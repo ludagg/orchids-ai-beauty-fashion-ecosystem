@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { motion, useScroll, useTransform, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 import { 
   ArrowRight, 
   Play, 
@@ -13,7 +13,13 @@ import {
   Menu,
   X,
   Star,
-  CheckCircle2
+  CheckCircle2,
+  Scan,
+  Palette,
+  TrendingUp,
+  Shield,
+  Zap,
+  Heart
 } from "lucide-react";
 
 const navItems = ["Features", "AI", "Marketplace", "Salons"];
@@ -24,24 +30,28 @@ const features = [
     description: "Curated collections from India's finest designers. Shop with confidence.",
     icon: ShoppingBag,
     color: "#e11d48",
+    image: "https://images.unsplash.com/photo-1558171813-4c088753af8f?w=800&h=600&fit=crop",
   },
   {
     title: "Salon Booking",
     description: "Book verified beauty services instantly. Real reviews, real results.",
     icon: Scissors,
     color: "#9333ea",
+    image: "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=800&h=600&fit=crop",
   },
   {
     title: "Video Commerce",
     description: "Shop from live streams and videos. See it, love it, own it.",
     icon: Video,
     color: "#2563eb",
+    image: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&h=600&fit=crop",
   },
   {
     title: "AI Stylist",
     description: "Your personal style advisor. Intelligent recommendations, perfect fits.",
     icon: Sparkles,
     color: "#059669",
+    image: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800&h=600&fit=crop",
   },
 ];
 
@@ -57,11 +67,64 @@ const trustBadges = [
   "Verified Sellers",
 ];
 
+const partners = [
+  { name: "Nike", logo: "/partners/nike.svg" },
+  { name: "Adidas", logo: "/partners/adidas.svg" },
+  { name: "Zara", logo: "/partners/zara.svg" },
+  { name: "H&M", logo: "/partners/hm.svg" },
+  { name: "Gucci", logo: "/partners/gucci.svg" },
+  { name: "Louis Vuitton", logo: "/partners/lv.svg" },
+];
+
+const bentoItems = [
+  {
+    title: "Virtual Try-On",
+    description: "See how clothes look on you before buying",
+    icon: Scan,
+    size: "large",
+    gradient: "from-rose-500/10 to-orange-500/10",
+    iconColor: "#e11d48",
+  },
+  {
+    title: "Style DNA",
+    description: "AI learns your unique preferences",
+    icon: Palette,
+    size: "small",
+    gradient: "from-violet-500/10 to-purple-500/10",
+    iconColor: "#9333ea",
+  },
+  {
+    title: "Trend Forecast",
+    description: "Stay ahead of fashion curves",
+    icon: TrendingUp,
+    size: "small",
+    gradient: "from-blue-500/10 to-cyan-500/10",
+    iconColor: "#2563eb",
+  },
+  {
+    title: "Smart Sizing",
+    description: "Perfect fit recommendations using body measurements",
+    icon: Zap,
+    size: "medium",
+    gradient: "from-emerald-500/10 to-teal-500/10",
+    iconColor: "#059669",
+  },
+  {
+    title: "Wishlist Sync",
+    description: "Price alerts & availability tracking",
+    icon: Heart,
+    size: "small",
+    gradient: "from-pink-500/10 to-rose-500/10",
+    iconColor: "#ec4899",
+  },
+];
+
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
   const [activeFeature, setActiveFeature] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
+  const featuresRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ["start start", "end start"],
@@ -70,6 +133,11 @@ export default function Home() {
   const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
   const heroScale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
 
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const springX = useSpring(mouseX, { stiffness: 50, damping: 20 });
+  const springY = useSpring(mouseY, { stiffness: 50, damping: 20 });
+
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
@@ -77,11 +145,15 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveFeature((prev) => (prev + 1) % features.length);
-    }, 4000);
-    return () => clearInterval(interval);
-  }, []);
+    const handleMouseMove = (e: MouseEvent) => {
+      const { clientX, clientY } = e;
+      const { innerWidth, innerHeight } = window;
+      mouseX.set((clientX - innerWidth / 2) / 50);
+      mouseY.set((clientY - innerHeight / 2) / 50);
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [mouseX, mouseY]);
 
   useEffect(() => {
     if (mobileMenuOpen) {
@@ -275,34 +347,25 @@ export default function Home() {
         </div>
 
         <motion.div
-  initial={{ opacity: 0, y: 60 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ duration: 1, delay: 0.5 }}
-  className="relative w-full max-w-[1100px] mx-auto mt-16 px-6"
->
-  <div className="relative aspect-[16/9] rounded-3xl overflow-hidden bg-white shadow-2xl shadow-black/10 group">
-    {/* Vidéo HTML5 avec poster */}
-    <video
-      className="w-full h-full object-cover"
-      poster="https://img.youtube.com/vi/VOT6g2MvF2E/maxresdefault.jpg" // Thumbnail YouTube
-      controls
-      preload="metadata"
-    >
-      <source
-        src="https://www.youtube.com/watch?v=VOT6g2MvF2E" 
-        type="video/mp4"
-      />
-      Votre navigateur ne supporte pas la vidéo.
-    </video>
-    
-    {/* Même overlay et bouton */}
-    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent pointer-events-none" />
-    
-    <div className="absolute bottom-6 left-6 right-6 sm:bottom-8 sm:left-8 sm:right-8">
-      {/* Bouton qui lance la vidéo */}
-    </div>
-  </div>
-</motion.div>
+          initial={{ opacity: 0, y: 60 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.5 }}
+          style={{ x: springX, y: springY }}
+          className="relative w-full max-w-[1100px] mx-auto mt-16 px-6"
+        >
+          <div className="relative aspect-[16/9] rounded-3xl overflow-hidden bg-gradient-to-br from-[#f5f5f5] to-white shadow-2xl shadow-black/10 border border-[#e5e5e5]">
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="text-center">
+                <div className="w-20 h-20 mx-auto rounded-full bg-[#1a1a1a] flex items-center justify-center cursor-pointer hover:scale-110 transition-transform shadow-xl">
+                  <Play className="w-8 h-8 text-white ml-1" />
+                </div>
+                <p className="mt-4 text-[#6b6b6b] text-sm">Watch how Priisme works</p>
+              </div>
+            </div>
+            <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&h=675&fit=crop')] bg-cover bg-center opacity-30" />
+          </div>
+        </motion.div>
+
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -319,8 +382,10 @@ export default function Home() {
         </motion.div>
       </motion.section>
 
-      <section id="features" className="py-24 md:py-32 bg-white">
-        <div className="max-w-[1100px] mx-auto px-6">
+
+
+      <section id="features" ref={featuresRef} className="py-24 md:py-32 bg-white overflow-hidden">
+        <div className="max-w-[1200px] mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -337,58 +402,167 @@ export default function Home() {
             </h2>
           </motion.div>
 
-          <div className="grid sm:grid-cols-2 gap-4 md:gap-6">
-            {features.map((feature, i) => {
-              const Icon = feature.icon;
-              return (
-                <motion.div
-                  key={feature.title}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                  onMouseEnter={() => setActiveFeature(i)}
-                  className={`group relative p-6 md:p-8 rounded-2xl transition-all duration-300 cursor-pointer border ${
-                    activeFeature === i
-                      ? "bg-[#fafafa] border-[#e5e5e5] shadow-lg shadow-black/5"
-                      : "bg-transparent border-transparent hover:bg-[#fafafa]/50 hover:border-[#e5e5e5]/50"
-                  }`}
-                >
-                  <div 
-                    className="w-12 h-12 rounded-2xl flex items-center justify-center mb-5 transition-transform duration-300 group-hover:scale-110"
-                    style={{ backgroundColor: `${feature.color}10` }}
-                  >
-                    <Icon className="w-6 h-6" style={{ color: feature.color }} />
-                  </div>
-                  <h3 className="text-[20px] md:text-[24px] font-semibold mb-2 tracking-tight font-display">
-                    {feature.title}
-                  </h3>
-                  <p className="text-[#6b6b6b] text-[15px] leading-relaxed mb-5">
-                    {feature.description}
-                  </p>
-                  <a
-                    href="#"
-                    className="inline-flex items-center gap-1.5 text-[#1a1a1a] text-sm font-medium group/link"
-                  >
-                    Learn more
-                    <ChevronRight className="w-4 h-4 transition-transform group-hover/link:translate-x-1" />
-                  </a>
+          <div className="relative">
+            <div className="relative h-[500px] sm:h-[560px] md:h-[620px] flex items-center justify-center perspective-[1200px]">
+              <AnimatePresence mode="popLayout">
+                {features.map((feature, i) => {
+                  const Icon = feature.icon;
+                  const offset = (i - activeFeature + features.length) % features.length;
+                  const isActive = offset === 0;
+                  const isNext = offset === 1;
+                  const isPrev = offset === features.length - 1;
+                  const isHidden = !isActive && !isNext && !isPrev;
                   
-                  <div 
-                    className={`absolute bottom-0 left-6 right-6 h-1 rounded-full transition-all duration-500 ${
-                      activeFeature === i ? "opacity-100" : "opacity-0"
-                    }`}
-                    style={{ backgroundColor: feature.color }}
-                  />
-                </motion.div>
-              );
-            })}
+                  let xPos = 0;
+                  let zPos = 0;
+                  let rotation = 0;
+                  let scale = 1;
+                  let opacity = 1;
+                  
+                  if (isActive) {
+                    xPos = 0;
+                    zPos = 0;
+                    rotation = 0;
+                    scale = 1;
+                    opacity = 1;
+                  } else if (isNext) {
+                    xPos = 280;
+                    zPos = -150;
+                    rotation = -8;
+                    scale = 0.85;
+                    opacity = 0.6;
+                  } else if (isPrev) {
+                    xPos = -280;
+                    zPos = -150;
+                    rotation = 8;
+                    scale = 0.85;
+                    opacity = 0.6;
+                  } else {
+                    xPos = offset > features.length / 2 ? -400 : 400;
+                    zPos = -300;
+                    rotation = offset > features.length / 2 ? 15 : -15;
+                    scale = 0.7;
+                    opacity = 0;
+                  }
+
+                  return (
+                    <motion.div
+                      key={feature.title}
+                      initial={{ opacity: 0, x: 100, rotateY: -15 }}
+                      animate={{
+                        x: xPos,
+                        z: zPos,
+                        rotateY: rotation,
+                        scale,
+                        opacity,
+                        zIndex: isActive ? 30 : isNext || isPrev ? 20 : 10,
+                      }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 100,
+                        damping: 20,
+                        mass: 1,
+                      }}
+                      onClick={() => !isActive && setActiveFeature(i)}
+                      className={`absolute w-[320px] sm:w-[380px] md:w-[440px] cursor-pointer ${isHidden ? "pointer-events-none" : ""}`}
+                      style={{ transformStyle: "preserve-3d" }}
+                    >
+                      <div 
+                        className={`relative rounded-3xl overflow-hidden bg-white shadow-2xl transition-shadow duration-500 ${isActive ? "shadow-black/20" : "shadow-black/10"}`}
+                        style={{ 
+                          border: isActive ? `2px solid ${feature.color}30` : "1px solid #e5e5e5",
+                        }}
+                      >
+                        <div className="relative aspect-[4/5] overflow-hidden">
+                          <img 
+                            src={feature.image} 
+                            alt={feature.title}
+                            className="w-full h-full object-cover"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                          
+                          <div className="absolute top-4 left-4">
+                            <div 
+                              className="w-12 h-12 rounded-2xl flex items-center justify-center backdrop-blur-xl"
+                              style={{ backgroundColor: `${feature.color}90` }}
+                            >
+                              <Icon className="w-6 h-6 text-white" />
+                            </div>
+                          </div>
+                          
+                          <div className="absolute bottom-0 left-0 right-0 p-6">
+                            <motion.div
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: isActive ? 1 : 0.7, y: 0 }}
+                              transition={{ delay: 0.1 }}
+                            >
+                              <h3 className="text-2xl sm:text-3xl font-semibold text-white mb-2 font-display">
+                                {feature.title}
+                              </h3>
+                              <p className="text-white/80 text-sm sm:text-base leading-relaxed mb-4">
+                                {feature.description}
+                              </p>
+                              {isActive && (
+                                <motion.button
+                                  initial={{ opacity: 0, y: 10 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  transition={{ delay: 0.2 }}
+                                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-[#1a1a1a] text-sm font-medium hover:bg-white/90 transition-colors group/btn"
+                                >
+                                  Explore
+                                  <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
+                                </motion.button>
+                              )}
+                            </motion.div>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </AnimatePresence>
+            </div>
+
+            <div className="flex items-center justify-center gap-3 mt-8">
+              {features.map((feature, i) => (
+                <button
+                  key={feature.title}
+                  onClick={() => setActiveFeature(i)}
+                  className={`relative h-2 rounded-full transition-all duration-500 ${
+                    i === activeFeature ? "w-10" : "w-2 hover:w-4"
+                  }`}
+                  style={{ 
+                    backgroundColor: i === activeFeature ? feature.color : "#d4d4d4",
+                  }}
+                />
+              ))}
+            </div>
+
+            <div className="flex items-center justify-center gap-8 mt-8">
+              <button
+                onClick={() => setActiveFeature((prev) => (prev - 1 + features.length) % features.length)}
+                className="w-12 h-12 rounded-full border border-[#e5e5e5] flex items-center justify-center hover:bg-[#f5f5f5] transition-colors"
+              >
+                <ChevronRight className="w-5 h-5 rotate-180" />
+              </button>
+              <div className="text-center">
+                <p className="text-sm text-[#6b6b6b]">
+                  <span className="font-semibold text-[#1a1a1a]">{activeFeature + 1}</span> / {features.length}
+                </p>
+              </div>
+              <button
+                onClick={() => setActiveFeature((prev) => (prev + 1) % features.length)}
+                className="w-12 h-12 rounded-full border border-[#e5e5e5] flex items-center justify-center hover:bg-[#f5f5f5] transition-colors"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
           </div>
         </div>
       </section>
 
       <section id="ai" className="py-24 md:py-32 bg-[#fafafa] overflow-hidden">
-        <div className="max-w-[1100px] mx-auto px-6">
+        <div className="max-w-[1200px] mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -415,7 +589,42 @@ export default function Home() {
             body type, and preferences.
           </motion.p>
 
-          <div className="grid sm:grid-cols-3 gap-6 md:gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 auto-rows-[140px] md:auto-rows-[180px]">
+            {bentoItems.map((item, i) => {
+              const Icon = item.icon;
+              const sizeClasses = {
+                large: "col-span-2 row-span-2",
+                medium: "col-span-2 row-span-1",
+                small: "col-span-1 row-span-1",
+              };
+              return (
+                <motion.div
+                  key={item.title}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  className={`${sizeClasses[item.size as keyof typeof sizeClasses]} relative group p-6 rounded-3xl bg-white border border-[#e5e5e5] hover:shadow-xl hover:shadow-black/5 transition-all duration-500 hover:-translate-y-1 overflow-hidden cursor-pointer`}
+                >
+                  <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+                  <div className="relative z-10 h-full flex flex-col">
+                    <div 
+                      className="w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center mb-auto"
+                      style={{ backgroundColor: `${item.iconColor}10` }}
+                    >
+                      <Icon className="w-5 h-5 md:w-6 md:h-6" style={{ color: item.iconColor }} />
+                    </div>
+                    <div className="mt-auto">
+                      <h3 className="text-[15px] md:text-[17px] font-semibold mb-1">{item.title}</h3>
+                      <p className="text-[#6b6b6b] text-xs md:text-sm leading-relaxed">{item.description}</p>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+
+          <div className="grid sm:grid-cols-3 gap-6 md:gap-8 mt-16">
             {capabilities.map((cap, i) => (
               <motion.div
                 key={cap.label}
@@ -623,6 +832,78 @@ export default function Home() {
                 For Business
                 <ChevronRight className="w-5 h-5" />
               </button>
+            </div>
+          </motion.div>
+        </div>
+        </section>
+
+      <section className="py-20 md:py-28 bg-[#0a0a0a] relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,#1a1a1a_0%,transparent_50%)]" />
+        <div className="max-w-[1200px] mx-auto px-6 relative">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <span className="inline-block px-4 py-1.5 rounded-full bg-white/10 text-sm text-white/60 font-medium mb-4">
+              Trusted Partners
+            </span>
+            <h3 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-white font-display">
+              Partnered with <span className="text-white/50 italic">the best</span>
+            </h3>
+          </motion.div>
+
+          <div className="relative">
+            <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#0a0a0a] to-transparent z-10" />
+            <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#0a0a0a] to-transparent z-10" />
+            
+            <div className="flex gap-16 md:gap-24 items-center justify-center flex-wrap py-8">
+              {[
+                { name: "Nike", svg: <svg viewBox="0 0 100 35" className="w-24 h-10"><path fill="currentColor" d="M21.7 3.1c-8.8 4.3-17.6 8.8-26 13.4-1.4.8-2.1 1.5-2.1 2.3 0 .5.3.9.8 1.3.5.4 1.1.6 1.8.6.5 0 2.2-.5 5.1-1.5 2.9-1 6.4-2.3 10.5-3.8 4.1-1.5 7.1-2.6 9-3.3l5.7-2.1c1.8-.7 3.2-1.2 4.2-1.5 1-.3 1.8-.5 2.4-.5.4 0 .6.1.7.2.1.1.2.3.2.5 0 .3-.1.6-.2.9-.1.3-.4.7-.7 1.2l-4.5 6.6-8.2 12.1c-.8 1.2-1.2 2.1-1.2 2.6 0 .4.2.7.5.9.3.2.7.3 1.2.3.4 0 .8-.1 1.2-.2.4-.1.9-.4 1.4-.7 2.9-1.8 5.8-3.7 8.7-5.6l6.4-4.3c1.5-1 2.9-1.9 4.2-2.9 1.3-1 2.5-1.9 3.6-2.9 1.1-1 2-1.9 2.7-2.7.7-.8 1.3-1.7 1.7-2.5.4-.8.6-1.7.6-2.5 0-.9-.2-1.6-.7-2.3-.5-.7-1.1-1.2-1.9-1.6-.8-.4-1.7-.7-2.6-.9-.9-.2-1.9-.3-2.8-.3-1.2 0-2.6.2-4.2.5-1.6.3-3.3.8-5.1 1.5-1.8.7-3.8 1.4-5.8 2.3-2 .9-4.3 1.9-6.8 3z"/></svg> },
+                { name: "Adidas", svg: <svg viewBox="0 0 100 65" className="w-20 h-12"><path fill="currentColor" d="M0 65l16.7-28.9 16.7 28.9H0zm19.4-33.5L36.1 3.4 52.8 32l-16.7 28.9-16.7-28.4zm36.1 0L72.2 3.4 88.9 32 72.2 60.9 55.5 32.5v-.5l-.1.5zm0-28.1L72.2 0l16.7 3.4L72.2 32 55.5 3.4z"/></svg> },
+                { name: "Puma", svg: <svg viewBox="0 0 100 40" className="w-24 h-10"><path fill="currentColor" d="M66.7 13.3c-4.2 0-7.5 2.3-9.2 5.8v-5h-6.7v25h6.7V27.5c0-5 2.5-7.5 6.7-7.5h2.5v-6.7h-0zm-36.7 0c-7.5 0-13.3 5.8-13.3 13.3s5.8 13.3 13.3 13.3 13.3-5.8 13.3-13.3-5.8-13.3-13.3-13.3zm0 20c-3.7 0-6.7-3-6.7-6.7s3-6.7 6.7-6.7 6.7 3 6.7 6.7-3 6.7-6.7 6.7zM90 13.3V39h-6.7V27.5c0-5-2.5-7.5-6.7-7.5s-6.7 2.5-6.7 7.5V39h-6.7V13.3h6.7v5c1.7-3.5 5-5.8 9.2-5.8 6.6 0 10.9 4.2 10.9 11.7v15.1h-0.1V13.3zM10 1.7c5.5 0 10 4.5 10 10H0c0-5.5 4.5-10 10-10z"/></svg> },
+                { name: "H&M", svg: <svg viewBox="0 0 100 50" className="w-16 h-10"><text x="50" y="38" textAnchor="middle" fontSize="36" fontWeight="bold" fill="currentColor">H&amp;M</text></svg> },
+                { name: "Zara", svg: <svg viewBox="0 0 100 30" className="w-20 h-8"><text x="50" y="24" textAnchor="middle" fontSize="28" fontWeight="400" letterSpacing="4" fill="currentColor" style={{fontFamily: "serif"}}>ZARA</text></svg> },
+                { name: "Gucci", svg: <svg viewBox="0 0 100 35" className="w-20 h-10"><text x="50" y="28" textAnchor="middle" fontSize="24" fontWeight="400" letterSpacing="6" fill="currentColor" style={{fontFamily: "serif"}}>GUCCI</text></svg> },
+              ].map((brand, i) => (
+                <motion.div
+                  key={brand.name}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  className="text-white/30 hover:text-white/80 transition-all duration-500 cursor-pointer hover:scale-110"
+                >
+                  {brand.svg}
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="mt-16 pt-12 border-t border-white/10"
+          >
+            <div className="grid sm:grid-cols-3 gap-8 text-center">
+              {[
+                { value: "200+", label: "Brand Partners" },
+                { value: "50K+", label: "Products Listed" },
+                { value: "99%", label: "Authentic Guarantee" },
+              ].map((stat, i) => (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.3 + i * 0.1 }}
+                >
+                  <p className="text-4xl md:text-5xl font-semibold text-white mb-2">{stat.value}</p>
+                  <p className="text-white/50 text-sm">{stat.label}</p>
+                </motion.div>
+              ))}
             </div>
           </motion.div>
         </div>
