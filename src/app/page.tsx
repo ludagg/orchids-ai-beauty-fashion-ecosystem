@@ -204,104 +204,105 @@ export default function Home() {
       <motion.section
         ref={heroRef}
         style={{ opacity: heroOpacity, scale: heroScale }}
-        className="relative min-h-screen flex items-center pt-16 overflow-hidden"
+        className="relative min-h-screen flex flex-col items-center justify-center pt-16 overflow-hidden"
       >
-        <div className="max-w-[1200px] mx-auto px-6 w-full grid lg:grid-cols-2 lg:gap-12 items-center">
-          <div className="relative z-10 text-center lg:text-left">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-[#e5e5e5] shadow-sm mb-8"
-            >
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-              </span>
-              <span className="text-sm text-[#6b6b6b]">
-                India&apos;s First AI-Powered Beauty & Fashion Ecosystem
-              </span>
-            </motion.div>
+        <div className="relative z-10 max-w-[980px] mx-auto px-6 text-center">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-[#e5e5e5] shadow-sm mb-8"
+          >
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            <span className="text-sm text-[#6b6b6b]">
+              India&apos;s First AI-Powered Beauty & Fashion Ecosystem
+            </span>
+          </motion.div>
 
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.1 }}
-              className="text-[44px] sm:text-[56px] md:text-[72px] lg:text-[88px] font-semibold leading-[1.05] tracking-tight font-display"
-            >
-              Where Fashion
-              <br />
-              <span className="text-gradient-color font-display italic">Meets Intelligence.</span>
-            </motion.h1>
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.1 }}
+            className="text-[44px] sm:text-[56px] md:text-[72px] lg:text-[88px] font-semibold leading-[1.05] tracking-tight font-display"
+          >
+            Where Fashion
+            <br />
+            <span className="text-gradient-color font-display italic">Meets Intelligence.</span>
+          </motion.h1>
 
-            <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-[17px] md:text-[21px] text-[#6b6b6b] max-w-[540px] mx-auto lg:mx-0 mt-6 leading-relaxed"
-            >
-              Shop fashion. Book salons. Watch shoppable videos.
-              All powered by AI, all in one place.
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mt-10"
-            >
-              <button className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#1a1a1a] text-white font-medium text-[17px] hover:bg-[#333] transition-all hover:shadow-xl hover:shadow-black/20 active:scale-[0.98] flex items-center justify-center gap-2 group">
-                Start Shopping
-                <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-              </button>
-              <button className="w-full sm:w-auto px-8 py-4 rounded-full bg-white border border-[#e5e5e5] font-medium text-[17px] hover:bg-[#fafafa] transition-all hover:border-[#d4d4d4] active:scale-[0.98] flex items-center justify-center gap-2 group">
-                <Play className="w-5 h-5 text-[#6b6b6b] group-hover:text-[#1a1a1a] transition-colors" />
-                Watch Demo
-              </button>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-              className="flex flex-wrap items-center justify-center lg:justify-start gap-6 mt-10"
-            >
-              {trustBadges.map((badge) => (
-                <div key={badge} className="flex items-center gap-2 text-sm text-[#6b6b6b]">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                  {badge}
-                </div>
-              ))}
-            </motion.div>
-          </div>
+          <motion.p
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-[17px] md:text-[21px] text-[#6b6b6b] max-w-[540px] mx-auto mt-6 leading-relaxed"
+          >
+            Shop fashion. Book salons. Watch shoppable videos.
+            All powered by AI, all in one place.
+          </motion.p>
 
           <motion.div
-            initial={{ opacity: 0, y: 60 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.5 }}
-            className="relative w-full mt-16 lg:mt-0"
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10"
           >
-            <div className="relative aspect-[16/9] rounded-3xl overflow-hidden bg-white shadow-2xl shadow-black/10 group">
-              <img
-                src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&h=675&fit=crop"
-                alt="Fashion"
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
-              <div className="absolute bottom-6 left-6 right-6 sm:bottom-8 sm:left-8 sm:right-8">
-                <div className="flex items-center gap-4">
-                  <button className="w-14 h-14 rounded-full bg-white/95 backdrop-blur-xl flex items-center justify-center cursor-pointer hover:bg-white transition-all shadow-lg hover:scale-110 active:scale-95">
-                    <Play className="w-6 h-6 text-[#1a1a1a] ml-0.5" />
-                  </button>
-                  <div>
-                    <p className="text-sm font-medium text-white">Watch the Priisme Story</p>
-                    <p className="text-xs text-white/70">2 min · Behind the scenes</p>
-                  </div>
-                </div>
+            <button className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#1a1a1a] text-white font-medium text-[17px] hover:bg-[#333] transition-all hover:shadow-xl hover:shadow-black/20 active:scale-[0.98] flex items-center justify-center gap-2 group">
+              Start Shopping
+              <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+            </button>
+            <button className="w-full sm:w-auto px-8 py-4 rounded-full bg-white border border-[#e5e5e5] font-medium text-[17px] hover:bg-[#fafafa] transition-all hover:border-[#d4d4d4] active:scale-[0.98] flex items-center justify-center gap-2 group">
+              <Play className="w-5 h-5 text-[#6b6b6b] group-hover:text-[#1a1a1a] transition-colors" />
+              Watch Demo
+            </button>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="flex flex-wrap items-center justify-center gap-6 mt-10"
+          >
+            {trustBadges.map((badge) => (
+              <div key={badge} className="flex items-center gap-2 text-sm text-[#6b6b6b]">
+                <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                {badge}
               </div>
-            </div>
+            ))}
           </motion.div>
         </div>
+
+        <motion.div
+  initial={{ opacity: 0, y: 60 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 1, delay: 0.5 }}
+  className="relative w-full max-w-[1100px] mx-auto mt-16 px-6"
+>
+  <div className="relative aspect-[16/9] rounded-3xl overflow-hidden bg-white shadow-2xl shadow-black/10 group">
+    {/* Vidéo HTML5 avec poster */}
+    <video
+      className="w-full h-full object-cover"
+      poster="https://img.youtube.com/vi/VOT6g2MvF2E/maxresdefault.jpg" // Thumbnail YouTube
+      controls
+      preload="metadata"
+    >
+      <source
+        src="https://www.youtube.com/watch?v=VOT6g2MvF2E" 
+        type="video/mp4"
+      />
+      Votre navigateur ne supporte pas la vidéo.
+    </video>
+    
+    {/* Même overlay et bouton */}
+    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent pointer-events-none" />
+    
+    <div className="absolute bottom-6 left-6 right-6 sm:bottom-8 sm:left-8 sm:right-8">
+      {/* Bouton qui lance la vidéo */}
+    </div>
+  </div>
+</motion.div>
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
