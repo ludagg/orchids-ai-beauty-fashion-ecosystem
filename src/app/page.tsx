@@ -824,88 +824,79 @@ export default function Home() {
               Join thousands who&apos;ve already discovered a smarter way
               to shop, book, and style.
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <button className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#1a1a1a] text-white font-medium text-[17px] hover:bg-[#333] transition-all hover:shadow-xl hover:shadow-black/20 active:scale-[0.98]">
-                Download App
+            
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
+              <button className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-[#1a1a1a] text-white font-medium hover:bg-[#333] transition-all hover:shadow-xl hover:shadow-black/20 active:scale-[0.98] inline-flex items-center justify-center gap-3 group">
+                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
+                </svg>
+                <div className="text-left">
+                  <p className="text-[10px] opacity-80 leading-none">Download on the</p>
+                  <p className="text-sm font-semibold leading-tight">App Store</p>
+                </div>
               </button>
-              <button className="w-full sm:w-auto px-8 py-4 rounded-full bg-white border border-[#e5e5e5] font-medium text-[17px] hover:bg-[#fafafa] transition-all hover:border-[#d4d4d4] active:scale-[0.98] inline-flex items-center justify-center gap-2">
-                For Business
-                <ChevronRight className="w-5 h-5" />
+              <button className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-[#1a1a1a] text-white font-medium hover:bg-[#333] transition-all hover:shadow-xl hover:shadow-black/20 active:scale-[0.98] inline-flex items-center justify-center gap-3 group">
+                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 01-.61-.92V2.734a1 1 0 01.609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.198l2.807 1.626a1 1 0 010 1.73l-2.808 1.626L15.206 12l2.492-2.491zM5.864 2.658L16.8 8.99l-2.302 2.302-8.634-8.634z"/>
+                </svg>
+                <div className="text-left">
+                  <p className="text-[10px] opacity-80 leading-none">GET IT ON</p>
+                  <p className="text-sm font-semibold leading-tight">Google Play</p>
+                </div>
               </button>
             </div>
+
+            <div className="flex items-center justify-center gap-2 text-[#6b6b6b] mb-6">
+              <div className="h-px w-12 bg-[#e5e5e5]" />
+              <span className="text-sm">or</span>
+              <div className="h-px w-12 bg-[#e5e5e5]" />
+            </div>
+
+            <button className="px-8 py-4 rounded-full bg-white border border-[#e5e5e5] font-medium text-[17px] hover:bg-[#fafafa] transition-all hover:border-[#d4d4d4] active:scale-[0.98] inline-flex items-center justify-center gap-2 group">
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="2" y1="12" x2="22" y2="12"/>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
+              Use Web Version
+              <ChevronRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+            </button>
           </motion.div>
         </div>
         </section>
 
-      <section className="py-20 md:py-28 bg-[#0a0a0a] relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,#1a1a1a_0%,transparent_50%)]" />
-        <div className="max-w-[1200px] mx-auto px-6 relative">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <span className="inline-block px-4 py-1.5 rounded-full bg-white/10 text-sm text-white/60 font-medium mb-4">
-              Trusted Partners
-            </span>
-            <h3 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-white font-display">
-              Partnered with <span className="text-white/50 italic">the best</span>
-            </h3>
-          </motion.div>
-
-          <div className="relative">
-            <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#0a0a0a] to-transparent z-10" />
-            <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#0a0a0a] to-transparent z-10" />
-            
-            <div className="flex gap-16 md:gap-24 items-center justify-center flex-wrap py-8">
-              {[
-                { name: "Nike", svg: <svg viewBox="0 0 100 35" className="w-24 h-10"><path fill="currentColor" d="M21.7 3.1c-8.8 4.3-17.6 8.8-26 13.4-1.4.8-2.1 1.5-2.1 2.3 0 .5.3.9.8 1.3.5.4 1.1.6 1.8.6.5 0 2.2-.5 5.1-1.5 2.9-1 6.4-2.3 10.5-3.8 4.1-1.5 7.1-2.6 9-3.3l5.7-2.1c1.8-.7 3.2-1.2 4.2-1.5 1-.3 1.8-.5 2.4-.5.4 0 .6.1.7.2.1.1.2.3.2.5 0 .3-.1.6-.2.9-.1.3-.4.7-.7 1.2l-4.5 6.6-8.2 12.1c-.8 1.2-1.2 2.1-1.2 2.6 0 .4.2.7.5.9.3.2.7.3 1.2.3.4 0 .8-.1 1.2-.2.4-.1.9-.4 1.4-.7 2.9-1.8 5.8-3.7 8.7-5.6l6.4-4.3c1.5-1 2.9-1.9 4.2-2.9 1.3-1 2.5-1.9 3.6-2.9 1.1-1 2-1.9 2.7-2.7.7-.8 1.3-1.7 1.7-2.5.4-.8.6-1.7.6-2.5 0-.9-.2-1.6-.7-2.3-.5-.7-1.1-1.2-1.9-1.6-.8-.4-1.7-.7-2.6-.9-.9-.2-1.9-.3-2.8-.3-1.2 0-2.6.2-4.2.5-1.6.3-3.3.8-5.1 1.5-1.8.7-3.8 1.4-5.8 2.3-2 .9-4.3 1.9-6.8 3z"/></svg> },
-                { name: "Adidas", svg: <svg viewBox="0 0 100 65" className="w-20 h-12"><path fill="currentColor" d="M0 65l16.7-28.9 16.7 28.9H0zm19.4-33.5L36.1 3.4 52.8 32l-16.7 28.9-16.7-28.4zm36.1 0L72.2 3.4 88.9 32 72.2 60.9 55.5 32.5v-.5l-.1.5zm0-28.1L72.2 0l16.7 3.4L72.2 32 55.5 3.4z"/></svg> },
-                { name: "Puma", svg: <svg viewBox="0 0 100 40" className="w-24 h-10"><path fill="currentColor" d="M66.7 13.3c-4.2 0-7.5 2.3-9.2 5.8v-5h-6.7v25h6.7V27.5c0-5 2.5-7.5 6.7-7.5h2.5v-6.7h-0zm-36.7 0c-7.5 0-13.3 5.8-13.3 13.3s5.8 13.3 13.3 13.3 13.3-5.8 13.3-13.3-5.8-13.3-13.3-13.3zm0 20c-3.7 0-6.7-3-6.7-6.7s3-6.7 6.7-6.7 6.7 3 6.7 6.7-3 6.7-6.7 6.7zM90 13.3V39h-6.7V27.5c0-5-2.5-7.5-6.7-7.5s-6.7 2.5-6.7 7.5V39h-6.7V13.3h6.7v5c1.7-3.5 5-5.8 9.2-5.8 6.6 0 10.9 4.2 10.9 11.7v15.1h-0.1V13.3zM10 1.7c5.5 0 10 4.5 10 10H0c0-5.5 4.5-10 10-10z"/></svg> },
-                { name: "H&M", svg: <svg viewBox="0 0 100 50" className="w-16 h-10"><text x="50" y="38" textAnchor="middle" fontSize="36" fontWeight="bold" fill="currentColor">H&amp;M</text></svg> },
-                { name: "Zara", svg: <svg viewBox="0 0 100 30" className="w-20 h-8"><text x="50" y="24" textAnchor="middle" fontSize="28" fontWeight="400" letterSpacing="4" fill="currentColor" style={{fontFamily: "serif"}}>ZARA</text></svg> },
-                { name: "Gucci", svg: <svg viewBox="0 0 100 35" className="w-20 h-10"><text x="50" y="28" textAnchor="middle" fontSize="24" fontWeight="400" letterSpacing="6" fill="currentColor" style={{fontFamily: "serif"}}>GUCCI</text></svg> },
-              ].map((brand, i) => (
-                <motion.div
-                  key={brand.name}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                  className="text-white/30 hover:text-white/80 transition-all duration-500 cursor-pointer hover:scale-110"
-                >
-                  {brand.svg}
-                </motion.div>
-              ))}
-            </div>
-          </div>
-
-          <motion.div
+      <section className="py-16 md:py-20 bg-[#fafafa] border-t border-[#e5e5e5]">
+        <div className="max-w-[1200px] mx-auto px-6">
+          <motion.p
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="mt-16 pt-12 border-t border-white/10"
+            className="text-center text-sm text-[#6b6b6b] mb-10"
           >
-            <div className="grid sm:grid-cols-3 gap-8 text-center">
-              {[
-                { value: "200+", label: "Brand Partners" },
-                { value: "50K+", label: "Products Listed" },
-                { value: "99%", label: "Authentic Guarantee" },
-              ].map((stat, i) => (
-                <motion.div
-                  key={stat.label}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.3 + i * 0.1 }}
-                >
-                  <p className="text-4xl md:text-5xl font-semibold text-white mb-2">{stat.value}</p>
-                  <p className="text-white/50 text-sm">{stat.label}</p>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
+            Trusted by leading brands worldwide
+          </motion.p>
+
+          <div className="flex gap-12 md:gap-20 items-center justify-center flex-wrap">
+            {[
+              { name: "Nike", svg: <svg viewBox="0 0 100 35" className="w-20 h-8"><path fill="currentColor" d="M21.7 3.1c-8.8 4.3-17.6 8.8-26 13.4-1.4.8-2.1 1.5-2.1 2.3 0 .5.3.9.8 1.3.5.4 1.1.6 1.8.6.5 0 2.2-.5 5.1-1.5 2.9-1 6.4-2.3 10.5-3.8 4.1-1.5 7.1-2.6 9-3.3l5.7-2.1c1.8-.7 3.2-1.2 4.2-1.5 1-.3 1.8-.5 2.4-.5.4 0 .6.1.7.2.1.1.2.3.2.5 0 .3-.1.6-.2.9-.1.3-.4.7-.7 1.2l-4.5 6.6-8.2 12.1c-.8 1.2-1.2 2.1-1.2 2.6 0 .4.2.7.5.9.3.2.7.3 1.2.3.4 0 .8-.1 1.2-.2.4-.1.9-.4 1.4-.7 2.9-1.8 5.8-3.7 8.7-5.6l6.4-4.3c1.5-1 2.9-1.9 4.2-2.9 1.3-1 2.5-1.9 3.6-2.9 1.1-1 2-1.9 2.7-2.7.7-.8 1.3-1.7 1.7-2.5.4-.8.6-1.7.6-2.5 0-.9-.2-1.6-.7-2.3-.5-.7-1.1-1.2-1.9-1.6-.8-.4-1.7-.7-2.6-.9-.9-.2-1.9-.3-2.8-.3-1.2 0-2.6.2-4.2.5-1.6.3-3.3.8-5.1 1.5-1.8.7-3.8 1.4-5.8 2.3-2 .9-4.3 1.9-6.8 3z"/></svg> },
+              { name: "Adidas", svg: <svg viewBox="0 0 100 65" className="w-16 h-10"><path fill="currentColor" d="M0 65l16.7-28.9 16.7 28.9H0zm19.4-33.5L36.1 3.4 52.8 32l-16.7 28.9-16.7-28.4zm36.1 0L72.2 3.4 88.9 32 72.2 60.9 55.5 32.5v-.5l-.1.5zm0-28.1L72.2 0l16.7 3.4L72.2 32 55.5 3.4z"/></svg> },
+              { name: "H&M", svg: <svg viewBox="0 0 100 50" className="w-14 h-8"><text x="50" y="38" textAnchor="middle" fontSize="36" fontWeight="bold" fill="currentColor">H&amp;M</text></svg> },
+              { name: "Zara", svg: <svg viewBox="0 0 100 30" className="w-16 h-6"><text x="50" y="24" textAnchor="middle" fontSize="28" fontWeight="400" letterSpacing="4" fill="currentColor" style={{fontFamily: "serif"}}>ZARA</text></svg> },
+              { name: "Gucci", svg: <svg viewBox="0 0 100 35" className="w-16 h-8"><text x="50" y="28" textAnchor="middle" fontSize="24" fontWeight="400" letterSpacing="6" fill="currentColor" style={{fontFamily: "serif"}}>GUCCI</text></svg> },
+              { name: "Dior", svg: <svg viewBox="0 0 100 30" className="w-14 h-6"><text x="50" y="24" textAnchor="middle" fontSize="26" fontWeight="400" letterSpacing="8" fill="currentColor" style={{fontFamily: "serif"}}>DIOR</text></svg> },
+            ].map((brand, i) => (
+              <motion.div
+                key={brand.name}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.05 }}
+                className="text-[#c4c4c4] hover:text-[#6b6b6b] transition-all duration-300 cursor-pointer"
+              >
+                {brand.svg}
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
