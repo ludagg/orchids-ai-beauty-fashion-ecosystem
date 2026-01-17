@@ -105,7 +105,7 @@ export default function Home() {
               href="#"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="text-xl font-semibold tracking-tight"
+              className="text-xl font-semibold tracking-tight font-display"
             >
               Priisme
             </motion.a>
@@ -162,7 +162,7 @@ export default function Home() {
           >
             <div className="flex flex-col h-full">
               <div className="flex items-center justify-between h-16 px-6 border-b border-[#e5e5e5]">
-                <span className="text-xl font-semibold">Priisme</span>
+                <span className="text-xl font-semibold font-display">Priisme</span>
                 <button onClick={() => setMobileMenuOpen(false)} className="p-2 -mr-2">
                   <X className="w-6 h-6" />
                 </button>
@@ -226,11 +226,11 @@ export default function Home() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-[44px] sm:text-[56px] md:text-[72px] lg:text-[88px] font-semibold leading-[1.05] tracking-tight"
+            className="text-[44px] sm:text-[56px] md:text-[72px] lg:text-[88px] font-semibold leading-[1.05] tracking-tight font-display"
           >
             Where Fashion
             <br />
-            <span className="text-gradient-color">Meets Intelligence.</span>
+            <span className="text-gradient-color font-display italic">Meets Intelligence.</span>
           </motion.h1>
 
           <motion.p
@@ -328,10 +328,10 @@ export default function Home() {
             <span className="inline-block px-4 py-1.5 rounded-full bg-[#f5f5f5] text-sm text-[#6b6b6b] font-medium mb-6">
               Platform
             </span>
-            <h2 className="text-[36px] sm:text-[44px] md:text-[56px] font-semibold leading-tight tracking-tight">
+            <h2 className="text-[36px] sm:text-[44px] md:text-[56px] font-semibold leading-tight tracking-tight font-display">
               One ecosystem.
               <br />
-              <span className="text-[#6b6b6b]">Endless possibilities.</span>
+              <span className="text-[#6b6b6b] italic">Endless possibilities.</span>
             </h2>
           </motion.div>
 
@@ -358,7 +358,7 @@ export default function Home() {
                   >
                     <Icon className="w-6 h-6" style={{ color: feature.color }} />
                   </div>
-                  <h3 className="text-[20px] md:text-[24px] font-semibold mb-2 tracking-tight">
+                  <h3 className="text-[20px] md:text-[24px] font-semibold mb-2 tracking-tight font-display">
                     {feature.title}
                   </h3>
                   <p className="text-[#6b6b6b] text-[15px] leading-relaxed mb-5">
@@ -396,10 +396,10 @@ export default function Home() {
             <span className="inline-block px-4 py-1.5 rounded-full bg-white border border-[#e5e5e5] text-sm text-[#6b6b6b] font-medium mb-6">
               Artificial Intelligence
             </span>
-            <h2 className="text-[36px] sm:text-[44px] md:text-[56px] font-semibold leading-tight tracking-tight">
+            <h2 className="text-[36px] sm:text-[44px] md:text-[56px] font-semibold leading-tight tracking-tight font-display">
               Your personal
               <br />
-              <span className="text-gradient-color">AI stylist.</span>
+              <span className="text-gradient-color italic">AI stylist.</span>
             </h2>
           </motion.div>
 
@@ -445,10 +445,10 @@ export default function Home() {
               <span className="inline-block px-4 py-1.5 rounded-full bg-[#f5f5f5] text-sm text-[#6b6b6b] font-medium mb-6">
                 Marketplace
               </span>
-              <h2 className="text-[36px] sm:text-[44px] md:text-[48px] font-semibold leading-tight tracking-tight mb-6">
+              <h2 className="text-[36px] sm:text-[44px] md:text-[48px] font-semibold leading-tight tracking-tight mb-6 font-display">
                 Shop with
                 <br />
-                <span className="text-[#6b6b6b]">confidence.</span>
+                <span className="text-[#6b6b6b] italic">confidence.</span>
               </h2>
               <p className="text-[#6b6b6b] text-[17px] leading-relaxed mb-8 max-w-[440px]">
                 Curated fashion from verified sellers. Secure payments.
@@ -567,10 +567,10 @@ export default function Home() {
               <span className="inline-block px-4 py-1.5 rounded-full bg-white border border-[#e5e5e5] text-sm text-[#6b6b6b] font-medium mb-6">
                 Salon Booking
               </span>
-              <h2 className="text-[36px] sm:text-[44px] md:text-[48px] font-semibold leading-tight tracking-tight mb-6">
+              <h2 className="text-[36px] sm:text-[44px] md:text-[48px] font-semibold leading-tight tracking-tight mb-6 font-display">
                 Beauty services,
                 <br />
-                <span className="text-[#6b6b6b]">verified.</span>
+                <span className="text-[#6b6b6b] italic">verified.</span>
               </h2>
               <p className="text-[#6b6b6b] text-[17px] leading-relaxed mb-8 max-w-[440px]">
                 Book appointments at India&apos;s top salons. Real reviews.
@@ -604,10 +604,10 @@ export default function Home() {
             viewport={{ once: true }}
             className="text-center"
           >
-            <h2 className="text-[36px] sm:text-[48px] md:text-[64px] lg:text-[72px] font-semibold leading-tight tracking-tight mb-4">
+            <h2 className="text-[36px] sm:text-[48px] md:text-[64px] lg:text-[72px] font-semibold leading-tight tracking-tight mb-4 font-display">
               The future of
               <br />
-              <span className="text-gradient-color">beauty & fashion.</span>
+              <span className="text-gradient-color italic">beauty & fashion.</span>
             </h2>
             <p className="text-[#6b6b6b] text-[17px] md:text-[21px] max-w-[540px] mx-auto mb-10 leading-relaxed">
               Join thousands who&apos;ve already discovered a smarter way
@@ -630,7 +630,7 @@ export default function Home() {
         <div className="max-w-[1100px] mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
             <div className="col-span-2 md:col-span-1">
-              <p className="text-xl font-semibold mb-4">Priisme</p>
+              <p className="text-xl font-semibold mb-4 font-display">Priisme</p>
               <p className="text-sm text-[#6b6b6b] leading-relaxed">
                 India&apos;s first AI-powered beauty & fashion ecosystem.
               </p>
