@@ -275,32 +275,34 @@ export default function Home() {
         </div>
 
         <motion.div
-          initial={{ opacity: 0, y: 60 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.5 }}
-          className="relative w-full max-w-[1100px] mx-auto mt-16 px-6"
-        >
-          <div className="relative aspect-[16/9] rounded-3xl overflow-hidden bg-white shadow-2xl shadow-black/10 group">
-            <img
-              src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&h=675&fit=crop"
-              alt="Fashion"
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
-            <div className="absolute bottom-6 left-6 right-6 sm:bottom-8 sm:left-8 sm:right-8">
-              <div className="flex items-center gap-4">
-                <button className="w-14 h-14 rounded-full bg-white/95 backdrop-blur-xl flex items-center justify-center cursor-pointer hover:bg-white transition-all shadow-lg hover:scale-110 active:scale-95">
-                  <Play className="w-6 h-6 text-[#1a1a1a] ml-0.5" />
-                </button>
-                <div>
-                  <p className="text-sm font-medium text-white">Watch the Priisme Story</p>
-                  <p className="text-xs text-white/70">2 min · Behind the scenes</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-
+  initial={{ opacity: 0, y: 60 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 1, delay: 0.5 }}
+  className="relative w-full max-w-[1100px] mx-auto mt-16 px-6"
+>
+  <div className="relative aspect-[16/9] rounded-3xl overflow-hidden bg-white shadow-2xl shadow-black/10 group">
+    {/* Vidéo HTML5 avec poster */}
+    <video
+      className="w-full h-full object-cover"
+      poster="https://img.youtube.com/vi/VOT6g2MvF2E/maxresdefault.jpg" // Thumbnail YouTube
+      controls
+      preload="metadata"
+    >
+      <source
+        src="https://www.youtube.com/watch?v=VOT6g2MvF2E" 
+        type="video/mp4"
+      />
+      Votre navigateur ne supporte pas la vidéo.
+    </video>
+    
+    {/* Même overlay et bouton */}
+    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent pointer-events-none" />
+    
+    <div className="absolute bottom-6 left-6 right-6 sm:bottom-8 sm:left-8 sm:right-8">
+      {/* Bouton qui lance la vidéo */}
+    </div>
+  </div>
+</motion.div>
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
