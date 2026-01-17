@@ -1,1 +1,24 @@
-'Before/After' Section\n\n### Before/After Transformations\n\nExperience the magic of transformation with our new interactive Before/After slider! Toggle between the original and transformed images to see the difference.\n\n#### Example Transformations:\n- **Transformation 1**: Description of what changes were made.\n- **Transformation 2**: Description of another transformation.\n\n#### Features:\n- **Interactive Toggle Slider**: An easy-to-use slider that allows users to see the original and transformed images side by side.\n- **Multiple Examples**: Various transformations to showcase the capabilities of our technology.\n- **Consistent Styling**: Ensures that the section blends seamlessly with the rest of the page layout.\n- **Smooth Animations**: Implemented using framer-motion for a pleasant user experience.\n- **Responsive Design**: Works perfectly on both mobile and desktop devices.
+// Previous code and imports remain unchanged 
+
+function Page() {
+   return (
+      <div>
+          {/* Other sections of the component */} 
+          <AISection />
+          {/* Before/After Section */}
+          <div className="before-after">
+              <h2>Before/After</h2>
+              <div className="before-after-images">
+                  <img src="link_to_before_image" alt="Before" />
+                  <img src="link_to_after_image" alt="After" />
+              </div>
+              <p>Here's how our AI service transforms beauty and fashion.
+              Experience the before and after results!</p>
+          </div>
+          {/* Existing Marketplace section */}
+          <MarketplaceSection />
+      </div>
+   );
+} 
+
+export default Page;
