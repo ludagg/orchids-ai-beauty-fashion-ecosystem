@@ -67,6 +67,15 @@ const trustBadges = [
   "Verified Sellers",
 ];
 
+const partners = [
+  { name: "Nike", logo: "/partners/nike.svg" },
+  { name: "Adidas", logo: "/partners/adidas.svg" },
+  { name: "Zara", logo: "/partners/zara.svg" },
+  { name: "H&M", logo: "/partners/hm.svg" },
+  { name: "Gucci", logo: "/partners/gucci.svg" },
+  { name: "Louis Vuitton", logo: "/partners/lv.svg" },
+];
+
 const bentoItems = [
   {
     title: "Virtual Try-On",
@@ -372,6 +381,8 @@ export default function Home() {
           </motion.div>
         </motion.div>
       </motion.section>
+
+
 
       <section id="features" ref={featuresRef} className="py-24 md:py-32 bg-white overflow-hidden">
         <div className="max-w-[1200px] mx-auto px-6">
@@ -821,6 +832,78 @@ export default function Home() {
                 For Business
                 <ChevronRight className="w-5 h-5" />
               </button>
+            </div>
+          </motion.div>
+        </div>
+        </section>
+
+      <section className="py-20 md:py-28 bg-[#0a0a0a] relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,#1a1a1a_0%,transparent_50%)]" />
+        <div className="max-w-[1200px] mx-auto px-6 relative">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <span className="inline-block px-4 py-1.5 rounded-full bg-white/10 text-sm text-white/60 font-medium mb-4">
+              Trusted Partners
+            </span>
+            <h3 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-white font-display">
+              Partnered with <span className="text-white/50 italic">the best</span>
+            </h3>
+          </motion.div>
+
+          <div className="relative">
+            <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#0a0a0a] to-transparent z-10" />
+            <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#0a0a0a] to-transparent z-10" />
+            
+            <div className="flex gap-16 md:gap-24 items-center justify-center flex-wrap py-8">
+              {[
+                { name: "Nike", svg: <svg viewBox="0 0 100 35" className="w-24 h-10"><path fill="currentColor" d="M21.7 3.1c-8.8 4.3-17.6 8.8-26 13.4-1.4.8-2.1 1.5-2.1 2.3 0 .5.3.9.8 1.3.5.4 1.1.6 1.8.6.5 0 2.2-.5 5.1-1.5 2.9-1 6.4-2.3 10.5-3.8 4.1-1.5 7.1-2.6 9-3.3l5.7-2.1c1.8-.7 3.2-1.2 4.2-1.5 1-.3 1.8-.5 2.4-.5.4 0 .6.1.7.2.1.1.2.3.2.5 0 .3-.1.6-.2.9-.1.3-.4.7-.7 1.2l-4.5 6.6-8.2 12.1c-.8 1.2-1.2 2.1-1.2 2.6 0 .4.2.7.5.9.3.2.7.3 1.2.3.4 0 .8-.1 1.2-.2.4-.1.9-.4 1.4-.7 2.9-1.8 5.8-3.7 8.7-5.6l6.4-4.3c1.5-1 2.9-1.9 4.2-2.9 1.3-1 2.5-1.9 3.6-2.9 1.1-1 2-1.9 2.7-2.7.7-.8 1.3-1.7 1.7-2.5.4-.8.6-1.7.6-2.5 0-.9-.2-1.6-.7-2.3-.5-.7-1.1-1.2-1.9-1.6-.8-.4-1.7-.7-2.6-.9-.9-.2-1.9-.3-2.8-.3-1.2 0-2.6.2-4.2.5-1.6.3-3.3.8-5.1 1.5-1.8.7-3.8 1.4-5.8 2.3-2 .9-4.3 1.9-6.8 3z"/></svg> },
+                { name: "Adidas", svg: <svg viewBox="0 0 100 65" className="w-20 h-12"><path fill="currentColor" d="M0 65l16.7-28.9 16.7 28.9H0zm19.4-33.5L36.1 3.4 52.8 32l-16.7 28.9-16.7-28.4zm36.1 0L72.2 3.4 88.9 32 72.2 60.9 55.5 32.5v-.5l-.1.5zm0-28.1L72.2 0l16.7 3.4L72.2 32 55.5 3.4z"/></svg> },
+                { name: "Puma", svg: <svg viewBox="0 0 100 40" className="w-24 h-10"><path fill="currentColor" d="M66.7 13.3c-4.2 0-7.5 2.3-9.2 5.8v-5h-6.7v25h6.7V27.5c0-5 2.5-7.5 6.7-7.5h2.5v-6.7h-0zm-36.7 0c-7.5 0-13.3 5.8-13.3 13.3s5.8 13.3 13.3 13.3 13.3-5.8 13.3-13.3-5.8-13.3-13.3-13.3zm0 20c-3.7 0-6.7-3-6.7-6.7s3-6.7 6.7-6.7 6.7 3 6.7 6.7-3 6.7-6.7 6.7zM90 13.3V39h-6.7V27.5c0-5-2.5-7.5-6.7-7.5s-6.7 2.5-6.7 7.5V39h-6.7V13.3h6.7v5c1.7-3.5 5-5.8 9.2-5.8 6.6 0 10.9 4.2 10.9 11.7v15.1h-0.1V13.3zM10 1.7c5.5 0 10 4.5 10 10H0c0-5.5 4.5-10 10-10z"/></svg> },
+                { name: "H&M", svg: <svg viewBox="0 0 100 50" className="w-16 h-10"><text x="50" y="38" textAnchor="middle" fontSize="36" fontWeight="bold" fill="currentColor">H&amp;M</text></svg> },
+                { name: "Zara", svg: <svg viewBox="0 0 100 30" className="w-20 h-8"><text x="50" y="24" textAnchor="middle" fontSize="28" fontWeight="400" letterSpacing="4" fill="currentColor" style={{fontFamily: "serif"}}>ZARA</text></svg> },
+                { name: "Gucci", svg: <svg viewBox="0 0 100 35" className="w-20 h-10"><text x="50" y="28" textAnchor="middle" fontSize="24" fontWeight="400" letterSpacing="6" fill="currentColor" style={{fontFamily: "serif"}}>GUCCI</text></svg> },
+              ].map((brand, i) => (
+                <motion.div
+                  key={brand.name}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  className="text-white/30 hover:text-white/80 transition-all duration-500 cursor-pointer hover:scale-110"
+                >
+                  {brand.svg}
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="mt-16 pt-12 border-t border-white/10"
+          >
+            <div className="grid sm:grid-cols-3 gap-8 text-center">
+              {[
+                { value: "200+", label: "Brand Partners" },
+                { value: "50K+", label: "Products Listed" },
+                { value: "99%", label: "Authentic Guarantee" },
+              ].map((stat, i) => (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.3 + i * 0.1 }}
+                >
+                  <p className="text-4xl md:text-5xl font-semibold text-white mb-2">{stat.value}</p>
+                  <p className="text-white/50 text-sm">{stat.label}</p>
+                </motion.div>
+              ))}
             </div>
           </motion.div>
         </div>
