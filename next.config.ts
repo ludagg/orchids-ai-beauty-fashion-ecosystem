@@ -26,7 +26,7 @@ if (!isVercel) {
 if (!isVercel) {
   (nextConfig as any).turbopack = {
     rules: {
-      "*.{jsx,tsx}": {
+      "src/**/*.{jsx,tsx}": {
         loaders: [LOADER],
       },
     },
