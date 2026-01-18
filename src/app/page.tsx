@@ -934,7 +934,7 @@ export default function Home() {
           </div>
           <div className="pt-8 border-t border-[#e5e5e5] flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-sm text-[#6b6b6b]">
-              © 2024 Priisme. All rights reserved.
+              © 2026 Priisme. All rights reserved.
             </p>
             <div className="flex items-center gap-6">
               <a href="#" className="text-sm text-[#6b6b6b] hover:text-[#1a1a1a] transition-colors">Privacy</a>
