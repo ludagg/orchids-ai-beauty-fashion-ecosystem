@@ -22,7 +22,7 @@ import {
   Heart
 } from "lucide-react";
 
-const navItems = ["Features", "AI", "Marketplace", "Salons"];
+const navItems = ["Features", "AI", "Marketplace", "Salons", "Testimonials"];
 
 const features = [
   {
@@ -117,6 +117,30 @@ const bentoItems = [
     gradient: "from-pink-500/10 to-rose-500/10",
     iconColor: "#ec4899",
   },
+];
+
+const testimonials = [
+  {
+    name: "Ananya Sharma",
+    role: "Fashion Blogger",
+    content: "Priisme has completely changed how I discover new designers. The AI Stylist is surprisingly accurate and helps me find pieces I wouldn't have considered before.",
+    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
+    rating: 5
+  },
+  {
+    name: "Rahul Mehra",
+    role: "Verified Buyer",
+    content: "The virtual try-on feature is a game changer. I've bought three outfits so far and they all fit perfectly. No more returns because of wrong sizing!",
+    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
+    rating: 5
+  },
+  {
+    name: "Priya Patel",
+    role: "Salon Regular",
+    content: "Booking my favorite salon has never been easier. Love the real-time availability and the fact that I can see verified reviews before booking.",
+    avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop",
+    rating: 5
+  }
 ];
 
 export default function Home() {
@@ -802,6 +826,59 @@ export default function Home() {
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
               </button>
             </motion.div>
+          </div>
+        </div>
+      </section>
+
+      <section id="testimonials" className="py-24 md:py-32 bg-white">
+        <div className="max-w-[1200px] mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16 md:mb-20"
+          >
+            <span className="inline-block px-4 py-1.5 rounded-full bg-[#f5f5f5] text-sm text-[#6b6b6b] font-medium mb-6">
+              Testimonials
+            </span>
+            <h2 className="text-[36px] sm:text-[44px] md:text-[56px] font-semibold leading-tight tracking-tight font-display">
+              Loved by fashion
+              <br />
+              <span className="text-[#6b6b6b] italic">enthusiasts.</span>
+            </h2>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {testimonials.map((testimonial, i) => (
+              <motion.div
+                key={testimonial.name}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="p-8 rounded-3xl bg-[#fafafa] border border-[#e5e5e5] relative group hover:shadow-xl hover:shadow-black/5 transition-all duration-300"
+              >
+                <div className="flex gap-1 mb-6">
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                  ))}
+                </div>
+                <p className="text-[#1a1a1a] text-lg leading-relaxed mb-8">
+                  &ldquo;{testimonial.content}&rdquo;
+                </p>
+                <div className="flex items-center gap-4">
+                  <img
+                    src={testimonial.avatar}
+                    alt={testimonial.name}
+                    className="w-12 h-12 rounded-full object-cover"
+                  />
+                  <div>
+                    <p className="font-semibold">{testimonial.name}</p>
+                    <p className="text-sm text-[#6b6b6b]">{testimonial.role}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
