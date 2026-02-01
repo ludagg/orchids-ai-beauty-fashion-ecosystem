@@ -147,6 +147,7 @@ export default function Home() {
   const [scrolled, setScrolled] = useState(false);
   const [activeFeature, setActiveFeature] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
   const featuresRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -154,8 +155,8 @@ export default function Home() {
     offset: ["start start", "end start"],
   });
 
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const heroScale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
+  const heroOpacity = useTransform(scrollYProgress, [0.7, 1], [1, 0]);
+  const heroScale = useTransform(scrollYProgress, [0.7, 1], [1, 0.98]);
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -349,7 +350,10 @@ export default function Home() {
               Start Shopping
               <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
             </button>
-            <button className="w-full sm:w-auto px-8 py-4 rounded-full bg-white border border-[#e5e5e5] font-medium text-[17px] hover:bg-[#fafafa] transition-all hover:border-[#d4d4d4] active:scale-[0.98] flex items-center justify-center gap-2 group">
+            <button
+              onClick={() => setIsPlaying(true)}
+              className="w-full sm:w-auto px-8 py-4 rounded-full bg-white border border-[#e5e5e5] font-medium text-[17px] hover:bg-[#fafafa] transition-all hover:border-[#d4d4d4] active:scale-[0.98] flex items-center justify-center gap-2 group"
+            >
               <Play className="w-5 h-5 text-[#6b6b6b] group-hover:text-[#1a1a1a] transition-colors" />
               Watch Demo
             </button>
@@ -378,15 +382,30 @@ export default function Home() {
           className="relative w-full max-w-[1100px] mx-auto mt-16 px-6"
         >
           <div className="relative aspect-[16/9] rounded-3xl overflow-hidden bg-gradient-to-br from-[#f5f5f5] to-white shadow-2xl shadow-black/10 border border-[#e5e5e5]">
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center">
-                <div className="w-20 h-20 mx-auto rounded-full bg-[#1a1a1a] flex items-center justify-center cursor-pointer hover:scale-110 transition-transform shadow-xl">
-                  <Play className="w-8 h-8 text-white ml-1" />
+            {isPlaying ? (
+              <iframe
+                src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+                title="YouTube video player"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                className="absolute inset-0 w-full h-full border-0"
+              />
+            ) : (
+              <>
+                <div
+                  className="absolute inset-0 flex items-center justify-center z-10 cursor-pointer"
+                  onClick={() => setIsPlaying(true)}
+                >
+                  <div className="text-center">
+                    <div className="w-20 h-20 mx-auto rounded-full bg-[#1a1a1a] flex items-center justify-center hover:scale-110 transition-transform shadow-xl">
+                      <Play className="w-8 h-8 text-white ml-1" />
+                    </div>
+                    <p className="mt-4 text-[#6b6b6b] text-sm">Watch how Priisme works</p>
+                  </div>
                 </div>
-                <p className="mt-4 text-[#6b6b6b] text-sm">Watch how Priisme works</p>
-              </div>
-            </div>
-            <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&h=675&fit=crop')] bg-cover bg-center opacity-30" />
+                <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&h=675&fit=crop')] bg-cover bg-center opacity-30" />
+              </>
+            )}
           </div>
         </motion.div>
 
