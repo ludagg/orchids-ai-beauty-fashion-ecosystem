@@ -216,6 +216,7 @@ export default function Home() {
               <button 
                 className="md:hidden p-2 -mr-2"
                 onClick={() => setMobileMenuOpen(true)}
+                aria-label="Open menu"
               >
                 <Menu className="w-6 h-6" />
               </button>
@@ -235,7 +236,11 @@ export default function Home() {
             <div className="flex flex-col h-full">
               <div className="flex items-center justify-between h-16 px-6 border-b border-[#e5e5e5]">
                 <span className="text-xl font-semibold font-display">Priisme</span>
-                <button onClick={() => setMobileMenuOpen(false)} className="p-2 -mr-2">
+                <button
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-2 -mr-2"
+                  aria-label="Close menu"
+                >
                   <X className="w-6 h-6" />
                 </button>
               </div>
@@ -356,9 +361,12 @@ export default function Home() {
           <div className="relative aspect-[16/9] rounded-3xl overflow-hidden bg-gradient-to-br from-[#f5f5f5] to-white shadow-2xl shadow-black/10 border border-[#e5e5e5]">
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-center">
-                <div className="w-20 h-20 mx-auto rounded-full bg-[#1a1a1a] flex items-center justify-center cursor-pointer hover:scale-110 transition-transform shadow-xl">
+                <button
+                  aria-label="Play demo video"
+                  className="w-20 h-20 mx-auto rounded-full bg-[#1a1a1a] flex items-center justify-center cursor-pointer hover:scale-110 transition-transform shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1a1a1a]"
+                >
                   <Play className="w-8 h-8 text-white ml-1" />
-                </div>
+                </button>
                 <p className="mt-4 text-[#6b6b6b] text-sm">Watch how Priisme works</p>
               </div>
             </div>
@@ -528,6 +536,8 @@ export default function Home() {
                 <button
                   key={feature.title}
                   onClick={() => setActiveFeature(i)}
+                  aria-label={`Go to slide ${i + 1}`}
+                  aria-current={i === activeFeature}
                   className={`relative h-2 rounded-full transition-all duration-500 ${
                     i === activeFeature ? "w-10" : "w-2 hover:w-4"
                   }`}
@@ -541,6 +551,7 @@ export default function Home() {
             <div className="flex items-center justify-center gap-8 mt-8">
               <button
                 onClick={() => setActiveFeature((prev) => (prev - 1 + features.length) % features.length)}
+                aria-label="Previous slide"
                 className="w-12 h-12 rounded-full border border-[#e5e5e5] flex items-center justify-center hover:bg-[#f5f5f5] transition-colors"
               >
                 <ChevronRight className="w-5 h-5 rotate-180" />
@@ -552,6 +563,7 @@ export default function Home() {
               </div>
               <button
                 onClick={() => setActiveFeature((prev) => (prev + 1) % features.length)}
+                aria-label="Next slide"
                 className="w-12 h-12 rounded-full border border-[#e5e5e5] flex items-center justify-center hover:bg-[#f5f5f5] transition-colors"
               >
                 <ChevronRight className="w-5 h-5" />
