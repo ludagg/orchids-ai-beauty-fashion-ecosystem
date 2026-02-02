@@ -233,13 +233,14 @@ export default function Home() {
               <motion.button
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="hidden sm:block px-4 py-2 rounded-full bg-[#1a1a1a] text-white text-sm font-medium hover:bg-[#333] transition-all hover:shadow-lg hover:shadow-black/20 active:scale-95"
+                className="hidden sm:block px-4 py-2 rounded-full bg-[#1a1a1a] text-white text-sm font-medium hover:bg-[#333] transition-all hover:shadow-lg hover:shadow-black/20 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1a1a1a] focus-visible:ring-offset-2"
               >
                 Get Started
               </motion.button>
               <button 
-                className="md:hidden p-2 -mr-2"
+                className="md:hidden p-2 -mr-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1a1a1a] focus-visible:ring-offset-2 rounded-lg"
                 onClick={() => setMobileMenuOpen(true)}
+                aria-label="Open menu"
               >
                 <Menu className="w-6 h-6" />
               </button>
@@ -259,7 +260,11 @@ export default function Home() {
             <div className="flex flex-col h-full">
               <div className="flex items-center justify-between h-16 px-6 border-b border-[#e5e5e5]">
                 <span className="text-xl font-semibold font-display">Priisme</span>
-                <button onClick={() => setMobileMenuOpen(false)} className="p-2 -mr-2">
+                <button
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-2 -mr-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1a1a1a] focus-visible:ring-offset-2 rounded-lg"
+                  aria-label="Close menu"
+                >
                   <X className="w-6 h-6" />
                 </button>
               </div>
@@ -285,10 +290,10 @@ export default function Home() {
                 </ul>
               </nav>
               <div className="px-6 py-8 border-t border-[#e5e5e5] space-y-3">
-                <button className="w-full py-4 rounded-2xl bg-[#1a1a1a] text-white font-medium hover:bg-[#333] transition-colors">
+                <button className="w-full py-4 rounded-2xl bg-[#1a1a1a] text-white font-medium hover:bg-[#333] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1a1a1a] focus-visible:ring-offset-2">
                   Get Started
                 </button>
-                <button className="w-full py-4 rounded-2xl border border-[#e5e5e5] font-medium hover:bg-[#fafafa] transition-colors">
+                <button className="w-full py-4 rounded-2xl border border-[#e5e5e5] font-medium hover:bg-[#fafafa] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1a1a1a] focus-visible:ring-offset-2">
                   Sign In
                 </button>
               </div>
@@ -298,6 +303,7 @@ export default function Home() {
       </AnimatePresence>
 
       <motion.section
+        id="main-content"
         ref={heroRef}
         style={{ opacity: heroOpacity, scale: heroScale }}
         className="relative min-h-screen flex flex-col items-center justify-center pt-16 overflow-hidden"
@@ -345,11 +351,11 @@ export default function Home() {
             transition={{ duration: 0.8, delay: 0.3 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10"
           >
-            <button className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#1a1a1a] text-white font-medium text-[17px] hover:bg-[#333] transition-all hover:shadow-xl hover:shadow-black/20 active:scale-[0.98] flex items-center justify-center gap-2 group">
+            <button className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#1a1a1a] text-white font-medium text-[17px] hover:bg-[#333] transition-all hover:shadow-xl hover:shadow-black/20 active:scale-[0.98] flex items-center justify-center gap-2 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1a1a1a] focus-visible:ring-offset-2">
               Start Shopping
               <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
             </button>
-            <button className="w-full sm:w-auto px-8 py-4 rounded-full bg-white border border-[#e5e5e5] font-medium text-[17px] hover:bg-[#fafafa] transition-all hover:border-[#d4d4d4] active:scale-[0.98] flex items-center justify-center gap-2 group">
+            <button className="w-full sm:w-auto px-8 py-4 rounded-full bg-white border border-[#e5e5e5] font-medium text-[17px] hover:bg-[#fafafa] transition-all hover:border-[#d4d4d4] active:scale-[0.98] flex items-center justify-center gap-2 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1a1a1a] focus-visible:ring-offset-2">
               <Play className="w-5 h-5 text-[#6b6b6b] group-hover:text-[#1a1a1a] transition-colors" />
               Watch Demo
             </button>
@@ -380,9 +386,12 @@ export default function Home() {
           <div className="relative aspect-[16/9] rounded-3xl overflow-hidden bg-gradient-to-br from-[#f5f5f5] to-white shadow-2xl shadow-black/10 border border-[#e5e5e5]">
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-center">
-                <div className="w-20 h-20 mx-auto rounded-full bg-[#1a1a1a] flex items-center justify-center cursor-pointer hover:scale-110 transition-transform shadow-xl">
+                <button
+                  className="w-20 h-20 mx-auto rounded-full bg-[#1a1a1a] flex items-center justify-center cursor-pointer hover:scale-110 transition-transform shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1a1a1a] focus-visible:ring-offset-2"
+                  aria-label="Play demo video"
+                >
                   <Play className="w-8 h-8 text-white ml-1" />
-                </div>
+                </button>
                 <p className="mt-4 text-[#6b6b6b] text-sm">Watch how Priisme works</p>
               </div>
             </div>
@@ -552,12 +561,14 @@ export default function Home() {
                 <button
                   key={feature.title}
                   onClick={() => setActiveFeature(i)}
-                  className={`relative h-2 rounded-full transition-all duration-500 ${
+                  className={`relative h-2 rounded-full transition-all duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1a1a1a] focus-visible:ring-offset-2 ${
                     i === activeFeature ? "w-10" : "w-2 hover:w-4"
                   }`}
                   style={{ 
                     backgroundColor: i === activeFeature ? feature.color : "#d4d4d4",
                   }}
+                  aria-label={`Go to feature ${i + 1}`}
+                  aria-current={i === activeFeature}
                 />
               ))}
             </div>
@@ -565,7 +576,8 @@ export default function Home() {
             <div className="flex items-center justify-center gap-8 mt-8">
               <button
                 onClick={() => setActiveFeature((prev) => (prev - 1 + features.length) % features.length)}
-                className="w-12 h-12 rounded-full border border-[#e5e5e5] flex items-center justify-center hover:bg-[#f5f5f5] transition-colors"
+                className="w-12 h-12 rounded-full border border-[#e5e5e5] flex items-center justify-center hover:bg-[#f5f5f5] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1a1a1a] focus-visible:ring-offset-2"
+                aria-label="Previous feature"
               >
                 <ChevronRight className="w-5 h-5 rotate-180" />
               </button>
@@ -576,7 +588,8 @@ export default function Home() {
               </div>
               <button
                 onClick={() => setActiveFeature((prev) => (prev + 1) % features.length)}
-                className="w-12 h-12 rounded-full border border-[#e5e5e5] flex items-center justify-center hover:bg-[#f5f5f5] transition-colors"
+                className="w-12 h-12 rounded-full border border-[#e5e5e5] flex items-center justify-center hover:bg-[#f5f5f5] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1a1a1a] focus-visible:ring-offset-2"
+                aria-label="Next feature"
               >
                 <ChevronRight className="w-5 h-5" />
               </button>
