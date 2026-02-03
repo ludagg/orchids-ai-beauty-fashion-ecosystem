@@ -146,6 +146,16 @@ const testimonials = [
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
   const [activeFeature, setActiveFeature] = useState(0);
+  const [isJoined, setIsJoined] = useState(false);
+
+  const scrollToWaitlist = () => {
+    document.getElementById("waitlist-form")?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const handleWaitlistSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsJoined(true);
+  };
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
   const featuresRef = useRef<HTMLDivElement>(null);
@@ -226,16 +236,10 @@ export default function Home() {
               <motion.button
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="hidden sm:block text-sm text-[#6b6b6b] hover:text-[#1a1a1a] transition-colors"
-              >
-                Sign In
-              </motion.button>
-              <motion.button
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
+                onClick={scrollToWaitlist}
                 className="hidden sm:block px-4 py-2 rounded-full bg-[#1a1a1a] text-white text-sm font-medium hover:bg-[#333] transition-all hover:shadow-lg hover:shadow-black/20 active:scale-95"
               >
-                Get Started
+                Join Waitlist
               </motion.button>
               <button 
                 className="md:hidden p-2 -mr-2"
@@ -285,11 +289,14 @@ export default function Home() {
                 </ul>
               </nav>
               <div className="px-6 py-8 border-t border-[#e5e5e5] space-y-3">
-                <button className="w-full py-4 rounded-2xl bg-[#1a1a1a] text-white font-medium hover:bg-[#333] transition-colors">
-                  Get Started
-                </button>
-                <button className="w-full py-4 rounded-2xl border border-[#e5e5e5] font-medium hover:bg-[#fafafa] transition-colors">
-                  Sign In
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    scrollToWaitlist();
+                  }}
+                  className="w-full py-4 rounded-2xl bg-[#1a1a1a] text-white font-medium hover:bg-[#333] transition-colors"
+                >
+                  Join Waitlist
                 </button>
               </div>
             </div>
@@ -335,21 +342,42 @@ export default function Home() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-[17px] md:text-[21px] text-[#6b6b6b] max-w-[540px] mx-auto mt-6 leading-relaxed"
           >
-            Shop fashion. Book salons. Watch shoppable videos.
-            All powered by AI, all in one place.
+            Experience the future of fashion. Join the waitlist for early access
+            to India&apos;s first AI-powered fashion ecosystem.
           </motion.p>
 
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10"
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10 w-full max-w-[600px] mx-auto"
           >
-            <button className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#1a1a1a] text-white font-medium text-[17px] hover:bg-[#333] transition-all hover:shadow-xl hover:shadow-black/20 active:scale-[0.98] flex items-center justify-center gap-2 group">
-              Start Shopping
-              <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-            </button>
-            <button className="w-full sm:w-auto px-8 py-4 rounded-full bg-white border border-[#e5e5e5] font-medium text-[17px] hover:bg-[#fafafa] transition-all hover:border-[#d4d4d4] active:scale-[0.98] flex items-center justify-center gap-2 group">
+            {isJoined ? (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="flex-1 h-14 flex items-center justify-center px-6 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 font-medium"
+              >
+                <CheckCircle2 className="w-5 h-5 mr-2" />
+                Thank you for joining our waitlist!
+              </motion.div>
+            ) : (
+              <form id="waitlist-form" onSubmit={handleWaitlistSubmit} className="relative flex-1 w-full group">
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  className="w-full h-14 px-6 rounded-full bg-white border border-[#e5e5e5] text-[17px] outline-none focus:border-[#1a1a1a] transition-all group-hover:border-[#d4d4d4]"
+                  required
+                />
+                <button
+                  type="submit"
+                  className="absolute right-1.5 top-1.5 bottom-1.5 px-6 rounded-full bg-[#1a1a1a] text-white font-medium text-[15px] hover:bg-[#333] transition-all active:scale-[0.98]"
+                >
+                  Join Waitlist
+                </button>
+              </form>
+            )}
+            <button className="w-full sm:w-auto px-8 py-4 h-14 rounded-full bg-white border border-[#e5e5e5] font-medium text-[17px] hover:bg-[#fafafa] transition-all hover:border-[#d4d4d4] active:scale-[0.98] flex items-center justify-center gap-2 group">
               <Play className="w-5 h-5 text-[#6b6b6b] group-hover:text-[#1a1a1a] transition-colors" />
               Watch Demo
             </button>
@@ -893,51 +921,42 @@ export default function Home() {
             className="text-center"
           >
             <h2 className="text-[36px] sm:text-[48px] md:text-[64px] lg:text-[72px] font-semibold leading-tight tracking-tight mb-4 font-display">
-              The future of
+              Join the
               <br />
-              <span className="text-gradient-color italic">beauty & fashion.</span>
+              <span className="text-gradient-color italic">future of fashion.</span>
             </h2>
             <p className="text-[#6b6b6b] text-[17px] md:text-[21px] max-w-[540px] mx-auto mb-10 leading-relaxed">
-              Join thousands who&apos;ve already discovered a smarter way
-              to shop, book, and style.
+              Be the first to experience India&apos;s most intelligent fashion ecosystem.
+              Join the waitlist today for early access.
             </p>
             
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
-              <button className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-[#1a1a1a] text-white font-medium hover:bg-[#333] transition-all hover:shadow-xl hover:shadow-black/20 active:scale-[0.98] inline-flex items-center justify-center gap-3 group">
-                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
-                </svg>
-                <div className="text-left">
-                  <p className="text-[10px] opacity-80 leading-none">Download on the</p>
-                  <p className="text-sm font-semibold leading-tight">App Store</p>
-                </div>
-              </button>
-              <button className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-[#1a1a1a] text-white font-medium hover:bg-[#333] transition-all hover:shadow-xl hover:shadow-black/20 active:scale-[0.98] inline-flex items-center justify-center gap-3 group">
-                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 01-.61-.92V2.734a1 1 0 01.609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.198l2.807 1.626a1 1 0 010 1.73l-2.808 1.626L15.206 12l2.492-2.491zM5.864 2.658L16.8 8.99l-2.302 2.302-8.634-8.634z"/>
-                </svg>
-                <div className="text-left">
-                  <p className="text-[10px] opacity-80 leading-none">GET IT ON</p>
-                  <p className="text-sm font-semibold leading-tight">Google Play</p>
-                </div>
-              </button>
+            <div className="max-w-[480px] mx-auto">
+              {isJoined ? (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="h-14 flex items-center justify-center px-6 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 font-medium"
+                >
+                  <CheckCircle2 className="w-5 h-5 mr-2" />
+                  You&apos;re on the list!
+                </motion.div>
+              ) : (
+                <form onSubmit={handleWaitlistSubmit} className="relative group">
+                  <input
+                    type="email"
+                    placeholder="Enter your email"
+                    className="w-full h-14 px-6 rounded-full bg-white border border-[#e5e5e5] text-[17px] outline-none focus:border-[#1a1a1a] transition-all group-hover:border-[#d4d4d4]"
+                    required
+                  />
+                  <button
+                    type="submit"
+                    className="absolute right-1.5 top-1.5 bottom-1.5 px-6 rounded-full bg-[#1a1a1a] text-white font-medium text-[15px] hover:bg-[#333] transition-all active:scale-[0.98]"
+                  >
+                    Join Waitlist
+                  </button>
+                </form>
+              )}
             </div>
-
-            <div className="flex items-center justify-center gap-2 text-[#6b6b6b] mb-6">
-              <div className="h-px w-12 bg-[#e5e5e5]" />
-              <span className="text-sm">or</span>
-              <div className="h-px w-12 bg-[#e5e5e5]" />
-            </div>
-
-            <button className="px-8 py-4 rounded-full bg-white border border-[#e5e5e5] font-medium text-[17px] hover:bg-[#fafafa] transition-all hover:border-[#d4d4d4] active:scale-[0.98] inline-flex items-center justify-center gap-2 group">
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10"/>
-                <line x1="2" y1="12" x2="22" y2="12"/>
-                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-              </svg>
-              Use Web Version
-              <ChevronRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-            </button>
           </motion.div>
         </div>
         </section>
