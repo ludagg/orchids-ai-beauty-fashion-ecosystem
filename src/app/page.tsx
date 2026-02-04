@@ -411,13 +411,17 @@ export default function Home() {
         >
           <div className="relative aspect-[16/9] rounded-3xl overflow-hidden bg-gradient-to-br from-[#f5f5f5] to-white shadow-2xl shadow-black/10 border border-[#e5e5e5]">
             {showVideo ? (
-              <iframe
-                src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
-                title="Priisme Demo Video"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="absolute inset-0 w-full h-full border-0"
-              />
+              <div className="absolute inset-0 z-10 bg-black">
+                <iframe
+                  width="100%"
+                  height="100%"
+                  src="https://www.youtube.com/embed/M7lc1UVf-VE?autoplay=1"
+                  title="YouTube video player"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                ></iframe>
+              </div>
             ) : (
               <>
                 <div className="absolute inset-0 flex items-center justify-center z-10">
