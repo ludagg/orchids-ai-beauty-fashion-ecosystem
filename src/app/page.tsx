@@ -244,6 +244,7 @@ export default function Home() {
               <button 
                 className="md:hidden p-2 -mr-2"
                 onClick={() => setMobileMenuOpen(true)}
+                aria-label="Open menu"
               >
                 <Menu className="w-6 h-6" />
               </button>
@@ -263,7 +264,11 @@ export default function Home() {
             <div className="flex flex-col h-full">
               <div className="flex items-center justify-between h-16 px-6 border-b border-[#e5e5e5]">
                 <span className="text-xl font-semibold font-display">Priisme</span>
-                <button onClick={() => setMobileMenuOpen(false)} className="p-2 -mr-2">
+                <button
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-2 -mr-2"
+                  aria-label="Close menu"
+                >
                   <X className="w-6 h-6" />
                 </button>
               </div>
@@ -304,6 +309,7 @@ export default function Home() {
         )}
       </AnimatePresence>
 
+      <main id="main-content">
       <motion.section
         ref={heroRef}
         style={{ opacity: heroOpacity, scale: heroScale }}
@@ -594,6 +600,7 @@ export default function Home() {
               <button
                 onClick={() => setActiveFeature((prev) => (prev - 1 + features.length) % features.length)}
                 className="w-12 h-12 rounded-full border border-[#e5e5e5] flex items-center justify-center hover:bg-[#f5f5f5] transition-colors"
+                aria-label="Previous feature"
               >
                 <ChevronRight className="w-5 h-5 rotate-180" />
               </button>
@@ -605,6 +612,7 @@ export default function Home() {
               <button
                 onClick={() => setActiveFeature((prev) => (prev + 1) % features.length)}
                 className="w-12 h-12 rounded-full border border-[#e5e5e5] flex items-center justify-center hover:bg-[#f5f5f5] transition-colors"
+                aria-label="Next feature"
               >
                 <ChevronRight className="w-5 h-5" />
               </button>
@@ -759,7 +767,7 @@ export default function Home() {
                         className="w-full h-[240px] sm:h-[280px] object-cover transition-transform duration-500 group-hover:scale-110"
                       />
                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
-                      <button className="absolute bottom-4 left-4 right-4 py-3 rounded-xl bg-white font-medium text-sm opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 hover:bg-[#fafafa]">
+                      <button className="absolute bottom-4 left-4 right-4 py-3 rounded-xl bg-white font-medium text-sm opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 focus-visible:opacity-100 focus-visible:translate-y-0 transition-all duration-300 hover:bg-[#fafafa]">
                         Quick View
                       </button>
                     </div>
@@ -995,6 +1003,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      </main>
 
       <footer className="py-16 bg-[#fafafa] border-t border-[#e5e5e5]">
         <div className="max-w-[1100px] mx-auto px-6">
