@@ -244,6 +244,7 @@ export default function Home() {
               <button 
                 className="md:hidden p-2 -mr-2"
                 onClick={() => setMobileMenuOpen(true)}
+                aria-label="Open mobile menu"
               >
                 <Menu className="w-6 h-6" />
               </button>
@@ -263,7 +264,11 @@ export default function Home() {
             <div className="flex flex-col h-full">
               <div className="flex items-center justify-between h-16 px-6 border-b border-[#e5e5e5]">
                 <span className="text-xl font-semibold font-display">Priisme</span>
-                <button onClick={() => setMobileMenuOpen(false)} className="p-2 -mr-2">
+                <button
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-2 -mr-2"
+                  aria-label="Close mobile menu"
+                >
                   <X className="w-6 h-6" />
                 </button>
               </div>
@@ -594,6 +599,7 @@ export default function Home() {
               <button
                 onClick={() => setActiveFeature((prev) => (prev - 1 + features.length) % features.length)}
                 className="w-12 h-12 rounded-full border border-[#e5e5e5] flex items-center justify-center hover:bg-[#f5f5f5] transition-colors"
+                aria-label="Previous feature"
               >
                 <ChevronRight className="w-5 h-5 rotate-180" />
               </button>
@@ -605,6 +611,7 @@ export default function Home() {
               <button
                 onClick={() => setActiveFeature((prev) => (prev + 1) % features.length)}
                 className="w-12 h-12 rounded-full border border-[#e5e5e5] flex items-center justify-center hover:bg-[#f5f5f5] transition-colors"
+                aria-label="Next feature"
               >
                 <ChevronRight className="w-5 h-5" />
               </button>
