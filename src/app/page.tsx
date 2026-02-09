@@ -244,6 +244,7 @@ export default function Home() {
               <button 
                 className="md:hidden p-2 -mr-2"
                 onClick={() => setMobileMenuOpen(true)}
+                aria-label="Open menu"
               >
                 <Menu className="w-6 h-6" />
               </button>
@@ -263,7 +264,11 @@ export default function Home() {
             <div className="flex flex-col h-full">
               <div className="flex items-center justify-between h-16 px-6 border-b border-[#e5e5e5]">
                 <span className="text-xl font-semibold font-display">Priisme</span>
-                <button onClick={() => setMobileMenuOpen(false)} className="p-2 -mr-2">
+                <button
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-2 -mr-2"
+                  aria-label="Close menu"
+                >
                   <X className="w-6 h-6" />
                 </button>
               </div>
@@ -304,8 +309,9 @@ export default function Home() {
         )}
       </AnimatePresence>
 
-      <motion.section
-        ref={heroRef}
+      <main id="main-content">
+        <motion.section
+          ref={heroRef}
         style={{ opacity: heroOpacity, scale: heroScale }}
         className="relative min-h-screen flex flex-col items-center justify-center pt-16 overflow-hidden"
       >
@@ -408,9 +414,12 @@ export default function Home() {
           <div className="relative aspect-[16/9] rounded-3xl overflow-hidden bg-gradient-to-br from-[#f5f5f5] to-white shadow-2xl shadow-black/10 border border-[#e5e5e5]">
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-center">
-                <div className="w-20 h-20 mx-auto rounded-full bg-[#1a1a1a] flex items-center justify-center cursor-pointer hover:scale-110 transition-transform shadow-xl">
+                <button
+                  className="w-20 h-20 mx-auto rounded-full bg-[#1a1a1a] flex items-center justify-center cursor-pointer hover:scale-110 transition-transform shadow-xl focus-visible:ring-2 focus-visible:ring-[#1a1a1a] focus-visible:ring-offset-2 outline-none"
+                  aria-label="Play demo video"
+                >
                   <Play className="w-8 h-8 text-white ml-1" />
-                </div>
+                </button>
                 <p className="mt-4 text-[#6b6b6b] text-sm">Watch how Priisme works</p>
               </div>
             </div>
@@ -580,6 +589,7 @@ export default function Home() {
                 <button
                   key={feature.title}
                   onClick={() => setActiveFeature(i)}
+                  aria-label={`Go to feature ${i + 1}`}
                   className={`relative h-2 rounded-full transition-all duration-500 ${
                     i === activeFeature ? "w-10" : "w-2 hover:w-4"
                   }`}
@@ -594,6 +604,7 @@ export default function Home() {
               <button
                 onClick={() => setActiveFeature((prev) => (prev - 1 + features.length) % features.length)}
                 className="w-12 h-12 rounded-full border border-[#e5e5e5] flex items-center justify-center hover:bg-[#f5f5f5] transition-colors"
+                aria-label="Previous feature"
               >
                 <ChevronRight className="w-5 h-5 rotate-180" />
               </button>
@@ -605,6 +616,7 @@ export default function Home() {
               <button
                 onClick={() => setActiveFeature((prev) => (prev + 1) % features.length)}
                 className="w-12 h-12 rounded-full border border-[#e5e5e5] flex items-center justify-center hover:bg-[#f5f5f5] transition-colors"
+                aria-label="Next feature"
               >
                 <ChevronRight className="w-5 h-5" />
               </button>
@@ -759,7 +771,7 @@ export default function Home() {
                         className="w-full h-[240px] sm:h-[280px] object-cover transition-transform duration-500 group-hover:scale-110"
                       />
                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
-                      <button className="absolute bottom-4 left-4 right-4 py-3 rounded-xl bg-white font-medium text-sm opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 hover:bg-[#fafafa]">
+                      <button className="absolute bottom-4 left-4 right-4 py-3 rounded-xl bg-white font-medium text-sm opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 focus:opacity-100 focus:translate-y-0 transition-all duration-300 hover:bg-[#fafafa] outline-none focus-visible:ring-2 focus-visible:ring-[#1a1a1a]">
                         Quick View
                       </button>
                     </div>
@@ -993,8 +1005,9 @@ export default function Home() {
               </motion.div>
             ))}
           </div>
-        </div>
-      </section>
+          </div>
+        </section>
+      </main>
 
       <footer className="py-16 bg-[#fafafa] border-t border-[#e5e5e5]">
         <div className="max-w-[1100px] mx-auto px-6">
