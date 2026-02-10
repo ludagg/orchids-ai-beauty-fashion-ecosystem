@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
+import MotionVideo from "@/components/MotionVideo";
 import { 
   ArrowRight, 
   Play, 
@@ -898,6 +899,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Motion Video Section */}
+      <MotionVideo />
 
       <section id="testimonials" className="py-24 md:py-32 bg-white">
         <div className="max-w-[1200px] mx-auto px-6">
