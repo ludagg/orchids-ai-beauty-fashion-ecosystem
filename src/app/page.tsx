@@ -199,7 +199,7 @@ export default function Home() {
   }, [mobileMenuOpen]);
 
   return (
-    <div className="min-h-screen bg-[#fafafa] text-[#1a1a1a] selection:bg-black/10">
+    <div id="main-content" className="min-h-screen bg-[#fafafa] text-[#1a1a1a] selection:bg-black/10 outline-none">
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           scrolled ? "bg-white/90 backdrop-blur-2xl shadow-sm" : ""
@@ -224,7 +224,7 @@ export default function Home() {
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.05 }}
-                  className="relative text-sm text-[#6b6b6b] hover:text-[#1a1a1a] transition-colors py-2 group"
+                  className="relative text-sm text-[#6b6b6b] hover:text-[#1a1a1a] transition-colors py-2 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1a1a1a] focus-visible:ring-offset-2 rounded-sm"
                 >
                   {item}
                   <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#1a1a1a] transition-all duration-300 group-hover:w-full" />
@@ -242,8 +242,9 @@ export default function Home() {
                 Join Waitlist
               </motion.button>
               <button 
-                className="md:hidden p-2 -mr-2"
+                className="md:hidden p-2 -mr-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1a1a1a] rounded-md"
                 onClick={() => setMobileMenuOpen(true)}
+                aria-label="Open mobile menu"
               >
                 <Menu className="w-6 h-6" />
               </button>
@@ -263,7 +264,11 @@ export default function Home() {
             <div className="flex flex-col h-full">
               <div className="flex items-center justify-between h-16 px-6 border-b border-[#e5e5e5]">
                 <span className="text-xl font-semibold font-display">Priisme</span>
-                <button onClick={() => setMobileMenuOpen(false)} className="p-2 -mr-2">
+                <button
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-2 -mr-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1a1a1a] rounded-md"
+                  aria-label="Close mobile menu"
+                >
                   <X className="w-6 h-6" />
                 </button>
               </div>
@@ -366,12 +371,12 @@ export default function Home() {
                 <input
                   type="email"
                   placeholder="Enter your email"
-                  className="w-full h-14 px-6 rounded-full bg-white border border-[#e5e5e5] text-[17px] outline-none focus:border-[#1a1a1a] transition-all group-hover:border-[#d4d4d4]"
+                  className="w-full h-14 px-6 rounded-full bg-white border border-[#e5e5e5] text-[17px] outline-none focus:border-[#1a1a1a] focus:ring-2 focus:ring-[#1a1a1a] focus:ring-offset-2 transition-all group-hover:border-[#d4d4d4]"
                   required
                 />
                 <button
                   type="submit"
-                  className="absolute right-1.5 top-1.5 bottom-1.5 px-6 rounded-full bg-[#1a1a1a] text-white font-medium text-[15px] hover:bg-[#333] transition-all active:scale-[0.98]"
+                  className="absolute right-1.5 top-1.5 bottom-1.5 px-6 rounded-full bg-[#1a1a1a] text-white font-medium text-[15px] hover:bg-[#333] transition-all active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1a1a1a] focus-visible:ring-offset-2"
                 >
                   Join Waitlist
                 </button>

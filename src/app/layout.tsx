@@ -30,6 +30,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${playfair.variable} ${outfit.variable} font-sans antialiased`}>
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only fixed top-4 left-4 z-[100] px-4 py-2 bg-white text-[#1a1a1a] rounded-lg shadow-lg outline-none ring-2 ring-[#1a1a1a] ring-offset-2"
+        >
+          Skip to Content
+        </a>
         <Script
           id="orchids-browser-logs"
           src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/scripts/orchids-browser-logs.js"
