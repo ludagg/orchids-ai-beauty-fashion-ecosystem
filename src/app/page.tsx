@@ -362,7 +362,7 @@ export default function Home() {
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>
             <span className="text-sm text-[#6b6b6b]">
-              India&apos;s First AI-Powered Beauty & Fashion Ecosystem
+              AI-Powered Beauty & Fashion Ecosystem
             </span>
           </motion.div>
 
@@ -384,7 +384,7 @@ export default function Home() {
             className="text-[17px] md:text-[21px] text-[#6b6b6b] max-w-[540px] mx-auto mt-6 leading-relaxed"
           >
             Experience the future of fashion. Join the waitlist for early access
-            to India&apos;s first AI-powered fashion ecosystem.
+            to our AI-powered fashion ecosystem.
           </motion.p>
 
           <motion.div
