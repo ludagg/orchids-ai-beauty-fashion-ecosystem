@@ -309,6 +309,47 @@ export default function Home() {
         style={{ opacity: heroOpacity, scale: heroScale }}
         className="relative min-h-screen flex flex-col items-center justify-center pt-16 overflow-hidden"
       >
+        {/* Background Decorations */}
+        <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#e5e5e5_1px,transparent_1px)] bg-[size:40px_40px] opacity-[0.3]" />
+          <motion.div
+            animate={{
+              x: [0, 40, 0],
+              y: [0, 20, 0],
+            }}
+            transition={{
+              duration: 15,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-rose-500/[0.08] blur-[100px] rounded-full"
+          />
+          <motion.div
+            animate={{
+              x: [0, -30, 0],
+              y: [0, -50, 0],
+            }}
+            transition={{
+              duration: 20,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            className="absolute top-[20%] -right-[10%] w-[35%] h-[35%] bg-blue-500/[0.08] blur-[100px] rounded-full"
+          />
+          <motion.div
+            animate={{
+              x: [0, 20, 0],
+              y: [0, 30, 0],
+            }}
+            transition={{
+              duration: 18,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            className="absolute bottom-[10%] left-[20%] w-[30%] h-[30%] bg-violet-500/[0.05] blur-[100px] rounded-full"
+          />
+        </div>
+
         <div className="relative z-10 max-w-[980px] mx-auto px-6 text-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
