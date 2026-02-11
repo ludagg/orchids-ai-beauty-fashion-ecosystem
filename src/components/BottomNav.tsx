@@ -1,6 +1,6 @@
 "use client";
 
-import { LayoutDashboard, ShoppingBag, Sparkles, Scissors, Video } from "lucide-react";
+import { LayoutDashboard, ShoppingBag, Sparkles, Scissors, Video, MessageSquare } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 const navItems = [
   { icon: LayoutDashboard, label: "Home", href: "/app" },
   { icon: ShoppingBag, label: "Shop", href: "/app/marketplace" },
+  { icon: MessageSquare, label: "Chat", href: "/app/conversations" },
   { icon: Sparkles, label: "AI", href: "/app/ai-stylist" },
   { icon: Scissors, label: "Salons", href: "/app/salons" },
   { icon: Video, label: "Live", href: "/app/live-commerce" },
