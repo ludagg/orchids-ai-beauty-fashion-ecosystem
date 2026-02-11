@@ -25,13 +25,13 @@ export default function SalonDashboard() {
     <div className="space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-[#1a1a1a]">Good Morning, Aura Spa</h1>
-          <p className="text-[#6b6b6b] mt-1">Here&apos;s what&apos;s happening at your salon today.</p>
+          <h1 className="text-2xl font-bold text-foreground">Good Morning, Aura Spa</h1>
+          <p className="text-muted-foreground mt-1">Here&apos;s what&apos;s happening at your salon today.</p>
         </div>
         <div className="flex items-center gap-3">
-          <div className="bg-white border border-[#e5e5e5] rounded-xl px-4 py-2 flex items-center gap-2">
+          <div className="bg-card border border-border rounded-xl px-4 py-2 flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-sm font-medium">Accepting Bookings</span>
+            <span className="text-sm font-medium text-foreground">Accepting Bookings</span>
           </div>
         </div>
       </div>
@@ -44,19 +44,19 @@ export default function SalonDashboard() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.1 }}
-            className="p-6 bg-white rounded-2xl border border-[#e5e5e5] shadow-sm hover:shadow-md transition-shadow"
+            className="p-6 bg-card rounded-2xl border border-border shadow-sm hover:shadow-md transition-shadow"
           >
             <div className="flex items-start justify-between">
-              <div className={`p-3 rounded-xl ${stat.bg} ${stat.color}`}>
+              <div className={`p-3 rounded-xl ${stat.bg} dark:bg-opacity-20 ${stat.color}`}>
                 <stat.icon className="w-6 h-6" />
               </div>
-              <div className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg">
+              <div className="text-[10px] font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-950/30 dark:text-emerald-400 px-2 py-1 rounded-lg">
                 {stat.change}
               </div>
             </div>
             <div className="mt-4">
-              <p className="text-sm font-medium text-[#6b6b6b]">{stat.label}</p>
-              <p className="text-2xl font-bold text-[#1a1a1a] mt-1">{stat.value}</p>
+              <p className="text-sm font-medium text-muted-foreground">{stat.label}</p>
+              <p className="text-2xl font-bold text-foreground mt-1">{stat.value}</p>
             </div>
           </motion.div>
         ))}
@@ -66,7 +66,7 @@ export default function SalonDashboard() {
         {/* Upcoming Appointments */}
         <div className="lg:col-span-2 space-y-6">
           <div className="flex items-center justify-between">
-            <h3 className="font-bold text-[#1a1a1a] text-lg">Upcoming Appointments</h3>
+            <h3 className="font-bold text-foreground text-lg">Upcoming Appointments</h3>
             <button className="text-sm font-bold text-blue-600 hover:underline">View Calendar</button>
           </div>
 
@@ -82,17 +82,17 @@ export default function SalonDashboard() {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.4 + i * 0.1 }}
-                className="flex items-center gap-4 p-4 bg-white border border-[#e5e5e5] rounded-2xl hover:border-blue-200 transition-colors group cursor-pointer"
+                className="flex items-center gap-4 p-4 bg-card border border-border rounded-2xl hover:border-blue-200 transition-colors group cursor-pointer"
               >
-                <div className="w-12 h-12 rounded-full overflow-hidden bg-[#f5f5f5]">
+                <div className="w-12 h-12 rounded-full overflow-hidden bg-secondary">
                   <img src={`https://i.pravatar.cc/100?u=${app.image}`} alt={app.customer} className="w-full h-full object-cover" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h4 className="font-bold text-[#1a1a1a] truncate">{app.customer}</h4>
-                  <p className="text-sm text-[#6b6b6b] truncate">{app.service}</p>
+                  <h4 className="font-bold text-foreground truncate">{app.customer}</h4>
+                  <p className="text-sm text-muted-foreground truncate">{app.service}</p>
                 </div>
                 <div className="text-right">
-                  <div className="flex items-center gap-1.5 text-sm font-bold text-[#1a1a1a]">
+                  <div className="flex items-center gap-1.5 text-sm font-bold text-foreground">
                     <Clock className="w-3.5 h-3.5 text-blue-600" />
                     {app.time}
                   </div>
@@ -110,7 +110,7 @@ export default function SalonDashboard() {
 
         {/* Quick Actions & Tips */}
         <div className="space-y-8">
-          <div className="p-6 rounded-3xl bg-[#1a1a1a] text-white space-y-6">
+          <div className="p-6 rounded-3xl bg-[#1a1a1a] dark:bg-card text-white space-y-6 border border-border">
             <h3 className="font-bold text-lg">Quick Actions</h3>
             <div className="grid grid-cols-2 gap-3">
               {[
@@ -130,12 +130,12 @@ export default function SalonDashboard() {
             </div>
           </div>
 
-          <div className="p-6 rounded-3xl bg-blue-50 border border-blue-100 space-y-4">
-            <div className="flex items-center gap-2 text-blue-600">
+          <div className="p-6 rounded-3xl bg-blue-50 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900/30 space-y-4">
+            <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400">
               <Star className="w-5 h-5 fill-current" />
               <h3 className="font-bold">Partner Tip</h3>
             </div>
-            <p className="text-sm text-blue-900 leading-relaxed">
+            <p className="text-sm text-blue-900 dark:text-blue-100 leading-relaxed">
               Adding real photos of your latest work can increase booking rates by up to 40%. Try updating your gallery today!
             </p>
             <button className="w-full py-3 rounded-xl bg-blue-600 text-white text-sm font-bold hover:bg-blue-700 transition-all">

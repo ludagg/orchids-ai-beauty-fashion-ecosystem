@@ -66,13 +66,13 @@ export default function SalonLayout({
         </nav>
 
         <div className="p-4 mt-auto">
-          <div className="p-4 rounded-2xl bg-blue-50 border border-blue-100">
-            <div className="flex items-center gap-2 text-blue-600 mb-2">
+          <div className="p-4 rounded-2xl bg-blue-50 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900/30">
+            <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 mb-2">
               <Clock className="w-4 h-4" />
               <p className="text-xs font-bold uppercase">Store Status</p>
             </div>
-            <p className="text-sm font-semibold text-blue-900">Open for Business</p>
-            <p className="text-[10px] text-blue-600 mt-1">Closing in 4 hours</p>
+            <p className="text-sm font-semibold text-blue-900 dark:text-blue-100">Open for Business</p>
+            <p className="text-[10px] text-blue-600 dark:text-blue-400 mt-1">Closing in 4 hours</p>
           </div>
         </div>
 

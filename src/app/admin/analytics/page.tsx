@@ -55,11 +55,11 @@ export default function AdminAnalyticsPage() {
     <div className="space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Platform Analytics</h1>
-          <p className="text-slate-500 mt-1">Deep dive into platform growth and revenue metrics.</p>
+          <h1 className="text-2xl font-bold text-foreground">Platform Analytics</h1>
+          <p className="text-muted-foreground mt-1">Deep dive into platform growth and revenue metrics.</p>
         </div>
         <div className="flex items-center gap-3">
-          <button className="px-6 py-3 bg-white border border-slate-200 text-slate-700 rounded-xl text-sm font-bold hover:bg-slate-50 transition-all flex items-center gap-2">
+          <button className="px-6 py-3 bg-card border border-border text-muted-foreground rounded-xl text-sm font-bold hover:bg-secondary transition-all flex items-center gap-2">
             <Download className="w-4 h-4" />
             Download Dataset
           </button>
@@ -74,7 +74,7 @@ export default function AdminAnalyticsPage() {
           { label: "Conversion Rate", value: "3.2%", change: "-0.5%", trend: "down", icon: Activity, color: "text-violet-600", bg: "bg-violet-50" },
           { label: "Avg. Order Value", value: "₹4,850", change: "+5%", trend: "up", icon: ShoppingBag, color: "text-amber-600", bg: "bg-amber-50" },
         ].map((s, i) => (
-          <div key={s.label} className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm">
+          <div key={s.label} className="p-6 bg-card rounded-2xl border border-border shadow-sm">
             <div className="flex items-start justify-between">
               <div className={`p-3 rounded-xl ${s.bg} ${s.color}`}>
                 <s.icon className="w-6 h-6" />
@@ -84,8 +84,8 @@ export default function AdminAnalyticsPage() {
               </div>
             </div>
             <div className="mt-4">
-              <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">{s.label}</p>
-              <p className="text-2xl font-bold text-slate-900 mt-1">{s.value}</p>
+              <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">{s.label}</p>
+              <p className="text-2xl font-bold text-foreground mt-1">{s.value}</p>
             </div>
           </div>
         ))}
@@ -93,13 +93,13 @@ export default function AdminAnalyticsPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Revenue Growth Chart */}
-        <div className="lg:col-span-2 p-8 bg-white border border-slate-200 rounded-[32px] shadow-sm">
+        <div className="lg:col-span-2 p-8 bg-card border border-border rounded-[32px] shadow-sm">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h3 className="font-bold text-slate-900 text-lg">Revenue Growth</h3>
-              <p className="text-xs text-slate-500 mt-1">Comparison between Marketplace & Salon bookings</p>
+              <h3 className="font-bold text-foreground text-lg">Revenue Growth</h3>
+              <p className="text-xs text-muted-foreground mt-1">Comparison between Marketplace & Salon bookings</p>
             </div>
-            <select className="px-4 py-2 bg-slate-50 border-transparent rounded-lg text-xs font-bold text-slate-600 outline-none">
+            <select className="px-4 py-2 bg-secondary border-transparent rounded-lg text-xs font-bold text-muted-foreground outline-none">
               <option>Last 6 Months</option>
               <option>Last 12 Months</option>
               <option>Last 30 Days</option>
@@ -118,7 +118,7 @@ export default function AdminAnalyticsPage() {
                     <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="currentColor" className="text-border" />
                 <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 700, fill: '#94a3b8' }} />
                 <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 700, fill: '#94a3b8' }} tickFormatter={(value) => `₹${value/1000}k`} />
                 <Tooltip
@@ -132,18 +132,18 @@ export default function AdminAnalyticsPage() {
           <div className="flex items-center gap-6 mt-8 justify-center">
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-indigo-500" />
-              <span className="text-xs font-bold text-slate-600">Marketplace</span>
+              <span className="text-xs font-bold text-muted-foreground">Marketplace</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-emerald-500" />
-              <span className="text-xs font-bold text-slate-600">Salon Bookings</span>
+              <span className="text-xs font-bold text-muted-foreground">Salon Bookings</span>
             </div>
           </div>
         </div>
 
         {/* Revenue by Category */}
-        <div className="p-8 bg-white border border-slate-200 rounded-[32px] shadow-sm flex flex-col">
-          <h3 className="font-bold text-slate-900 text-lg mb-8">Sales by Category</h3>
+        <div className="p-8 bg-card border border-border rounded-[32px] shadow-sm flex flex-col">
+          <h3 className="font-bold text-foreground text-lg mb-8">Sales by Category</h3>
           <div className="flex-1 flex items-center justify-center">
             <div className="h-[250px] w-full">
               <ResponsiveContainer width="100%" height="100%">
@@ -171,9 +171,9 @@ export default function AdminAnalyticsPage() {
               <div key={cat.name} className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-2 h-2 rounded-full" style={{ backgroundColor: cat.color }} />
-                  <span className="text-xs font-bold text-slate-600">{cat.name}</span>
+                  <span className="text-xs font-bold text-muted-foreground">{cat.name}</span>
                 </div>
-                <span className="text-xs font-bold text-slate-900">{cat.value}%</span>
+                <span className="text-xs font-bold text-foreground">{cat.value}%</span>
               </div>
             ))}
           </div>
@@ -181,7 +181,7 @@ export default function AdminAnalyticsPage() {
       </div>
 
       {/* Geographic Distribution Preview */}
-      <div className="p-8 rounded-[40px] bg-slate-900 text-white relative overflow-hidden group">
+      <div className="p-8 rounded-[40px] bg-slate-900 dark:bg-card text-white relative overflow-hidden group border border-border">
         <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500/10 blur-[80px] rounded-full -mr-48 -mt-48" />
         <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-12">
           <div className="space-y-6">
@@ -189,21 +189,21 @@ export default function AdminAnalyticsPage() {
               <Globe className="w-6 h-6" />
               <h3 className="text-xl font-bold font-display">Regional Performance</h3>
             </div>
-            <p className="text-slate-400 max-w-sm leading-relaxed">
+            <p className="text-slate-300 dark:text-muted-foreground max-w-sm leading-relaxed">
               Your platform is expanding rapidly in Tier-2 cities. Bangalore and Mumbai remain your strongest markets with 64% of total volume.
             </p>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Top City</p>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Top City</p>
                 <p className="text-lg font-bold">Bangalore</p>
               </div>
               <div>
-                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Fastest Growth</p>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Fastest Growth</p>
                 <p className="text-lg font-bold text-emerald-400">Pune</p>
               </div>
             </div>
           </div>
-          <div className="w-full md:w-64 aspect-square bg-slate-800 rounded-3xl border border-slate-700 flex items-center justify-center p-8">
+          <div className="w-full md:w-64 aspect-square bg-slate-800 dark:bg-secondary rounded-3xl border border-slate-700 dark:border-border flex items-center justify-center p-8">
              {/* Map Placeholder */}
              <div className="relative w-full h-full opacity-40">
                 <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-indigo-500 rounded-full animate-ping" />

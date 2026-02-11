@@ -16,6 +16,7 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 
 const adminNavItems = [
   { icon: LayoutDashboard, label: "Overview", href: "/admin" },
@@ -36,9 +37,9 @@ export default function AdminLayout({
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] text-[#0f172a] flex flex-col lg:flex-row">
+    <div className="min-h-screen bg-background text-foreground flex flex-col lg:flex-row">
       {/* Sidebar - Desktop */}
-      <aside className="w-64 bg-[#1e293b] text-white hidden lg:flex flex-col sticky top-0 h-screen">
+      <aside className="w-64 bg-[#1e293b] dark:bg-card text-white hidden lg:flex flex-col sticky top-0 h-screen border-r border-border">
         <div className="p-6 border-b border-slate-700">
           <Link href="/admin" className="text-xl font-bold tracking-tight">
             Priisme <span className="text-indigo-400">Admin</span>
@@ -79,10 +80,13 @@ export default function AdminLayout({
       </aside>
 
       {/* Mobile Header */}
-      <header className="lg:hidden h-16 bg-[#1e293b] text-white px-4 flex items-center justify-between sticky top-0 z-50">
-        <Link href="/admin" className="text-lg font-bold">
-          Priisme Admin
-        </Link>
+      <header className="lg:hidden h-16 bg-[#1e293b] dark:bg-card text-white px-4 flex items-center justify-between sticky top-0 z-50 border-b border-border">
+        <div className="flex items-center gap-4">
+          <Link href="/admin" className="text-lg font-bold">
+            Priisme Admin
+          </Link>
+          <ThemeSwitcher />
+        </div>
         <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="p-2">
           {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
@@ -90,7 +94,7 @@ export default function AdminLayout({
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-[#1e293b] lg:hidden pt-16">
+        <div className="fixed inset-0 z-40 bg-[#1e293b] dark:bg-card lg:hidden pt-16">
           <nav className="p-6 space-y-2">
             {adminNavItems.map((item) => (
               <Link
@@ -109,25 +113,26 @@ export default function AdminLayout({
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0">
-        <header className="hidden lg:flex h-16 bg-white border-b border-slate-200 px-8 items-center justify-between sticky top-0 z-30">
+        <header className="hidden lg:flex h-16 bg-card border-b border-border px-8 items-center justify-between sticky top-0 z-30">
           <div className="flex-1 max-w-md relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <input
               type="text"
               placeholder="Search anything..."
-              className="w-full pl-10 pr-4 py-2 bg-slate-50 border-transparent focus:bg-white focus:border-slate-200 rounded-lg text-sm transition-all outline-none"
+              className="w-full pl-10 pr-4 py-2 bg-secondary border-transparent focus:bg-card focus:border-border rounded-lg text-sm transition-all outline-none text-foreground"
             />
           </div>
 
           <div className="flex items-center gap-4">
-            <button className="p-2 text-slate-400 hover:text-slate-600 relative">
+            <ThemeSwitcher />
+            <button className="p-2 text-muted-foreground hover:text-foreground relative">
               <Bell className="w-5 h-5" />
-              <span className="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full border-2 border-white"></span>
+              <span className="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full border-2 border-card"></span>
             </button>
-            <div className="h-8 w-px bg-slate-200 mx-2" />
+            <div className="h-8 w-px bg-border mx-2" />
             <button className="flex items-center gap-2">
-              <span className="text-sm font-medium text-slate-700">Administrator</span>
-              <div className="w-8 h-8 rounded-lg bg-slate-100 border border-slate-200" />
+              <span className="text-sm font-medium text-foreground">Administrator</span>
+              <div className="w-8 h-8 rounded-lg bg-secondary border border-border" />
             </button>
           </div>
         </header>

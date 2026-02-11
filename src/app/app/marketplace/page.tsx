@@ -97,17 +97,17 @@ export default function MarketplacePage() {
       {/* Header Section */}
       <section className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <h1 className="text-3xl sm:text-4xl font-semibold font-display tracking-tight">Marketplace</h1>
-          <p className="text-[#6b6b6b] mt-1 text-base">Curated fashion from India's finest designers.</p>
+          <h1 className="text-3xl sm:text-4xl font-semibold font-display tracking-tight text-foreground">Marketplace</h1>
+          <p className="text-muted-foreground mt-1 text-base">Curated fashion from India's finest designers.</p>
         </div>
 
         <div className="flex items-center gap-3">
-          <button className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-[#e5e5e5] bg-white text-sm font-medium hover:bg-[#f5f5f5] transition-all">
+          <button className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-border bg-card text-foreground text-sm font-medium hover:bg-secondary transition-all">
             <Filter className="w-4 h-4" />
             Filters
           </button>
-          <div className="h-10 w-px bg-[#e5e5e5] mx-1" />
-          <button className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#1a1a1a] text-white text-sm font-medium hover:bg-[#333] transition-all shadow-lg shadow-black/10">
+          <div className="h-10 w-px bg-border mx-1" />
+          <button className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-medium hover:opacity-90 transition-all shadow-lg shadow-primary/10">
             <TrendingUp className="w-4 h-4" />
             Trends
           </button>
@@ -122,8 +122,8 @@ export default function MarketplacePage() {
             onClick={() => setSelectedCategory(category)}
             className={`px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
               selectedCategory === category
-                ? "bg-[#1a1a1a] text-white shadow-md"
-                : "bg-white border border-[#e5e5e5] text-[#6b6b6b] hover:border-[#1a1a1a] hover:text-[#1a1a1a]"
+                ? "bg-primary text-primary-foreground shadow-md"
+                : "bg-card border border-border text-muted-foreground hover:border-foreground hover:text-foreground"
             }`}
           >
             {category}
@@ -134,7 +134,7 @@ export default function MarketplacePage() {
       {/* Curated for You Section */}
       <section className="space-y-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-semibold font-display tracking-tight">
+          <h2 className="text-2xl font-semibold font-display tracking-tight text-foreground">
             Curated for <span className="bg-gradient-to-r from-violet-600 to-rose-600 bg-clip-text text-transparent">You</span>
           </h2>
           <button className="text-sm font-medium text-rose-600 hover:text-rose-700 transition-colors">
@@ -144,17 +144,17 @@ export default function MarketplacePage() {
         <div className="flex gap-4 sm:gap-6 overflow-x-auto pb-4 no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
           {products.slice(0, 4).map((product, i) => (
             <div key={`curated-${product.id}`} className="flex-shrink-0 w-[240px] sm:w-[280px] group cursor-pointer">
-              <div className="relative aspect-[4/5] rounded-[32px] overflow-hidden mb-3 border border-[#e5e5e5] bg-white shadow-sm">
+              <div className="relative aspect-[4/5] rounded-[32px] overflow-hidden mb-3 border border-border bg-card shadow-sm">
                 <img src={product.image} alt={product.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                 <div className="absolute top-4 right-4">
-                  <div className="px-3 py-1 rounded-full bg-white/90 backdrop-blur-md text-[10px] font-bold text-rose-600 uppercase tracking-wider">
+                  <div className="px-3 py-1 rounded-full bg-background/90 backdrop-blur-md text-[10px] font-bold text-rose-600 uppercase tracking-wider">
                     95% Match
                   </div>
                 </div>
               </div>
-              <h3 className="font-semibold text-sm truncate">{product.title}</h3>
-              <p className="text-xs text-[#6b6b6b] mb-1">{product.designer}</p>
-              <p className="font-bold text-sm text-[#1a1a1a]">{product.price}</p>
+              <h3 className="font-semibold text-sm truncate text-foreground">{product.title}</h3>
+              <p className="text-xs text-muted-foreground mb-1">{product.designer}</p>
+              <p className="font-bold text-sm text-foreground">{product.price}</p>
             </div>
           ))}
         </div>
@@ -171,7 +171,7 @@ export default function MarketplacePage() {
             className="group"
           >
             <Link href={`/app/marketplace/${product.id}`} className="block">
-              <div className="relative aspect-[4/5] rounded-[24px] sm:rounded-[32px] overflow-hidden mb-3 sm:mb-4 shadow-sm border border-[#e5e5e5] bg-[#f5f5f5]">
+              <div className="relative aspect-[4/5] rounded-[24px] sm:rounded-[32px] overflow-hidden mb-3 sm:mb-4 shadow-sm border border-border bg-secondary">
                 <img
                   src={product.image}
                   alt={product.title}
@@ -181,7 +181,7 @@ export default function MarketplacePage() {
 
                 {/* Overlay Tags */}
                 <div className="absolute top-4 left-4 flex flex-col gap-2">
-                  <div className="px-3 py-1 rounded-full bg-white/90 backdrop-blur-md text-[10px] font-bold uppercase tracking-wider shadow-sm flex items-center gap-1.5">
+                  <div className="px-3 py-1 rounded-full bg-background/90 backdrop-blur-md text-[10px] font-bold uppercase tracking-wider shadow-sm flex items-center gap-1.5 text-foreground">
                     <Tag className="w-3 h-3 text-rose-500" />
                     New
                   </div>
@@ -192,30 +192,30 @@ export default function MarketplacePage() {
                   className={`absolute top-4 right-4 p-2.5 rounded-full backdrop-blur-md transition-all duration-300 shadow-lg active:scale-90 ${
                     wishlistedIds.includes(product.id)
                       ? "bg-rose-500 text-white opacity-100"
-                      : "bg-white/90 text-[#1a1a1a] opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 hover:bg-white"
+                      : "bg-background/90 text-foreground opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 hover:bg-background"
                   }`}
                 >
                   <Heart className={`w-4 h-4 ${wishlistedIds.includes(product.id) ? "fill-current" : ""}`} />
                 </button>
 
-                <div className="absolute bottom-4 left-4 right-4 p-3 rounded-2xl bg-white/90 backdrop-blur-md opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 shadow-xl hidden sm:flex items-center justify-between">
-                  <p className="text-xs font-bold text-[#1a1a1a]">Quick View</p>
-                  <ArrowRight className="w-4 h-4 text-[#1a1a1a]" />
+                <div className="absolute bottom-4 left-4 right-4 p-3 rounded-2xl bg-background/90 backdrop-blur-md opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 shadow-xl hidden sm:flex items-center justify-between">
+                  <p className="text-xs font-bold text-foreground">Quick View</p>
+                  <ArrowRight className="w-4 h-4 text-foreground" />
                 </div>
               </div>
 
               <div className="px-1">
                 <div className="flex items-center justify-between mb-0.5 sm:mb-1">
-                  <h3 className="font-semibold text-sm sm:text-[15px] truncate text-[#1a1a1a]">{product.title}</h3>
-                  <div className="hidden sm:flex items-center gap-1 text-xs font-bold bg-[#f5f5f5] px-2 py-0.5 rounded-full">
+                  <h3 className="font-semibold text-sm sm:text-[15px] truncate text-foreground">{product.title}</h3>
+                  <div className="hidden sm:flex items-center gap-1 text-xs font-bold bg-secondary px-2 py-0.5 rounded-full text-foreground">
                     <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
                     {product.rating}
                   </div>
                 </div>
-                <p className="text-xs sm:text-sm text-[#6b6b6b] mb-1 sm:mb-2">{product.designer}</p>
+                <p className="text-xs sm:text-sm text-muted-foreground mb-1 sm:mb-2">{product.designer}</p>
                 <div className="flex items-center justify-between">
                   <p className="font-bold text-base sm:text-lg text-rose-600">{product.price}</p>
-                  <p className="text-[10px] sm:text-[11px] text-[#6b6b6b] hidden sm:block">{product.reviews} reviews</p>
+                  <p className="text-[10px] sm:text-[11px] text-muted-foreground hidden sm:block">{product.reviews} reviews</p>
                 </div>
               </div>
             </Link>
@@ -225,7 +225,7 @@ export default function MarketplacePage() {
 
       {/* Load More */}
       <section className="flex justify-center pt-8">
-        <button className="px-8 py-4 rounded-2xl border border-[#e5e5e5] bg-white text-sm font-bold hover:bg-[#fafafa] transition-all flex items-center gap-2">
+        <button className="px-8 py-4 rounded-2xl border border-border bg-card text-foreground text-sm font-bold hover:bg-secondary transition-all flex items-center gap-2">
           View More Collections <ChevronRight className="w-4 h-4" />
         </button>
       </section>

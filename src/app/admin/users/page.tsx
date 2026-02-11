@@ -31,11 +31,11 @@ export default function AdminUsersPage() {
     <div className="space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">User Management</h1>
-          <p className="text-slate-500 mt-1">Manage all platform users, roles, and permissions.</p>
+          <h1 className="text-2xl font-bold text-foreground">User Management</h1>
+          <p className="text-muted-foreground mt-1">Manage all platform users, roles, and permissions.</p>
         </div>
         <div className="flex items-center gap-3">
-          <button className="px-6 py-3 bg-white border border-slate-200 text-slate-700 rounded-xl text-sm font-bold hover:bg-slate-50 transition-all flex items-center gap-2">
+          <button className="px-6 py-3 bg-card border border-border text-muted-foreground rounded-xl text-sm font-bold hover:bg-secondary transition-all flex items-center gap-2">
             <Download className="w-4 h-4" />
             Export Users
           </button>
@@ -54,13 +54,13 @@ export default function AdminUsersPage() {
           { label: "Vendors", value: "842", change: "+15", icon: ShieldCheck, color: "text-violet-600", bg: "bg-violet-50" },
           { label: "Suspended", value: "12", change: "-2", icon: ShieldAlert, color: "text-rose-600", bg: "bg-rose-50" },
         ].map((s, i) => (
-          <div key={s.label} className="p-6 bg-white rounded-2xl border border-slate-200">
+          <div key={s.label} className="p-6 bg-card rounded-2xl border border-border">
             <div className={`w-10 h-10 rounded-xl ${s.bg} ${s.color} flex items-center justify-center mb-4`}>
               <s.icon className="w-5 h-5" />
             </div>
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">{s.label}</p>
+            <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">{s.label}</p>
             <div className="flex items-center gap-2 mt-1">
-              <p className="text-2xl font-bold text-slate-900">{s.value}</p>
+              <p className="text-2xl font-bold text-foreground">{s.value}</p>
               <span className="text-[10px] font-bold text-emerald-600">{s.change}</span>
             </div>
           </div>
@@ -68,22 +68,22 @@ export default function AdminUsersPage() {
       </div>
 
       {/* Toolbar */}
-      <div className="bg-white p-4 rounded-2xl border border-slate-200 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div className="bg-card p-4 rounded-2xl border border-border flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="relative w-full md:w-96">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <input
             type="text"
             placeholder="Search by name, email or ID..."
-            className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border-transparent focus:bg-white focus:border-slate-200 rounded-lg text-sm transition-all outline-none"
+            className="w-full pl-10 pr-4 py-2.5 bg-secondary border-transparent focus:bg-card focus:border-border rounded-lg text-sm transition-all outline-none text-foreground"
           />
         </div>
         <div className="flex items-center gap-3 w-full md:w-auto">
-          <button className="flex-1 md:flex-none px-4 py-2.5 rounded-lg border border-slate-200 text-sm font-bold text-slate-600 hover:bg-slate-50 transition-all flex items-center justify-center gap-2">
+          <button className="flex-1 md:flex-none px-4 py-2.5 rounded-lg border border-border text-sm font-bold text-muted-foreground hover:bg-secondary transition-all flex items-center justify-center gap-2">
             <Filter className="w-4 h-4" />
             Filter
           </button>
-          <div className="h-8 w-px bg-slate-200 mx-1 hidden md:block" />
-          <select className="flex-1 md:flex-none px-4 py-2.5 rounded-lg bg-slate-50 border-transparent text-sm font-bold text-slate-600 outline-none">
+          <div className="h-8 w-px bg-border mx-1 hidden md:block" />
+          <select className="flex-1 md:flex-none px-4 py-2.5 rounded-lg bg-secondary border-transparent text-sm font-bold text-muted-foreground outline-none">
             <option>All Roles</option>
             <option>Customer</option>
             <option>Vendor</option>
@@ -93,29 +93,29 @@ export default function AdminUsersPage() {
       </div>
 
       {/* Users Table */}
-      <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+      <div className="bg-card rounded-2xl border border-border overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-slate-100 bg-slate-50/50">
-                <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest">User</th>
-                <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest">Role</th>
-                <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest">Status</th>
-                <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest">Joined</th>
-                <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest text-right">Actions</th>
+              <tr className="border-b border-border bg-secondary/50">
+                <th className="px-6 py-4 text-xs font-bold text-muted-foreground uppercase tracking-widest">User</th>
+                <th className="px-6 py-4 text-xs font-bold text-muted-foreground uppercase tracking-widest">Role</th>
+                <th className="px-6 py-4 text-xs font-bold text-muted-foreground uppercase tracking-widest">Status</th>
+                <th className="px-6 py-4 text-xs font-bold text-muted-foreground uppercase tracking-widest">Joined</th>
+                <th className="px-6 py-4 text-xs font-bold text-muted-foreground uppercase tracking-widest text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-border">
               {users.map((u) => (
-                <tr key={u.id} className="hover:bg-slate-50/50 transition-colors group">
+                <tr key={u.id} className="hover:bg-secondary/50 transition-colors group">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-slate-200 overflow-hidden">
+                      <div className="w-10 h-10 rounded-full bg-secondary overflow-hidden">
                         <img src={`https://i.pravatar.cc/100?u=${u.avatar}`} alt={u.name} />
                       </div>
                       <div>
-                        <p className="text-sm font-bold text-slate-900">{u.name}</p>
-                        <p className="text-xs text-slate-500">{u.email}</p>
+                        <p className="text-sm font-bold text-foreground">{u.name}</p>
+                        <p className="text-xs text-muted-foreground">{u.email}</p>
                       </div>
                     </div>
                   </td>
@@ -129,12 +129,12 @@ export default function AdminUsersPage() {
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-1.5">
                       <div className={`w-1.5 h-1.5 rounded-full ${u.status === 'Active' ? 'bg-emerald-500' : 'bg-rose-500'}`} />
-                      <span className="text-xs font-medium text-slate-700">{u.status}</span>
+                      <span className="text-xs font-medium text-foreground">{u.status}</span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-xs text-slate-500 font-medium">{u.joined}</td>
+                  <td className="px-6 py-4 text-xs text-muted-foreground font-medium">{u.joined}</td>
                   <td className="px-6 py-4 text-right">
-                    <button className="p-2 rounded-lg hover:bg-white hover:shadow-sm text-slate-400 hover:text-slate-600 transition-all">
+                    <button className="p-2 rounded-lg hover:bg-card hover:shadow-sm text-muted-foreground hover:text-foreground transition-all">
                       <MoreVertical className="w-4 h-4" />
                     </button>
                   </td>

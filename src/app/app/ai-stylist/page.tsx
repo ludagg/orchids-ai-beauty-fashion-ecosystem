@@ -72,18 +72,18 @@ export default function AIStylistPage() {
   };
 
   return (
-    <div className="h-[calc(100vh-64px)] lg:h-screen flex flex-col bg-[#fafafa]">
+    <div className="h-[calc(100vh-64px)] lg:h-screen flex flex-col bg-background text-foreground">
       {/* Header */}
-      <header className="p-6 border-b border-[#e5e5e5] bg-white flex items-center justify-between">
+      <header className="p-6 border-b border-border bg-card flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-violet-100 flex items-center justify-center text-violet-600 shadow-sm shadow-violet-100">
+          <div className="w-12 h-12 rounded-2xl bg-violet-100 dark:bg-violet-950/30 flex items-center justify-center text-violet-600 dark:text-violet-400 shadow-sm shadow-violet-100/10">
             <Sparkles className="w-6 h-6" />
           </div>
           <div>
-            <h1 className="text-xl font-bold font-display tracking-tight text-[#1a1a1a]">AI Stylist</h1>
+            <h1 className="text-xl font-bold font-display tracking-tight text-foreground">AI Stylist</h1>
             <div className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <p className="text-xs font-bold text-[#6b6b6b] uppercase tracking-widest">Always Online</p>
+              <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Always Online</p>
             </div>
           </div>
         </div>
@@ -94,8 +94,8 @@ export default function AIStylistPage() {
               key={style.name}
               className={`px-4 py-2 rounded-xl text-xs font-bold transition-all border ${
                 style.active
-                  ? "bg-[#1a1a1a] text-white border-[#1a1a1a] shadow-lg shadow-black/10"
-                  : "bg-white text-[#6b6b6b] border-[#e5e5e5] hover:border-[#1a1a1a]"
+                  ? "bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/10"
+                  : "bg-card text-muted-foreground border-border hover:border-foreground hover:text-foreground"
               }`}
             >
               {style.name}
@@ -122,15 +122,15 @@ export default function AIStylistPage() {
                   <div className={`w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center shadow-sm ${
                     msg.type === "user"
                       ? "bg-gradient-to-tr from-rose-500 to-violet-500 text-white"
-                      : "bg-white border border-[#e5e5e5] text-violet-600"
+                      : "bg-card border border-border text-violet-600 dark:text-violet-400"
                   }`}>
                     {msg.type === "user" ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
                   </div>
                   <div className="space-y-1">
                     <div className={`p-4 rounded-[24px] text-[15px] leading-relaxed shadow-sm border ${
                       msg.type === "user"
-                        ? "bg-[#1a1a1a] text-white border-[#1a1a1a] rounded-tr-none"
-                        : "bg-white text-[#1a1a1a] border-[#e5e5e5] rounded-tl-none"
+                        ? "bg-primary text-primary-foreground border-primary rounded-tr-none"
+                        : "bg-card text-foreground border-border rounded-tl-none"
                     }`}>
                       {msg.content}
                     </div>
@@ -149,10 +149,10 @@ export default function AIStylistPage() {
                 className="flex justify-start"
               >
                 <div className="flex gap-3">
-                  <div className="w-8 h-8 rounded-full bg-white border border-[#e5e5e5] flex items-center justify-center text-violet-600">
+                  <div className="w-8 h-8 rounded-full bg-card border border-border flex items-center justify-center text-violet-600 dark:text-violet-400">
                     <Bot className="w-4 h-4" />
                   </div>
-                  <div className="bg-white border border-[#e5e5e5] p-4 rounded-[24px] rounded-tl-none shadow-sm flex gap-1">
+                  <div className="bg-card border border-border p-4 rounded-[24px] rounded-tl-none shadow-sm flex gap-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-bounce" style={{ animationDelay: "0ms" }} />
                     <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-bounce" style={{ animationDelay: "150ms" }} />
                     <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-bounce" style={{ animationDelay: "300ms" }} />
@@ -166,10 +166,10 @@ export default function AIStylistPage() {
           <div className="p-6 bg-transparent">
             <div className="max-w-3xl mx-auto relative">
               <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center gap-2">
-                <button className="p-2 rounded-xl hover:bg-[#f5f5f5] text-[#6b6b6b] transition-colors">
+                <button className="p-2 rounded-xl hover:bg-secondary text-muted-foreground transition-colors">
                   <Camera className="w-5 h-5" />
                 </button>
-                <button className="p-2 rounded-xl hover:bg-[#f5f5f5] text-[#6b6b6b] transition-colors">
+                <button className="p-2 rounded-xl hover:bg-secondary text-muted-foreground transition-colors">
                   <ImageIcon className="w-5 h-5" />
                 </button>
               </div>
@@ -179,12 +179,12 @@ export default function AIStylistPage() {
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSend()}
-                className="w-full pl-28 pr-16 py-5 rounded-[28px] bg-white border border-[#e5e5e5] focus:border-violet-500 shadow-xl shadow-black/[0.03] transition-all outline-none text-base"
+                className="w-full pl-28 pr-16 py-5 rounded-[28px] bg-card border border-border focus:border-violet-500 shadow-xl shadow-black/[0.03] transition-all outline-none text-base text-foreground"
               />
               <button
                 onClick={handleSend}
                 disabled={!inputValue.trim()}
-                className="absolute right-3 top-1/2 -translate-y-1/2 w-12 h-12 rounded-2xl bg-[#1a1a1a] text-white flex items-center justify-center hover:bg-violet-600 disabled:bg-[#e5e5e5] disabled:cursor-not-allowed transition-all shadow-lg"
+                className="absolute right-3 top-1/2 -translate-y-1/2 w-12 h-12 rounded-2xl bg-primary text-primary-foreground flex items-center justify-center hover:opacity-90 disabled:bg-muted disabled:cursor-not-allowed transition-all shadow-lg"
               >
                 <Send className="w-5 h-5" />
               </button>
@@ -196,9 +196,9 @@ export default function AIStylistPage() {
         </main>
 
         {/* Desktop Recommendations Sidebar */}
-        <aside className="hidden xl:flex w-80 border-l border-[#e5e5e5] bg-white flex-col">
-          <div className="p-6 border-b border-[#e5e5e5]">
-            <h3 className="font-bold text-[#1a1a1a] flex items-center gap-2">
+        <aside className="hidden xl:flex w-80 border-l border-border bg-card flex-col">
+          <div className="p-6 border-b border-border">
+            <h3 className="font-bold text-foreground flex items-center gap-2">
               <Zap className="w-4 h-4 text-amber-500" />
               Live Suggestions
             </h3>
@@ -211,30 +211,30 @@ export default function AIStylistPage() {
                 animate={{ opacity: 1, x: 0 }}
                 className="group cursor-pointer"
               >
-                <div className="aspect-[4/5] rounded-3xl overflow-hidden mb-3 relative shadow-md border border-[#e5e5e5]">
+                <div className="aspect-[4/5] rounded-3xl overflow-hidden mb-3 relative shadow-md border border-border">
                   <img
                     src={`https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=500&fit=crop&sig=${i}`}
                     alt="Suggestion"
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
-                  <div className="absolute top-3 right-3 p-2 rounded-full bg-white/90 backdrop-blur-md shadow-sm opacity-0 group-hover:opacity-100 transition-opacity">
-                    <ShoppingBag className="w-4 h-4 text-[#1a1a1a]" />
+                  <div className="absolute top-3 right-3 p-2 rounded-full bg-background/90 backdrop-blur-md shadow-sm opacity-0 group-hover:opacity-100 transition-opacity">
+                    <ShoppingBag className="w-4 h-4 text-foreground" />
                   </div>
                 </div>
-                <h4 className="font-bold text-sm text-[#1a1a1a] truncate">Linen Utility Shirt</h4>
-                <p className="text-xs text-[#6b6b6b] mt-0.5 font-medium">Studio Épure • ₹2,899</p>
+                <h4 className="font-bold text-sm text-foreground truncate">Linen Utility Shirt</h4>
+                <p className="text-xs text-muted-foreground mt-0.5 font-medium">Studio Épure • ₹2,899</p>
               </motion.div>
             ))}
 
-            <div className="p-5 rounded-3xl bg-violet-50 border border-violet-100 space-y-3">
-              <div className="flex items-center gap-2 text-violet-700">
+            <div className="p-5 rounded-3xl bg-violet-50 dark:bg-violet-950/30 border border-violet-100 dark:border-violet-900/30 space-y-3">
+              <div className="flex items-center gap-2 text-violet-700 dark:text-violet-400">
                 <CheckCircle2 className="w-4 h-4" />
                 <span className="text-xs font-bold uppercase tracking-widest">Style Score</span>
               </div>
-              <p className="text-sm text-violet-900 leading-relaxed font-medium">
+              <p className="text-sm text-violet-900 dark:text-violet-200 leading-relaxed font-medium">
                 These pieces match your "Minimalist" profile with <span className="font-bold">94% accuracy</span>.
               </p>
-              <button className="w-full py-2.5 rounded-xl bg-white text-violet-700 text-xs font-bold shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2">
+              <button className="w-full py-2.5 rounded-xl bg-card text-violet-700 dark:text-violet-400 text-xs font-bold shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2">
                 <RefreshCcw className="w-3.5 h-3.5" />
                 Regenerate Picks
               </button>
