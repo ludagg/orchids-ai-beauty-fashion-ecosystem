@@ -24,7 +24,7 @@ import SearchBar from "@/components/SearchBar";
 import NotificationBell from "@/components/NotificationBell";
 import UserAccount from "@/components/UserAccount";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
 const sidebarItems = [
@@ -43,8 +43,14 @@ export default function AppLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const handleSearch = (query: string) => {
+    if (!query.trim()) return;
+    router.push(`/app/search?q=${encodeURIComponent(query)}`);
+  };
 
   // Close mobile menu on route change
   useEffect(() => {
@@ -122,7 +128,7 @@ export default function AppLayout({
           </div>
         </div>
         <div className="px-4 pb-3">
-          <SearchBar value={searchQuery} onChange={setSearchQuery} />
+          <SearchBar value={searchQuery} onChange={setSearchQuery} onSearch={handleSearch} />
         </div>
       </header>
 
@@ -177,7 +183,7 @@ export default function AppLayout({
         {/* Header - Desktop Search */}
         <header className="hidden lg:flex h-16 border-b border-border bg-card/80 backdrop-blur-md sticky top-0 z-30 px-6 items-center justify-between">
           <div className="flex-1 max-w-xl">
-            <SearchBar value={searchQuery} onChange={setSearchQuery} />
+            <SearchBar value={searchQuery} onChange={setSearchQuery} onSearch={handleSearch} />
           </div>
 
           <div className="flex items-center gap-4 ml-4">
