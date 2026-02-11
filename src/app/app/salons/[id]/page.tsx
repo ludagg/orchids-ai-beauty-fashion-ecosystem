@@ -2,252 +2,402 @@
 
 import { motion } from "framer-motion";
 import {
-  Scissors,
   MapPin,
   Star,
-  ChevronLeft,
   Clock,
   Phone,
   Globe,
-  Instagram,
-  CheckCircle2,
-  Calendar as CalendarIcon,
+  Calendar,
   ChevronRight,
-  Info
+  Heart,
+  Share2,
+  CheckCircle2,
+  IndianRupee,
+  Users,
+  Award
 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
-import { useParams } from "next/navigation";
+
+const salonData = {
+  id: "1",
+  name: "Aura Luxury Spa",
+  location: "Indiranagar, Bangalore",
+  address: "123, 100 Feet Road, Indiranagar, Bangalore - 560038",
+  rating: 4.9,
+  reviews: 420,
+  phone: "+91 98765 43210",
+  website: "www.auraluxuryspa.com",
+  hours: "9:00 AM - 9:00 PM",
+  images: [
+    "https://images.unsplash.com/photo-1600948836101-f9ffda59d250?w=800&h=600&fit=crop",
+    "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=800&h=600&fit=crop",
+    "https://images.unsplash.com/photo-1522337660859-02fbefca4702?w=800&h=600&fit=crop"
+  ],
+  tags: ["Spa", "Facial", "Massage", "Hair Treatment"],
+  isVerified: true
+};
 
 const services = [
-  { id: 1, name: "Signature Haircut", duration: "45 min", price: "₹800", description: "Precision cut, wash, and style tailored to your face shape." },
-  { id: 2, name: "Hair Coloring (Global)", duration: "120 min", price: "₹3,500", description: "Full head color using premium ammonia-free products." },
-  { id: 3, name: "Deep Conditioning Spa", duration: "60 min", price: "₹1,800", description: "Intense hydration treatment for damaged or dry hair." },
-  { id: 4, name: "Beard Grooming & Styling", duration: "30 min", price: "₹500", description: "Trim, shape, and hot towel finish for a sharp look." }
+  {
+    id: "1",
+    name: "Premium Haircut & Styling",
+    description: "Expert haircut with wash and styling",
+    price: 1500,
+    duration: 60,
+    image: "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=400&h=300&fit=crop"
+  },
+  {
+    id: "2",
+    name: "Hydra Facial Treatment",
+    description: "Deep cleansing and hydrating facial",
+    price: 3500,
+    duration: 90,
+    image: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=400&h=300&fit=crop"
+  },
+  {
+    id: "3",
+    name: "Full Body Massage",
+    description: "Relaxing Swedish massage therapy",
+    price: 2800,
+    duration: 75,
+    image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=400&h=300&fit=crop"
+  },
+  {
+    id: "4",
+    name: "Manicure & Pedicure",
+    description: "Complete nail care treatment",
+    price: 1200,
+    duration: 45,
+    image: "https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=300&fit=crop"
+  }
 ];
 
-const gallery = [
-  "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=600&h=600&fit=crop",
-  "https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?w=600&h=600&fit=crop",
-  "https://images.unsplash.com/photo-1580618672591-eb180b1a973f?w=600&h=600&fit=crop",
-  "https://images.unsplash.com/photo-1562322140-8baeececf3df?w=600&h=600&fit=crop"
+const reviews = [
+  {
+    id: "1",
+    user: "Priya Sharma",
+    avatar: "https://i.pravatar.cc/100?u=1",
+    rating: 5,
+    date: "2 days ago",
+    comment: "Absolutely loved the ambiance and service quality. The staff is very professional and courteous."
+  },
+  {
+    id: "2",
+    user: "Rahul Kapoor",
+    avatar: "https://i.pravatar.cc/100?u=2",
+    rating: 5,
+    date: "1 week ago",
+    comment: "Best salon experience in Bangalore. Highly recommend their hair treatment services!"
+  },
+  {
+    id: "3",
+    user: "Anjali Desai",
+    avatar: "https://i.pravatar.cc/100?u=3",
+    rating: 4,
+    date: "2 weeks ago",
+    comment: "Great service and clean facility. The massage was incredibly relaxing."
+  }
 ];
 
-export default function SalonDetailsPage() {
-  const { id } = useParams();
-  const [selectedService, setSelectedService] = useState(1);
+export default function SalonDetailPage({ params }: { params: { id: string } }) {
+  const [selectedImage, setSelectedImage] = useState(0);
+  const [selectedService, setSelectedService] = useState<string | null>(null);
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 max-w-[1400px] mx-auto w-full">
-      <Link
-        href="/app/salons"
-        className="inline-flex items-center gap-2 text-sm font-medium text-[#6b6b6b] hover:text-[#1a1a1a] transition-colors mb-8 group"
-      >
-        <ChevronLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-        Back to Salons
-      </Link>
+    <div className="min-h-screen bg-[#fafafa] pb-12">
+      {/* Image Gallery */}
+      <div className="relative h-[60vh] bg-black">
+        <img
+          src={salonData.images[selectedImage]}
+          alt={salonData.name}
+          className="w-full h-full object-cover opacity-90"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Main Info (Left 2 columns) */}
-        <div className="lg:col-span-2 space-y-8">
-          {/* Cover and Gallery */}
-          <section className="space-y-4">
-            <div className="aspect-[21/9] rounded-[40px] overflow-hidden bg-[#f5f5f5] border border-[#e5e5e5] shadow-sm">
-              <img
-                src="https://images.unsplash.com/photo-1600948836101-f9ffda59d250?w=1200&h=600&fit=crop"
-                alt="Salon Interior"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="grid grid-cols-4 gap-4">
-              {gallery.map((img, i) => (
-                <div key={i} className="aspect-square rounded-2xl overflow-hidden border border-[#e5e5e5] hover:border-[#1a1a1a] transition-colors cursor-pointer group">
-                  <img src={img} alt="Interior" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+        {/* Image Thumbnails */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
+          {salonData.images.map((img, i) => (
+            <button
+              key={i}
+              onClick={() => setSelectedImage(i)}
+              className={`w-20 h-16 rounded-xl overflow-hidden border-2 transition-all ${
+                selectedImage === i ? "border-white scale-110" : "border-white/40 opacity-60 hover:opacity-100"
+              }`}
+            >
+              <img src={img} alt="" className="w-full h-full object-cover" />
+            </button>
+          ))}
+        </div>
+
+        {/* Action Buttons */}
+        <div className="absolute top-6 right-6 flex gap-2">
+          <button className="p-3 rounded-2xl bg-white/90 backdrop-blur-md hover:bg-white transition-all shadow-xl">
+            <Heart className="w-5 h-5 text-[#1a1a1a]" />
+          </button>
+          <button className="p-3 rounded-2xl bg-white/90 backdrop-blur-md hover:bg-white transition-all shadow-xl">
+            <Share2 className="w-5 h-5 text-[#1a1a1a]" />
+          </button>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-20 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Main Content */}
+          <div className="lg:col-span-2 space-y-8">
+            {/* Salon Info Card */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-white rounded-[32px] p-8 border border-[#e5e5e5] shadow-xl"
+            >
+              <div className="flex items-start justify-between mb-6">
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <h1 className="text-3xl font-bold text-[#1a1a1a]">{salonData.name}</h1>
+                    {salonData.isVerified && (
+                      <CheckCircle2 className="w-6 h-6 text-blue-500 fill-blue-100" />
+                    )}
+                  </div>
+                  <div className="flex items-center gap-2 text-[#6b6b6b] mb-4">
+                    <MapPin className="w-4 h-4" />
+                    <span>{salonData.location}</span>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-amber-50 text-amber-700 border border-amber-100">
+                      <Star className="w-4 h-4 fill-current" />
+                      <span className="font-bold">{salonData.rating}</span>
+                      <span className="text-xs">({salonData.reviews} reviews)</span>
+                    </div>
+                    <div className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-100">
+                      <Award className="w-4 h-4" />
+                      <span className="font-bold text-xs">Top Rated</span>
+                    </div>
+                  </div>
                 </div>
-              ))}
-            </div>
-          </section>
+              </div>
 
-          {/* Details */}
-          <section className="space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-              <div>
-                <div className="flex items-center gap-3 mb-2">
-                  <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold uppercase tracking-widest border border-emerald-100">
-                    Verified Partner
+              <div className="flex flex-wrap gap-2 mb-6">
+                {salonData.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="px-3 py-1.5 rounded-lg bg-[#f5f5f5] text-[11px] font-bold text-[#6b6b6b] uppercase tracking-wider"
+                  >
+                    {tag}
                   </span>
-                  <div className="flex items-center gap-1 text-sm font-bold text-amber-500">
-                    <Star className="w-4 h-4 fill-current" />
-                    4.9 (420 reviews)
-                  </div>
-                </div>
-                <h1 className="text-3xl sm:text-5xl font-semibold font-display tracking-tight text-[#1a1a1a]">Aura Luxury Spa</h1>
-                <div className="flex items-center gap-2 text-[#6b6b6b] mt-2">
-                  <MapPin className="w-4 h-4" />
-                  <p className="text-base">123, 100 Feet Rd, Indiranagar, Bangalore</p>
-                </div>
-              </div>
-              <div className="flex gap-2">
-                <button className="p-3 rounded-2xl border border-[#e5e5e5] hover:bg-[#f5f5f5] transition-all">
-                  <Phone className="w-5 h-5 text-[#6b6b6b]" />
-                </button>
-                <button className="p-3 rounded-2xl border border-[#e5e5e5] hover:bg-[#f5f5f5] transition-all">
-                  <Globe className="w-5 h-5 text-[#6b6b6b]" />
-                </button>
-                <button className="p-3 rounded-2xl border border-[#e5e5e5] hover:bg-[#f5f5f5] transition-all">
-                  <Instagram className="w-5 h-5 text-[#6b6b6b]" />
-                </button>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-8 py-6 border-y border-[#e5e5e5]">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600">
-                  <Clock className="w-6 h-6" />
-                </div>
-                <div>
-                  <p className="text-xs font-bold text-[#c4c4c4] uppercase tracking-widest">Opening Hours</p>
-                  <p className="text-sm font-bold text-[#1a1a1a]">10:00 AM - 09:00 PM</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-2xl bg-rose-50 flex items-center justify-center text-rose-600">
-                  <Scissors className="w-6 h-6" />
-                </div>
-                <div>
-                  <p className="text-xs font-bold text-[#c4c4c4] uppercase tracking-widest">Available Slots</p>
-                  <p className="text-sm font-bold text-[#1a1a1a]">8 slots left today</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              <h3 className="text-2xl font-semibold font-display">About the Salon</h3>
-              <p className="text-[#6b6b6b] leading-relaxed text-lg">
-                Aura Luxury Spa offers a premium grooming experience in the heart of Indiranagar.
-                Our team of expert stylists and therapists use only the finest international products
-                to ensure you look and feel your best. We specialize in contemporary haircuts,
-                rejuvenating spa treatments, and professional grooming for all genders.
-              </p>
-              <div className="grid grid-cols-2 gap-4 pt-4">
-                {["Free Wi-Fi", "Valet Parking", "Air Conditioned", "Loyalty Program"].map(item => (
-                  <div key={item} className="flex items-center gap-2 text-sm text-[#1a1a1a] font-medium">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                    {item}
-                  </div>
                 ))}
               </div>
-            </div>
 
-            <div className="space-y-6 pt-4">
-              <h3 className="text-2xl font-semibold font-display">Services</h3>
-              <div className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 py-6 border-y border-[#f5f5f5]">
+                <div className="flex items-center gap-3">
+                  <div className="p-3 rounded-xl bg-blue-50 text-blue-600">
+                    <Clock className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-[#c4c4c4] font-bold uppercase tracking-wider">Hours</p>
+                    <p className="text-sm font-bold text-[#1a1a1a]">{salonData.hours}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="p-3 rounded-xl bg-emerald-50 text-emerald-600">
+                    <Phone className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-[#c4c4c4] font-bold uppercase tracking-wider">Phone</p>
+                    <p className="text-sm font-bold text-[#1a1a1a]">{salonData.phone}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="p-3 rounded-xl bg-violet-50 text-violet-600">
+                    <Globe className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-[#c4c4c4] font-bold uppercase tracking-wider">Website</p>
+                    <p className="text-sm font-bold text-[#1a1a1a] truncate">{salonData.website}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-6">
+                <p className="text-[#6b6b6b] leading-relaxed">
+                  Experience luxury and relaxation at Aura Luxury Spa, where we combine traditional wellness
+                  techniques with modern spa treatments. Our expert therapists are dedicated to providing you
+                  with the ultimate pampering experience in a serene and tranquil environment.
+                </p>
+              </div>
+            </motion.div>
+
+            {/* Services */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="bg-white rounded-[32px] p-8 border border-[#e5e5e5] shadow-sm"
+            >
+              <h2 className="text-2xl font-bold text-[#1a1a1a] mb-6">Services</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {services.map((service) => (
                   <div
                     key={service.id}
-                    onClick={() => setSelectedService(service.id)}
-                    className={`p-6 rounded-3xl border transition-all cursor-pointer group ${
+                    className={`p-4 rounded-2xl border-2 transition-all cursor-pointer ${
                       selectedService === service.id
-                        ? "border-blue-600 bg-blue-50/30"
-                        : "border-[#e5e5e5] bg-white hover:border-blue-600"
+                        ? "border-[#1a1a1a] bg-[#fafafa]"
+                        : "border-[#e5e5e5] hover:border-[#c4c4c4]"
                     }`}
+                    onClick={() => setSelectedService(service.id)}
                   >
-                    <div className="flex items-start justify-between mb-2">
-                      <div>
-                        <h4 className="font-bold text-lg text-[#1a1a1a]">{service.name}</h4>
-                        <p className="text-sm text-[#6b6b6b] mt-1">{service.description}</p>
+                    <div className="flex gap-4">
+                      <div className="w-20 h-20 rounded-xl overflow-hidden bg-[#f5f5f5] flex-shrink-0">
+                        <img
+                          src={service.image}
+                          alt={service.name}
+                          className="w-full h-full object-cover"
+                        />
                       </div>
-                      <p className="font-bold text-xl text-blue-600">{service.price}</p>
-                    </div>
-                    <div className="flex items-center justify-between mt-4">
-                      <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-1.5 text-xs font-bold text-[#6b6b6b] uppercase tracking-widest">
-                          <Clock className="w-3.5 h-3.5" />
-                          {service.duration}
+                      <div className="flex-1">
+                        <h3 className="font-bold text-[#1a1a1a] mb-1">{service.name}</h3>
+                        <p className="text-xs text-[#6b6b6b] mb-2">{service.description}</p>
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-[#1a1a1a] flex items-center gap-1">
+                            <IndianRupee className="w-3.5 h-3.5" />
+                            {service.price}
+                          </span>
+                          <span className="text-[10px] font-bold text-[#6b6b6b] uppercase tracking-wider flex items-center gap-1">
+                            <Clock className="w-3 h-3" />
+                            {service.duration} min
+                          </span>
                         </div>
-                      </div>
-                      <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
-                        selectedService === service.id ? "border-blue-600 bg-blue-600" : "border-[#e5e5e5]"
-                      }`}>
-                        {selectedService === service.id && <div className="w-2 h-2 rounded-full bg-white" />}
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
-            </div>
-          </section>
-        </div>
+            </motion.div>
 
-        {/* Sidebar Booking Card */}
-        <div className="lg:col-span-1">
-          <div className="sticky top-24 p-8 rounded-[40px] bg-white border border-[#e5e5e5] shadow-2xl shadow-black/5 space-y-8">
-            <div className="space-y-2">
-              <h3 className="text-2xl font-semibold font-display">Book Appointment</h3>
-              <p className="text-sm text-[#6b6b6b]">Select your preferred date and time.</p>
-            </div>
-
-            {/* Date Selection (Simplified) */}
-            <div className="space-y-4">
-              <p className="text-xs font-bold text-[#c4c4c4] uppercase tracking-widest">Select Date</p>
-              <div className="grid grid-cols-4 gap-2">
-                {[12, 13, 14, 15].map((day, i) => (
-                  <button
-                    key={day}
-                    className={`flex flex-col items-center justify-center py-3 rounded-2xl border transition-all ${
-                      i === 0 ? "border-blue-600 bg-blue-600 text-white shadow-lg shadow-blue-200" : "border-[#e5e5e5] hover:border-[#1a1a1a]"
-                    }`}
-                  >
-                    <span className="text-[10px] font-bold uppercase tracking-widest mb-1">{i === 0 ? "Today" : ["Wed", "Thu", "Fri"][i-1]}</span>
-                    <span className="text-lg font-bold">{day}</span>
-                  </button>
+            {/* Reviews */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="bg-white rounded-[32px] p-8 border border-[#e5e5e5] shadow-sm"
+            >
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold text-[#1a1a1a]">Customer Reviews</h2>
+                <button className="text-sm font-bold text-blue-600 hover:text-blue-700">
+                  View All
+                </button>
+              </div>
+              <div className="space-y-6">
+                {reviews.map((review) => (
+                  <div key={review.id} className="pb-6 border-b border-[#f5f5f5] last:border-0">
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 rounded-full overflow-hidden bg-[#f5f5f5]">
+                        <img src={review.avatar} alt={review.user} className="w-full h-full object-cover" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between mb-2">
+                          <div>
+                            <h4 className="font-bold text-[#1a1a1a]">{review.user}</h4>
+                            <p className="text-xs text-[#6b6b6b]">{review.date}</p>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            {Array.from({ length: review.rating }).map((_, i) => (
+                              <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                            ))}
+                          </div>
+                        </div>
+                        <p className="text-[#6b6b6b] leading-relaxed">{review.comment}</p>
+                      </div>
+                    </div>
+                  </div>
                 ))}
               </div>
-            </div>
+            </motion.div>
+          </div>
 
-            {/* Time Slots */}
-            <div className="space-y-4">
-              <p className="text-xs font-bold text-[#c4c4c4] uppercase tracking-widest">Available Slots</p>
-              <div className="grid grid-cols-2 gap-2">
-                {["10:00 AM", "11:30 AM", "01:00 PM", "02:30 PM", "04:00 PM", "05:30 PM"].map((time, i) => (
-                  <button
-                    key={time}
-                    className={`py-3 rounded-xl border text-sm font-bold transition-all ${
-                      i === 1 ? "border-[#1a1a1a] bg-[#1a1a1a] text-white" : "border-[#e5e5e5] hover:border-[#1a1a1a]"
-                    }`}
-                  >
-                    {time}
-                  </button>
+          {/* Booking Sidebar */}
+          <div className="lg:col-span-1">
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="bg-white rounded-[32px] p-8 border border-[#e5e5e5] shadow-xl sticky top-8 space-y-6"
+            >
+              <h3 className="text-xl font-bold text-[#1a1a1a]">Book Appointment</h3>
+
+              {/* Selected Service */}
+              {selectedService && (
+                <div className="p-4 rounded-2xl bg-[#fafafa] border border-[#e5e5e5]">
+                  <p className="text-xs font-bold text-[#c4c4c4] uppercase tracking-wider mb-1">
+                    Selected Service
+                  </p>
+                  <p className="font-bold text-[#1a1a1a]">
+                    {services.find(s => s.id === selectedService)?.name}
+                  </p>
+                  <p className="text-sm font-bold text-[#1a1a1a] mt-2 flex items-center gap-1">
+                    <IndianRupee className="w-3.5 h-3.5" />
+                    {services.find(s => s.id === selectedService)?.price}
+                  </p>
+                </div>
+              )}
+
+              {/* Date Selection */}
+              <div>
+                <label className="text-xs font-bold text-[#c4c4c4] uppercase tracking-wider mb-2 block">
+                  Select Date
+                </label>
+                <div className="relative">
+                  <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#6b6b6b]" />
+                  <input
+                    type="date"
+                    className="w-full pl-12 pr-4 py-4 rounded-xl bg-[#f5f5f5] border-transparent focus:bg-white focus:border-[#1a1a1a] transition-all outline-none font-medium"
+                    min={new Date().toISOString().split("T")[0]}
+                  />
+                </div>
+              </div>
+
+              {/* Time Slots */}
+              <div>
+                <label className="text-xs font-bold text-[#c4c4c4] uppercase tracking-wider mb-2 block">
+                  Select Time
+                </label>
+                <div className="grid grid-cols-3 gap-2">
+                  {["10:00", "11:30", "14:00", "15:30", "17:00", "18:30"].map((time) => (
+                    <button
+                      key={time}
+                      className="px-3 py-2.5 rounded-xl border-2 border-[#e5e5e5] hover:border-[#1a1a1a] text-sm font-bold transition-all"
+                    >
+                      {time}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <Link href="/app/salons/booking">
+                <button
+                  disabled={!selectedService}
+                  className="w-full py-4 rounded-2xl bg-[#1a1a1a] text-white font-bold hover:bg-[#333] transition-all shadow-xl shadow-black/10 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  Book Appointment
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+              </Link>
+
+              <div className="pt-4 border-t border-[#f5f5f5] space-y-3">
+                <p className="text-xs font-bold text-[#c4c4c4] uppercase tracking-wider">
+                  Why Book With Us
+                </p>
+                {[
+                  "Instant confirmation",
+                  "Easy rescheduling",
+                  "Secure payment"
+                ].map((benefit, i) => (
+                  <div key={i} className="flex items-start gap-2 text-sm text-[#6b6b6b]">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-500 mt-0.5 flex-shrink-0" />
+                    <span>{benefit}</span>
+                  </div>
                 ))}
               </div>
-            </div>
-
-            <div className="pt-6 border-t border-[#f5f5f5] space-y-4">
-              <div className="flex items-center justify-between">
-                <p className="text-[#6b6b6b]">Service Total</p>
-                <p className="font-bold">{services.find(s => s.id === selectedService)?.price}</p>
-              </div>
-              <div className="flex items-center justify-between text-emerald-600">
-                <p className="text-sm">Booking Fee</p>
-                <p className="font-bold">₹0 (Free)</p>
-              </div>
-              <div className="flex items-center justify-between text-lg font-bold pt-2">
-                <p>Total</p>
-                <p>{services.find(s => s.id === selectedService)?.price || "₹800"}</p>
-              </div>
-            </div>
-
-            <button className="w-full h-14 rounded-2xl bg-[#1a1a1a] text-white font-bold text-lg hover:bg-blue-600 transition-all active:scale-[0.98] shadow-xl shadow-black/10 flex items-center justify-center gap-3">
-              <CalendarIcon className="w-5 h-5" />
-              Confirm Booking
-            </button>
-
-            <div className="flex items-start gap-3 p-4 rounded-2xl bg-blue-50/50 border border-blue-100">
-              <Info className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
-              <p className="text-xs text-blue-800 leading-relaxed">
-                You can cancel or reschedule up to 4 hours before the appointment for a full refund.
-              </p>
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>
