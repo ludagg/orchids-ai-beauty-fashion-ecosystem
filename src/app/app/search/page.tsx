@@ -12,7 +12,7 @@ import {
   Navigation,
   ChevronRight
 } from "lucide-react";
-import { useState } from "react";
+import { useState, Suspense } from "react";
 
 // Mock Data - Products
 const products = [
@@ -126,7 +126,7 @@ const salons = [
   }
 ];
 
-export default function SearchPage() {
+function SearchResults() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q") || "";
   const [activeTab, setActiveTab] = useState("All");
@@ -146,7 +146,7 @@ export default function SearchPage() {
   const hasResults = filteredProducts.length > 0 || filteredSalons.length > 0;
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 space-y-8 max-w-[1400px] mx-auto w-full">
+    <div className="space-y-8">
       <section>
         <h1 className="text-3xl font-semibold font-display tracking-tight text-foreground">
           Search Results for "{query}"
@@ -298,6 +298,16 @@ export default function SearchPage() {
           </div>
         </section>
       )}
+    </div>
+  );
+}
+
+export default function SearchPage() {
+  return (
+    <div className="p-4 sm:p-6 lg:p-8 max-w-[1400px] mx-auto w-full">
+      <Suspense fallback={<div className="flex justify-center py-20">Loading search results...</div>}>
+        <SearchResults />
+      </Suspense>
     </div>
   );
 }
