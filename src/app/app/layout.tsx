@@ -12,6 +12,7 @@ import {
   Compass,
   Settings,
   ArrowRight,
+  ChevronLeft,
   ChevronRight,
   Menu,
   X,
@@ -25,7 +26,7 @@ import SearchBar from "@/components/SearchBar";
 import NotificationBell from "@/components/NotificationBell";
 import UserAccount from "@/components/UserAccount";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
 const sidebarItems = [
@@ -44,22 +45,36 @@ export default function AppLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   // Close mobile menu on route change
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [pathname]);
 
+  const handleSearch = (query: string) => {
+    router.push(`/app/search?q=${encodeURIComponent(query)}`);
+  };
+
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col lg:flex-row">
       {/* Sidebar - Desktop */}
-      <aside className="w-64 border-r border-border bg-card hidden lg:flex flex-col sticky top-0 h-screen">
-        <div className="p-6">
-          <Link href="/" className="text-xl font-semibold tracking-tight font-display">
-            Priisme
-          </Link>
+      <aside className={`border-r border-border bg-card hidden lg:flex flex-col sticky top-0 h-screen transition-all duration-300 ${isCollapsed ? "w-20" : "w-64"}`}>
+        <div className={`p-6 flex items-center ${isCollapsed ? "justify-center" : "justify-between"}`}>
+          {!isCollapsed && (
+            <Link href="/" className="text-xl font-semibold tracking-tight font-display bg-clip-text text-transparent bg-gradient-to-r from-violet-600 via-rose-500 to-amber-500">
+              Priisme
+            </Link>
+          )}
+          <button
+            onClick={() => setIsCollapsed(!isCollapsed)}
+            className="p-1 rounded-full hover:bg-secondary text-muted-foreground transition-colors"
+          >
+            {isCollapsed ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5" />}
+          </button>
         </div>
 
         <nav className="flex-1 px-4 space-y-1">
@@ -73,36 +88,38 @@ export default function AppLayout({
                   isActive
                     ? "bg-primary text-primary-foreground shadow-lg shadow-foreground/10"
                     : "text-muted-foreground hover:bg-secondary hover:text-foreground"
-                }`}
+                } ${isCollapsed ? "justify-center" : ""}`}
               >
-                <item.icon className="w-5 h-5" />
-                {item.label}
+                <item.icon className="w-5 h-5 flex-shrink-0" />
+                {!isCollapsed && <span>{item.label}</span>}
               </Link>
             );
           })}
         </nav>
 
-        <div className="p-4 mt-auto">
-          <div className="p-4 rounded-2xl bg-gradient-to-br from-rose-500/10 to-violet-500/10 border border-rose-200/20">
-            <p className="text-xs font-semibold text-rose-600 mb-1 uppercase tracking-wider">AI Insight</p>
-            <p className="text-sm text-foreground font-medium leading-relaxed">
-              Your style profile is 85% complete. Finish it to unlock personal picks.
-            </p>
-            <button className="mt-3 text-xs font-bold flex items-center gap-1 hover:gap-2 transition-all">
-              Complete Profile <ArrowRight className="w-3 h-3" />
-            </button>
+        {!isCollapsed && (
+          <div className="p-4 mt-auto">
+            <div className="p-4 rounded-2xl bg-gradient-to-br from-rose-500/10 to-violet-500/10 border border-rose-200/20">
+              <p className="text-xs font-semibold text-rose-600 mb-1 uppercase tracking-wider">AI Insight</p>
+              <p className="text-sm text-foreground font-medium leading-relaxed">
+                Your style profile is 85% complete. Finish it to unlock personal picks.
+              </p>
+              <button className="mt-3 text-xs font-bold flex items-center gap-1 hover:gap-2 transition-all">
+                Complete Profile <ArrowRight className="w-3 h-3" />
+              </button>
+            </div>
           </div>
-        </div>
+        )}
 
-        <div className="p-4 border-t border-border">
+        <div className={`p-4 border-t border-border ${isCollapsed ? "flex justify-center" : ""}`}>
           <Link
             href="/app/settings"
             className={`w-full flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors ${
               pathname === "/app/settings" ? "text-foreground" : "text-muted-foreground hover:text-foreground"
-            }`}
+            } ${isCollapsed ? "justify-center" : ""}`}
           >
-            <Settings className="w-5 h-5" />
-            Settings
+            <Settings className="w-5 h-5 flex-shrink-0" />
+            {!isCollapsed && <span>Settings</span>}
           </Link>
         </div>
       </aside>
@@ -178,7 +195,7 @@ export default function AppLayout({
         {/* Header - Desktop Search */}
         <header className="hidden lg:flex h-16 border-b border-border bg-card/80 backdrop-blur-md sticky top-0 z-30 px-6 items-center justify-between">
           <div className="flex-1 max-w-xl">
-            <SearchBar value={searchQuery} onChange={setSearchQuery} />
+            <SearchBar value={searchQuery} onChange={setSearchQuery} onSubmit={handleSearch} />
           </div>
 
           <div className="flex items-center gap-4 ml-4">

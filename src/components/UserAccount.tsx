@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import {
   User,
   Settings,
@@ -41,17 +42,23 @@ export default function UserAccount({ showLabel = true }: { showLabel?: boolean 
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem className="cursor-pointer">
-            <UserCircle className="mr-2 h-4 w-4" />
-            <span>Profile</span>
+          <DropdownMenuItem asChild className="cursor-pointer">
+            <Link href="/app/profile" className="flex items-center w-full">
+              <UserCircle className="mr-2 h-4 w-4" />
+              <span>Profile</span>
+            </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">
-            <CreditCard className="mr-2 h-4 w-4" />
-            <span>Billing</span>
+          <DropdownMenuItem asChild className="cursor-pointer">
+            <Link href="/app/billing" className="flex items-center w-full">
+              <CreditCard className="mr-2 h-4 w-4" />
+              <span>Billing</span>
+            </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">
-            <Settings className="mr-2 h-4 w-4" />
-            <span>Settings</span>
+          <DropdownMenuItem asChild className="cursor-pointer">
+            <Link href="/app/settings" className="flex items-center w-full">
+              <Settings className="mr-2 h-4 w-4" />
+              <span>Settings</span>
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
