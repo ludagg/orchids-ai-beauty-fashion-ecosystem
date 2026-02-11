@@ -82,6 +82,15 @@ const products = [
 
 export default function MarketplacePage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [wishlistedIds, setWishlistedIds] = useState<string[]>([]);
+
+  const toggleWishlist = (id: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setWishlistedIds(prev =>
+      prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+    );
+  };
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-8 max-w-[1400px] mx-auto w-full">
@@ -179,10 +188,14 @@ export default function MarketplacePage() {
                 </div>
 
                 <button
-                  onClick={(e) => { e.preventDefault(); }}
-                  className="absolute top-4 right-4 p-2.5 rounded-full bg-white/90 backdrop-blur-md opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 shadow-lg hover:bg-white"
+                  onClick={(e) => toggleWishlist(product.id, e)}
+                  className={`absolute top-4 right-4 p-2.5 rounded-full backdrop-blur-md transition-all duration-300 shadow-lg active:scale-90 ${
+                    wishlistedIds.includes(product.id)
+                      ? "bg-rose-500 text-white opacity-100"
+                      : "bg-white/90 text-[#1a1a1a] opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 hover:bg-white"
+                  }`}
                 >
-                  <Heart className="w-4 h-4 text-[#1a1a1a]" />
+                  <Heart className={`w-4 h-4 ${wishlistedIds.includes(product.id) ? "fill-current" : ""}`} />
                 </button>
 
                 <div className="absolute bottom-4 left-4 right-4 p-3 rounded-2xl bg-white/90 backdrop-blur-md opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 shadow-xl hidden sm:flex items-center justify-between">

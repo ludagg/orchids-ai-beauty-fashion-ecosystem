@@ -14,7 +14,9 @@ import {
   ChevronRight,
   Menu,
   X,
-  Heart
+  Heart,
+  MessageSquare,
+  Calendar
 } from "lucide-react";
 import Link from "next/link";
 import BottomNav from "@/components/BottomNav";
@@ -31,6 +33,8 @@ const sidebarItems = [
   { icon: Sparkles, label: "AI Stylist", href: "/app/ai-stylist" },
   { icon: Scissors, label: "Salons", href: "/app/salons" },
   { icon: Video, label: "Live Commerce", href: "/app/live-commerce" },
+  { icon: MessageSquare, label: "Conversations", href: "/app/conversations" },
+  { icon: Calendar, label: "My Bookings", href: "/app/bookings" },
 ];
 
 export default function AppLayout({

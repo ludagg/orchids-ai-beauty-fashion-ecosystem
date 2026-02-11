@@ -56,6 +56,8 @@ export default function ProductDetailsPage() {
   const [selectedSize, setSelectedSize] = useState("M");
   const [selectedColor, setSelectedColor] = useState(product.colors[0].name);
   const [quantity, setQuantity] = useState(1);
+  const [isWishlisted, setIsWishlisted] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 max-w-[1400px] mx-auto w-full">
@@ -102,11 +104,14 @@ export default function ProductDetailsPage() {
             <div className="flex items-center justify-between">
               <p className="text-sm font-bold text-rose-600 uppercase tracking-widest">{product.designer}</p>
               <div className="flex gap-2">
-                <button className="p-2.5 rounded-full border border-[#e5e5e5] hover:bg-[#f5f5f5] transition-colors">
+                <button className="p-2.5 rounded-full border border-[#e5e5e5] hover:bg-[#f5f5f5] transition-colors active:scale-90">
                   <Share2 className="w-4 h-4 text-[#6b6b6b]" />
                 </button>
-                <button className="p-2.5 rounded-full border border-[#e5e5e5] hover:bg-[#f5f5f5] transition-colors">
-                  <Heart className="w-4 h-4 text-[#6b6b6b]" />
+                <button
+                  onClick={() => setIsLiked(!isLiked)}
+                  className={`p-2.5 rounded-full border transition-all active:scale-90 ${isLiked ? "border-rose-500 bg-rose-50" : "border-[#e5e5e5] hover:bg-[#f5f5f5]"}`}
+                >
+                  <Heart className={`w-4 h-4 ${isLiked ? "fill-rose-500 text-rose-500" : "text-[#6b6b6b]"}`} />
                 </button>
               </div>
             </div>
@@ -200,12 +205,22 @@ export default function ProductDetailsPage() {
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 pt-4">
-            <button className="flex-[2] h-14 rounded-2xl bg-[#1a1a1a] text-white font-bold text-lg hover:bg-[#333] transition-all active:scale-[0.98] shadow-xl shadow-black/10 flex items-center justify-center gap-3">
-              <ShoppingBag className="w-5 h-5" />
-              Add to Bag
-            </button>
-            <button className="flex-1 h-14 rounded-2xl border-2 border-[#1a1a1a] text-[#1a1a1a] font-bold text-lg hover:bg-[#fafafa] transition-all active:scale-[0.98]">
-              Wishlist
+            <Link href="/app/cart" className="flex-[2]">
+              <button className="w-full h-14 rounded-2xl bg-[#1a1a1a] text-white font-bold text-lg hover:bg-[#333] transition-all active:scale-[0.98] shadow-xl shadow-black/10 flex items-center justify-center gap-3">
+                <ShoppingBag className="w-5 h-5" />
+                Add to Bag
+              </button>
+            </Link>
+            <button
+              onClick={() => setIsWishlisted(!isWishlisted)}
+              className={`flex-1 h-14 rounded-2xl border-2 font-bold text-lg transition-all active:scale-[0.98] flex items-center justify-center gap-2 ${
+                isWishlisted
+                  ? "border-rose-500 text-rose-500 bg-rose-50"
+                  : "border-[#1a1a1a] text-[#1a1a1a] hover:bg-[#fafafa]"
+              }`}
+            >
+              <Heart className={`w-5 h-5 ${isWishlisted ? "fill-rose-500" : ""}`} />
+              {isWishlisted ? "Saved" : "Wishlist"}
             </button>
           </div>
 

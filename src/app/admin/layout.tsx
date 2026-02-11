@@ -8,6 +8,7 @@ import {
   BarChart3,
   Settings,
   Bell,
+  CreditCard,
   Search,
   Menu,
   X
@@ -22,6 +23,7 @@ const adminNavItems = [
   { icon: Scissors, label: "Salons", href: "/admin/salons" },
   { icon: ShoppingBag, label: "Marketplace", href: "/admin/marketplace" },
   { icon: BarChart3, label: "Analytics", href: "/admin/analytics" },
+  { icon: CreditCard, label: "Payments", href: "/admin/payments" },
   { icon: Settings, label: "Settings", href: "/admin/settings" },
 ];
 

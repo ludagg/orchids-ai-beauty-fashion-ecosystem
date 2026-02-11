@@ -1,323 +1,321 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   Video,
   Users,
-  Heart,
-  MessageCircle,
-  ShoppingBag,
-  Share2,
-  X,
-  Play,
-  Pause,
-  Volume2,
-  VolumeX,
+  TrendingUp,
   Star,
   ChevronRight,
-  TrendingUp,
-  Tag,
-  ArrowRight,
+  Play,
+  Heart,
+  Search,
   CheckCircle2,
+  Zap,
+  Tag,
   Plus
 } from "lucide-react";
-import { useState, useRef } from "react";
+import Link from "next/link";
+import { useState } from "react";
 
-const liveProducts = [
+const categories = [
+  "All", "Fashion", "Beauty", "Lifestyle", "Luxury", "Streetwear", "Minimalist"
+];
+
+const trendingStreams = [
   {
-    id: 1,
-    title: "Eco-Linen Summer Set",
-    price: "₹3,499",
-    image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=200&h=200&fit=crop",
-    discount: "20% OFF",
-    stock: "Low Stock"
+    id: "1",
+    title: "Summer Collection Launch 🌿",
+    creator: "Ananya Sharma",
+    viewers: "1.2k",
+    image: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&h=1000&fit=crop",
+    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
+    category: "Fashion"
   },
   {
-    id: 2,
-    title: "Artisan Silk Scarf",
-    price: "₹1,299",
-    image: "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=200&h=200&fit=crop",
-    discount: null,
-    stock: "Available"
+    id: "2",
+    title: "Minimalist Skincare Routine ✨",
+    creator: "Priya Patel",
+    viewers: "850",
+    image: "https://images.unsplash.com/photo-1596462502278-27bfdc4033c8?w=800&h=1000&fit=crop",
+    avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop",
+    category: "Beauty"
+  },
+  {
+    id: "3",
+    title: "Streetwear Trends 2026 👟",
+    creator: "Rahul Mehra",
+    viewers: "2.1k",
+    image: "https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?w=800&h=1000&fit=crop",
+    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
+    category: "Streetwear"
   }
 ];
 
-const comments = [
-  { id: 1, user: "Ananya", text: "Love that linen set! Is it available in blue?", color: "bg-rose-500" },
-  { id: 2, user: "Rahul", text: "Just ordered! Can't wait 😍", color: "bg-blue-500" },
-  { id: 3, user: "Priya", text: "Does it shrink after wash?", color: "bg-violet-500" },
-  { id: 4, user: "Karan", text: "The quality looks amazing on screen", color: "bg-emerald-500" }
+const topCreators = [
+  { name: "Sonia Gupta", followers: "124k", avatar: "https://i.pravatar.cc/150?u=sonia", rating: 4.9 },
+  { name: "Vikram Singh", followers: "89k", avatar: "https://i.pravatar.cc/150?u=vikram", rating: 4.8 },
+  { name: "Anita Desai", followers: "210k", avatar: "https://i.pravatar.cc/150?u=anita", rating: 5.0 },
+  { name: "Karan Johar", followers: "1.2M", avatar: "https://i.pravatar.cc/150?u=karan", rating: 4.7 }
 ];
 
-export default function LiveCommercePage() {
-  const [isPlaying, setIsPlaying] = useState(true);
-  const [isMuted, setIsMuted] = useState(false);
-  const [showCart, setShowCart] = useState(false);
-  const [liked, setLiked] = useState(false);
-  const videoRef = useRef<HTMLDivElement>(null);
+export default function LiveCommerceIndex() {
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [followedCreators, setFollowedCreators] = useState<string[]>([]);
+
+  const toggleFollow = (name: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    setFollowedCreators(prev =>
+      prev.includes(name) ? prev.filter(n => n !== name) : [...prev, name]
+    );
+  };
 
   return (
-    <div className="h-[calc(100vh-64px)] lg:h-screen bg-black overflow-hidden flex flex-col lg:flex-row">
-      {/* Video Stream Container */}
-      <main className="flex-1 relative bg-[#1a1a1a] flex items-center justify-center group">
-        {/* Placeholder for Video */}
+    <div className="flex-1 p-4 sm:p-6 lg:p-8 space-y-10 max-w-[1400px] mx-auto w-full">
+      {/* Hero Section */}
+      <section className="relative h-[300px] sm:h-[400px] rounded-[40px] overflow-hidden bg-[#1a1a1a] flex items-center px-8 sm:px-12">
         <div className="absolute inset-0 z-0">
           <img
-            src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1600&h=900&fit=crop"
-            alt="Live Stream"
-            className="w-full h-full object-cover opacity-80"
+            src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1600&h=900&fit=crop"
+            alt="Hero"
+            className="w-full h-full object-cover opacity-40 scale-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/40 to-transparent" />
         </div>
 
-        {/* Live UI Overlay - Top */}
-        <div className="absolute top-0 left-0 right-0 p-6 flex items-start justify-between z-10">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-rose-500 text-white text-[10px] font-bold uppercase tracking-widest shadow-lg animate-pulse">
-              <span className="w-1.5 h-1.5 rounded-full bg-white" />
-              Live
-            </div>
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/40 backdrop-blur-md text-white text-xs font-bold border border-white/10">
-              <Users className="w-3.5 h-3.5" />
-              1.2k watching
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <button className="p-2.5 rounded-full bg-black/40 backdrop-blur-md text-white hover:bg-black/60 transition-all border border-white/10">
-              <Share2 className="w-5 h-5" />
-            </button>
-            <button className="p-2.5 rounded-full bg-black/40 backdrop-blur-md text-white hover:bg-black/60 transition-all border border-white/10">
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-        </div>
-
-        {/* Centered Controls Overlay (Visible on Hover) */}
-        <div className="absolute inset-0 flex items-center justify-center z-10 opacity-0 group-hover:opacity-100 transition-opacity">
-          <button
-            onClick={() => setIsPlaying(!isPlaying)}
-            className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white hover:scale-110 transition-all border border-white/30"
-          >
-            {isPlaying ? <Pause className="w-10 h-10 fill-current" /> : <Play className="w-10 h-10 fill-current ml-1" />}
-          </button>
-        </div>
-
-        {/* Bottom UI Overlay */}
-        <div className="absolute bottom-0 left-0 right-0 p-6 space-y-6 z-10">
-          <div className="flex items-end justify-between">
-            {/* Creator Info and Stream Details */}
-            <div className="space-y-4 max-w-md">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-2xl border-2 border-rose-500 p-0.5 shadow-xl shadow-rose-500/20">
-                  <img
-                    src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop"
-                    alt="Creator"
-                    className="w-full h-full object-cover rounded-[14px]"
-                  />
-                </div>
-                <div>
-                  <h3 className="text-white font-bold flex items-center gap-1.5">
-                    Ananya Sharma
-                    <CheckCircle2 className="w-3.5 h-3.5 text-blue-400 fill-blue-400/20" />
-                  </h3>
-                  <p className="text-white/70 text-xs font-medium uppercase tracking-wider">Summer Minimalist Collection</p>
-                </div>
-                <button className="ml-4 px-4 py-1.5 rounded-full bg-rose-500 text-white text-xs font-bold hover:bg-rose-600 transition-all shadow-lg shadow-rose-500/30">
-                  Follow
-                </button>
-              </div>
-              <p className="text-white/90 text-sm leading-relaxed line-clamp-2">
-                Exploring the new Eco-Linen arrivals! 🌿 Sustainable, breathable, and perfect for your summer escapes. Check out the cart below.
-              </p>
-            </div>
-
-            {/* Side Actions (Vertical) */}
-            <div className="flex flex-col gap-4">
-              <button
-                onClick={() => setLiked(!liked)}
-                className="flex flex-col items-center gap-1 group"
-              >
-                <div className={`p-3 rounded-full backdrop-blur-md transition-all border ${
-                  liked ? "bg-rose-500 border-rose-500 shadow-xl shadow-rose-500/40" : "bg-black/40 border-white/10 text-white hover:bg-black/60"
-                }`}>
-                  <Heart className={`w-6 h-6 ${liked ? "fill-current" : ""}`} />
-                </div>
-                <span className="text-white text-[10px] font-bold uppercase tracking-widest">4.8k</span>
-              </button>
-
-              <button className="flex flex-col items-center gap-1 group">
-                <div className="p-3 rounded-full bg-black/40 backdrop-blur-md text-white border border-white/10 hover:bg-black/60 transition-all">
-                  <MessageCircle className="w-6 h-6" />
-                </div>
-                <span className="text-white text-[10px] font-bold uppercase tracking-widest">124</span>
-              </button>
-
-              <button
-                onClick={() => setIsMuted(!isMuted)}
-                className="flex flex-col items-center gap-1 group"
-              >
-                <div className="p-3 rounded-full bg-black/40 backdrop-blur-md text-white border border-white/10 hover:bg-black/60 transition-all">
-                  {isMuted ? <VolumeX className="w-6 h-6" /> : <Volume2 className="w-6 h-6" />}
-                </div>
-                <span className="text-white text-[10px] font-bold uppercase tracking-widest">{isMuted ? "Muted" : "Audio"}</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Featured Product Banner - Mobile */}
+        <div className="relative z-10 max-w-xl space-y-6">
           <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            className="lg:hidden p-4 rounded-3xl bg-white shadow-2xl flex items-center gap-4 border border-[#e5e5e5]"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500 text-[10px] font-bold uppercase tracking-widest text-white"
           >
-            <div className="w-16 h-16 rounded-xl overflow-hidden shadow-inner">
-              <img src={liveProducts[0].image} alt="Featured" className="w-full h-full object-cover" />
-            </div>
-            <div className="flex-1">
-              <h4 className="font-bold text-sm text-[#1a1a1a]">{liveProducts[0].title}</h4>
-              <p className="text-[#1a1a1a] font-bold">{liveProducts[0].price}</p>
-            </div>
-            <button className="px-5 py-2.5 rounded-xl bg-[#1a1a1a] text-white text-xs font-bold hover:bg-[#333] transition-all flex items-center gap-2">
-              Buy Now <ChevronRight className="w-3.5 h-3.5" />
-            </button>
+            <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+            Live Now
+          </motion.div>
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="text-4xl sm:text-5xl md:text-6xl font-bold text-white font-display leading-[1.1]"
+          >
+            Shop the <span className="italic text-rose-400">Future.</span>
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-white/70 text-lg max-w-md leading-relaxed"
+          >
+            Join interactive live streams from top creators and shop exclusively curated collections in real-time.
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <Link href="/app/live-commerce/1">
+              <button className="px-8 py-4 rounded-2xl bg-white text-[#1a1a1a] font-bold text-base hover:bg-rose-500 hover:text-white transition-all shadow-xl shadow-white/5 active:scale-95 flex items-center gap-3 group">
+                Watch Featured Stream
+                <Play className="w-5 h-5 fill-current transition-transform group-hover:scale-110" />
+              </button>
+            </Link>
           </motion.div>
         </div>
-      </main>
+      </section>
 
-      {/* Sidebar - Desktop (Chat & Shopping) */}
-      <aside className="hidden lg:flex w-96 bg-white border-l border-[#e5e5e5] flex-col">
-        {/* Tabs */}
-        <div className="flex border-b border-[#e5e5e5]">
+      {/* Categories */}
+      <section className="flex gap-3 overflow-x-auto pb-2 no-scrollbar">
+        {categories.map((cat) => (
           <button
-            className={`flex-1 py-4 text-xs font-bold uppercase tracking-[0.2em] transition-all border-b-2 ${
-              !showCart ? "text-[#1a1a1a] border-[#1a1a1a]" : "text-[#6b6b6b] border-transparent hover:text-[#1a1a1a]"
+            key={cat}
+            onClick={() => setSelectedCategory(cat)}
+            className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all border whitespace-nowrap ${
+              selectedCategory === cat
+                ? "bg-[#1a1a1a] text-white border-[#1a1a1a] shadow-lg shadow-black/10"
+                : "bg-white text-[#6b6b6b] border-[#e5e5e5] hover:border-[#1a1a1a] hover:text-[#1a1a1a]"
             }`}
-            onClick={() => setShowCart(false)}
           >
-            Chat
+            {cat}
           </button>
-          <button
-            className={`flex-1 py-4 text-xs font-bold uppercase tracking-[0.2em] transition-all border-b-2 ${
-              showCart ? "text-[#1a1a1a] border-[#1a1a1a]" : "text-[#6b6b6b] border-transparent hover:text-[#1a1a1a]"
-            }`}
-            onClick={() => setShowCart(true)}
-          >
-            Shop ({liveProducts.length})
+        ))}
+      </section>
+
+      {/* Trending Streams Grid */}
+      <section className="space-y-6">
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-bold flex items-center gap-2 font-display">
+            <TrendingUp className="w-6 h-6 text-rose-500" />
+            Trending Streams
+          </h2>
+          <button className="text-sm font-bold text-[#6b6b6b] hover:text-[#1a1a1a] flex items-center gap-1 transition-colors">
+            View All <ChevronRight className="w-4 h-4" />
           </button>
         </div>
 
-        <div className="flex-1 overflow-hidden relative">
-          <AnimatePresence mode="wait">
-            {!showCart ? (
-              <motion.div
-                key="chat"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                className="h-full flex flex-col p-6 space-y-6"
-              >
-                <div className="flex-1 overflow-y-auto space-y-4 no-scrollbar">
-                  <div className="p-4 rounded-2xl bg-[#f5f5f5] border border-[#e5e5e5] text-center">
-                    <p className="text-[10px] font-bold text-[#6b6b6b] uppercase tracking-widest">Welcome to the stream!</p>
-                    <p className="text-xs text-[#6b6b6b] mt-1">Be respectful and have fun shopping 🛍️</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {trendingStreams.map((stream, i) => (
+            <motion.div
+              key={stream.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.1 }}
+              className="group cursor-pointer"
+            >
+              <Link href={`/app/live-commerce/${stream.id}`}>
+                <div className="relative aspect-[4/5] rounded-[32px] overflow-hidden mb-4 shadow-xl border border-[#e5e5e5]">
+                  <img
+                    src={stream.image}
+                    alt={stream.title}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20" />
+
+                  <div className="absolute top-4 left-4 flex gap-2">
+                    <div className="px-3 py-1.5 rounded-full bg-rose-500 text-white text-[10px] font-bold uppercase tracking-widest shadow-lg flex items-center gap-1.5">
+                      <span className="w-1 h-1 rounded-full bg-white animate-pulse" />
+                      Live
+                    </div>
+                    <div className="px-3 py-1.5 rounded-full bg-black/40 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-widest border border-white/10 flex items-center gap-1.5">
+                      <Users className="w-3 h-3" />
+                      {stream.viewers}
+                    </div>
                   </div>
 
-                  {comments.map((comment) => (
-                    <div key={comment.id} className="flex gap-3">
-                      <div className={`w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-white text-[10px] font-bold ${comment.color}`}>
-                        {comment.user[0]}
+                  <div className="absolute bottom-6 left-6 right-6">
+                    <p className="text-white font-bold text-xl mb-3 line-clamp-2 leading-tight">
+                      {stream.title}
+                    </p>
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl border-2 border-white/20 p-0.5 overflow-hidden">
+                        <img src={stream.avatar} alt={stream.creator} className="w-full h-full object-cover rounded-[10px]" />
                       </div>
-                      <div className="space-y-1 max-w-[85%]">
-                        <div className="flex items-center gap-2">
-                          <span className="font-bold text-xs text-[#1a1a1a]">{comment.user}</span>
-                        </div>
-                        <div className="p-3 rounded-2xl rounded-tl-none bg-[#f5f5f5] text-sm text-[#1a1a1a]">
-                          {comment.text}
-                        </div>
+                      <div>
+                        <p className="text-white font-bold text-sm flex items-center gap-1">
+                          {stream.creator}
+                          <CheckCircle2 className="w-3 h-3 text-blue-400 fill-blue-400/20" />
+                        </p>
+                        <p className="text-white/60 text-[10px] font-bold uppercase tracking-widest">{stream.category}</p>
                       </div>
                     </div>
-                  ))}
-                </div>
-
-                <div className="pt-4 border-t border-[#e5e5e5]">
-                  <div className="relative">
-                    <input
-                      type="text"
-                      placeholder="Type a comment..."
-                      className="w-full pl-4 pr-12 py-3.5 rounded-2xl bg-[#f5f5f5] border-transparent focus:bg-white focus:border-[#e5e5e5] transition-all outline-none text-sm"
-                    />
-                    <button className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-xl bg-[#1a1a1a] text-white hover:bg-[#333] transition-all">
-                      <ArrowRight className="w-4 h-4" />
-                    </button>
                   </div>
-                </div>
-              </motion.div>
-            ) : (
-              <motion.div
-                key="shop"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                className="h-full overflow-y-auto p-6 space-y-6 no-scrollbar"
-              >
-                <div className="space-y-4">
-                  <h4 className="text-xs font-bold text-[#c4c4c4] uppercase tracking-widest">On Screen Now</h4>
-                  <div className="group relative rounded-[32px] overflow-hidden border-2 border-rose-500 bg-white shadow-2xl shadow-rose-500/10 transition-all hover:-translate-y-1">
-                    <div className="relative aspect-square">
-                      <img src={liveProducts[0].image} alt="Featured" className="w-full h-full object-cover" />
-                      <div className="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-rose-500 text-white text-[10px] font-bold uppercase tracking-widest shadow-lg">
-                        {liveProducts[0].discount}
-                      </div>
-                      <div className="absolute bottom-4 right-4 flex gap-2">
-                        <button className="p-2.5 rounded-full bg-white shadow-xl hover:scale-110 transition-all">
-                          <Heart className="w-4 h-4 text-rose-500" />
-                        </button>
-                      </div>
-                    </div>
-                    <div className="p-5">
-                      <div className="flex items-start justify-between mb-3">
-                        <div>
-                          <h5 className="font-bold text-[#1a1a1a]">{liveProducts[0].title}</h5>
-                          <p className="text-xs text-[#6b6b6b] mt-0.5">Studio Épure • Linen</p>
-                        </div>
-                        <p className="font-bold text-lg text-rose-600">{liveProducts[0].price}</p>
-                      </div>
-                      <button className="w-full py-4 rounded-2xl bg-[#1a1a1a] text-white font-bold hover:bg-rose-500 transition-all flex items-center justify-center gap-2 shadow-xl shadow-black/10 group/btn">
-                        Add to Bag
-                        <ShoppingBag className="w-4 h-4 group-hover/btn:scale-110 transition-transform" />
-                      </button>
+
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center">
+                      <Play className="w-8 h-8 text-white fill-current ml-1" />
                     </div>
                   </div>
                 </div>
-
-                <div className="space-y-4">
-                  <h4 className="text-xs font-bold text-[#c4c4c4] uppercase tracking-widest">More From the Stream</h4>
-                  {liveProducts.slice(1).map((product) => (
-                    <div key={product.id} className="flex gap-4 p-3 rounded-2xl bg-white border border-[#e5e5e5] hover:border-[#1a1a1a] transition-all cursor-pointer group">
-                      <div className="w-20 h-20 rounded-xl overflow-hidden shadow-inner">
-                        <img src={product.image} alt={product.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                      </div>
-                      <div className="flex-1 flex flex-col justify-between py-0.5">
-                        <div>
-                          <h6 className="font-bold text-sm text-[#1a1a1a] truncate">{product.title}</h6>
-                          <p className="text-xs font-bold text-rose-600 mt-1">{product.price}</p>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">{product.stock}</span>
-                        </div>
-                      </div>
-                      <button className="self-center p-2.5 rounded-xl bg-[#f5f5f5] text-[#1a1a1a] hover:bg-[#1a1a1a] hover:text-white transition-all">
-                        <Plus className="w-4 h-4" />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+              </Link>
+            </motion.div>
+          ))}
         </div>
-      </aside>
+      </section>
+
+      {/* Top Creators Section */}
+      <section className="space-y-8">
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-bold flex items-center gap-2 font-display">
+            <Star className="w-6 h-6 text-amber-500" />
+            Top Creators
+          </h2>
+          <button className="text-sm font-bold text-[#6b6b6b] hover:text-[#1a1a1a] flex items-center gap-1 transition-colors">
+            See Discover <ChevronRight className="w-4 h-4" />
+          </button>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          {topCreators.map((creator, i) => (
+            <motion.div
+              key={creator.name}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.4 + i * 0.1 }}
+              className="p-6 rounded-[32px] bg-white border border-[#e5e5e5] hover:border-[#1a1a1a] transition-all group text-center relative"
+            >
+              <button
+                onClick={(e) => toggleFollow(creator.name, e)}
+                className={`absolute top-4 right-4 p-2 rounded-xl transition-all active:scale-90 z-10 ${
+                  followedCreators.includes(creator.name)
+                    ? "bg-rose-500 text-white"
+                    : "bg-[#f5f5f5] text-[#1a1a1a] hover:bg-[#e5e5e5]"
+                }`}
+              >
+                {followedCreators.includes(creator.name) ? <CheckCircle2 className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+              </button>
+              <Link href={`/app/live-commerce/creator/${i+1}`}>
+                <div className="relative w-24 h-24 mx-auto mb-4">
+                  <div className="absolute inset-0 rounded-[28px] bg-gradient-to-tr from-rose-500 to-violet-500 animate-spin-slow opacity-20 group-hover:opacity-100 transition-opacity" />
+                  <div className="relative w-full h-full rounded-[24px] overflow-hidden border-2 border-white shadow-xl">
+                    <img src={creator.avatar} alt={creator.name} className="w-full h-full object-cover" />
+                  </div>
+                </div>
+                <h3 className="font-bold text-[#1a1a1a] flex items-center justify-center gap-1">
+                  {creator.name}
+                  <CheckCircle2 className="w-3.5 h-3.5 text-blue-500 fill-blue-500/10" />
+                </h3>
+                <p className="text-xs text-[#6b6b6b] mt-1 font-medium">{creator.followers} followers</p>
+                <div className="mt-4 flex items-center justify-center gap-1.5">
+                  <div className="flex -space-x-1">
+                    {[1,2,3].map(j => (
+                      <div key={j} className="w-5 h-5 rounded-full border border-white bg-[#f5f5f5] overflow-hidden">
+                        <img src={`https://i.pravatar.cc/50?u=${creator.name}${j}`} alt="fan" />
+                      </div>
+                    ))}
+                  </div>
+                  <span className="text-[10px] font-bold text-[#1a1a1a] uppercase tracking-wider">Top Tier</span>
+                </div>
+              </Link>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* Coming Soon / Categories Bento */}
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="p-10 rounded-[40px] bg-gradient-to-br from-violet-600 to-indigo-700 text-white relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 blur-[60px] rounded-full -mr-32 -mt-32" />
+          <div className="relative z-10 space-y-6">
+            <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center">
+              <Zap className="w-7 h-7" />
+            </div>
+            <div>
+              <h3 className="text-3xl font-bold font-display">Creator Studio</h3>
+              <p className="text-white/70 mt-2 leading-relaxed">
+                Are you a designer or fashion influencer? Start your own live stream and reach millions.
+              </p>
+            </div>
+            <button className="px-8 py-3.5 rounded-2xl bg-white text-indigo-700 font-bold hover:bg-indigo-50 transition-all active:scale-95 shadow-xl">
+              Apply Now
+            </button>
+          </div>
+        </div>
+
+        <div className="p-10 rounded-[40px] bg-[#f5f5f5] border border-[#e5e5e5] flex flex-col justify-between group">
+          <div className="space-y-6">
+            <div className="w-14 h-14 rounded-2xl bg-white border border-[#e5e5e5] flex items-center justify-center text-[#1a1a1a]">
+              <Tag className="w-7 h-7" />
+            </div>
+            <div>
+              <h3 className="text-3xl font-bold text-[#1a1a1a] font-display">Flash Sales</h3>
+              <p className="text-[#6b6b6b] mt-2 leading-relaxed">
+                Don't miss out on upcoming limited-time events from luxury brands.
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-4 mt-8">
+            <div className="flex -space-x-3">
+              {[1,2,3,4].map(i => (
+                <div key={i} className="w-10 h-10 rounded-full border-2 border-white overflow-hidden shadow-sm">
+                  <img src={`https://i.pravatar.cc/100?u=sale${i}`} alt="user" />
+                </div>
+              ))}
+            </div>
+            <p className="text-sm font-bold text-[#1a1a1a]">
+              +1.2k people interested
+            </p>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
