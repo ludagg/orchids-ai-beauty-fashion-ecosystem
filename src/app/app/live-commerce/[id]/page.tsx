@@ -61,7 +61,7 @@ export default function LiveCommercePage() {
   return (
     <div className="h-[calc(100vh-64px)] lg:h-screen bg-black overflow-hidden flex flex-col lg:flex-row">
       {/* Video Stream Container */}
-      <main className="flex-1 relative bg-[#1a1a1a] flex items-center justify-center group">
+      <main className="flex-1 relative bg-foreground flex items-center justify-center group">
         {/* Placeholder for Video */}
         <div className="absolute inset-0 z-0">
           <img
@@ -76,7 +76,7 @@ export default function LiveCommercePage() {
         <div className="absolute top-0 left-0 right-0 p-6 flex items-start justify-between z-10">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-rose-500 text-white text-[10px] font-bold uppercase tracking-widest shadow-lg animate-pulse">
-              <span className="w-1.5 h-1.5 rounded-full bg-white" />
+              <span className="w-1.5 h-1.5 rounded-full bg-card" />
               Live
             </div>
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/40 backdrop-blur-md text-white text-xs font-bold border border-white/10">
@@ -101,7 +101,7 @@ export default function LiveCommercePage() {
         <div className="absolute inset-0 flex items-center justify-center z-10 opacity-0 group-hover:opacity-100 transition-opacity">
           <button
             onClick={() => setIsPlaying(!isPlaying)}
-            className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white hover:scale-110 transition-all border border-white/30"
+            className="w-20 h-20 rounded-full bg-card/20 backdrop-blur-md flex items-center justify-center text-white hover:scale-110 transition-all border border-white/30"
           >
             {isPlaying ? <Pause className="w-10 h-10 fill-current" /> : <Play className="w-10 h-10 fill-current ml-1" />}
           </button>
@@ -130,7 +130,7 @@ export default function LiveCommercePage() {
                 <button
                   onClick={() => setIsFollowing(!isFollowing)}
                   className={`ml-4 px-4 py-1.5 rounded-full text-xs font-bold transition-all shadow-lg active:scale-95 ${
-                    isFollowing ? "bg-white/20 text-white backdrop-blur-md" : "bg-rose-500 text-white hover:bg-rose-600 shadow-rose-500/30"
+                    isFollowing ? "bg-card/20 text-white backdrop-blur-md" : "bg-rose-500 text-white hover:bg-rose-600 shadow-rose-500/30"
                   }`}
                 >
                   {isFollowing ? "Following" : "Follow"}
@@ -178,16 +178,16 @@ export default function LiveCommercePage() {
           <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            className="lg:hidden p-4 rounded-3xl bg-white shadow-2xl flex items-center gap-4 border border-[#e5e5e5]"
+            className="lg:hidden p-4 rounded-3xl bg-card shadow-2xl flex items-center gap-4 border border-border"
           >
             <div className="w-16 h-16 rounded-xl overflow-hidden shadow-inner">
               <img src={liveProducts[0].image} alt="Featured" className="w-full h-full object-cover" />
             </div>
             <div className="flex-1">
-              <h4 className="font-bold text-sm text-[#1a1a1a]">{liveProducts[0].title}</h4>
-              <p className="text-[#1a1a1a] font-bold">{liveProducts[0].price}</p>
+              <h4 className="font-bold text-sm text-foreground">{liveProducts[0].title}</h4>
+              <p className="text-foreground font-bold">{liveProducts[0].price}</p>
             </div>
-            <button className="px-5 py-2.5 rounded-xl bg-[#1a1a1a] text-white text-xs font-bold hover:bg-[#333] transition-all flex items-center gap-2">
+            <button className="px-5 py-2.5 rounded-xl bg-foreground text-white text-xs font-bold hover:bg-[#333] transition-all flex items-center gap-2">
               Buy Now <ChevronRight className="w-3.5 h-3.5" />
             </button>
           </motion.div>
@@ -195,12 +195,12 @@ export default function LiveCommercePage() {
       </main>
 
       {/* Sidebar - Desktop (Chat & Shopping) */}
-      <aside className="hidden lg:flex w-96 bg-white border-l border-[#e5e5e5] flex-col">
+      <aside className="hidden lg:flex w-96 bg-card border-l border-border flex-col">
         {/* Tabs */}
-        <div className="flex border-b border-[#e5e5e5]">
+        <div className="flex border-b border-border">
           <button
             className={`flex-1 py-4 text-xs font-bold uppercase tracking-[0.2em] transition-all border-b-2 ${
-              !showCart ? "text-[#1a1a1a] border-[#1a1a1a]" : "text-[#6b6b6b] border-transparent hover:text-[#1a1a1a]"
+              !showCart ? "text-foreground border-foreground" : "text-muted-foreground border-transparent hover:text-foreground"
             }`}
             onClick={() => setShowCart(false)}
           >
@@ -208,7 +208,7 @@ export default function LiveCommercePage() {
           </button>
           <button
             className={`flex-1 py-4 text-xs font-bold uppercase tracking-[0.2em] transition-all border-b-2 ${
-              showCart ? "text-[#1a1a1a] border-[#1a1a1a]" : "text-[#6b6b6b] border-transparent hover:text-[#1a1a1a]"
+              showCart ? "text-foreground border-foreground" : "text-muted-foreground border-transparent hover:text-foreground"
             }`}
             onClick={() => setShowCart(true)}
           >
@@ -227,9 +227,9 @@ export default function LiveCommercePage() {
                 className="h-full flex flex-col p-6 space-y-6"
               >
                 <div className="flex-1 overflow-y-auto space-y-4 no-scrollbar">
-                  <div className="p-4 rounded-2xl bg-[#f5f5f5] border border-[#e5e5e5] text-center">
-                    <p className="text-[10px] font-bold text-[#6b6b6b] uppercase tracking-widest">Welcome to the stream!</p>
-                    <p className="text-xs text-[#6b6b6b] mt-1">Be respectful and have fun shopping 🛍️</p>
+                  <div className="p-4 rounded-2xl bg-muted border border-border text-center">
+                    <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Welcome to the stream!</p>
+                    <p className="text-xs text-muted-foreground mt-1">Be respectful and have fun shopping 🛍️</p>
                   </div>
 
                   {comments.map((comment) => (
@@ -239,9 +239,9 @@ export default function LiveCommercePage() {
                       </div>
                       <div className="space-y-1 max-w-[85%]">
                         <div className="flex items-center gap-2">
-                          <span className="font-bold text-xs text-[#1a1a1a]">{comment.user}</span>
+                          <span className="font-bold text-xs text-foreground">{comment.user}</span>
                         </div>
-                        <div className="p-3 rounded-2xl rounded-tl-none bg-[#f5f5f5] text-sm text-[#1a1a1a]">
+                        <div className="p-3 rounded-2xl rounded-tl-none bg-muted text-sm text-foreground">
                           {comment.text}
                         </div>
                       </div>
@@ -249,14 +249,14 @@ export default function LiveCommercePage() {
                   ))}
                 </div>
 
-                <div className="pt-4 border-t border-[#e5e5e5]">
+                <div className="pt-4 border-t border-border">
                   <div className="relative">
                     <input
                       type="text"
                       placeholder="Type a comment..."
-                      className="w-full pl-4 pr-12 py-3.5 rounded-2xl bg-[#f5f5f5] border-transparent focus:bg-white focus:border-[#e5e5e5] transition-all outline-none text-sm"
+                      className="w-full pl-4 pr-12 py-3.5 rounded-2xl bg-muted border-transparent focus:bg-card focus:border-border transition-all outline-none text-sm"
                     />
-                    <button className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-xl bg-[#1a1a1a] text-white hover:bg-[#333] transition-all">
+                    <button className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-xl bg-foreground text-white hover:bg-[#333] transition-all">
                       <ArrowRight className="w-4 h-4" />
                     </button>
                   </div>
@@ -271,15 +271,15 @@ export default function LiveCommercePage() {
                 className="h-full overflow-y-auto p-6 space-y-6 no-scrollbar"
               >
                 <div className="space-y-4">
-                  <h4 className="text-xs font-bold text-[#c4c4c4] uppercase tracking-widest">On Screen Now</h4>
-                  <div className="group relative rounded-[32px] overflow-hidden border-2 border-rose-500 bg-white shadow-2xl shadow-rose-500/10 transition-all hover:-translate-y-1">
+                  <h4 className="text-xs font-bold text-muted-foreground/50 uppercase tracking-widest">On Screen Now</h4>
+                  <div className="group relative rounded-[32px] overflow-hidden border-2 border-rose-500 bg-card shadow-2xl shadow-rose-500/10 transition-all hover:-translate-y-1">
                     <div className="relative aspect-square">
                       <img src={liveProducts[0].image} alt="Featured" className="w-full h-full object-cover" />
                       <div className="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-rose-500 text-white text-[10px] font-bold uppercase tracking-widest shadow-lg">
                         {liveProducts[0].discount}
                       </div>
                       <div className="absolute bottom-4 right-4 flex gap-2">
-                        <button className="p-2.5 rounded-full bg-white shadow-xl hover:scale-110 transition-all">
+                        <button className="p-2.5 rounded-full bg-card shadow-xl hover:scale-110 transition-all">
                           <Heart className="w-4 h-4 text-rose-500" />
                         </button>
                       </div>
@@ -287,13 +287,13 @@ export default function LiveCommercePage() {
                     <div className="p-5">
                       <div className="flex items-start justify-between mb-3">
                         <div>
-                          <h5 className="font-bold text-[#1a1a1a]">{liveProducts[0].title}</h5>
-                          <p className="text-xs text-[#6b6b6b] mt-0.5">Studio Épure • Linen</p>
+                          <h5 className="font-bold text-foreground">{liveProducts[0].title}</h5>
+                          <p className="text-xs text-muted-foreground mt-0.5">Studio Épure • Linen</p>
                         </div>
                         <p className="font-bold text-lg text-rose-600">{liveProducts[0].price}</p>
                       </div>
                       <Link href="/app/cart">
-                        <button className="w-full py-4 rounded-2xl bg-[#1a1a1a] text-white font-bold hover:bg-rose-500 transition-all flex items-center justify-center gap-2 shadow-xl shadow-black/10 group/btn">
+                        <button className="w-full py-4 rounded-2xl bg-foreground text-white font-bold hover:bg-rose-500 transition-all flex items-center justify-center gap-2 shadow-xl shadow-foreground/10 group/btn">
                           Add to Bag
                           <ShoppingBag className="w-4 h-4 group-hover/btn:scale-110 transition-transform" />
                         </button>
@@ -303,22 +303,22 @@ export default function LiveCommercePage() {
                 </div>
 
                 <div className="space-y-4">
-                  <h4 className="text-xs font-bold text-[#c4c4c4] uppercase tracking-widest">More From the Stream</h4>
+                  <h4 className="text-xs font-bold text-muted-foreground/50 uppercase tracking-widest">More From the Stream</h4>
                   {liveProducts.slice(1).map((product) => (
-                    <div key={product.id} className="flex gap-4 p-3 rounded-2xl bg-white border border-[#e5e5e5] hover:border-[#1a1a1a] transition-all cursor-pointer group">
+                    <div key={product.id} className="flex gap-4 p-3 rounded-2xl bg-card border border-border hover:border-foreground transition-all cursor-pointer group">
                       <div className="w-20 h-20 rounded-xl overflow-hidden shadow-inner">
                         <img src={product.image} alt={product.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                       </div>
                       <div className="flex-1 flex flex-col justify-between py-0.5">
                         <div>
-                          <h6 className="font-bold text-sm text-[#1a1a1a] truncate">{product.title}</h6>
+                          <h6 className="font-bold text-sm text-foreground truncate">{product.title}</h6>
                           <p className="text-xs font-bold text-rose-600 mt-1">{product.price}</p>
                         </div>
                         <div className="flex items-center gap-2">
                           <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">{product.stock}</span>
                         </div>
                       </div>
-                      <button className="self-center p-2.5 rounded-xl bg-[#f5f5f5] text-[#1a1a1a] hover:bg-[#1a1a1a] hover:text-white transition-all">
+                      <button className="self-center p-2.5 rounded-xl bg-muted text-foreground hover:bg-foreground hover:text-white transition-all">
                         <Plus className="w-4 h-4" />
                       </button>
                     </div>

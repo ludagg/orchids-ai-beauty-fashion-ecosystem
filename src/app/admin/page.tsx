@@ -121,7 +121,7 @@ export default function AdminDashboard() {
                   <p className="text-sm font-medium text-foreground">{item.label}</p>
                   <p className="text-xs text-muted-foreground">{item.status}</p>
                 </div>
-                <div className={`w-2.5 h-2.5 rounded-full ${item.color} shadow-sm shadow-black/10`} />
+                <div className={`w-2.5 h-2.5 rounded-full ${item.color} shadow-sm shadow-foreground/10`} />
               </div>
             ))}
           </div>

@@ -131,7 +131,7 @@ export default function SalonsPage() {
           >
             <Link
               href={`/app/salons/${salon.id}`}
-              className="flex flex-col sm:flex-row gap-5 p-4 rounded-3xl bg-card border border-border hover:shadow-xl hover:shadow-black/5 transition-all group overflow-hidden"
+              className="flex flex-col sm:flex-row gap-5 p-4 rounded-3xl bg-card border border-border hover:shadow-xl hover:shadow-foreground/5 transition-all group overflow-hidden"
             >
               <div className="w-full sm:w-48 h-56 sm:h-48 rounded-2xl overflow-hidden flex-shrink-0 bg-secondary shadow-inner relative">
                 <img src={salon.image} alt={salon.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
@@ -170,7 +170,7 @@ export default function SalonsPage() {
                     <p className="text-xs font-bold text-muted-foreground/50 uppercase tracking-widest mb-0.5">Starting From</p>
                     <p className="font-bold text-foreground">{salon.price}</p>
                   </div>
-                  <button className="px-5 py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-bold hover:bg-blue-600 transition-all flex items-center gap-2 shadow-lg shadow-black/5">
+                  <button className="px-5 py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-bold hover:bg-blue-600 transition-all flex items-center gap-2 shadow-lg shadow-foreground/5">
                     Book Now <ChevronRight className="w-4 h-4" />
                   </button>
                 </div>
@@ -186,8 +186,8 @@ export default function SalonsPage() {
         className="rounded-[40px] bg-gradient-to-br from-blue-600 to-indigo-700 p-8 sm:p-12 text-white relative overflow-hidden shadow-2xl shadow-blue-200"
       >
         <div className="relative z-10 max-w-lg">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-[10px] font-bold uppercase tracking-widest mb-6">
-            <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-card/20 backdrop-blur-md text-[10px] font-bold uppercase tracking-widest mb-6">
+            <span className="w-1.5 h-1.5 rounded-full bg-card animate-pulse" />
             Limited Offer
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold font-display mb-6 leading-tight">First Booking? <br/>Get 30% Off</h2>
@@ -195,17 +195,17 @@ export default function SalonsPage() {
             Experience premium beauty services at any of our partner salons and enjoy exclusive discounts on your first visit.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
-            <button className="px-8 py-4 rounded-2xl bg-white text-blue-600 font-bold hover:bg-white/90 transition-all flex items-center justify-center gap-2">
+            <button className="px-8 py-4 rounded-2xl bg-card text-blue-600 font-bold hover:bg-card/90 transition-all flex items-center justify-center gap-2">
               Claim Offer <ChevronRight className="w-4 h-4" />
             </button>
-            <button className="px-8 py-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-white font-bold hover:bg-white/20 transition-all">
+            <button className="px-8 py-4 rounded-2xl bg-card/10 backdrop-blur-md border border-white/20 text-white font-bold hover:bg-card/20 transition-all">
               Learn More
             </button>
           </div>
         </div>
 
         {/* Decorative Blobs */}
-        <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[70%] bg-white/10 blur-[80px] rounded-full rotate-12" />
+        <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[70%] bg-card/10 blur-[80px] rounded-full rotate-12" />
         <div className="absolute bottom-[-20%] right-[10%] w-[30%] h-[40%] bg-blue-400/20 blur-[60px] rounded-full" />
       </motion.div>
     </div>
