@@ -22,6 +22,8 @@ import {
   Zap,
   Heart
 } from "lucide-react";
+import { ThemeSwitcher } from "@/components/ThemeSwitcher";
+import { useTheme } from "next-themes";
 
 const navItems = ["Features", "AI", "Marketplace", "Salons", "Testimonials"];
 
@@ -190,10 +192,10 @@ export default function Home() {
   }, [mobileMenuOpen]);
 
   return (
-    <div className="min-h-screen bg-[#fafafa] text-[#1a1a1a] selection:bg-black/10">
+    <div className="min-h-screen bg-background text-foreground selection:bg-primary/10">
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          scrolled ? "bg-white/90 backdrop-blur-2xl shadow-sm" : ""
+          scrolled ? "bg-card/90 backdrop-blur-2xl shadow-sm" : ""
         }`}
       >
         <div className="max-w-[1200px] mx-auto px-6">
@@ -215,20 +217,21 @@ export default function Home() {
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.05 }}
-                  className="relative text-sm text-[#6b6b6b] hover:text-[#1a1a1a] transition-colors py-2 group"
+                  className="relative text-sm text-muted-foreground hover:text-foreground transition-colors py-2 group"
                 >
                   {item}
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#1a1a1a] transition-all duration-300 group-hover:w-full" />
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-foreground transition-all duration-300 group-hover:w-full" />
                 </motion.a>
               ))}
             </div>
 
             <div className="flex items-center gap-4">
+              <ThemeSwitcher />
               <Link href="/auth">
                 <motion.button
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="hidden sm:block px-4 py-2 rounded-full bg-[#1a1a1a] text-white text-sm font-medium hover:bg-[#333] transition-all hover:shadow-lg hover:shadow-black/20 active:scale-95"
+                  className="hidden sm:block px-4 py-2 rounded-full bg-primary text-primary-foreground text-sm font-medium hover:opacity-90 transition-all hover:shadow-lg hover:shadow-primary/20 active:scale-95"
                 >
                   Sign In
                 </motion.button>
@@ -250,11 +253,14 @@ export default function Home() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] bg-white"
+            className="fixed inset-0 z-[100] bg-background"
           >
             <div className="flex flex-col h-full">
-              <div className="flex items-center justify-between h-16 px-6 border-b border-[#e5e5e5]">
-                <span className="text-xl font-semibold font-display">Priisme</span>
+              <div className="flex items-center justify-between h-16 px-6 border-b border-border">
+                <div className="flex items-center gap-4">
+                  <span className="text-xl font-semibold font-display">Priisme</span>
+                  <ThemeSwitcher />
+                </div>
                 <button onClick={() => setMobileMenuOpen(false)} className="p-2 -mr-2">
                   <X className="w-6 h-6" />
                 </button>
@@ -271,18 +277,18 @@ export default function Home() {
                       <a
                         href={`#${item.toLowerCase()}`}
                         onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center justify-between py-4 text-2xl font-medium border-b border-[#e5e5e5] hover:text-[#6b6b6b] transition-colors"
+                        className="flex items-center justify-between py-4 text-2xl font-medium border-b border-border hover:text-muted-foreground transition-colors"
                       >
                         {item}
-                        <ChevronRight className="w-5 h-5 text-[#6b6b6b]" />
+                        <ChevronRight className="w-5 h-5 text-muted-foreground" />
                       </a>
                     </motion.li>
                   ))}
                 </ul>
               </nav>
-              <div className="px-6 py-8 border-t border-[#e5e5e5] space-y-3">
+              <div className="px-6 py-8 border-t border-border space-y-3">
                 <Link href="/auth" onClick={() => setMobileMenuOpen(false)}>
-                  <button className="w-full py-4 rounded-2xl bg-[#1a1a1a] text-white font-medium hover:bg-[#333] transition-colors">
+                  <button className="w-full py-4 rounded-2xl bg-primary text-primary-foreground font-medium hover:opacity-90 transition-colors">
                     Sign In
                   </button>
                 </Link>
@@ -299,7 +305,7 @@ export default function Home() {
       >
         {/* Background Decorations */}
         <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#e5e5e5_1px,transparent_1px)] bg-[size:40px_40px] opacity-[0.3]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--border)_1px,transparent_1px)] bg-[size:40px_40px] opacity-[0.3]" />
           <motion.div
             animate={{
               x: [0, 40, 0],
@@ -343,13 +349,13 @@ export default function Home() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-[#e5e5e5] shadow-sm mb-8"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-card border border-border shadow-sm mb-8"
           >
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>
-            <span className="text-sm text-[#6b6b6b]">
+            <span className="text-sm text-muted-foreground">
               AI-Powered Beauty & Fashion Ecosystem
             </span>
           </motion.div>
@@ -369,7 +375,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-[17px] md:text-[21px] text-[#6b6b6b] max-w-[540px] mx-auto mt-6 leading-relaxed"
+            className="text-[17px] md:text-[21px] text-muted-foreground max-w-[540px] mx-auto mt-6 leading-relaxed"
           >
             Experience the future of fashion. Explore our AI-powered ecosystem
             and discover the intelligence behind style.
@@ -383,14 +389,14 @@ export default function Home() {
           >
             <Link href="/app" className="flex-1 w-full group">
               <button
-                className="w-full h-14 rounded-full bg-[#1a1a1a] text-white font-medium text-[17px] hover:bg-[#333] transition-all active:scale-[0.98] shadow-lg shadow-black/10 flex items-center justify-center gap-2"
+                className="w-full h-14 rounded-full bg-primary text-primary-foreground font-medium text-[17px] hover:opacity-90 transition-all active:scale-[0.98] shadow-lg shadow-primary/10 flex items-center justify-center gap-2"
               >
                 Get Started
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
             </Link>
-            <button className="w-full sm:w-auto px-8 py-4 h-14 rounded-full bg-white border border-[#e5e5e5] font-medium text-[17px] hover:bg-[#fafafa] transition-all hover:border-[#d4d4d4] active:scale-[0.98] flex items-center justify-center gap-2 group">
-              <Play className="w-5 h-5 text-[#6b6b6b] group-hover:text-[#1a1a1a] transition-colors" />
+            <button className="w-full sm:w-auto px-8 py-4 h-14 rounded-full bg-card border border-border font-medium text-[17px] hover:bg-secondary transition-all hover:border-muted-foreground/30 active:scale-[0.98] flex items-center justify-center gap-2 group">
+              <Play className="w-5 h-5 text-muted-foreground group-hover:text-foreground transition-colors" />
               Watch Demo
             </button>
           </motion.div>
@@ -402,7 +408,7 @@ export default function Home() {
             className="flex flex-wrap items-center justify-center gap-6 mt-10"
           >
             {trustBadges.map((badge) => (
-              <div key={badge} className="flex items-center gap-2 text-sm text-[#6b6b6b]">
+              <div key={badge} className="flex items-center gap-2 text-sm text-muted-foreground">
                 <CheckCircle2 className="w-4 h-4 text-emerald-500" />
                 {badge}
               </div>
@@ -417,13 +423,13 @@ export default function Home() {
           style={{ x: springX, y: springY }}
           className="relative w-full max-w-[1100px] mx-auto mt-16 px-6"
         >
-          <div className="relative aspect-[16/9] rounded-3xl overflow-hidden bg-gradient-to-br from-[#f5f5f5] to-white shadow-2xl shadow-black/10 border border-[#e5e5e5]">
+          <div className="relative aspect-[16/9] rounded-3xl overflow-hidden bg-gradient-to-br from-secondary to-card shadow-2xl shadow-black/10 border border-border">
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-center">
-                <div className="w-20 h-20 mx-auto rounded-full bg-[#1a1a1a] flex items-center justify-center cursor-pointer hover:scale-110 transition-transform shadow-xl">
-                  <Play className="w-8 h-8 text-white ml-1" />
+                <div className="w-20 h-20 mx-auto rounded-full bg-primary flex items-center justify-center cursor-pointer hover:scale-110 transition-transform shadow-xl">
+                  <Play className="w-8 h-8 text-primary-foreground ml-1" />
                 </div>
-                <p className="mt-4 text-[#6b6b6b] text-sm">Watch how Priisme works</p>
+                <p className="mt-4 text-muted-foreground text-sm">Watch how Priisme works</p>
               </div>
             </div>
             <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&h=675&fit=crop')] bg-cover bg-center opacity-30" />
@@ -439,9 +445,9 @@ export default function Home() {
           <motion.div
             animate={{ y: [0, 8, 0] }}
             transition={{ duration: 2, repeat: Infinity }}
-            className="w-6 h-10 rounded-full border-2 border-[#d4d4d4] flex items-start justify-center p-2"
+            className="w-6 h-10 rounded-full border-2 border-muted-foreground/30 flex items-start justify-center p-2"
           >
-            <motion.div className="w-1.5 h-2.5 rounded-full bg-[#6b6b6b]" />
+            <motion.div className="w-1.5 h-2.5 rounded-full bg-muted-foreground" />
           </motion.div>
         </motion.div>
       </motion.section>
@@ -456,13 +462,13 @@ export default function Home() {
             viewport={{ once: true, margin: "-100px" }}
             className="text-center mb-16 md:mb-20"
           >
-            <span className="inline-block px-4 py-1.5 rounded-full bg-[#f5f5f5] text-sm text-[#6b6b6b] font-medium mb-6">
+            <span className="inline-block px-4 py-1.5 rounded-full bg-secondary text-sm text-muted-foreground font-medium mb-6">
               Platform
             </span>
             <h2 className="text-[36px] sm:text-[44px] md:text-[56px] font-semibold leading-tight tracking-tight font-display">
               One ecosystem.
               <br />
-              <span className="text-[#6b6b6b] italic">Endless possibilities.</span>
+              <span className="text-muted-foreground italic">Endless possibilities.</span>
             </h2>
           </motion.div>
 
@@ -532,9 +538,9 @@ export default function Home() {
                       style={{ transformStyle: "preserve-3d" }}
                     >
                       <div 
-                        className={`relative rounded-3xl overflow-hidden bg-white shadow-2xl transition-shadow duration-500 ${isActive ? "shadow-black/20" : "shadow-black/10"}`}
+                      className={`relative rounded-3xl overflow-hidden bg-card shadow-2xl transition-shadow duration-500 ${isActive ? "shadow-black/20" : "shadow-black/10"}`}
                         style={{ 
-                          border: isActive ? `2px solid ${feature.color}30` : "1px solid #e5e5e5",
+                        border: isActive ? `2px solid ${feature.color}30` : "1px solid var(--border)",
                         }}
                       >
                         <div className="relative aspect-[4/5] overflow-hidden">
@@ -571,7 +577,7 @@ export default function Home() {
                                   initial={{ opacity: 0, y: 10 }}
                                   animate={{ opacity: 1, y: 0 }}
                                   transition={{ delay: 0.2 }}
-                                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-[#1a1a1a] text-sm font-medium hover:bg-white/90 transition-colors group/btn"
+                                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-card text-foreground text-sm font-medium hover:opacity-90 transition-colors group/btn"
                                 >
                                   Explore
                                   <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
@@ -596,7 +602,8 @@ export default function Home() {
                     i === activeFeature ? "w-10" : "w-2 hover:w-4"
                   }`}
                   style={{ 
-                    backgroundColor: i === activeFeature ? feature.color : "#d4d4d4",
+                    backgroundColor: i === activeFeature ? feature.color : "var(--muted-foreground)",
+                    opacity: i === activeFeature ? 1 : 0.3
                   }}
                 />
               ))}
@@ -605,18 +612,18 @@ export default function Home() {
             <div className="flex items-center justify-center gap-8 mt-8">
               <button
                 onClick={() => setActiveFeature((prev) => (prev - 1 + features.length) % features.length)}
-                className="w-12 h-12 rounded-full border border-[#e5e5e5] flex items-center justify-center hover:bg-[#f5f5f5] transition-colors"
+                className="w-12 h-12 rounded-full border border-border flex items-center justify-center hover:bg-secondary transition-colors"
               >
                 <ChevronRight className="w-5 h-5 rotate-180" />
               </button>
               <div className="text-center">
-                <p className="text-sm text-[#6b6b6b]">
-                  <span className="font-semibold text-[#1a1a1a]">{activeFeature + 1}</span> / {features.length}
+                <p className="text-sm text-muted-foreground">
+                  <span className="font-semibold text-foreground">{activeFeature + 1}</span> / {features.length}
                 </p>
               </div>
               <button
                 onClick={() => setActiveFeature((prev) => (prev + 1) % features.length)}
-                className="w-12 h-12 rounded-full border border-[#e5e5e5] flex items-center justify-center hover:bg-[#f5f5f5] transition-colors"
+                className="w-12 h-12 rounded-full border border-border flex items-center justify-center hover:bg-secondary transition-colors"
               >
                 <ChevronRight className="w-5 h-5" />
               </button>
@@ -625,7 +632,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="ai" className="py-24 md:py-32 bg-[#fafafa] overflow-hidden">
+      <section id="ai" className="py-24 md:py-32 bg-background overflow-hidden">
         <div className="max-w-[1200px] mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -633,7 +640,7 @@ export default function Home() {
             viewport={{ once: true, margin: "-100px" }}
             className="text-center mb-6"
           >
-            <span className="inline-block px-4 py-1.5 rounded-full bg-white border border-[#e5e5e5] text-sm text-[#6b6b6b] font-medium mb-6">
+            <span className="inline-block px-4 py-1.5 rounded-full bg-card border border-border text-sm text-muted-foreground font-medium mb-6">
               Artificial Intelligence
             </span>
             <h2 className="text-[36px] sm:text-[44px] md:text-[56px] font-semibold leading-tight tracking-tight font-display">
@@ -647,7 +654,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-[#6b6b6b] text-[17px] md:text-[21px] text-center max-w-[560px] mx-auto mb-16 md:mb-20 leading-relaxed"
+            className="text-muted-foreground text-[17px] md:text-[21px] text-center max-w-[560px] mx-auto mb-16 md:mb-20 leading-relaxed"
           >
             Advanced machine learning that understands your style,
             body type, and preferences.
@@ -668,7 +675,7 @@ export default function Home() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
-                  className={`${sizeClasses[item.size as keyof typeof sizeClasses]} relative group p-6 rounded-3xl bg-white border border-[#e5e5e5] hover:shadow-xl hover:shadow-black/5 transition-all duration-500 hover:-translate-y-1 overflow-hidden cursor-pointer`}
+                  className={`${sizeClasses[item.size as keyof typeof sizeClasses]} relative group p-6 rounded-3xl bg-card border border-border hover:shadow-xl hover:shadow-black/5 transition-all duration-500 hover:-translate-y-1 overflow-hidden cursor-pointer`}
                 >
                   <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
                   <div className="relative z-10 h-full flex flex-col">
@@ -679,8 +686,8 @@ export default function Home() {
                       <Icon className="w-5 h-5 md:w-6 md:h-6" style={{ color: item.iconColor }} />
                     </div>
                     <div className="mt-auto">
-                      <h3 className="text-[15px] md:text-[17px] font-semibold mb-1">{item.title}</h3>
-                      <p className="text-[#6b6b6b] text-xs md:text-sm leading-relaxed">{item.description}</p>
+                      <h3 className="text-[15px] md:text-[17px] font-semibold mb-1 text-foreground">{item.title}</h3>
+                      <p className="text-muted-foreground text-xs md:text-sm leading-relaxed">{item.description}</p>
                     </div>
                   </div>
                 </motion.div>
@@ -696,20 +703,20 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="text-center p-8 rounded-3xl bg-white border border-[#e5e5e5] hover:shadow-xl hover:shadow-black/5 transition-all duration-300 hover:-translate-y-1"
+                className="text-center p-8 rounded-3xl bg-card border border-border hover:shadow-xl hover:shadow-black/5 transition-all duration-300 hover:-translate-y-1"
               >
                 <p className="text-[48px] sm:text-[56px] md:text-[72px] font-semibold tracking-tight leading-none text-gradient-color">
                   {cap.metric}
                 </p>
-                <p className="text-[17px] font-semibold mt-3">{cap.label}</p>
-                <p className="text-[#6b6b6b] text-sm mt-1">{cap.detail}</p>
+                <p className="text-[17px] font-semibold mt-3 text-foreground">{cap.label}</p>
+                <p className="text-muted-foreground text-sm mt-1">{cap.detail}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      <section id="marketplace" className="py-24 md:py-32 bg-white">
+      <section id="marketplace" className="py-24 md:py-32 bg-card">
         <div className="max-w-[1200px] mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             <motion.div
@@ -717,15 +724,15 @@ export default function Home() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
-              <span className="inline-block px-4 py-1.5 rounded-full bg-[#f5f5f5] text-sm text-[#6b6b6b] font-medium mb-6">
+              <span className="inline-block px-4 py-1.5 rounded-full bg-secondary text-sm text-muted-foreground font-medium mb-6">
                 Marketplace
               </span>
               <h2 className="text-[36px] sm:text-[44px] md:text-[48px] font-semibold leading-tight tracking-tight mb-6 font-display">
                 Shop with
                 <br />
-                <span className="text-[#6b6b6b] italic">confidence.</span>
+                <span className="text-muted-foreground italic">confidence.</span>
               </h2>
-              <p className="text-[#6b6b6b] text-[17px] leading-relaxed mb-8 max-w-[440px]">
+              <p className="text-muted-foreground text-[17px] leading-relaxed mb-8 max-w-[440px]">
                 Curated fashion from verified sellers. Secure payments.
                 Easy returns. Virtual try-on powered by AI.
               </p>
@@ -739,7 +746,7 @@ export default function Home() {
                 ))}
               </ul>
               
-              <button className="px-6 py-3 rounded-full bg-[#1a1a1a] text-white font-medium hover:bg-[#333] transition-all hover:shadow-lg hover:shadow-black/20 active:scale-[0.98] inline-flex items-center gap-2 group">
+              <button className="px-6 py-3 rounded-full bg-primary text-primary-foreground font-medium hover:opacity-90 transition-all hover:shadow-lg hover:shadow-primary/20 active:scale-[0.98] inline-flex items-center gap-2 group">
                 Explore Marketplace
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
               </button>
@@ -762,7 +769,7 @@ export default function Home() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.1 }}
-                    className={`group rounded-2xl overflow-hidden shadow-xl shadow-black/10 bg-white ${i === 1 ? "mt-8" : ""}`}
+                    className={`group rounded-2xl overflow-hidden shadow-xl shadow-black/10 bg-card ${i === 1 ? "mt-8" : ""}`}
                   >
                     <div className="relative overflow-hidden">
                       <img
@@ -771,13 +778,13 @@ export default function Home() {
                         className="w-full h-[240px] sm:h-[280px] object-cover transition-transform duration-500 group-hover:scale-110"
                       />
                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
-                      <button className="absolute bottom-4 left-4 right-4 py-3 rounded-xl bg-white font-medium text-sm opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 hover:bg-[#fafafa]">
+                      <button className="absolute bottom-4 left-4 right-4 py-3 rounded-xl bg-card text-foreground font-medium text-sm opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 hover:bg-secondary">
                         Quick View
                       </button>
                     </div>
                     <div className="p-4">
-                      <p className="font-semibold">{item.price}</p>
-                      <p className="text-sm text-[#6b6b6b]">Designer Collection</p>
+                      <p className="font-semibold text-foreground">{item.price}</p>
+                      <p className="text-sm text-muted-foreground">Designer Collection</p>
                     </div>
                   </motion.div>
                 ))}
@@ -787,7 +794,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="salons" className="py-24 md:py-32 bg-[#fafafa]">
+      <section id="salons" className="py-24 md:py-32 bg-background">
         <div className="max-w-[1200px] mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             <motion.div
@@ -796,14 +803,14 @@ export default function Home() {
               viewport={{ once: true }}
               className="order-2 lg:order-1"
             >
-              <div className="rounded-3xl overflow-hidden bg-white shadow-xl shadow-black/10 hover:shadow-2xl transition-shadow duration-300">
+              <div className="rounded-3xl overflow-hidden bg-card shadow-xl shadow-black/10 hover:shadow-2xl transition-shadow duration-300">
                 <div className="relative overflow-hidden">
                   <img
                     src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=600&h=400&fit=crop"
                     alt="Salon"
                     className="w-full h-[260px] sm:h-[300px] object-cover"
                   />
-                  <div className="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-white/95 backdrop-blur text-xs font-medium flex items-center gap-1.5">
+                  <div className="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-card/95 backdrop-blur text-xs font-medium flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
                     Open Now
                   </div>
@@ -811,22 +818,22 @@ export default function Home() {
                 <div className="p-6">
                   <div className="flex items-start justify-between mb-4">
                     <div>
-                      <p className="font-semibold text-lg">Luxe Beauty Lounge</p>
-                      <p className="text-[#6b6b6b] text-sm">Koramangala, Bangalore</p>
+                      <p className="font-semibold text-lg text-foreground">Luxe Beauty Lounge</p>
+                      <p className="text-muted-foreground text-sm">Koramangala, Bangalore</p>
                     </div>
-                    <div className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#fafafa]">
+                    <div className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary">
                       <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
                       <span className="text-sm font-medium">4.9</span>
                     </div>
                   </div>
                   <div className="flex gap-2 mb-5">
                     {["Haircut", "Color", "Spa"].map((tag) => (
-                      <span key={tag} className="px-3 py-1 rounded-full bg-[#f5f5f5] text-xs text-[#6b6b6b]">
+                      <span key={tag} className="px-3 py-1 rounded-full bg-muted text-xs text-muted-foreground">
                         {tag}
                       </span>
                     ))}
                   </div>
-                  <button className="w-full py-3.5 rounded-2xl bg-[#1a1a1a] text-white font-medium hover:bg-[#333] transition-all active:scale-[0.98]">
+                  <button className="w-full py-3.5 rounded-2xl bg-primary text-primary-foreground font-medium hover:opacity-90 transition-all active:scale-[0.98]">
                     Book Appointment
                   </button>
                 </div>
@@ -839,15 +846,15 @@ export default function Home() {
               viewport={{ once: true }}
               className="order-1 lg:order-2"
             >
-              <span className="inline-block px-4 py-1.5 rounded-full bg-white border border-[#e5e5e5] text-sm text-[#6b6b6b] font-medium mb-6">
+              <span className="inline-block px-4 py-1.5 rounded-full bg-card border border-border text-sm text-muted-foreground font-medium mb-6">
                 Salon Booking
               </span>
               <h2 className="text-[36px] sm:text-[44px] md:text-[48px] font-semibold leading-tight tracking-tight mb-6 font-display">
                 Beauty services,
                 <br />
-                <span className="text-[#6b6b6b] italic">verified.</span>
+                <span className="text-muted-foreground italic">verified.</span>
               </h2>
-              <p className="text-[#6b6b6b] text-[17px] leading-relaxed mb-8 max-w-[440px]">
+              <p className="text-muted-foreground text-[17px] leading-relaxed mb-8 max-w-[440px]">
                 Book appointments at India&apos;s top salons. Real reviews.
                 Real-time availability. Secure, hassle-free payments.
               </p>
@@ -861,7 +868,7 @@ export default function Home() {
                 ))}
               </ul>
               
-              <button className="px-6 py-3 rounded-full bg-[#1a1a1a] text-white font-medium hover:bg-[#333] transition-all hover:shadow-lg hover:shadow-black/20 active:scale-[0.98] inline-flex items-center gap-2 group">
+              <button className="px-6 py-3 rounded-full bg-primary text-primary-foreground font-medium hover:opacity-90 transition-all hover:shadow-lg hover:shadow-primary/20 active:scale-[0.98] inline-flex items-center gap-2 group">
                 Find Salons Near You
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
               </button>
@@ -870,7 +877,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="testimonials" className="py-24 md:py-32 bg-white">
+      <section id="testimonials" className="py-24 md:py-32 bg-card">
         <div className="max-w-[1200px] mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -878,13 +885,13 @@ export default function Home() {
             viewport={{ once: true }}
             className="text-center mb-16 md:mb-20"
           >
-            <span className="inline-block px-4 py-1.5 rounded-full bg-[#f5f5f5] text-sm text-[#6b6b6b] font-medium mb-6">
+            <span className="inline-block px-4 py-1.5 rounded-full bg-secondary text-sm text-muted-foreground font-medium mb-6">
               Testimonials
             </span>
             <h2 className="text-[36px] sm:text-[44px] md:text-[56px] font-semibold leading-tight tracking-tight font-display">
               Loved by fashion
               <br />
-              <span className="text-[#6b6b6b] italic">enthusiasts.</span>
+              <span className="text-muted-foreground italic">enthusiasts.</span>
             </h2>
           </motion.div>
 
@@ -896,14 +903,14 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="p-8 rounded-3xl bg-[#fafafa] border border-[#e5e5e5] relative group hover:shadow-xl hover:shadow-black/5 transition-all duration-300"
+                className="p-8 rounded-3xl bg-background border border-border relative group hover:shadow-xl hover:shadow-black/5 transition-all duration-300"
               >
                 <div className="flex gap-1 mb-6">
                   {[...Array(testimonial.rating)].map((_, i) => (
                     <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
                   ))}
                 </div>
-                <p className="text-[#1a1a1a] text-lg leading-relaxed mb-8">
+                <p className="text-foreground text-lg leading-relaxed mb-8">
                   &ldquo;{testimonial.content}&rdquo;
                 </p>
                 <div className="flex items-center gap-4">
@@ -913,8 +920,8 @@ export default function Home() {
                     className="w-12 h-12 rounded-full object-cover"
                   />
                   <div>
-                    <p className="font-semibold">{testimonial.name}</p>
-                    <p className="text-sm text-[#6b6b6b]">{testimonial.role}</p>
+                    <p className="font-semibold text-foreground">{testimonial.name}</p>
+                    <p className="text-sm text-muted-foreground">{testimonial.role}</p>
                   </div>
                 </div>
               </motion.div>
@@ -923,8 +930,8 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-24 md:py-32 bg-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#f5f5f5_1px,transparent_1px)] bg-[size:24px_24px] opacity-50" />
+      <section className="py-24 md:py-32 bg-card relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--secondary)_1px,transparent_1px)] bg-[size:24px_24px] opacity-50" />
         <div className="max-w-[980px] mx-auto px-6 relative">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -937,7 +944,7 @@ export default function Home() {
               <br />
               <span className="text-gradient-color italic">future of fashion.</span>
             </h2>
-            <p className="text-[#6b6b6b] text-[17px] md:text-[21px] max-w-[540px] mx-auto mb-10 leading-relaxed">
+            <p className="text-muted-foreground text-[17px] md:text-[21px] max-w-[540px] mx-auto mb-10 leading-relaxed">
               Be the first to experience India&apos;s most intelligent fashion ecosystem.
               Start your journey today.
             </p>
@@ -945,7 +952,7 @@ export default function Home() {
             <div className="max-w-[480px] mx-auto">
               <Link href="/app" className="group">
                 <button
-                  className="w-full h-14 rounded-full bg-[#1a1a1a] text-white font-medium text-[17px] hover:bg-[#333] transition-all active:scale-[0.98] shadow-lg shadow-black/10 flex items-center justify-center gap-2"
+                  className="w-full h-14 rounded-full bg-primary text-primary-foreground font-medium text-[17px] hover:opacity-90 transition-all active:scale-[0.98] shadow-lg shadow-primary/10 flex items-center justify-center gap-2"
                 >
                   Get Started
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -956,13 +963,13 @@ export default function Home() {
         </div>
         </section>
 
-      <section className="py-16 md:py-20 bg-[#fafafa] border-t border-[#e5e5e5]">
+      <section className="py-16 md:py-20 bg-background border-t border-border">
         <div className="max-w-[1200px] mx-auto px-6">
           <motion.p
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="text-center text-sm text-[#6b6b6b] mb-10"
+            className="text-center text-sm text-muted-foreground mb-10"
           >
             Trusted by leading brands worldwide
           </motion.p>
@@ -982,7 +989,7 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.05 }}
-                className="text-[#c4c4c4] hover:text-[#6b6b6b] transition-all duration-300 cursor-pointer"
+                className="text-muted-foreground/50 hover:text-muted-foreground transition-all duration-300 cursor-pointer"
               >
                 {brand.svg}
               </motion.div>
@@ -991,12 +998,12 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="py-16 bg-[#fafafa] border-t border-[#e5e5e5]">
+      <footer className="py-16 bg-background border-t border-border">
         <div className="max-w-[1100px] mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
             <div className="col-span-2 md:col-span-1">
-              <p className="text-xl font-semibold mb-4 font-display">Priisme</p>
-              <p className="text-sm text-[#6b6b6b] leading-relaxed">
+              <p className="text-xl font-semibold mb-4 font-display text-foreground">Priisme</p>
+              <p className="text-sm text-muted-foreground leading-relaxed">
                 India&apos;s first AI-powered beauty & fashion ecosystem.
               </p>
             </div>
@@ -1013,7 +1020,7 @@ export default function Home() {
                     <li key={link}>
                       <a
                         href="#"
-                        className="text-sm text-[#6b6b6b] hover:text-[#1a1a1a] transition-colors"
+                        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                       >
                         {link}
                       </a>
@@ -1023,14 +1030,14 @@ export default function Home() {
               </div>
             ))}
           </div>
-          <div className="pt-8 border-t border-[#e5e5e5] flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-[#6b6b6b]">
+          <div className="pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-sm text-muted-foreground">
               © 2026 Priisme. All rights reserved.
             </p>
             <div className="flex items-center gap-6">
-              <a href="#" className="text-sm text-[#6b6b6b] hover:text-[#1a1a1a] transition-colors">Privacy</a>
-              <a href="#" className="text-sm text-[#6b6b6b] hover:text-[#1a1a1a] transition-colors">Terms</a>
-              <a href="#" className="text-sm text-[#6b6b6b] hover:text-[#1a1a1a] transition-colors">Cookies</a>
+              <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Privacy</a>
+              <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Terms</a>
+              <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Cookies</a>
             </div>
           </div>
         </div>

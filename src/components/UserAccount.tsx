@@ -22,21 +22,21 @@ export default function UserAccount({ showLabel = true }: { showLabel?: boolean 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="flex items-center gap-2 p-1.5 pr-3 rounded-full hover:bg-[#f5f5f5] transition-colors border border-transparent hover:border-[#e5e5e5] outline-none focus-visible:ring-2 focus-visible:ring-[#1a1a1a] focus-visible:ring-offset-2 group">
+        <button className="flex items-center gap-2 p-1.5 pr-3 rounded-full hover:bg-secondary transition-colors border border-transparent hover:border-border outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 group">
           <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-violet-500 to-rose-500 flex items-center justify-center text-white font-medium text-xs shadow-sm group-hover:shadow-md transition-shadow">
             JD
           </div>
           {showLabel && (
-            <span className="text-sm font-medium hidden sm:inline text-[#1a1a1a]">Guest User</span>
+            <span className="text-sm font-medium hidden sm:inline text-foreground">Guest User</span>
           )}
-          <ChevronDown className="w-4 h-4 text-[#6b6b6b] group-hover:text-[#1a1a1a] transition-colors hidden sm:inline" />
+          <ChevronDown className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors hidden sm:inline" />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" sideOffset={8}>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none text-[#1a1a1a]">Jane Doe</p>
-            <p className="text-xs leading-none text-[#6b6b6b]">jane.doe@example.com</p>
+            <p className="text-sm font-medium leading-none text-foreground">Jane Doe</p>
+            <p className="text-xs leading-none text-muted-foreground">jane.doe@example.com</p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
