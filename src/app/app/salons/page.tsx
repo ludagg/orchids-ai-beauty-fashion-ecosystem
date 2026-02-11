@@ -133,7 +133,7 @@ export default function SalonsPage() {
               href={`/app/salons/${salon.id}`}
               className="flex flex-col sm:flex-row gap-5 p-4 rounded-3xl bg-white border border-[#e5e5e5] hover:shadow-xl hover:shadow-black/5 transition-all group overflow-hidden"
             >
-              <div className="w-full sm:w-48 h-48 rounded-2xl overflow-hidden flex-shrink-0 bg-[#f5f5f5] shadow-inner relative">
+              <div className="w-full sm:w-48 h-56 sm:h-48 rounded-2xl overflow-hidden flex-shrink-0 bg-[#f5f5f5] shadow-inner relative">
                 <img src={salon.image} alt={salon.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                 <div className="absolute top-3 left-3 px-2 py-1 rounded-lg bg-white/90 backdrop-blur-md text-[10px] font-bold flex items-center gap-1 shadow-sm">
                   <Navigation className="w-3 h-3 text-blue-600" />
@@ -143,8 +143,8 @@ export default function SalonsPage() {
 
               <div className="flex-1 flex flex-col justify-between py-1">
                 <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-xl font-bold text-[#1a1a1a] group-hover:text-blue-600 transition-colors">{salon.name}</h3>
+                  <div className="flex items-center justify-between gap-2">
+                    <h3 className="text-lg sm:text-xl font-bold text-[#1a1a1a] group-hover:text-blue-600 transition-colors truncate">{salon.name}</h3>
                     <div className="flex items-center gap-1 text-sm font-bold bg-amber-50 text-amber-700 px-2 py-0.5 rounded-lg border border-amber-100">
                       <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
                       {salon.rating}

@@ -123,7 +123,7 @@ export default function MarketplacePage() {
       </section>
 
       {/* Product Grid */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <section className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
         {products.map((product, i) => (
           <motion.div
             key={product.id}
@@ -133,7 +133,7 @@ export default function MarketplacePage() {
             className="group"
           >
             <Link href={`/app/marketplace/${product.id}`} className="block">
-              <div className="relative aspect-[4/5] rounded-[32px] overflow-hidden mb-4 shadow-sm border border-[#e5e5e5] bg-[#f5f5f5]">
+              <div className="relative aspect-[4/5] rounded-[24px] sm:rounded-[32px] overflow-hidden mb-3 sm:mb-4 shadow-sm border border-[#e5e5e5] bg-[#f5f5f5]">
                 <img
                   src={product.image}
                   alt={product.title}
@@ -156,24 +156,24 @@ export default function MarketplacePage() {
                   <Heart className="w-4 h-4 text-[#1a1a1a]" />
                 </button>
 
-                <div className="absolute bottom-4 left-4 right-4 p-3 rounded-2xl bg-white/90 backdrop-blur-md opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 shadow-xl flex items-center justify-between">
+                <div className="absolute bottom-4 left-4 right-4 p-3 rounded-2xl bg-white/90 backdrop-blur-md opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 shadow-xl hidden sm:flex items-center justify-between">
                   <p className="text-xs font-bold text-[#1a1a1a]">Quick View</p>
                   <ArrowRight className="w-4 h-4 text-[#1a1a1a]" />
                 </div>
               </div>
 
               <div className="px-1">
-                <div className="flex items-center justify-between mb-1">
-                  <h3 className="font-semibold text-[15px] truncate text-[#1a1a1a]">{product.title}</h3>
-                  <div className="flex items-center gap-1 text-xs font-bold bg-[#f5f5f5] px-2 py-0.5 rounded-full">
+                <div className="flex items-center justify-between mb-0.5 sm:mb-1">
+                  <h3 className="font-semibold text-sm sm:text-[15px] truncate text-[#1a1a1a]">{product.title}</h3>
+                  <div className="hidden sm:flex items-center gap-1 text-xs font-bold bg-[#f5f5f5] px-2 py-0.5 rounded-full">
                     <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
                     {product.rating}
                   </div>
                 </div>
-                <p className="text-sm text-[#6b6b6b] mb-2">{product.designer}</p>
+                <p className="text-xs sm:text-sm text-[#6b6b6b] mb-1 sm:mb-2">{product.designer}</p>
                 <div className="flex items-center justify-between">
-                  <p className="font-bold text-lg text-rose-600">{product.price}</p>
-                  <p className="text-[11px] text-[#6b6b6b]">{product.reviews} reviews</p>
+                  <p className="font-bold text-base sm:text-lg text-rose-600">{product.price}</p>
+                  <p className="text-[10px] sm:text-[11px] text-[#6b6b6b] hidden sm:block">{product.reviews} reviews</p>
                 </div>
               </div>
             </Link>
