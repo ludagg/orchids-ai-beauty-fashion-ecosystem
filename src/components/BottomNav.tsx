@@ -9,7 +9,7 @@ const navItems = [
   { icon: LayoutDashboard, label: "Home", href: "/app" },
   { icon: ShoppingBag, label: "Shop", href: "/app/marketplace" },
   { icon: MessageSquare, label: "Chat", href: "/app/conversations" },
-  { icon: Sparkles, label: "AI", href: "/app/ai-stylist" },
+  //{ icon: Sparkles, label: "AI", href: "/app/ai-stylist" },
   { icon: Scissors, label: "Salons", href: "/app/salons" },
   { icon: Video, label: "Live", href: "/app/live-commerce" },
 ];
