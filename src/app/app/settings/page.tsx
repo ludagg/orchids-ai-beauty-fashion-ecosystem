@@ -1,237 +1,101 @@
 "use client";
 
 import { motion } from "framer-motion";
-import {
-  User,
-  Bell,
-  Shield,
-  CreditCard,
-  Smartphone,
-  Globe,
-  HelpCircle,
-  LogOut,
-  ChevronRight,
-  Camera,
-  CheckCircle2,
-  Lock,
-  Eye,
-  Trash2
-} from "lucide-react";
-import { useState } from "react";
-
-const sections = [
-  { id: "account", label: "Account", icon: User },
-  { id: "notifications", label: "Notifications", icon: Bell },
-  { id: "privacy", label: "Privacy & Security", icon: Shield },
-  { id: "payments", label: "Payments", icon: CreditCard },
-  { id: "preferences", label: "Preferences", icon: Smartphone },
-  { id: "support", label: "Support", icon: HelpCircle }
-];
+import { Bell, Lock, Moon, Globe, Shield, Smartphone } from "lucide-react";
+import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 
 export default function SettingsPage() {
-  const [activeSection, setActiveSection] = useState("account");
-
   return (
-    <div className="p-4 sm:p-6 lg:p-8 max-w-[1400px] mx-auto w-full">
-      <div className="mb-12">
-        <h1 className="text-3xl sm:text-4xl font-semibold font-display tracking-tight text-foreground">Settings</h1>
-        <p className="text-muted-foreground mt-1 text-base">Manage your profile, preferences, and account security.</p>
+    <div className="p-6 max-w-4xl mx-auto space-y-8">
+      <div>
+        <h1 className="text-3xl font-bold font-display">Settings</h1>
+        <p className="text-muted-foreground mt-1">Customize your app experience.</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-        {/* Navigation Sidebar */}
-        <aside className="lg:col-span-4 xl:col-span-3 space-y-1">
-          {sections.map((section) => {
-            const Icon = section.icon;
-            return (
-              <button
-                key={section.id}
-                onClick={() => setActiveSection(section.id)}
-                className={`w-full flex items-center justify-between px-5 py-4 rounded-2xl transition-all group ${
-                  activeSection === section.id
-                    ? "bg-card text-foreground shadow-xl shadow-foreground/5 border border-border"
-                    : "text-muted-foreground hover:bg-card hover:text-foreground"
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <div className={`p-2 rounded-xl transition-colors ${
-                    activeSection === section.id ? "bg-foreground text-white" : "bg-muted group-hover:bg-muted/80"
-                  }`}>
-                    <Icon className="w-5 h-5" />
-                  </div>
-                  <span className="font-bold text-sm uppercase tracking-widest">{section.label}</span>
-                </div>
-                <ChevronRight className={`w-4 h-4 transition-transform ${
-                  activeSection === section.id ? "translate-x-1" : "opacity-0 group-hover:opacity-100"
-                }`} />
-              </button>
-            );
-          })}
-
-          <button className="w-full flex items-center gap-3 px-5 py-4 rounded-2xl text-rose-600 hover:bg-rose-50 transition-all mt-8 group">
-            <div className="p-2 rounded-xl bg-rose-50 group-hover:bg-rose-100">
-              <LogOut className="w-5 h-5" />
+      <div className="space-y-6">
+        {/* Appearance */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-card border border-border rounded-2xl p-6"
+        >
+          <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+            <Moon className="w-5 h-5 text-primary" /> Appearance
+          </h3>
+          <div className="flex items-center justify-between py-2">
+            <div>
+              <p className="font-medium text-foreground">Theme Mode</p>
+              <p className="text-sm text-muted-foreground">Select your preferred display theme.</p>
             </div>
-            <span className="font-bold text-sm uppercase tracking-widest">Sign Out</span>
-          </button>
-        </aside>
+            <ThemeSwitcher />
+          </div>
+        </motion.div>
 
-        {/* Content Area */}
-        <main className="lg:col-span-8 xl:col-span-9">
-          <motion.div
-            key={activeSection}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-card rounded-[40px] border border-border shadow-xl shadow-black/[0.02] overflow-hidden"
-          >
-            {/* Account Section Content */}
-            {activeSection === "account" && (
-              <div className="p-8 sm:p-12 space-y-10">
-                <div className="flex flex-col sm:flex-row items-center gap-8 pb-10 border-b border-muted">
-                  <div className="relative group">
-                    <div className="w-32 h-32 rounded-[40px] bg-gradient-to-tr from-violet-500 to-rose-500 p-1">
-                      <div className="w-full h-full rounded-[36px] bg-card p-1 overflow-hidden">
-                        <img
-                          src="https://i.pravatar.cc/300?u=jd"
-                          alt="Profile"
-                          className="w-full h-full object-cover rounded-[32px]"
-                        />
-                      </div>
-                    </div>
-                    <button className="absolute -bottom-2 -right-2 p-3 rounded-2xl bg-foreground text-white shadow-xl hover:scale-110 transition-all">
-                      <Camera className="w-5 h-5" />
-                    </button>
-                  </div>
-                  <div className="space-y-2 text-center sm:text-left">
-                    <h3 className="text-2xl font-bold text-foreground">Guest User</h3>
-                    <p className="text-muted-foreground font-medium">jd.guest@priisme.com</p>
-                    <div className="flex items-center justify-center sm:justify-start gap-2 pt-1">
-                      <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold uppercase tracking-widest border border-emerald-100 flex items-center gap-1.5">
-                        <CheckCircle2 className="w-3 h-3" />
-                        Verified Account
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="space-y-4">
-                    <label className="text-[10px] font-bold text-muted-foreground/50 uppercase tracking-[0.2em]">Full Name</label>
-                    <input
-                      type="text"
-                      defaultValue="Guest User"
-                      className="w-full px-6 py-4 rounded-2xl bg-muted border-transparent focus:bg-card focus:border-foreground transition-all outline-none font-bold"
-                    />
-                  </div>
-                  <div className="space-y-4">
-                    <label className="text-[10px] font-bold text-muted-foreground/50 uppercase tracking-[0.2em]">Email Address</label>
-                    <input
-                      type="email"
-                      defaultValue="jd.guest@priisme.com"
-                      className="w-full px-6 py-4 rounded-2xl bg-muted border-transparent focus:bg-card focus:border-foreground transition-all outline-none font-bold"
-                    />
-                  </div>
-                  <div className="space-y-4">
-                    <label className="text-[10px] font-bold text-muted-foreground/50 uppercase tracking-[0.2em]">Phone Number</label>
-                    <input
-                      type="tel"
-                      defaultValue="+91 98765 43210"
-                      className="w-full px-6 py-4 rounded-2xl bg-muted border-transparent focus:bg-card focus:border-foreground transition-all outline-none font-bold"
-                    />
-                  </div>
-                  <div className="space-y-4">
-                    <label className="text-[10px] font-bold text-muted-foreground/50 uppercase tracking-[0.2em]">Location</label>
-                    <input
-                      type="text"
-                      defaultValue="Bangalore, India"
-                      className="w-full px-6 py-4 rounded-2xl bg-muted border-transparent focus:bg-card focus:border-foreground transition-all outline-none font-bold"
-                    />
-                  </div>
-                </div>
-
-                <div className="pt-6 border-t border-muted flex justify-end gap-4">
-                  <button className="px-8 py-4 rounded-2xl bg-muted text-foreground font-bold hover:bg-muted/80 transition-all">
-                    Discard Changes
-                  </button>
-                  <button className="px-8 py-4 rounded-2xl bg-foreground text-white font-bold hover:bg-[#333] transition-all shadow-xl shadow-foreground/10">
-                    Save Profile
-                  </button>
-                </div>
+        {/* Notifications */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="bg-card border border-border rounded-2xl p-6"
+        >
+          <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+            <Bell className="w-5 h-5 text-amber-500" /> Notifications
+          </h3>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between py-2 border-b border-border last:border-0">
+              <div>
+                <p className="font-medium text-foreground">Email Notifications</p>
+                <p className="text-sm text-muted-foreground">Receive updates about your account via email.</p>
               </div>
-            )}
-
-            {/* Privacy Section Content */}
-            {activeSection === "privacy" && (
-              <div className="p-8 sm:p-12 space-y-10">
-                <div className="space-y-6">
-                  <h3 className="text-2xl font-bold text-foreground">Security Settings</h3>
-                  <div className="grid grid-cols-1 gap-4">
-                    <div className="flex items-center justify-between p-6 rounded-3xl bg-muted border border-transparent hover:border-border transition-all">
-                      <div className="flex gap-4">
-                        <div className="p-3 rounded-2xl bg-card shadow-sm">
-                          <Lock className="w-5 h-5 text-foreground" />
-                        </div>
-                        <div>
-                          <p className="font-bold text-foreground">Change Password</p>
-                          <p className="text-xs text-muted-foreground mt-0.5 font-medium">Update your account password regularly.</p>
-                        </div>
-                      </div>
-                      <button className="px-5 py-2.5 rounded-xl bg-card border border-border text-xs font-bold hover:bg-foreground hover:text-white transition-all shadow-sm">
-                        Update
-                      </button>
-                    </div>
-
-                    <div className="flex items-center justify-between p-6 rounded-3xl bg-muted border border-transparent hover:border-border transition-all">
-                      <div className="flex gap-4">
-                        <div className="p-3 rounded-2xl bg-card shadow-sm">
-                          <Smartphone className="w-5 h-5 text-foreground" />
-                        </div>
-                        <div>
-                          <p className="font-bold text-foreground">Two-Factor Authentication</p>
-                          <p className="text-xs text-muted-foreground mt-0.5 font-medium">Add an extra layer of security to your account.</p>
-                        </div>
-                      </div>
-                      <button className="px-5 py-2.5 rounded-xl bg-emerald-500 text-white text-xs font-bold hover:bg-emerald-600 transition-all shadow-lg shadow-emerald-500/20">
-                        Enabled
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-6 pt-10 border-t border-muted">
-                  <h3 className="text-2xl font-bold text-rose-600">Danger Zone</h3>
-                  <div className="p-6 rounded-3xl bg-rose-50 border border-rose-100 flex items-center justify-between">
-                    <div>
-                      <p className="font-bold text-rose-900">Delete Account</p>
-                      <p className="text-xs text-rose-700 mt-0.5 font-medium">Permanently remove your account and all data. This cannot be undone.</p>
-                    </div>
-                    <button className="p-3 rounded-2xl bg-card text-rose-600 border border-rose-200 hover:bg-rose-600 hover:text-white transition-all shadow-sm">
-                      <Trash2 className="w-5 h-5" />
-                    </button>
-                  </div>
-                </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" defaultChecked className="sr-only peer" />
+                <div className="w-11 h-6 bg-secondary peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+              </label>
+            </div>
+            <div className="flex items-center justify-between py-2 border-b border-border last:border-0">
+              <div>
+                <p className="font-medium text-foreground">Push Notifications</p>
+                <p className="text-sm text-muted-foreground">Receive real-time alerts on your device.</p>
               </div>
-            )}
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" defaultChecked className="sr-only peer" />
+                <div className="w-11 h-6 bg-secondary peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+              </label>
+            </div>
+          </div>
+        </motion.div>
 
-            {/* Generic Content for other sections */}
-            {!["account", "privacy"].includes(activeSection) && (
-              <div className="p-20 text-center space-y-4">
-                <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center mx-auto">
-                  {sections.find(s => s.id === activeSection)?.icon && (
-                    <div className="text-muted-foreground">
-                      {(() => {
-                        const Icon = sections.find(s => s.id === activeSection)!.icon;
-                        return <Icon className="w-10 h-10" />;
-                      })()}
-                    </div>
-                  )}
-                </div>
-                <h3 className="text-xl font-bold text-foreground uppercase tracking-widest">{activeSection} Content Coming Soon</h3>
-                <p className="text-muted-foreground max-w-xs mx-auto text-sm font-medium">We're working on making this setting available for you. Stay tuned for updates!</p>
+        {/* Privacy & Security */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="bg-card border border-border rounded-2xl p-6"
+        >
+          <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+            <Shield className="w-5 h-5 text-rose-500" /> Privacy & Security
+          </h3>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between py-2 border-b border-border last:border-0">
+              <div>
+                <p className="font-medium text-foreground">Two-Factor Authentication</p>
+                <p className="text-sm text-muted-foreground">Add an extra layer of security to your account.</p>
               </div>
-            )}
-          </motion.div>
-        </main>
+              <button className="px-4 py-2 rounded-lg bg-secondary text-sm font-medium hover:bg-secondary/80 transition-colors">
+                Enable 2FA
+              </button>
+            </div>
+            <div className="flex items-center justify-between py-2 border-b border-border last:border-0">
+              <div>
+                <p className="font-medium text-foreground">Change Password</p>
+                <p className="text-sm text-muted-foreground">Update your password regularly.</p>
+              </div>
+              <button className="px-4 py-2 rounded-lg bg-secondary text-sm font-medium hover:bg-secondary/80 transition-colors">
+                Update
+              </button>
+            </div>
+          </div>
+        </motion.div>
       </div>
     </div>
   );
