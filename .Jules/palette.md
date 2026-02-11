@@ -12,3 +12,7 @@
 ## 2025-05-14 - Dark Mode Implementation with next-themes
 **Learning:** When implementing dark mode in Next.js with `next-themes`, use `resolvedTheme` instead of `theme` to account for system settings. Ensure hydration safety by checking a `mounted` state. Refactor hardcoded hex colors to semantic CSS variables early to ensure global consistency.
 **Action:** Always prefer `resolvedTheme` for icon logic and toggle states. Use semantic classes like `bg-background` and `text-foreground` in new components from the start.
+
+## 2026-02-11 - Standardizing Commerce Icons
+**Learning:** Using distinct icons for the Marketplace (ShoppingBag) and the Cart (ShoppingCart) improves user recognition and navigation clarity, especially when both are accessible from the same header.
+**Action:** Always verify icon consistency between the desktop sidebar/header and the mobile BottomNav to ensure a unified user experience.
