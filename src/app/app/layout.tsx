@@ -17,6 +17,7 @@ import {
   Heart
 } from "lucide-react";
 import Link from "next/link";
+import BottomNav from "@/components/BottomNav";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 
@@ -185,9 +186,11 @@ export default function AppLayout({
           </div>
         </header>
 
-        <main className="flex-1 min-h-0 overflow-y-auto">
+        <main className="flex-1 min-h-0 overflow-y-auto pb-20 lg:pb-0">
           {children}
         </main>
+
+        <BottomNav />
       </div>
     </div>
   );

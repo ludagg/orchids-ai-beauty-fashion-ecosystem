@@ -50,6 +50,14 @@ const nearbySalons = [
   }
 ];
 
+const trendingStyles = [
+  { title: "Boho Chic", items: "124 items", image: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=300&h=400&fit=crop" },
+  { title: "Ethic Fusion", items: "89 items", image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&h=400&fit=crop" },
+  { title: "Street Luxe", items: "210 items", image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300&h=400&fit=crop" },
+  { title: "Minimalist", items: "56 items", image: "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=300&h=400&fit=crop" },
+  { title: "Cyberpunk", items: "34 items", image: "https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=300&h=400&fit=crop" },
+];
+
 export default function AppPage() {
   return (
     <div className="flex-1 p-4 sm:p-6 lg:p-8 space-y-8 max-w-[1400px] mx-auto w-full">
@@ -106,12 +114,46 @@ export default function AppPage() {
         ))}
       </section>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      {/* Trending Now Section */}
+      <section className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-xl font-semibold flex items-center gap-2 font-display">
+            <TrendingUp className="w-5 h-5 text-violet-500" />
+            Trending Now
+          </h2>
+          <button className="text-sm font-medium text-[#6b6b6b] hover:text-[#1a1a1a] flex items-center gap-1 transition-colors">
+            Explore All <ChevronRight className="w-4 h-4" />
+          </button>
+        </div>
+        <div className="flex gap-4 overflow-x-auto pb-4 no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
+          {trendingStyles.map((style, i) => (
+            <motion.div
+              key={style.title}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 + i * 0.1 }}
+              className="flex-shrink-0 w-40 sm:w-48 group cursor-pointer"
+            >
+              <div className="relative aspect-[3/4] rounded-2xl overflow-hidden mb-2 shadow-sm border border-[#e5e5e5]">
+                <img src={style.image} alt={style.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="absolute bottom-3 left-3 right-3 text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                  <p className="text-xs font-bold truncate">{style.title}</p>
+                </div>
+              </div>
+              <h3 className="font-medium text-sm truncate">{style.title}</h3>
+              <p className="text-xs text-[#6b6b6b]">{style.items}</p>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
         {/* Marketplace Feed */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="lg:col-span-2 space-y-12">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold flex items-center gap-2 font-display">
-              <ShoppingBag className="w-5 h-5 text-rose-500" />
+            <h2 className="text-2xl font-semibold flex items-center gap-2 font-display tracking-tight">
+              <ShoppingBag className="w-6 h-6 text-rose-500" />
               Featured Marketplace
             </h2>
             <button className="text-sm font-medium text-[#6b6b6b] hover:text-[#1a1a1a] flex items-center gap-1 transition-colors">
@@ -145,6 +187,38 @@ export default function AppPage() {
               </motion.div>
             ))}
           </div>
+
+          {/* Exclusive for You Section */}
+          <section className="space-y-6">
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-semibold flex items-center gap-2 font-display tracking-tight">
+                <Star className="w-6 h-6 text-amber-500" />
+                Exclusive for You
+              </h2>
+              <button className="text-sm font-medium text-[#6b6b6b] hover:text-[#1a1a1a] flex items-center gap-1 transition-colors">
+                View All <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+            <div className="flex gap-6 overflow-x-auto pb-4 no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
+              {[
+                { title: "Silk Evening Gown", price: "₹15,999", image: "https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=300&h=400&fit=crop" },
+                { title: "Leather Biker Jacket", price: "₹8,499", image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=300&h=400&fit=crop" },
+                { title: "Velvet Blazer", price: "₹6,299", image: "https://images.unsplash.com/photo-1594932224828-b4b059b6f684?w=300&h=400&fit=crop" },
+                { title: "Embroidered Kurta", price: "₹4,599", image: "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=300&h=400&fit=crop" },
+              ].map((item, i) => (
+                <div key={i} className="flex-shrink-0 w-48 group cursor-pointer">
+                  <div className="relative aspect-[3/4] rounded-2xl overflow-hidden mb-3 border border-[#e5e5e5] shadow-sm">
+                    <img src={item.image} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    <button className="absolute top-2 right-2 p-2 rounded-full bg-white/80 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Heart className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                  <h4 className="font-semibold text-sm truncate">{item.title}</h4>
+                  <p className="text-rose-600 font-bold text-sm">{item.price}</p>
+                </div>
+              ))}
+            </div>
+          </section>
 
           {/* Promo Banner */}
           <motion.div
@@ -215,6 +289,27 @@ export default function AppPage() {
               ))}
             </div>
           </div>
+
+          {/* Style Quiz CTA */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="p-8 rounded-[32px] bg-gradient-to-br from-violet-600 to-indigo-700 text-white space-y-6 shadow-xl relative overflow-hidden group"
+          >
+            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 blur-[60px] rounded-full -mr-32 -mt-32" />
+            <div className="relative z-10">
+              <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center mb-4">
+                <Sparkles className="w-7 h-7 text-white" />
+              </div>
+              <h3 className="text-2xl font-semibold mb-2 font-display">Uncover Your Style Persona</h3>
+              <p className="text-white/80 text-sm leading-relaxed mb-6">
+                Take our 2-minute visual quiz and let our AI build your unique fashion DNA for hyper-personalized recommendations.
+              </p>
+              <button className="w-full py-4 rounded-2xl bg-white text-[#1a1a1a] text-[15px] font-bold hover:bg-violet-50 transition-all active:scale-[0.98] shadow-lg">
+                Start Style Quiz
+              </button>
+            </div>
+          </motion.div>
 
           {/* AI Stylist Preview */}
           <div className="p-8 rounded-[32px] bg-white border border-[#e5e5e5] space-y-6 shadow-sm relative overflow-hidden group">
