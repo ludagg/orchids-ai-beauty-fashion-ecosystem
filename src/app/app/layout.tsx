@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import {
   ShoppingBag,
+  ShoppingCart,
   Scissors,
   Video,
   Sparkles,
@@ -14,7 +15,8 @@ import {
   ChevronRight,
   Menu,
   X,
-  Heart
+  Heart,
+  MessageSquare
 } from "lucide-react";
 import Link from "next/link";
 import BottomNav from "@/components/BottomNav";
@@ -31,6 +33,7 @@ const sidebarItems = [
   { icon: Sparkles, label: "AI Stylist", href: "/app/ai-stylist" },
   { icon: Scissors, label: "Salons", href: "/app/salons" },
   { icon: Video, label: "Live Commerce", href: "/app/live-commerce" },
+  { icon: MessageSquare, label: "Messages", href: "/app/conversations" },
 ];
 
 export default function AppLayout({
@@ -180,6 +183,10 @@ export default function AppLayout({
             <ThemeSwitcher />
             <Link href="/app/wishlist" className="p-2 rounded-full hover:bg-secondary transition-colors relative">
               <Heart className={`w-5 h-5 ${pathname === '/app/wishlist' ? 'text-rose-500 fill-rose-500' : 'text-muted-foreground'}`} />
+            </Link>
+            <Link href="/app/cart" className="p-2 rounded-full hover:bg-secondary transition-colors relative">
+              <ShoppingCart className={`w-5 h-5 ${pathname === '/app/cart' ? 'text-indigo-600 fill-indigo-600' : 'text-muted-foreground'}`} />
+              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-indigo-600 rounded-full border border-card" />
             </Link>
             <NotificationBell />
             <UserAccount />

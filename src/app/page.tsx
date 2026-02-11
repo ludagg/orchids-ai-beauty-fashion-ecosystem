@@ -363,40 +363,61 @@ export default function Home() {
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-[44px] sm:text-[56px] md:text-[72px] lg:text-[88px] font-semibold leading-[1.05] tracking-tight font-display"
+            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+            className="text-[48px] sm:text-[64px] md:text-[88px] lg:text-[110px] font-semibold leading-[0.95] tracking-tight font-display"
           >
-            Where Fashion
-            <br />
-            <span className="text-gradient-color font-display italic">Meets Intelligence.</span>
+            <span className="block overflow-hidden">
+              <motion.span
+                initial={{ y: "100%" }}
+                animate={{ y: 0 }}
+                transition={{ duration: 1, delay: 0.2 }}
+                className="block"
+              >
+                Where Fashion
+              </motion.span>
+            </span>
+            <span className="block overflow-hidden">
+              <motion.span
+                initial={{ y: "100%" }}
+                animate={{ y: 0 }}
+                transition={{ duration: 1, delay: 0.4 }}
+                className="text-gradient-color font-display italic block pb-2"
+              >
+                Meets Intelligence.
+              </motion.span>
+            </span>
           </motion.h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-[17px] md:text-[21px] text-muted-foreground max-w-[540px] mx-auto mt-6 leading-relaxed"
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="text-[18px] md:text-[22px] text-muted-foreground max-w-[600px] mx-auto mt-8 leading-relaxed font-medium"
           >
-            Experience the future of fashion. Explore our AI-powered ecosystem
-            and discover the intelligence behind style.
+            The world's first truly intelligent beauty & fashion ecosystem.
+            Experience a revolution in how you discover, style, and shop.
           </motion.p>
 
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10 w-full max-w-[600px] mx-auto"
+            transition={{ duration: 1, delay: 0.8 }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-5 mt-12 w-full max-w-[640px] mx-auto px-4"
           >
             <Link href="/app" className="flex-1 w-full group">
               <button
-                className="w-full h-14 rounded-full bg-primary text-primary-foreground font-medium text-[17px] hover:opacity-90 transition-all active:scale-[0.98] shadow-lg shadow-primary/10 flex items-center justify-center gap-2"
+                className="w-full h-16 rounded-[24px] bg-primary text-primary-foreground font-bold text-[18px] hover:opacity-95 transition-all active:scale-[0.98] shadow-2xl shadow-primary/20 flex items-center justify-center gap-3"
               >
                 Get Started
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center group-hover:translate-x-1 transition-transform">
+                  <ArrowRight className="w-4 h-4" />
+                </div>
               </button>
             </Link>
-            <button className="w-full sm:w-auto px-8 py-4 h-14 rounded-full bg-card border border-border font-medium text-[17px] hover:bg-secondary transition-all hover:border-muted-foreground/30 active:scale-[0.98] flex items-center justify-center gap-2 group">
-              <Play className="w-5 h-5 text-muted-foreground group-hover:text-foreground transition-colors" />
+            <button className="w-full sm:w-auto px-10 h-16 rounded-[24px] bg-white border-2 border-slate-100 font-bold text-[18px] hover:bg-slate-50 transition-all active:scale-[0.98] flex items-center justify-center gap-3 group">
+              <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center group-hover:bg-white transition-colors">
+                <Play className="w-4 h-4 text-slate-900 fill-current" />
+              </div>
               Watch Demo
             </button>
           </motion.div>
@@ -454,21 +475,27 @@ export default function Home() {
 
 
 
-      <section id="features" ref={featuresRef} className="py-24 md:py-32 bg-white overflow-hidden">
-        <div className="max-w-[1200px] mx-auto px-6">
+      <section id="features" ref={featuresRef} className="py-24 md:py-40 bg-white overflow-hidden relative">
+        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
+        <div className="max-w-[1400px] mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
-            className="text-center mb-16 md:mb-20"
+            className="text-center mb-24 md:mb-32"
           >
-            <span className="inline-block px-4 py-1.5 rounded-full bg-secondary text-sm text-muted-foreground font-medium mb-6">
-              Platform
-            </span>
-            <h2 className="text-[36px] sm:text-[44px] md:text-[56px] font-semibold leading-tight tracking-tight font-display">
-              One ecosystem.
+            <motion.span
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              className="inline-block px-6 py-2 rounded-full bg-slate-50 text-xs text-slate-500 font-bold uppercase tracking-[0.2em] mb-8 border border-slate-100"
+            >
+              The Core Platform
+            </motion.span>
+            <h2 className="text-[40px] sm:text-[56px] md:text-[72px] lg:text-[88px] font-semibold leading-[1.1] tracking-tight font-display text-slate-900">
+              One intelligent ecosystem.
               <br />
-              <span className="text-muted-foreground italic">Endless possibilities.</span>
+              <span className="text-slate-300 italic">Unlimited style possibilities.</span>
             </h2>
           </motion.div>
 
@@ -538,26 +565,32 @@ export default function Home() {
                       style={{ transformStyle: "preserve-3d" }}
                     >
                       <div 
-                      className={`relative rounded-3xl overflow-hidden bg-card shadow-2xl transition-shadow duration-500 ${isActive ? "shadow-black/20" : "shadow-black/10"}`}
+                      className={`relative rounded-[40px] overflow-hidden bg-white shadow-2xl transition-all duration-700 ${isActive ? "shadow-black/30 scale-100" : "shadow-black/10 scale-95 grayscale-[0.5]"}`}
                         style={{ 
-                        border: isActive ? `2px solid ${feature.color}30` : "1px solid var(--border)",
+                        border: isActive ? `1px solid ${feature.color}40` : "1px solid #e2e8f0",
                         }}
                       >
-                        <div className="relative aspect-[4/5] overflow-hidden">
-                          <img 
+                        <div className="relative aspect-[3/4] overflow-hidden">
+                          <motion.img
+                            animate={{ scale: isActive ? 1.05 : 1 }}
+                            transition={{ duration: 1.5 }}
                             src={feature.image} 
                             alt={feature.title}
                             className="w-full h-full object-cover"
                           />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                           
-                          <div className="absolute top-4 left-4">
-                            <div 
-                              className="w-12 h-12 rounded-2xl flex items-center justify-center backdrop-blur-xl"
-                              style={{ backgroundColor: `${feature.color}90` }}
+                          <div className="absolute top-6 left-6">
+                            <motion.div
+                              animate={{
+                                y: isActive ? 0 : 10,
+                                opacity: isActive ? 1 : 0
+                              }}
+                              className="w-16 h-16 rounded-[24px] flex items-center justify-center backdrop-blur-2xl shadow-2xl"
+                              style={{ backgroundColor: `${feature.color}cc` }}
                             >
-                              <Icon className="w-6 h-6 text-white" />
-                            </div>
+                              <Icon className="w-8 h-8 text-white" />
+                            </motion.div>
                           </div>
                           
                           <div className="absolute bottom-0 left-0 right-0 p-6">
@@ -632,21 +665,27 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="ai" className="py-24 md:py-32 bg-background overflow-hidden">
-        <div className="max-w-[1200px] mx-auto px-6">
+      <section id="ai" className="py-24 md:py-40 bg-slate-50 overflow-hidden relative">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(244,63,94,0.05),transparent_70%)]" />
+        <div className="max-w-[1400px] mx-auto px-6 relative">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
-            className="text-center mb-6"
+            className="text-center mb-12"
           >
-            <span className="inline-block px-4 py-1.5 rounded-full bg-card border border-border text-sm text-muted-foreground font-medium mb-6">
+            <motion.span
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              className="inline-block px-6 py-2 rounded-full bg-white text-xs text-rose-500 font-bold uppercase tracking-[0.2em] mb-8 border border-rose-100 shadow-sm"
+            >
               Artificial Intelligence
-            </span>
-            <h2 className="text-[36px] sm:text-[44px] md:text-[56px] font-semibold leading-tight tracking-tight font-display">
-              Your personal
+            </motion.span>
+            <h2 className="text-[40px] sm:text-[56px] md:text-[72px] lg:text-[88px] font-semibold leading-[1.1] tracking-tight font-display text-slate-900">
+              Personalized style,
               <br />
-              <span className="text-gradient-color italic">AI stylist.</span>
+              <span className="text-rose-500 italic">perfected by AI.</span>
             </h2>
           </motion.div>
 
