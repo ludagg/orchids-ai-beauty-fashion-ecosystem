@@ -34,8 +34,8 @@ export default function SettingsPage() {
   return (
     <div className="p-4 sm:p-6 lg:p-8 max-w-[1400px] mx-auto w-full">
       <div className="mb-12">
-        <h1 className="text-3xl sm:text-4xl font-semibold font-display tracking-tight text-[#1a1a1a]">Settings</h1>
-        <p className="text-[#6b6b6b] mt-1 text-base">Manage your profile, preferences, and account security.</p>
+        <h1 className="text-3xl sm:text-4xl font-semibold font-display tracking-tight text-foreground">Settings</h1>
+        <p className="text-muted-foreground mt-1 text-base">Manage your profile, preferences, and account security.</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
@@ -49,13 +49,13 @@ export default function SettingsPage() {
                 onClick={() => setActiveSection(section.id)}
                 className={`w-full flex items-center justify-between px-5 py-4 rounded-2xl transition-all group ${
                   activeSection === section.id
-                    ? "bg-white text-[#1a1a1a] shadow-xl shadow-black/5 border border-[#e5e5e5]"
-                    : "text-[#6b6b6b] hover:bg-white hover:text-[#1a1a1a]"
+                    ? "bg-card text-foreground shadow-xl shadow-black/5 dark:shadow-white/5 border border-border"
+                    : "text-muted-foreground hover:bg-card hover:text-foreground"
                 }`}
               >
                 <div className="flex items-center gap-3">
                   <div className={`p-2 rounded-xl transition-colors ${
-                    activeSection === section.id ? "bg-[#1a1a1a] text-white" : "bg-[#f5f5f5] group-hover:bg-[#e5e5e5]"
+                    activeSection === section.id ? "bg-primary text-primary-foreground" : "bg-muted group-hover:bg-muted/80"
                   }`}>
                     <Icon className="w-5 h-5" />
                   </div>
@@ -82,15 +82,15 @@ export default function SettingsPage() {
             key={activeSection}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-[40px] border border-[#e5e5e5] shadow-xl shadow-black/[0.02] overflow-hidden"
+            className="bg-card rounded-[40px] border border-border shadow-xl shadow-black/[0.02] overflow-hidden"
           >
             {/* Account Section Content */}
             {activeSection === "account" && (
               <div className="p-8 sm:p-12 space-y-10">
-                <div className="flex flex-col sm:flex-row items-center gap-8 pb-10 border-b border-[#f5f5f5]">
+                <div className="flex flex-col sm:flex-row items-center gap-8 pb-10 border-b border-muted">
                   <div className="relative group">
                     <div className="w-32 h-32 rounded-[40px] bg-gradient-to-tr from-violet-500 to-rose-500 p-1">
-                      <div className="w-full h-full rounded-[36px] bg-white p-1 overflow-hidden">
+                      <div className="w-full h-full rounded-[36px] bg-card p-1 overflow-hidden">
                         <img
                           src="https://i.pravatar.cc/300?u=jd"
                           alt="Profile"
@@ -98,15 +98,15 @@ export default function SettingsPage() {
                         />
                       </div>
                     </div>
-                    <button className="absolute -bottom-2 -right-2 p-3 rounded-2xl bg-[#1a1a1a] text-white shadow-xl hover:scale-110 transition-all">
+                    <button className="absolute -bottom-2 -right-2 p-3 rounded-2xl bg-primary text-primary-foreground shadow-xl hover:scale-110 transition-all">
                       <Camera className="w-5 h-5" />
                     </button>
                   </div>
                   <div className="space-y-2 text-center sm:text-left">
-                    <h3 className="text-2xl font-bold text-[#1a1a1a]">Guest User</h3>
-                    <p className="text-[#6b6b6b] font-medium">jd.guest@priisme.com</p>
+                    <h3 className="text-2xl font-bold text-foreground">Guest User</h3>
+                    <p className="text-muted-foreground font-medium">jd.guest@priisme.com</p>
                     <div className="flex items-center justify-center sm:justify-start gap-2 pt-1">
-                      <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold uppercase tracking-widest border border-emerald-100 flex items-center gap-1.5">
+                      <span className="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-500 text-[10px] font-bold uppercase tracking-widest border border-emerald-500/20 flex items-center gap-1.5">
                         <CheckCircle2 className="w-3 h-3" />
                         Verified Account
                       </span>
@@ -116,44 +116,44 @@ export default function SettingsPage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="space-y-4">
-                    <label className="text-[10px] font-bold text-[#c4c4c4] uppercase tracking-[0.2em]">Full Name</label>
+                    <label className="text-[10px] font-bold text-muted-foreground/60 uppercase tracking-[0.2em]">Full Name</label>
                     <input
                       type="text"
                       defaultValue="Guest User"
-                      className="w-full px-6 py-4 rounded-2xl bg-[#f5f5f5] border-transparent focus:bg-white focus:border-[#1a1a1a] transition-all outline-none font-bold"
+                      className="w-full px-6 py-4 rounded-2xl bg-muted border-transparent focus:bg-card focus:border-primary transition-all outline-none font-bold text-foreground"
                     />
                   </div>
                   <div className="space-y-4">
-                    <label className="text-[10px] font-bold text-[#c4c4c4] uppercase tracking-[0.2em]">Email Address</label>
+                    <label className="text-[10px] font-bold text-muted-foreground/60 uppercase tracking-[0.2em]">Email Address</label>
                     <input
                       type="email"
                       defaultValue="jd.guest@priisme.com"
-                      className="w-full px-6 py-4 rounded-2xl bg-[#f5f5f5] border-transparent focus:bg-white focus:border-[#1a1a1a] transition-all outline-none font-bold"
+                      className="w-full px-6 py-4 rounded-2xl bg-muted border-transparent focus:bg-card focus:border-primary transition-all outline-none font-bold text-foreground"
                     />
                   </div>
                   <div className="space-y-4">
-                    <label className="text-[10px] font-bold text-[#c4c4c4] uppercase tracking-[0.2em]">Phone Number</label>
+                    <label className="text-[10px] font-bold text-muted-foreground/60 uppercase tracking-[0.2em]">Phone Number</label>
                     <input
                       type="tel"
                       defaultValue="+91 98765 43210"
-                      className="w-full px-6 py-4 rounded-2xl bg-[#f5f5f5] border-transparent focus:bg-white focus:border-[#1a1a1a] transition-all outline-none font-bold"
+                      className="w-full px-6 py-4 rounded-2xl bg-muted border-transparent focus:bg-card focus:border-primary transition-all outline-none font-bold text-foreground"
                     />
                   </div>
                   <div className="space-y-4">
-                    <label className="text-[10px] font-bold text-[#c4c4c4] uppercase tracking-[0.2em]">Location</label>
+                    <label className="text-[10px] font-bold text-muted-foreground/60 uppercase tracking-[0.2em]">Location</label>
                     <input
                       type="text"
                       defaultValue="Bangalore, India"
-                      className="w-full px-6 py-4 rounded-2xl bg-[#f5f5f5] border-transparent focus:bg-white focus:border-[#1a1a1a] transition-all outline-none font-bold"
+                      className="w-full px-6 py-4 rounded-2xl bg-muted border-transparent focus:bg-card focus:border-primary transition-all outline-none font-bold text-foreground"
                     />
                   </div>
                 </div>
 
-                <div className="pt-6 border-t border-[#f5f5f5] flex justify-end gap-4">
-                  <button className="px-8 py-4 rounded-2xl bg-[#f5f5f5] text-[#1a1a1a] font-bold hover:bg-[#e5e5e5] transition-all">
+                <div className="pt-6 border-t border-muted flex justify-end gap-4">
+                  <button className="px-8 py-4 rounded-2xl bg-muted text-foreground font-bold hover:bg-muted/80 transition-all">
                     Discard Changes
                   </button>
-                  <button className="px-8 py-4 rounded-2xl bg-[#1a1a1a] text-white font-bold hover:bg-[#333] transition-all shadow-xl shadow-black/10">
+                  <button className="px-8 py-4 rounded-2xl bg-primary text-primary-foreground font-bold hover:opacity-90 transition-all shadow-xl shadow-black/10 dark:shadow-white/5">
                     Save Profile
                   </button>
                 </div>
@@ -164,31 +164,31 @@ export default function SettingsPage() {
             {activeSection === "privacy" && (
               <div className="p-8 sm:p-12 space-y-10">
                 <div className="space-y-6">
-                  <h3 className="text-2xl font-bold text-[#1a1a1a]">Security Settings</h3>
+                  <h3 className="text-2xl font-bold text-foreground">Security Settings</h3>
                   <div className="grid grid-cols-1 gap-4">
-                    <div className="flex items-center justify-between p-6 rounded-3xl bg-[#f5f5f5] border border-transparent hover:border-[#e5e5e5] transition-all">
+                    <div className="flex items-center justify-between p-6 rounded-3xl bg-muted/50 border border-transparent hover:border-border transition-all">
                       <div className="flex gap-4">
-                        <div className="p-3 rounded-2xl bg-white shadow-sm">
-                          <Lock className="w-5 h-5 text-[#1a1a1a]" />
+                        <div className="p-3 rounded-2xl bg-card shadow-sm">
+                          <Lock className="w-5 h-5 text-foreground" />
                         </div>
                         <div>
-                          <p className="font-bold text-[#1a1a1a]">Change Password</p>
-                          <p className="text-xs text-[#6b6b6b] mt-0.5 font-medium">Update your account password regularly.</p>
+                          <p className="font-bold text-foreground">Change Password</p>
+                          <p className="text-xs text-muted-foreground mt-0.5 font-medium">Update your account password regularly.</p>
                         </div>
                       </div>
-                      <button className="px-5 py-2.5 rounded-xl bg-white border border-[#e5e5e5] text-xs font-bold hover:bg-[#1a1a1a] hover:text-white transition-all shadow-sm">
+                      <button className="px-5 py-2.5 rounded-xl bg-card border border-border text-xs font-bold hover:bg-primary hover:text-primary-foreground transition-all shadow-sm">
                         Update
                       </button>
                     </div>
 
-                    <div className="flex items-center justify-between p-6 rounded-3xl bg-[#f5f5f5] border border-transparent hover:border-[#e5e5e5] transition-all">
+                    <div className="flex items-center justify-between p-6 rounded-3xl bg-muted/50 border border-transparent hover:border-border transition-all">
                       <div className="flex gap-4">
-                        <div className="p-3 rounded-2xl bg-white shadow-sm">
-                          <Smartphone className="w-5 h-5 text-[#1a1a1a]" />
+                        <div className="p-3 rounded-2xl bg-card shadow-sm">
+                          <Smartphone className="w-5 h-5 text-foreground" />
                         </div>
                         <div>
-                          <p className="font-bold text-[#1a1a1a]">Two-Factor Authentication</p>
-                          <p className="text-xs text-[#6b6b6b] mt-0.5 font-medium">Add an extra layer of security to your account.</p>
+                          <p className="font-bold text-foreground">Two-Factor Authentication</p>
+                          <p className="text-xs text-muted-foreground mt-0.5 font-medium">Add an extra layer of security to your account.</p>
                         </div>
                       </div>
                       <button className="px-5 py-2.5 rounded-xl bg-emerald-500 text-white text-xs font-bold hover:bg-emerald-600 transition-all shadow-lg shadow-emerald-500/20">
@@ -198,14 +198,14 @@ export default function SettingsPage() {
                   </div>
                 </div>
 
-                <div className="space-y-6 pt-10 border-t border-[#f5f5f5]">
+                <div className="space-y-6 pt-10 border-t border-muted">
                   <h3 className="text-2xl font-bold text-rose-600">Danger Zone</h3>
-                  <div className="p-6 rounded-3xl bg-rose-50 border border-rose-100 flex items-center justify-between">
+                  <div className="p-6 rounded-3xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-between">
                     <div>
                       <p className="font-bold text-rose-900">Delete Account</p>
                       <p className="text-xs text-rose-700 mt-0.5 font-medium">Permanently remove your account and all data. This cannot be undone.</p>
                     </div>
-                    <button className="p-3 rounded-2xl bg-white text-rose-600 border border-rose-200 hover:bg-rose-600 hover:text-white transition-all shadow-sm">
+                    <button className="p-3 rounded-2xl bg-card text-rose-600 border border-rose-500/20 hover:bg-rose-600 hover:text-white transition-all shadow-sm">
                       <Trash2 className="w-5 h-5" />
                     </button>
                   </div>
@@ -216,9 +216,9 @@ export default function SettingsPage() {
             {/* Generic Content for other sections */}
             {!["account", "privacy"].includes(activeSection) && (
               <div className="p-20 text-center space-y-4">
-                <div className="w-20 h-20 rounded-full bg-[#f5f5f5] flex items-center justify-center mx-auto">
+                <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center mx-auto">
                   {sections.find(s => s.id === activeSection)?.icon && (
-                    <div className="text-[#6b6b6b]">
+                    <div className="text-muted-foreground">
                       {(() => {
                         const Icon = sections.find(s => s.id === activeSection)!.icon;
                         return <Icon className="w-10 h-10" />;
@@ -226,8 +226,8 @@ export default function SettingsPage() {
                     </div>
                   )}
                 </div>
-                <h3 className="text-xl font-bold text-[#1a1a1a] uppercase tracking-widest">{activeSection} Content Coming Soon</h3>
-                <p className="text-[#6b6b6b] max-w-xs mx-auto text-sm font-medium">We're working on making this setting available for you. Stay tuned for updates!</p>
+                <h3 className="text-xl font-bold text-foreground uppercase tracking-widest">{activeSection} Content Coming Soon</h3>
+                <p className="text-muted-foreground max-w-xs mx-auto text-sm font-medium">We're working on making this setting available for you. Stay tuned for updates!</p>
               </div>
             )}
           </motion.div>

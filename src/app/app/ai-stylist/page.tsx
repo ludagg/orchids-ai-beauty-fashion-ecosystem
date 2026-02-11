@@ -95,7 +95,7 @@ export default function AIStylistPage() {
               className={`px-4 py-2 rounded-xl text-xs font-bold transition-all border ${
                 style.active
                   ? "bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/10"
-                  : "bg-card text-muted-foreground border-border hover:border-foreground hover:text-foreground"
+                  : "bg-card text-muted-foreground border-border hover:border-primary hover:text-foreground"
               }`}
             >
               {style.name}

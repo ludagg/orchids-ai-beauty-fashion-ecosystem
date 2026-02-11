@@ -123,7 +123,7 @@ export default function MarketplacePage() {
             className={`px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
               selectedCategory === category
                 ? "bg-primary text-primary-foreground shadow-md"
-                : "bg-card border border-border text-muted-foreground hover:border-foreground hover:text-foreground"
+                : "bg-card border border-border text-muted-foreground hover:border-primary hover:text-foreground"
             }`}
           >
             {category}

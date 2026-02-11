@@ -132,7 +132,7 @@ export default function LiveCommerceIndex() {
             className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all border whitespace-nowrap ${
               selectedCategory === cat
                 ? "bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/10"
-                : "bg-card text-muted-foreground border-border hover:border-foreground hover:text-foreground"
+                : "bg-card text-muted-foreground border-border hover:border-primary hover:text-foreground"
             }`}
           >
             {cat}
@@ -230,7 +230,7 @@ export default function LiveCommerceIndex() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.4 + i * 0.1 }}
-              className="p-6 rounded-[32px] bg-card border border-border hover:border-foreground transition-all group text-center relative"
+              className="p-6 rounded-[32px] bg-card border border-border hover:border-primary transition-all group text-center relative"
             >
               <button
                 onClick={(e) => toggleFollow(creator.name, e)}

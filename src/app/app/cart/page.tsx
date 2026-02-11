@@ -63,9 +63,9 @@ export default function CartPage() {
         {/* Cart Items */}
         <div className="flex-[2] space-y-8">
           <div className="flex items-center justify-between">
-            <h1 className="text-3xl font-bold text-[#1a1a1a] font-display tracking-tight flex items-center gap-3">
+            <h1 className="text-3xl font-bold text-foreground font-display tracking-tight flex items-center gap-3">
               Your Bag
-              <span className="text-sm font-bold text-[#6b6b6b] bg-[#f5f5f5] px-3 py-1 rounded-full">{items.length} items</span>
+              <span className="text-sm font-bold text-muted-foreground bg-muted px-3 py-1 rounded-full">{items.length} items</span>
             </h1>
             <Link href="/app/marketplace" className="text-sm font-bold text-rose-600 hover:underline flex items-center gap-1 group">
               <ChevronLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
@@ -82,26 +82,26 @@ export default function CartPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95 }}
-                  className="flex gap-6 p-6 rounded-[32px] bg-white border border-[#e5e5e5] hover:border-[#1a1a1a] transition-all group"
+                  className="flex gap-6 p-6 rounded-[32px] bg-card border border-border hover:border-primary transition-all group"
                 >
-                  <div className="w-24 sm:w-32 aspect-[3/4] rounded-2xl overflow-hidden bg-[#f5f5f5] shadow-inner">
+                  <div className="w-24 sm:w-32 aspect-[3/4] rounded-2xl overflow-hidden bg-muted shadow-inner">
                     <img src={item.image} alt={item.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                   </div>
                   <div className="flex-1 flex flex-col justify-between py-1">
                     <div className="flex items-start justify-between gap-4">
                       <div>
-                        <h3 className="font-bold text-[#1a1a1a] text-lg">{item.title}</h3>
+                        <h3 className="font-bold text-foreground text-lg">{item.title}</h3>
                         <p className="text-sm text-rose-600 font-bold uppercase tracking-widest">{item.designer}</p>
                         <div className="flex gap-4 mt-2">
-                          <p className="text-xs text-[#6b6b6b] font-medium">Size: <span className="text-[#1a1a1a] font-bold">{item.size}</span></p>
-                          <p className="text-xs text-[#6b6b6b] font-medium">Color: <span className="text-[#1a1a1a] font-bold">{item.color}</span></p>
+                          <p className="text-xs text-muted-foreground font-medium">Size: <span className="text-foreground font-bold">{item.size}</span></p>
+                          <p className="text-xs text-muted-foreground font-medium">Color: <span className="text-foreground font-bold">{item.color}</span></p>
                         </div>
                       </div>
-                      <p className="font-bold text-lg text-[#1a1a1a]">₹{item.price.toLocaleString()}</p>
+                      <p className="font-bold text-lg text-foreground">₹{item.price.toLocaleString()}</p>
                     </div>
 
                     <div className="flex items-center justify-between mt-4">
-                      <div className="flex items-center h-10 rounded-xl border border-[#e5e5e5] bg-[#fafafa] overflow-hidden">
+                      <div className="flex items-center h-10 rounded-xl border border-border bg-muted/50 overflow-hidden">
                         <button
                           onClick={() => updateQuantity(item.id, -1)}
                           className="w-10 h-full flex items-center justify-center hover:bg-white transition-colors"
@@ -134,16 +134,16 @@ export default function CartPage() {
             </AnimatePresence>
 
             {items.length === 0 && (
-              <div className="py-20 text-center space-y-6 bg-[#fcfcfc] rounded-[40px] border border-dashed border-[#e5e5e5]">
-                <div className="w-20 h-20 rounded-full bg-white border border-[#e5e5e5] flex items-center justify-center mx-auto shadow-sm">
-                  <ShoppingBag className="w-8 h-8 text-[#c4c4c4]" />
+              <div className="py-20 text-center space-y-6 bg-background/50 rounded-[40px] border border-dashed border-border">
+                <div className="w-20 h-20 rounded-full bg-card border border-border flex items-center justify-center mx-auto shadow-sm">
+                  <ShoppingBag className="w-8 h-8 text-muted-foreground/40" />
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-[#1a1a1a]">Your bag is empty</h2>
-                  <p className="text-[#6b6b6b] mt-1">Looks like you haven't added anything yet.</p>
+                  <h2 className="text-xl font-bold text-foreground">Your bag is empty</h2>
+                  <p className="text-muted-foreground mt-1">Looks like you haven't added anything yet.</p>
                 </div>
                 <Link href="/app/marketplace">
-                  <button className="px-8 py-3.5 rounded-2xl bg-[#1a1a1a] text-white font-bold hover:bg-[#333] transition-all shadow-xl shadow-black/10">
+                  <button className="px-8 py-3.5 rounded-2xl bg-primary text-primary-foreground font-bold hover:opacity-90 transition-all shadow-xl shadow-black/10 dark:shadow-white/5">
                     Explore Marketplace
                   </button>
                 </Link>
@@ -155,66 +155,66 @@ export default function CartPage() {
         {/* Order Summary */}
         <div className="flex-1">
           <div className="sticky top-24 space-y-8">
-            <div className="p-8 rounded-[40px] bg-[#f5f5f5] border border-[#e5e5e5] space-y-6">
-              <h2 className="text-xl font-bold text-[#1a1a1a]">Order Summary</h2>
+            <div className="p-8 rounded-[40px] bg-muted/50 border border-border space-y-6">
+              <h2 className="text-xl font-bold text-foreground">Order Summary</h2>
 
               <div className="space-y-4">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-[#6b6b6b] font-medium">Subtotal</span>
-                  <span className="text-[#1a1a1a] font-bold">₹{subtotal.toLocaleString()}</span>
+                  <span className="text-muted-foreground font-medium">Subtotal</span>
+                  <span className="text-foreground font-bold">₹{subtotal.toLocaleString()}</span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-[#6b6b6b] font-medium">Shipping</span>
-                  <span className={`font-bold ${shipping === 0 ? "text-emerald-600" : "text-[#1a1a1a]"}`}>
+                  <span className="text-muted-foreground font-medium">Shipping</span>
+                  <span className={`font-bold ${shipping === 0 ? "text-emerald-600" : "text-foreground"}`}>
                     {shipping === 0 ? "FREE" : `₹${shipping}`}
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-[#6b6b6b] font-medium">Estimated Tax (18%)</span>
-                  <span className="text-[#1a1a1a] font-bold">₹{tax.toLocaleString()}</span>
+                  <span className="text-muted-foreground font-medium">Estimated Tax (18%)</span>
+                  <span className="text-foreground font-bold">₹{tax.toLocaleString()}</span>
                 </div>
-                <div className="h-px bg-[#e5e5e5] my-2" />
+                <div className="h-px bg-border my-2" />
                 <div className="flex items-center justify-between text-lg">
-                  <span className="text-[#1a1a1a] font-bold">Total</span>
-                  <span className="text-[#1a1a1a] font-bold">₹{total.toLocaleString()}</span>
+                  <span className="text-foreground font-bold">Total</span>
+                  <span className="text-foreground font-bold">₹{total.toLocaleString()}</span>
                 </div>
               </div>
 
               <Link href="/app/checkout" className="block w-full">
                 <button
                   disabled={items.length === 0}
-                  className="w-full py-5 rounded-2xl bg-[#1a1a1a] text-white font-bold text-lg hover:bg-[#333] transition-all shadow-xl shadow-black/10 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 group"
+                  className="w-full py-5 rounded-2xl bg-primary text-primary-foreground font-bold text-lg hover:opacity-90 transition-all shadow-xl shadow-black/10 dark:shadow-white/5 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 group"
                 >
                   Checkout Now
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </button>
               </Link>
 
-              <div className="p-4 rounded-2xl bg-white border border-[#e5e5e5] space-y-3">
+              <div className="p-4 rounded-2xl bg-card border border-border space-y-3">
                 <div className="flex items-center gap-3">
                   <ShieldCheck className="w-5 h-5 text-emerald-600" />
-                  <p className="text-xs font-bold text-[#1a1a1a]">Secure Payment Guaranteed</p>
+                  <p className="text-xs font-bold text-foreground">Secure Payment Guaranteed</p>
                 </div>
                 <div className="flex items-center gap-3">
                   <Truck className="w-5 h-5 text-blue-600" />
-                  <p className="text-xs font-bold text-[#1a1a1a]">Fast Delivery in 3-5 days</p>
+                  <p className="text-xs font-bold text-foreground">Fast Delivery in 3-5 days</p>
                 </div>
                 <div className="flex items-center gap-3">
                   <RotateCcw className="w-5 h-5 text-rose-600" />
-                  <p className="text-xs font-bold text-[#1a1a1a]">Easy 15-day Returns</p>
+                  <p className="text-xs font-bold text-foreground">Easy 15-day Returns</p>
                 </div>
               </div>
             </div>
 
-            <div className="p-8 rounded-[40px] bg-white border border-[#e5e5e5] space-y-4">
-              <h3 className="font-bold text-[#1a1a1a]">Apply Promo Code</h3>
+            <div className="p-8 rounded-[40px] bg-card border border-border space-y-4">
+              <h3 className="font-bold text-foreground">Apply Promo Code</h3>
               <div className="flex gap-2">
                 <input
                   type="text"
                   placeholder="Enter code"
-                  className="flex-1 px-4 py-3 rounded-xl bg-[#f5f5f5] border-transparent focus:bg-white focus:border-[#e5e5e5] outline-none text-sm font-medium transition-all"
+                  className="flex-1 px-4 py-3 rounded-xl bg-muted border-transparent focus:bg-card focus:border-border outline-none text-sm font-medium transition-all text-foreground"
                 />
-                <button className="px-6 py-3 rounded-xl bg-[#1a1a1a] text-white font-bold text-sm hover:bg-[#333] transition-all">
+                <button className="px-6 py-3 rounded-xl bg-primary text-primary-foreground font-bold text-sm hover:opacity-90 transition-all">
                   Apply
                 </button>
               </div>
