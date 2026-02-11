@@ -49,6 +49,12 @@ export default function AppLayout({
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col lg:flex-row">
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only fixed top-4 left-4 z-[100] px-4 py-2 bg-background text-foreground rounded-lg shadow-lg outline-none ring-2 ring-primary ring-offset-2"
+      >
+        Skip to Content
+      </a>
       {/* Sidebar - Desktop */}
       <aside className="w-64 border-r border-border bg-card hidden lg:flex flex-col sticky top-0 h-screen">
         <div className="p-6">
@@ -186,7 +192,7 @@ export default function AppLayout({
           </div>
         </header>
 
-        <main className="flex-1 min-h-0 overflow-y-auto pb-20 lg:pb-0">
+        <main id="main-content" className="flex-1 min-h-0 overflow-y-auto pb-20 lg:pb-0">
           {children}
         </main>
 
