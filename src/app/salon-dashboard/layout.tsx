@@ -16,6 +16,7 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 
 const salonNavItems = [
   { icon: LayoutDashboard, label: "Dashboard", href: "/salon-dashboard" },
@@ -35,12 +36,12 @@ export default function SalonLayout({
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#fafafa] text-[#1a1a1a] flex flex-col lg:flex-row">
+    <div className="min-h-screen bg-background text-foreground flex flex-col lg:flex-row">
       {/* Sidebar - Desktop */}
-      <aside className="w-64 bg-white border-r border-[#e5e5e5] hidden lg:flex flex-col sticky top-0 h-screen">
-        <div className="p-6 border-b border-[#e5e5e5]">
+      <aside className="w-64 bg-card border-r border-border hidden lg:flex flex-col sticky top-0 h-screen">
+        <div className="p-6 border-b border-border">
           <Link href="/salon-dashboard" className="text-xl font-bold tracking-tight text-blue-600">
-            Priisme <span className="text-[#1a1a1a]">Partner</span>
+            Priisme <span className="text-foreground">Partner</span>
           </Link>
         </div>
 
@@ -53,8 +54,8 @@ export default function SalonLayout({
                 href={item.href}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
                   isActive
-                    ? "bg-blue-600 text-white shadow-lg shadow-blue-200"
-                    : "text-[#6b6b6b] hover:bg-[#f5f5f5] hover:text-[#1a1a1a]"
+                    ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+                    : "text-muted-foreground hover:bg-secondary hover:text-foreground"
                 }`}
               >
                 <item.icon className="w-5 h-5" />
@@ -75,22 +76,25 @@ export default function SalonLayout({
           </div>
         </div>
 
-        <div className="p-4 border-t border-[#e5e5e5]">
+        <div className="p-4 border-t border-border">
           <div className="flex items-center gap-3 px-2">
             <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-500 to-indigo-500" />
             <div className="min-w-0">
               <p className="text-sm font-bold truncate">Aura Luxury Spa</p>
-              <p className="text-xs text-[#6b6b6b] truncate">Store Manager</p>
+              <p className="text-xs text-muted-foreground truncate">Store Manager</p>
             </div>
           </div>
         </div>
       </aside>
 
       {/* Mobile Header */}
-      <header className="lg:hidden h-16 bg-white border-b border-[#e5e5e5] px-4 flex items-center justify-between sticky top-0 z-50">
-        <Link href="/salon-dashboard" className="text-lg font-bold text-blue-600">
-          Priisme Partner
-        </Link>
+      <header className="lg:hidden h-16 bg-card border-b border-border px-4 flex items-center justify-between sticky top-0 z-50">
+        <div className="flex items-center gap-4">
+          <Link href="/salon-dashboard" className="text-lg font-bold text-primary">
+            Priisme Partner
+          </Link>
+          <ThemeSwitcher />
+        </div>
         <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="p-2">
           {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
@@ -98,16 +102,16 @@ export default function SalonLayout({
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-white lg:hidden pt-16">
+        <div className="fixed inset-0 z-40 bg-background lg:hidden pt-16">
           <nav className="p-6 space-y-2">
             {salonNavItems.map((item) => (
               <Link
                 key={item.label}
                 href={item.href}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center gap-4 py-4 text-lg font-medium border-b border-[#e5e5e5]"
+                className="flex items-center gap-4 py-4 text-lg font-medium border-b border-border"
               >
-                <item.icon className="w-6 h-6 text-blue-600" />
+                <item.icon className="w-6 h-6 text-primary" />
                 {item.label}
               </Link>
             ))}
@@ -117,20 +121,21 @@ export default function SalonLayout({
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0">
-        <header className="hidden lg:flex h-16 bg-white border-b border-[#e5e5e5] px-8 items-center justify-between sticky top-0 z-30">
+        <header className="hidden lg:flex h-16 bg-card border-b border-border px-8 items-center justify-between sticky top-0 z-30">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-[#6b6b6b]">Dashboard</span>
-            <span className="text-[#e5e5e5]">/</span>
+            <span className="text-sm font-medium text-muted-foreground">Dashboard</span>
+            <span className="text-border">/</span>
             <span className="text-sm font-bold">Overview</span>
           </div>
 
           <div className="flex items-center gap-4">
-            <button className="p-2 text-[#6b6b6b] hover:text-[#1a1a1a] relative">
+            <ThemeSwitcher />
+            <button className="p-2 text-muted-foreground hover:text-foreground relative">
               <Bell className="w-5 h-5" />
-              <span className="absolute top-2 right-2 w-2 h-2 bg-blue-600 rounded-full border-2 border-white"></span>
+              <span className="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full border-2 border-card"></span>
             </button>
-            <div className="h-8 w-px bg-[#e5e5e5] mx-2" />
-            <button className="px-4 py-2 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 transition-all">
+            <div className="h-8 w-px bg-border mx-2" />
+            <button className="px-4 py-2 bg-primary text-primary-foreground rounded-xl text-sm font-bold hover:opacity-90 transition-all">
               Book Appointment
             </button>
           </div>

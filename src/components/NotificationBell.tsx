@@ -41,16 +41,16 @@ export default function NotificationBell() {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <button className="p-2 rounded-full hover:bg-[#f5f5f5] transition-colors relative outline-none focus-visible:ring-2 focus-visible:ring-[#1a1a1a] focus-visible:ring-offset-2">
-          <Bell className="w-5 h-5 text-[#6b6b6b]" />
-          <span className="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full border-2 border-white"></span>
+        <button className="p-2 rounded-full hover:bg-secondary transition-colors relative outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+          <Bell className="w-5 h-5 text-muted-foreground" />
+          <span className="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full border-2 border-card"></span>
           <span className="sr-only">Notifications</span>
         </button>
       </PopoverTrigger>
       <PopoverContent className="w-80 p-0 overflow-hidden" align="end">
-        <div className="p-4 border-b border-[#e5e5e5] flex items-center justify-between bg-white">
+        <div className="p-4 border-b border-border flex items-center justify-between bg-card">
           <h3 className="font-semibold text-sm">Notifications</h3>
-          <button className="text-xs text-rose-600 font-medium hover:underline">
+          <button className="text-xs text-primary font-medium hover:underline">
             Mark all as read
           </button>
         </div>
@@ -58,27 +58,27 @@ export default function NotificationBell() {
           {notifications.map((notification) => (
             <div
               key={notification.id}
-              className="p-4 flex gap-3 hover:bg-[#f5f5f5] transition-colors cursor-pointer border-b border-[#e5e5e5] last:border-0"
+              className="p-4 flex gap-3 hover:bg-secondary transition-colors cursor-pointer border-b border-border last:border-0"
             >
-              <div className={`w-10 h-10 rounded-full ${notification.bg} flex items-center justify-center flex-shrink-0`}>
+              <div className={`w-10 h-10 rounded-full ${notification.bg} dark:bg-primary/10 flex items-center justify-center flex-shrink-0`}>
                 <notification.icon className={`w-5 h-5 ${notification.color}`} />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-[#1a1a1a] leading-snug">
+                <p className="text-sm font-medium text-foreground leading-snug">
                   {notification.title}
                 </p>
-                <p className="text-xs text-[#6b6b6b] mt-0.5 line-clamp-2">
+                <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
                   {notification.description}
                 </p>
-                <p className="text-[10px] text-[#9b9b9b] mt-1 uppercase font-semibold tracking-wider">
+                <p className="text-[10px] text-muted-foreground opacity-70 mt-1 uppercase font-semibold tracking-wider">
                   {notification.time}
                 </p>
               </div>
             </div>
           ))}
         </div>
-        <div className="p-3 border-t border-[#e5e5e5] text-center">
-          <button className="text-sm font-medium text-[#1a1a1a] hover:underline">
+        <div className="p-3 border-t border-border text-center">
+          <button className="text-sm font-medium text-foreground hover:underline">
             View all notifications
           </button>
         </div>
