@@ -73,7 +73,7 @@ export default function LiveCommerceIndex() {
   return (
     <div className="flex-1 p-4 sm:p-6 lg:p-8 space-y-10 max-w-[1400px] mx-auto w-full">
       {/* Hero Section */}
-      <section className="relative h-[300px] sm:h-[400px] rounded-[40px] overflow-hidden bg-[#1a1a1a] flex items-center px-8 sm:px-12">
+      <section className="relative h-[300px] sm:h-[400px] rounded-[40px] overflow-hidden bg-[#1a1a1a] dark:bg-card flex items-center px-8 sm:px-12 border border-border">
         <div className="absolute inset-0 z-0">
           <img
             src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1600&h=900&fit=crop"
@@ -131,8 +131,8 @@ export default function LiveCommerceIndex() {
             onClick={() => setSelectedCategory(cat)}
             className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all border whitespace-nowrap ${
               selectedCategory === cat
-                ? "bg-[#1a1a1a] text-white border-[#1a1a1a] shadow-lg shadow-black/10"
-                : "bg-white text-[#6b6b6b] border-[#e5e5e5] hover:border-[#1a1a1a] hover:text-[#1a1a1a]"
+                ? "bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/10"
+                : "bg-card text-muted-foreground border-border hover:border-foreground hover:text-foreground"
             }`}
           >
             {cat}
@@ -143,11 +143,11 @@ export default function LiveCommerceIndex() {
       {/* Trending Streams Grid */}
       <section className="space-y-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold flex items-center gap-2 font-display">
+          <h2 className="text-2xl font-bold flex items-center gap-2 font-display text-foreground">
             <TrendingUp className="w-6 h-6 text-rose-500" />
             Trending Streams
           </h2>
-          <button className="text-sm font-bold text-[#6b6b6b] hover:text-[#1a1a1a] flex items-center gap-1 transition-colors">
+          <button className="text-sm font-bold text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors">
             View All <ChevronRight className="w-4 h-4" />
           </button>
         </div>
@@ -162,7 +162,7 @@ export default function LiveCommerceIndex() {
               className="group cursor-pointer"
             >
               <Link href={`/app/live-commerce/${stream.id}`}>
-                <div className="relative aspect-[4/5] rounded-[32px] overflow-hidden mb-4 shadow-xl border border-[#e5e5e5]">
+                <div className="relative aspect-[4/5] rounded-[32px] overflow-hidden mb-4 shadow-xl border border-border">
                   <img
                     src={stream.image}
                     alt={stream.title}
@@ -214,11 +214,11 @@ export default function LiveCommerceIndex() {
       {/* Top Creators Section */}
       <section className="space-y-8">
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold flex items-center gap-2 font-display">
+          <h2 className="text-2xl font-bold flex items-center gap-2 font-display text-foreground">
             <Star className="w-6 h-6 text-amber-500" />
             Top Creators
           </h2>
-          <button className="text-sm font-bold text-[#6b6b6b] hover:text-[#1a1a1a] flex items-center gap-1 transition-colors">
+          <button className="text-sm font-bold text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors">
             See Discover <ChevronRight className="w-4 h-4" />
           </button>
         </div>
@@ -230,14 +230,14 @@ export default function LiveCommerceIndex() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.4 + i * 0.1 }}
-              className="p-6 rounded-[32px] bg-white border border-[#e5e5e5] hover:border-[#1a1a1a] transition-all group text-center relative"
+              className="p-6 rounded-[32px] bg-card border border-border hover:border-foreground transition-all group text-center relative"
             >
               <button
                 onClick={(e) => toggleFollow(creator.name, e)}
                 className={`absolute top-4 right-4 p-2 rounded-xl transition-all active:scale-90 z-10 ${
                   followedCreators.includes(creator.name)
                     ? "bg-rose-500 text-white"
-                    : "bg-[#f5f5f5] text-[#1a1a1a] hover:bg-[#e5e5e5]"
+                    : "bg-secondary text-foreground hover:bg-border"
                 }`}
               >
                 {followedCreators.includes(creator.name) ? <CheckCircle2 className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
@@ -249,20 +249,20 @@ export default function LiveCommerceIndex() {
                     <img src={creator.avatar} alt={creator.name} className="w-full h-full object-cover" />
                   </div>
                 </div>
-                <h3 className="font-bold text-[#1a1a1a] flex items-center justify-center gap-1">
+                <h3 className="font-bold text-foreground flex items-center justify-center gap-1">
                   {creator.name}
                   <CheckCircle2 className="w-3.5 h-3.5 text-blue-500 fill-blue-500/10" />
                 </h3>
-                <p className="text-xs text-[#6b6b6b] mt-1 font-medium">{creator.followers} followers</p>
+                <p className="text-xs text-muted-foreground mt-1 font-medium">{creator.followers} followers</p>
                 <div className="mt-4 flex items-center justify-center gap-1.5">
                   <div className="flex -space-x-1">
                     {[1,2,3].map(j => (
-                      <div key={j} className="w-5 h-5 rounded-full border border-white bg-[#f5f5f5] overflow-hidden">
+                      <div key={j} className="w-5 h-5 rounded-full border border-card bg-secondary overflow-hidden">
                         <img src={`https://i.pravatar.cc/50?u=${creator.name}${j}`} alt="fan" />
                       </div>
                     ))}
                   </div>
-                  <span className="text-[10px] font-bold text-[#1a1a1a] uppercase tracking-wider">Top Tier</span>
+                  <span className="text-[10px] font-bold text-foreground uppercase tracking-wider">Top Tier</span>
                 </div>
               </Link>
             </motion.div>
@@ -290,14 +290,14 @@ export default function LiveCommerceIndex() {
           </div>
         </div>
 
-        <div className="p-10 rounded-[40px] bg-[#f5f5f5] border border-[#e5e5e5] flex flex-col justify-between group">
+        <div className="p-10 rounded-[40px] bg-secondary border border-border flex flex-col justify-between group">
           <div className="space-y-6">
-            <div className="w-14 h-14 rounded-2xl bg-white border border-[#e5e5e5] flex items-center justify-center text-[#1a1a1a]">
+            <div className="w-14 h-14 rounded-2xl bg-card border border-border flex items-center justify-center text-foreground">
               <Tag className="w-7 h-7" />
             </div>
             <div>
-              <h3 className="text-3xl font-bold text-[#1a1a1a] font-display">Flash Sales</h3>
-              <p className="text-[#6b6b6b] mt-2 leading-relaxed">
+              <h3 className="text-3xl font-bold text-foreground font-display">Flash Sales</h3>
+              <p className="text-muted-foreground mt-2 leading-relaxed">
                 Don't miss out on upcoming limited-time events from luxury brands.
               </p>
             </div>
@@ -305,12 +305,12 @@ export default function LiveCommerceIndex() {
           <div className="flex items-center gap-4 mt-8">
             <div className="flex -space-x-3">
               {[1,2,3,4].map(i => (
-                <div key={i} className="w-10 h-10 rounded-full border-2 border-white overflow-hidden shadow-sm">
+                <div key={i} className="w-10 h-10 rounded-full border-2 border-card overflow-hidden shadow-sm">
                   <img src={`https://i.pravatar.cc/100?u=sale${i}`} alt="user" />
                 </div>
               ))}
             </div>
-            <p className="text-sm font-bold text-[#1a1a1a]">
+            <p className="text-sm font-bold text-foreground">
               +1.2k people interested
             </p>
           </div>

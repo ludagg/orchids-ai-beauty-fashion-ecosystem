@@ -454,7 +454,7 @@ export default function Home() {
 
 
 
-      <section id="features" ref={featuresRef} className="py-24 md:py-32 bg-white overflow-hidden">
+      <section id="features" ref={featuresRef} className="py-24 md:py-32 bg-background overflow-hidden">
         <div className="max-w-[1200px] mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -538,7 +538,7 @@ export default function Home() {
                       style={{ transformStyle: "preserve-3d" }}
                     >
                       <div 
-                      className={`relative rounded-3xl overflow-hidden bg-card shadow-2xl transition-shadow duration-500 ${isActive ? "shadow-black/20" : "shadow-black/10"}`}
+              className={`relative rounded-3xl overflow-hidden bg-card shadow-2xl transition-shadow duration-500 ${isActive ? "shadow-black/20 dark:shadow-white/5" : "shadow-black/10"}`}
                         style={{ 
                         border: isActive ? `2px solid ${feature.color}30` : "1px solid var(--border)",
                         }}
