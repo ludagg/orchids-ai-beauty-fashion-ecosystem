@@ -50,13 +50,12 @@ const comments = [
   { id: 4, user: "Karan", text: "The quality looks amazing on screen", color: "bg-emerald-500" }
 ];
 
-export default function LiveCommercePage() {
+export default function VideoDetailPage() {
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(false);
   const [showCart, setShowCart] = useState(false);
   const [liked, setLiked] = useState(false);
   const [isFollowing, setIsFollowing] = useState(false);
-  const videoRef = useRef<HTMLDivElement>(null);
 
   return (
     <div className="h-[calc(100vh-64px)] lg:h-screen bg-black overflow-hidden flex flex-col lg:flex-row">
@@ -89,7 +88,7 @@ export default function LiveCommercePage() {
             <button className="p-2.5 rounded-full bg-black/40 backdrop-blur-md text-white hover:bg-black/60 transition-all border border-white/10">
               <Share2 className="w-5 h-5" />
             </button>
-            <Link href="/app/live-commerce">
+            <Link href="/app/videos-creations">
               <button className="p-2.5 rounded-full bg-black/40 backdrop-blur-md text-white hover:bg-black/60 transition-all border border-white/10">
                 <X className="w-5 h-5" />
               </button>
