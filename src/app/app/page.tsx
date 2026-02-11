@@ -10,10 +10,55 @@ import {
   ChevronRight,
   Star,
   Heart,
-  TrendingUp
+  TrendingUp,
+  Calendar,
+  Clock,
+  MapPin,
+  CreditCard,
+  Bell,
+  Search,
+  User,
+  Package,
+  Gift
 } from "lucide-react";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Bar, BarChart, CartesianGrid, XAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 
+// Mock Data for Charts
+const spendingData = [
+  { month: "Jan", amount: 1200 },
+  { month: "Feb", amount: 2100 },
+  { month: "Mar", amount: 1800 },
+  { month: "Apr", amount: 2400 },
+  { month: "May", amount: 1600 },
+  { month: "Jun", amount: 3200 },
+];
+
+const chartConfig = {
+  amount: {
+    label: "Spending (₹)",
+    color: "var(--primary)",
+  },
+};
+
+// Mock Data for Tabs
+const appointments = [
+  { id: 1, salon: "Aura Luxury Spa", service: "Hair Spa & Styling", date: "Today", time: "14:00", status: "Confirmed" },
+  { id: 2, salon: "The Grooming Co.", service: "Manicure", date: "Tomorrow", time: "11:00", status: "Pending" },
+];
+
+const orders = [
+  { id: "#ORD-7721", items: "Silk Evening Gown", date: "2 days ago", status: "Shipped", total: "₹15,999" },
+  { id: "#ORD-7720", items: "Velvet Blazer", date: "1 week ago", status: "Delivered", total: "₹6,299" },
+];
+
+// Existing Mock Data (Preserved & Enhanced)
 const featuredCollections = [
   {
     title: "Summer Minimalist",
@@ -50,290 +95,324 @@ const nearbySalons = [
   }
 ];
 
-const trendingStyles = [
-  { title: "Boho Chic", items: "124 items", image: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=300&h=400&fit=crop" },
-  { title: "Ethic Fusion", items: "89 items", image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&h=400&fit=crop" },
-  { title: "Street Luxe", items: "210 items", image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300&h=400&fit=crop" },
-  { title: "Minimalist", items: "56 items", image: "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=300&h=400&fit=crop" },
-  { title: "Cyberpunk", items: "34 items", image: "https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=300&h=400&fit=crop" },
-];
-
-export default function AppPage() {
+export default function UserDashboard() {
   return (
-    <div className="flex-1 p-4 sm:p-6 lg:p-8 space-y-8 max-w-[1400px] mx-auto w-full">
-      {/* Welcome Section */}
-      <section>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col md:flex-row md:items-end justify-between gap-4"
-        >
-          <div>
-            <h1 className="text-3xl sm:text-4xl font-semibold font-display tracking-tight text-foreground">Welcome back!</h1>
-            <p className="text-muted-foreground mt-1 text-base">Explore India's most intelligent fashion ecosystem.</p>
-          </div>
-          <div className="flex items-center gap-3 bg-card p-2 px-3 rounded-2xl border border-border shadow-sm">
-            <div className="flex -space-x-2">
-              {[1,2,3].map(i => (
-                <div key={i} className="w-8 h-8 rounded-full border-2 border-card bg-secondary overflow-hidden">
-                  <img src={`https://i.pravatar.cc/100?u=${i+10}`} alt="user" />
-                </div>
-              ))}
-            </div>
-            <p className="text-sm text-muted-foreground">
-              <span className="font-semibold text-foreground">12k+</span> stylists online
-            </p>
-          </div>
-        </motion.div>
-      </section>
+    <div className="flex-1 p-4 sm:p-6 lg:p-8 space-y-8 max-w-[1600px] mx-auto w-full">
 
-      {/* Quick Actions Grid */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {[
-          { title: "AI Stylist", desc: "Get recommendations", icon: Sparkles, color: "text-violet-600", bg: "bg-violet-50" },
-          { title: "Virtual Fit", desc: "Try on clothes", icon: TrendingUp, color: "text-rose-600", bg: "bg-rose-50" },
-          { title: "Book Salon", desc: "Nearby services", icon: Scissors, color: "text-blue-600", bg: "bg-blue-50" },
-          { title: "Wishlist", desc: "3 items saved", icon: Heart, color: "text-emerald-600", bg: "bg-emerald-50" },
-        ].map((item, i) => (
-          <motion.button
-            key={item.title}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.1 }}
-            className="flex items-center gap-4 p-5 rounded-2xl bg-card border border-border hover:shadow-xl hover:shadow-foreground/5 hover:-translate-y-1 transition-all group text-left shadow-sm"
-          >
-            <div className={`w-12 h-12 rounded-xl ${item.bg} flex items-center justify-center ${item.color}`}>
-              <item.icon className="w-6 h-6" />
-            </div>
-            <div>
-              <h3 className="font-semibold text-[15px] text-foreground">{item.title}</h3>
-              <p className="text-xs text-muted-foreground mt-0.5">{item.desc}</p>
-            </div>
-            <ChevronRight className="w-4 h-4 text-muted-foreground/50 ml-auto group-hover:text-foreground transition-colors" />
-          </motion.button>
-        ))}
-      </section>
-
-      {/* Trending Now Section */}
-      <section className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-xl font-semibold flex items-center gap-2 font-display text-foreground">
-            <TrendingUp className="w-5 h-5 text-violet-500" />
-            Trending Now
-          </h2>
-          <button className="text-sm font-medium text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors">
-            Explore All <ChevronRight className="w-4 h-4" />
-          </button>
+      {/* 1. Enhanced Header Section */}
+      <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-border/40">
+        <div>
+          <h1 className="text-3xl sm:text-4xl font-semibold font-display tracking-tight text-foreground">
+            Good Morning, Alex
+          </h1>
+          <p className="text-muted-foreground mt-1 text-base flex items-center gap-2">
+            <Calendar className="w-4 h-4" />
+            {new Date().toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+          </p>
         </div>
-        <div className="flex gap-4 overflow-x-auto pb-4 no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
-          {trendingStyles.map((style, i) => (
-            <motion.div
-              key={style.title}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 + i * 0.1 }}
-              className="flex-shrink-0 w-40 sm:w-48 group cursor-pointer"
-            >
-              <div className="relative aspect-[3/4] rounded-2xl overflow-hidden mb-2 shadow-sm border border-border">
-                <img src={style.image} alt={style.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="absolute bottom-3 left-3 right-3 text-white opacity-0 group-hover:opacity-100 transition-opacity">
-                  <p className="text-xs font-bold truncate">{style.title}</p>
-                </div>
-              </div>
-              <h3 className="font-medium text-sm truncate text-foreground">{style.title}</h3>
-              <p className="text-xs text-muted-foreground">{style.items}</p>
-            </motion.div>
-          ))}
+        <div className="flex items-center gap-4">
+            <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <input
+                    type="text"
+                    placeholder="Search stylists, salons..."
+                    className="pl-9 pr-4 py-2 rounded-full bg-secondary/50 border border-transparent focus:border-primary/20 focus:bg-background outline-none text-sm w-64 transition-all"
+                />
+            </div>
+            <Button variant="outline" size="icon" className="rounded-full relative">
+                <Bell className="w-5 h-5 text-muted-foreground" />
+                <span className="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full border border-background"></span>
+            </Button>
+            <Avatar className="h-10 w-10 border border-border">
+                <AvatarImage src="https://i.pravatar.cc/150?u=a042581f4e29026704d" />
+                <AvatarFallback>AL</AvatarFallback>
+            </Avatar>
         </div>
-      </section>
+      </header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-        {/* Marketplace Feed */}
-        <div className="lg:col-span-2 space-y-12">
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-semibold flex items-center gap-2 font-display tracking-tight text-foreground">
-              <ShoppingBag className="w-6 h-6 text-rose-500" />
-              Featured Marketplace
-            </h2>
-            <button className="text-sm font-medium text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors">
-              View All <ChevronRight className="w-4 h-4" />
-            </button>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            {featuredCollections.map((item, i) => (
-              <motion.div
-                key={item.title}
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.2 + i * 0.1 }}
-                className="group cursor-pointer"
-              >
-                <div className="relative aspect-[4/5] rounded-3xl overflow-hidden mb-4 shadow-sm border border-border">
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
-                  />
-                  <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <button className="absolute top-4 right-4 p-2.5 rounded-full bg-background/90 backdrop-blur-md opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 shadow-lg">
-                    <Heart className="w-4 h-4 text-foreground" />
-                  </button>
+      {/* 2. Top Stats Overview */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card className="bg-gradient-to-br from-violet-500 to-indigo-600 border-none text-white shadow-lg relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 blur-2xl pointer-events-none"></div>
+            <CardHeader className="pb-2">
+                <CardDescription className="text-white/70">Total Loyalty Points</CardDescription>
+                <CardTitle className="text-4xl font-bold">2,450</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <div className="text-xs font-medium bg-white/20 inline-flex items-center px-2 py-1 rounded-full">
+                    <Star className="w-3 h-3 mr-1 fill-yellow-300 text-yellow-300" /> Gold Member
                 </div>
-                <h3 className="font-semibold text-[15px] truncate text-foreground">{item.title}</h3>
-                <p className="text-sm text-muted-foreground mt-0.5">{item.designer}</p>
-                <p className="font-bold text-[15px] mt-1 text-rose-600">{item.price}</p>
-              </motion.div>
-            ))}
-          </div>
+            </CardContent>
+        </Card>
 
-          {/* Exclusive for You Section */}
-          <section className="space-y-6">
-            <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-semibold flex items-center gap-2 font-display tracking-tight text-foreground">
-                <Star className="w-6 h-6 text-amber-500" />
-                Exclusive for You
-              </h2>
-              <button className="text-sm font-medium text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors">
-                View All <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
-            <div className="flex gap-6 overflow-x-auto pb-4 no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
-              {[
-                { title: "Silk Evening Gown", price: "₹15,999", image: "https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=300&h=400&fit=crop" },
-                { title: "Leather Biker Jacket", price: "₹8,499", image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=300&h=400&fit=crop" },
-                { title: "Velvet Blazer", price: "₹6,299", image: "https://images.unsplash.com/photo-1594932224828-b4b059b6f684?w=300&h=400&fit=crop" },
-                { title: "Embroidered Kurta", price: "₹4,599", image: "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=300&h=400&fit=crop" },
-              ].map((item, i) => (
-                <div key={i} className="flex-shrink-0 w-48 group cursor-pointer">
-                  <div className="relative aspect-[3/4] rounded-2xl overflow-hidden mb-3 border border-border shadow-sm">
-                    <img src={item.image} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                    <button className="absolute top-2 right-2 p-2 rounded-full bg-background/80 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity">
-                      <Heart className="w-3.5 h-3.5 text-foreground" />
-                    </button>
-                  </div>
-                  <h4 className="font-semibold text-sm truncate text-foreground">{item.title}</h4>
-                  <p className="text-rose-600 font-bold text-sm">{item.price}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* Promo Banner */}
-          <motion.div
-            whileHover={{ scale: 1.01 }}
-            className="relative rounded-[32px] overflow-hidden bg-foreground dark:bg-card text-white p-8 sm:p-12 shadow-2xl shadow-black/20 border border-border"
-          >
-            <div className="relative z-10 max-w-md">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500 text-[10px] font-bold uppercase tracking-wider mb-4">
-                <span className="w-1.5 h-1.5 rounded-full bg-card animate-pulse" />
-                Live Now
-              </div>
-              <h3 className="text-3xl sm:text-4xl font-semibold mb-4 font-display leading-tight text-white">Video Commerce Experience</h3>
-              <p className="text-white/70 text-base mb-8 leading-relaxed">
-                Watch top creators review the latest collections and shop instantly from the video feed.
-              </p>
-              <button className="px-8 py-3.5 rounded-full bg-card text-foreground text-sm font-bold hover:bg-card/90 transition-all active:scale-95 flex items-center gap-2 shadow-xl shadow-white/10">
-                Join Live Stream <Video className="w-4 h-4" />
-              </button>
-            </div>
-            <div className="absolute right-0 top-0 bottom-0 w-3/5 overflow-hidden hidden md:block">
-              <div className="absolute inset-0 bg-gradient-to-r from-background via-background/20 to-transparent z-10" />
-              <img
-                src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&h=600&fit=crop"
-                alt="Live Commerce"
-                className="w-full h-full object-cover opacity-60 scale-105"
-              />
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Sidebar Column */}
-        <div className="space-y-8">
-          {/* Salon Booking */}
-          <div className="space-y-6">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold flex items-center gap-2 font-display text-foreground">
-                <Scissors className="w-5 h-5 text-blue-500" />
-                Nearby Salons
-              </h2>
-            </div>
-
-            <div className="space-y-5">
-              {nearbySalons.map((salon, i) => (
-                <motion.div
-                  key={salon.name}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.4 + i * 0.1 }}
-                  className="flex gap-4 group cursor-pointer bg-card p-3 rounded-2xl border border-transparent hover:border-border hover:shadow-sm transition-all"
-                >
-                  <div className="w-20 h-20 rounded-2xl overflow-hidden flex-shrink-0 shadow-sm">
-                    <img src={salon.image} alt={salon.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                  </div>
-                  <div className="flex-1 py-1">
-                    <div className="flex items-center justify-between mb-1">
-                      <h4 className="font-semibold text-[15px] group-hover:text-blue-600 transition-colors truncate text-foreground">{salon.name}</h4>
-                      <div className="flex items-center gap-1 text-xs font-bold text-foreground">
-                        <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-                        {salon.rating}
-                      </div>
+        <Card>
+            <CardHeader className="pb-2">
+                <CardDescription>Upcoming Appointment</CardDescription>
+                <CardTitle className="text-xl">Today, 14:00</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <div className="flex items-center gap-3 mt-1">
+                    <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center">
+                        <Scissors className="w-5 h-5 text-primary" />
                     </div>
-                    <p className="text-xs text-muted-foreground mb-3">{salon.location}</p>
-                    <button className="text-xs font-bold text-foreground hover:text-blue-600 transition-colors flex items-center gap-1 group/btn">
-                      Book Now <ChevronRight className="w-3 h-3 group-hover/btn:translate-x-0.5 transition-transform" />
-                    </button>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-
-          {/* Style Quiz CTA */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="p-8 rounded-[32px] bg-gradient-to-br from-violet-600 to-indigo-700 text-white space-y-6 shadow-xl relative overflow-hidden group"
-          >
-            <div className="absolute top-0 right-0 w-64 h-64 bg-card/10 blur-[60px] rounded-full -mr-32 -mt-32" />
-            <div className="relative z-10">
-              <div className="w-14 h-14 rounded-2xl bg-card/20 backdrop-blur-md flex items-center justify-center mb-4">
-                <Sparkles className="w-7 h-7 text-white" />
-              </div>
-              <h3 className="text-2xl font-semibold mb-2 font-display">Uncover Your Style Persona</h3>
-              <p className="text-white/80 text-sm leading-relaxed mb-6">
-                Take our 2-minute visual quiz and let our AI build your unique fashion DNA for hyper-personalized recommendations.
-              </p>
-              <button className="w-full py-4 rounded-2xl bg-card text-foreground text-[15px] font-bold hover:bg-violet-50 transition-all active:scale-[0.98] shadow-lg">
-                Start Style Quiz
-              </button>
-            </div>
-          </motion.div>
-
-          {/* AI Stylist Preview */}
-          <div className="p-8 rounded-[32px] bg-card border border-border space-y-6 shadow-sm relative overflow-hidden group">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-violet-500/5 blur-[40px] rounded-full -mr-16 -mt-16" />
-            <div className="w-14 h-14 rounded-2xl bg-violet-100 dark:bg-violet-950/30 flex items-center justify-center text-violet-600 dark:text-violet-400">
-              <Sparkles className="w-7 h-7" />
-            </div>
-            <div>
-              <h3 className="text-xl font-semibold mb-2 font-display text-foreground">AI Stylist Picks</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Based on your unique style DNA, we&apos;ve found 3 new outfits that match your profile.
-              </p>
-            </div>
-            <div className="flex gap-3">
-              {[1,2,3].map(i => (
-                <div key={i} className="flex-1 aspect-square rounded-2xl bg-secondary overflow-hidden border border-border group-hover:border-violet-200 transition-colors">
-                  <img src={`https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=200&h=200&fit=crop&q=80&sig=${i}`} alt="recom" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                    <div>
+                        <p className="text-sm font-medium">Hair Spa & Styling</p>
+                        <p className="text-xs text-muted-foreground">Aura Luxury Spa</p>
+                    </div>
                 </div>
-              ))}
+            </CardContent>
+        </Card>
+
+        <Card>
+            <CardHeader className="pb-2">
+                <CardDescription>Active Orders</CardDescription>
+                <CardTitle className="text-xl">2 Items</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <div className="flex items-center gap-3 mt-1">
+                    <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center">
+                        <Package className="w-5 h-5 text-blue-500" />
+                    </div>
+                    <div>
+                        <p className="text-sm font-medium">Out for Delivery</p>
+                        <p className="text-xs text-muted-foreground">Arriving by 6 PM</p>
+                    </div>
+                </div>
+            </CardContent>
+        </Card>
+
+        <Card className="border-dashed border-2 bg-secondary/30 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-secondary/50 transition-colors">
+            <CardContent className="flex flex-col items-center justify-center h-full pt-6">
+                <div className="w-12 h-12 rounded-full bg-background flex items-center justify-center mb-3 shadow-sm">
+                    <Sparkles className="w-6 h-6 text-rose-500" />
+                </div>
+                <h3 className="font-semibold text-foreground">New Style Quiz</h3>
+                <p className="text-xs text-muted-foreground mt-1">Unlock 50 points</p>
+            </CardContent>
+        </Card>
+      </div>
+
+      {/* 3. Main Dashboard Content Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+        {/* Left Column (Main Content) */}
+        <div className="lg:col-span-8 space-y-8">
+
+            {/* Spending Chart Section */}
+            <Card>
+                <CardHeader>
+                    <CardTitle>Spending Overview</CardTitle>
+                    <CardDescription>Your spending activity over the last 6 months.</CardDescription>
+                </CardHeader>
+                <CardContent className="pl-0">
+                    <ChartContainer config={chartConfig} className="h-[250px] w-full">
+                        <BarChart data={spendingData}>
+                            <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="var(--border)" opacity={0.4} />
+                            <XAxis
+                                dataKey="month"
+                                tickLine={false}
+                                tickMargin={10}
+                                axisLine={false}
+                                tickFormatter={(value) => value}
+                            />
+                            <ChartTooltip content={<ChartTooltipContent indicator="line" />} cursor={{fill: 'transparent'}} />
+                            <Bar dataKey="amount" fill="var(--color-amount)" radius={[4, 4, 0, 0]} maxBarSize={50} />
+                        </BarChart>
+                    </ChartContainer>
+                </CardContent>
+            </Card>
+
+            {/* Management Tabs */}
+            <Tabs defaultValue="appointments" className="w-full">
+                <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-xl font-semibold">Recent Activity</h2>
+                    <TabsList>
+                        <TabsTrigger value="appointments">Appointments</TabsTrigger>
+                        <TabsTrigger value="orders">Orders</TabsTrigger>
+                        <TabsTrigger value="wishlist">Wishlist</TabsTrigger>
+                    </TabsList>
+                </div>
+
+                <TabsContent value="appointments" className="space-y-4">
+                    {appointments.map((apt) => (
+                        <div key={apt.id} className="flex items-center justify-between p-4 rounded-xl border border-border bg-card hover:shadow-sm transition-all">
+                            <div className="flex items-center gap-4">
+                                <div className="w-12 h-12 rounded-full bg-violet-100 dark:bg-violet-900/20 text-violet-600 flex items-center justify-center">
+                                    <Scissors className="w-5 h-5" />
+                                </div>
+                                <div>
+                                    <h4 className="font-semibold">{apt.service}</h4>
+                                    <p className="text-sm text-muted-foreground flex items-center gap-2">
+                                        <span>{apt.salon}</span> • <span>{apt.date}, {apt.time}</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <Badge variant={apt.status === "Confirmed" ? "default" : "secondary"}>
+                                {apt.status}
+                            </Badge>
+                        </div>
+                    ))}
+                    <Button variant="ghost" className="w-full text-muted-foreground">View All Appointments</Button>
+                </TabsContent>
+
+                <TabsContent value="orders" className="space-y-4">
+                    {orders.map((order) => (
+                        <div key={order.id} className="flex items-center justify-between p-4 rounded-xl border border-border bg-card hover:shadow-sm transition-all">
+                            <div className="flex items-center gap-4">
+                                <div className="w-12 h-12 rounded-full bg-rose-100 dark:bg-rose-900/20 text-rose-600 flex items-center justify-center">
+                                    <ShoppingBag className="w-5 h-5" />
+                                </div>
+                                <div>
+                                    <h4 className="font-semibold">{order.items}</h4>
+                                    <p className="text-sm text-muted-foreground">
+                                        Order {order.id} • {order.date}
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="text-right">
+                                <p className="font-semibold">{order.total}</p>
+                                <p className="text-xs text-green-600 font-medium">{order.status}</p>
+                            </div>
+                        </div>
+                    ))}
+                    <Button variant="ghost" className="w-full text-muted-foreground">View Order History</Button>
+                </TabsContent>
+
+                 <TabsContent value="wishlist">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                        {[1, 2, 3].map((i) => (
+                            <div key={i} className="group relative rounded-xl overflow-hidden border border-border aspect-[3/4]">
+                                <img src={`https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300&h=400&fit=crop&sig=${i}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                    <Button size="sm" variant="secondary">View Item</Button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </TabsContent>
+            </Tabs>
+
+            {/* Discovery / Marketplace Section */}
+            <section className="space-y-6 pt-4">
+                <div className="flex items-center justify-between">
+                    <h2 className="text-xl font-semibold flex items-center gap-2">
+                        <ShoppingBag className="w-5 h-5 text-rose-500" />
+                        Featured Collections
+                    </h2>
+                    <Button variant="ghost" size="sm" className="text-muted-foreground">View All <ChevronRight className="w-4 h-4 ml-1" /></Button>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    {featuredCollections.map((item, i) => (
+                    <motion.div
+                        key={item.title}
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.1 * i }}
+                        className="group cursor-pointer"
+                    >
+                        <div className="relative aspect-[4/5] rounded-2xl overflow-hidden mb-3 shadow-sm border border-border">
+                        <img
+                            src={item.image}
+                            alt={item.title}
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                        />
+                        <button className="absolute top-3 right-3 p-2 rounded-full bg-background/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity shadow-sm">
+                            <Heart className="w-4 h-4 text-foreground" />
+                        </button>
+                        </div>
+                        <h3 className="font-semibold text-sm truncate text-foreground">{item.title}</h3>
+                        <p className="text-xs text-muted-foreground mt-0.5">{item.designer}</p>
+                        <p className="font-bold text-sm mt-1 text-rose-600">{item.price}</p>
+                    </motion.div>
+                    ))}
+                </div>
+            </section>
+
+        </div>
+
+        {/* Right Column (Sidebar) */}
+        <div className="lg:col-span-4 space-y-8">
+
+            {/* Quick Actions Grid */}
+            <div className="grid grid-cols-2 gap-3">
+                 {[
+                  { title: "Book Salon", icon: Scissors, color: "text-blue-600", bg: "bg-blue-50 dark:bg-blue-900/20" },
+                  { title: "AI Stylist", icon: Sparkles, color: "text-violet-600", bg: "bg-violet-50 dark:bg-violet-900/20" },
+                  { title: "Virtual Fit", icon: TrendingUp, color: "text-rose-600", bg: "bg-rose-50 dark:bg-rose-900/20" },
+                  { title: "Gift Cards", icon: Gift, color: "text-emerald-600", bg: "bg-emerald-50 dark:bg-emerald-900/20" },
+                ].map((action) => (
+                    <button key={action.title} className={`flex flex-col items-center justify-center p-4 rounded-xl border border-border hover:shadow-md transition-all ${action.bg}`}>
+                        <action.icon className={`w-6 h-6 mb-2 ${action.color}`} />
+                        <span className="text-sm font-medium text-foreground">{action.title}</span>
+                    </button>
+                ))}
             </div>
-            <button className="w-full py-4 rounded-2xl bg-foreground dark:bg-primary text-white dark:text-primary-foreground text-[15px] font-bold hover:bg-[#333] dark:hover:opacity-90 transition-all active:scale-[0.98] shadow-lg shadow-foreground/10">
-              Explore Your Style
-            </button>
-          </div>
+
+            {/* Promotional Banner (Live Commerce) */}
+             <motion.div
+                whileHover={{ scale: 1.01 }}
+                className="relative rounded-[24px] overflow-hidden bg-foreground text-white p-6 shadow-xl border border-border"
+              >
+                <div className="relative z-10">
+                  <div className="inline-flex items-center gap-2 px-2 py-0.5 rounded-full bg-rose-500 text-[10px] font-bold uppercase tracking-wider mb-3">
+                    <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                    Live
+                  </div>
+                  <h3 className="text-2xl font-semibold mb-2 font-display leading-tight">Winter Sale Live</h3>
+                  <p className="text-white/70 text-sm mb-4">
+                    Join top creators & shop instantly.
+                  </p>
+                  <Button size="sm" variant="secondary" className="w-full rounded-full font-bold">
+                    Watch Now <Video className="w-3 h-3 ml-2" />
+                  </Button>
+                </div>
+                <div className="absolute right-0 top-0 bottom-0 w-1/2 overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-r from-foreground via-transparent to-transparent z-10" />
+                  <img
+                    src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&h=600&fit=crop"
+                    alt="Live Commerce"
+                    className="w-full h-full object-cover opacity-60"
+                  />
+                </div>
+              </motion.div>
+
+            {/* Nearby Salons (Compact) */}
+            <div className="bg-card rounded-2xl border border-border p-5 space-y-4">
+                <div className="flex items-center justify-between">
+                    <h3 className="font-semibold text-base">Nearby Salons</h3>
+                    <Button variant="link" size="sm" className="h-auto p-0 text-xs">View Map</Button>
+                </div>
+                <div className="space-y-4">
+                    {nearbySalons.map((salon) => (
+                        <div key={salon.name} className="flex gap-3 items-start group cursor-pointer">
+                            <div className="w-16 h-16 rounded-lg overflow-hidden shrink-0 bg-secondary">
+                                <img src={salon.image} className="w-full h-full object-cover group-hover:scale-110 transition-transform" />
+                            </div>
+                            <div>
+                                <h4 className="font-semibold text-sm group-hover:text-primary transition-colors">{salon.name}</h4>
+                                <div className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
+                                    <MapPin className="w-3 h-3" /> {salon.location}
+                                </div>
+                                <div className="flex items-center gap-1 text-xs font-bold mt-1 text-amber-500">
+                                    <Star className="w-3 h-3 fill-current" /> {salon.rating}
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+                <Button variant="outline" className="w-full rounded-xl">Find More Salons</Button>
+            </div>
+
+            {/* Payment Method / Quick Info */}
+            <div className="bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-2xl p-5 shadow-lg">
+                <div className="flex justify-between items-start mb-6">
+                    <div className="w-10 h-6 bg-white/20 rounded-md"></div>
+                    <CreditCard className="w-5 h-5 text-white/50" />
+                </div>
+                <p className="text-white/60 text-xs uppercase tracking-wider mb-1">Total Balance</p>
+                <h3 className="text-2xl font-mono">₹12,450.00</h3>
+            </div>
+
         </div>
       </div>
     </div>
