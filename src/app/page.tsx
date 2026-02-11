@@ -147,16 +147,6 @@ const testimonials = [
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
   const [activeFeature, setActiveFeature] = useState(0);
-  const [isJoined, setIsJoined] = useState(false);
-
-  const scrollToWaitlist = () => {
-    document.getElementById("waitlist-form")?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  const handleWaitlistSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsJoined(true);
-  };
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
   const featuresRef = useRef<HTMLDivElement>(null);
@@ -381,8 +371,8 @@ export default function Home() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-[17px] md:text-[21px] text-[#6b6b6b] max-w-[540px] mx-auto mt-6 leading-relaxed"
           >
-            Experience the future of fashion. Join the waitlist for early access
-            to our AI-powered fashion ecosystem.
+            Experience the future of fashion. Explore our AI-powered ecosystem
+            and discover the intelligence behind style.
           </motion.p>
 
           <motion.div
@@ -391,31 +381,14 @@ export default function Home() {
             transition={{ duration: 0.8, delay: 0.3 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10 w-full max-w-[600px] mx-auto"
           >
-            {isJoined ? (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="flex-1 h-14 flex items-center justify-center px-6 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 font-medium"
+            <Link href="/app" className="flex-1 w-full group">
+              <button
+                className="w-full h-14 rounded-full bg-[#1a1a1a] text-white font-medium text-[17px] hover:bg-[#333] transition-all active:scale-[0.98] shadow-lg shadow-black/10 flex items-center justify-center gap-2"
               >
-                <CheckCircle2 className="w-5 h-5 mr-2" />
-                Thank you for joining our waitlist!
-              </motion.div>
-            ) : (
-              <form id="waitlist-form" onSubmit={handleWaitlistSubmit} className="relative flex-1 w-full group">
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="w-full h-14 px-6 rounded-full bg-white border border-[#e5e5e5] text-[17px] outline-none focus:border-[#1a1a1a] transition-all group-hover:border-[#d4d4d4]"
-                  required
-                />
-                <button
-                  type="submit"
-                  className="absolute right-1.5 top-1.5 bottom-1.5 px-6 rounded-full bg-[#1a1a1a] text-white font-medium text-[15px] hover:bg-[#333] transition-all active:scale-[0.98]"
-                >
-                  Join Waitlist
-                </button>
-              </form>
-            )}
+                Get Started
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </button>
+            </Link>
             <button className="w-full sm:w-auto px-8 py-4 h-14 rounded-full bg-white border border-[#e5e5e5] font-medium text-[17px] hover:bg-[#fafafa] transition-all hover:border-[#d4d4d4] active:scale-[0.98] flex items-center justify-center gap-2 group">
               <Play className="w-5 h-5 text-[#6b6b6b] group-hover:text-[#1a1a1a] transition-colors" />
               Watch Demo
@@ -966,35 +939,18 @@ export default function Home() {
             </h2>
             <p className="text-[#6b6b6b] text-[17px] md:text-[21px] max-w-[540px] mx-auto mb-10 leading-relaxed">
               Be the first to experience India&apos;s most intelligent fashion ecosystem.
-              Join the waitlist today for early access.
+              Start your journey today.
             </p>
             
             <div className="max-w-[480px] mx-auto">
-              {isJoined ? (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="h-14 flex items-center justify-center px-6 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 font-medium"
+              <Link href="/app" className="group">
+                <button
+                  className="w-full h-14 rounded-full bg-[#1a1a1a] text-white font-medium text-[17px] hover:bg-[#333] transition-all active:scale-[0.98] shadow-lg shadow-black/10 flex items-center justify-center gap-2"
                 >
-                  <CheckCircle2 className="w-5 h-5 mr-2" />
-                  You&apos;re on the list!
-                </motion.div>
-              ) : (
-                <form onSubmit={handleWaitlistSubmit} className="relative group">
-                  <input
-                    type="email"
-                    placeholder="Enter your email"
-                    className="w-full h-14 px-6 rounded-full bg-white border border-[#e5e5e5] text-[17px] outline-none focus:border-[#1a1a1a] transition-all group-hover:border-[#d4d4d4]"
-                    required
-                  />
-                  <button
-                    type="submit"
-                    className="absolute right-1.5 top-1.5 bottom-1.5 px-6 rounded-full bg-[#1a1a1a] text-white font-medium text-[15px] hover:bg-[#333] transition-all active:scale-[0.98]"
-                  >
-                    Join Waitlist
-                  </button>
-                </form>
-              )}
+                  Get Started
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </button>
+              </Link>
             </div>
           </motion.div>
         </div>
