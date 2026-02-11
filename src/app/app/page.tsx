@@ -2,15 +2,14 @@
 
 import { motion } from "framer-motion";
 import {
-  ShoppingBag,
   Scissors,
   Video,
   Sparkles,
-  ArrowRight,
   ChevronRight,
   Star,
   Heart,
-  TrendingUp
+  TrendingUp,
+  SlidersHorizontal
 } from "lucide-react";
 import { useState } from "react";
 
@@ -151,14 +150,32 @@ export default function AppPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
         {/* Marketplace Feed */}
         <div className="lg:col-span-2 space-y-12">
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-semibold flex items-center gap-2 font-display tracking-tight">
-              <ShoppingBag className="w-6 h-6 text-rose-500" />
-              Featured Marketplace
-            </h2>
-            <button className="text-sm font-medium text-[#6b6b6b] hover:text-[#1a1a1a] flex items-center gap-1 transition-colors">
-              View All <ChevronRight className="w-4 h-4" />
-            </button>
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div className="space-y-1">
+              <h2 className="text-4xl font-display tracking-tight text-[#1a1a1a]">
+                Curated for <span className="italic text-gradient-color">You</span>
+              </h2>
+              <p className="text-[#6b6b6b] text-base max-w-md">
+                Discover products matched to your style profile and content interactions.
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center gap-2">
+              <button className="px-5 py-2.5 rounded-full bg-[#1a1a1a] text-white text-sm font-medium transition-all hover:bg-[#333]">
+                AI Recommendations
+              </button>
+              {["New In", "Trending", "Sustainable"].map((filter) => (
+                <button
+                  key={filter}
+                  className="px-5 py-2.5 rounded-full bg-white border border-[#e5e5e5] text-[#1a1a1a] text-sm font-medium transition-all hover:bg-[#f5f5f5]"
+                >
+                  {filter}
+                </button>
+              ))}
+              <button className="px-5 py-2.5 rounded-full bg-white border border-[#e5e5e5] text-[#1a1a1a] text-sm font-medium transition-all hover:bg-[#f5f5f5] flex items-center gap-2">
+                Filters
+                <SlidersHorizontal className="w-3.5 h-3.5" />
+              </button>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
