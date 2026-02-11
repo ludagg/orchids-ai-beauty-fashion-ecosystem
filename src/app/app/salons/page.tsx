@@ -1,0 +1,213 @@
+"use client";
+
+import { motion } from "framer-motion";
+import {
+  Scissors,
+  Search,
+  MapPin,
+  Star,
+  ChevronRight,
+  Clock,
+  Calendar,
+  Filter,
+  Navigation
+} from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
+
+const categories = ["All", "Hair", "Skin", "Spa", "Nails", "Grooming"];
+
+const salons = [
+  {
+    id: "1",
+    name: "Aura Luxury Spa",
+    location: "Indiranagar, Bangalore",
+    rating: 4.9,
+    reviews: 420,
+    image: "https://images.unsplash.com/photo-1600948836101-f9ffda59d250?w=400&h=300&fit=crop",
+    tags: ["Spa", "Facial", "Massage"],
+    price: "$$$",
+    distance: "1.2 km"
+  },
+  {
+    id: "2",
+    name: "The Grooming Co.",
+    location: "Koramangala, Bangalore",
+    rating: 4.8,
+    reviews: 315,
+    image: "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=400&h=300&fit=crop",
+    tags: ["Haircut", "Beard", "Shave"],
+    price: "$$",
+    distance: "2.5 km"
+  },
+  {
+    id: "3",
+    name: "Noir Salon",
+    location: "MG Road, Bangalore",
+    rating: 4.7,
+    reviews: 512,
+    image: "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=400&h=300&fit=crop",
+    tags: ["Coloring", "Styling", "Treatments"],
+    price: "$$$$",
+    distance: "3.8 km"
+  },
+  {
+    id: "4",
+    name: "Eco Beauty Hub",
+    location: "HSR Layout, Bangalore",
+    rating: 4.9,
+    reviews: 128,
+    image: "https://images.unsplash.com/photo-1522337660859-02fbefca4702?w=400&h=300&fit=crop",
+    tags: ["Organic", "Skincare", "Eco-friendly"],
+    price: "$$",
+    distance: "5.1 km"
+  }
+];
+
+export default function SalonsPage() {
+  const [selectedCategory, setSelectedCategory] = useState("All");
+
+  return (
+    <div className="p-4 sm:p-6 lg:p-8 space-y-8 max-w-[1400px] mx-auto w-full">
+      {/* Header Section */}
+      <section className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+          <h1 className="text-3xl sm:text-4xl font-semibold font-display tracking-tight text-[#1a1a1a]">Nearby Salons</h1>
+          <p className="text-[#6b6b6b] mt-1 text-base">Book verified beauty services instantly.</p>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <div className="relative group hidden sm:block">
+            <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b6b6b]" />
+            <input
+              type="text"
+              placeholder="Your Location"
+              className="pl-9 pr-4 py-2.5 rounded-xl border border-[#e5e5e5] bg-white text-sm focus:ring-2 focus:ring-[#1a1a1a]/5 transition-all outline-none w-48"
+              defaultValue="Bangalore"
+            />
+          </div>
+          <button className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-[#e5e5e5] bg-white text-sm font-medium hover:bg-[#f5f5f5] transition-all">
+            <Filter className="w-4 h-4" />
+            Filters
+          </button>
+        </div>
+      </section>
+
+      {/* Search Bar - Mobile optimized */}
+      <section className="relative">
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#6b6b6b]" />
+        <input
+          type="text"
+          placeholder="Search for services or salon names..."
+          className="w-full pl-12 pr-4 py-4 rounded-2xl bg-white border border-[#e5e5e5] focus:border-[#1a1a1a] shadow-sm transition-all outline-none text-lg"
+        />
+      </section>
+
+      {/* Categories Scroll */}
+      <section className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar">
+        {categories.map((category) => (
+          <button
+            key={category}
+            onClick={() => setSelectedCategory(category)}
+            className={`px-6 py-2.5 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
+              selectedCategory === category
+                ? "bg-blue-600 text-white shadow-lg shadow-blue-200"
+                : "bg-white border border-[#e5e5e5] text-[#6b6b6b] hover:border-blue-600 hover:text-blue-600"
+            }`}
+          >
+            {category}
+          </button>
+        ))}
+      </section>
+
+      {/* Salon List */}
+      <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {salons.map((salon, i) => (
+          <motion.div
+            key={salon.id}
+            initial={{ opacity: 0, x: i % 2 === 0 ? -20 : 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: i * 0.1 }}
+          >
+            <Link
+              href={`/app/salons/${salon.id}`}
+              className="flex flex-col sm:flex-row gap-5 p-4 rounded-3xl bg-white border border-[#e5e5e5] hover:shadow-xl hover:shadow-black/5 transition-all group overflow-hidden"
+            >
+              <div className="w-full sm:w-48 h-48 rounded-2xl overflow-hidden flex-shrink-0 bg-[#f5f5f5] shadow-inner relative">
+                <img src={salon.image} alt={salon.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                <div className="absolute top-3 left-3 px-2 py-1 rounded-lg bg-white/90 backdrop-blur-md text-[10px] font-bold flex items-center gap-1 shadow-sm">
+                  <Navigation className="w-3 h-3 text-blue-600" />
+                  {salon.distance}
+                </div>
+              </div>
+
+              <div className="flex-1 flex flex-col justify-between py-1">
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-xl font-bold text-[#1a1a1a] group-hover:text-blue-600 transition-colors">{salon.name}</h3>
+                    <div className="flex items-center gap-1 text-sm font-bold bg-amber-50 text-amber-700 px-2 py-0.5 rounded-lg border border-amber-100">
+                      <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
+                      {salon.rating}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-1.5 text-sm text-[#6b6b6b]">
+                    <MapPin className="w-4 h-4" />
+                    {salon.location}
+                  </div>
+
+                  <div className="flex flex-wrap gap-2 pt-2">
+                    {salon.tags.map(tag => (
+                      <span key={tag} className="px-2.5 py-1 rounded-lg bg-[#f5f5f5] text-[11px] font-bold text-[#6b6b6b] uppercase tracking-wider">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between mt-6 sm:mt-0 pt-4 border-t border-[#f5f5f5] sm:border-0">
+                  <div>
+                    <p className="text-xs font-bold text-[#c4c4c4] uppercase tracking-widest mb-0.5">Starting From</p>
+                    <p className="font-bold text-[#1a1a1a]">{salon.price}</p>
+                  </div>
+                  <button className="px-5 py-2.5 rounded-xl bg-[#1a1a1a] text-white text-sm font-bold hover:bg-blue-600 transition-all flex items-center gap-2 shadow-lg shadow-black/5">
+                    Book Now <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            </Link>
+          </motion.div>
+        ))}
+      </section>
+
+      {/* Promotions Section */}
+      <motion.div
+        whileHover={{ scale: 1.01 }}
+        className="rounded-[40px] bg-gradient-to-br from-blue-600 to-indigo-700 p-8 sm:p-12 text-white relative overflow-hidden shadow-2xl shadow-blue-200"
+      >
+        <div className="relative z-10 max-w-lg">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-[10px] font-bold uppercase tracking-widest mb-6">
+            <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+            Limited Offer
+          </div>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold font-display mb-6 leading-tight">First Booking? <br/>Get 30% Off</h2>
+          <p className="text-white/80 text-lg mb-8 leading-relaxed">
+            Experience premium beauty services at any of our partner salons and enjoy exclusive discounts on your first visit.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <button className="px-8 py-4 rounded-2xl bg-white text-blue-600 font-bold hover:bg-white/90 transition-all flex items-center justify-center gap-2">
+              Claim Offer <ChevronRight className="w-4 h-4" />
+            </button>
+            <button className="px-8 py-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-white font-bold hover:bg-white/20 transition-all">
+              Learn More
+            </button>
+          </div>
+        </div>
+
+        {/* Decorative Blobs */}
+        <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[70%] bg-white/10 blur-[80px] rounded-full rotate-12" />
+        <div className="absolute bottom-[-20%] right-[10%] w-[30%] h-[40%] bg-blue-400/20 blur-[60px] rounded-full" />
+      </motion.div>
+    </div>
+  );
+}
