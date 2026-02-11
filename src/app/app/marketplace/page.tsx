@@ -122,6 +122,35 @@ export default function MarketplacePage() {
         ))}
       </section>
 
+      {/* Curated for You Section */}
+      <section className="space-y-6">
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-semibold font-display tracking-tight">
+            Curated for <span className="bg-gradient-to-r from-violet-600 to-rose-600 bg-clip-text text-transparent">You</span>
+          </h2>
+          <button className="text-sm font-medium text-rose-600 hover:text-rose-700 transition-colors">
+            Refine Profile
+          </button>
+        </div>
+        <div className="flex gap-4 sm:gap-6 overflow-x-auto pb-4 no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
+          {products.slice(0, 4).map((product, i) => (
+            <div key={`curated-${product.id}`} className="flex-shrink-0 w-[240px] sm:w-[280px] group cursor-pointer">
+              <div className="relative aspect-[4/5] rounded-[32px] overflow-hidden mb-3 border border-[#e5e5e5] bg-white shadow-sm">
+                <img src={product.image} alt={product.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                <div className="absolute top-4 right-4">
+                  <div className="px-3 py-1 rounded-full bg-white/90 backdrop-blur-md text-[10px] font-bold text-rose-600 uppercase tracking-wider">
+                    95% Match
+                  </div>
+                </div>
+              </div>
+              <h3 className="font-semibold text-sm truncate">{product.title}</h3>
+              <p className="text-xs text-[#6b6b6b] mb-1">{product.designer}</p>
+              <p className="font-bold text-sm text-[#1a1a1a]">{product.price}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Product Grid */}
       <section className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
         {products.map((product, i) => (

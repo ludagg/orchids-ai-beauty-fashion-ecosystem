@@ -18,6 +18,9 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import BottomNav from "@/components/BottomNav";
+import SearchBar from "@/components/SearchBar";
+import NotificationBell from "@/components/NotificationBell";
+import UserAccount from "@/components/UserAccount";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 
@@ -99,13 +102,22 @@ export default function AppLayout({
       </aside>
 
       {/* Mobile Nav */}
-      <header className="lg:hidden h-16 border-b border-[#e5e5e5] bg-white/80 backdrop-blur-md sticky top-0 z-40 px-4 flex items-center justify-between">
-        <Link href="/" className="text-lg font-semibold font-display">
-          Priisme
-        </Link>
-        <button onClick={() => setMobileMenuOpen(true)} className="p-2">
-          <Menu className="w-6 h-6" />
-        </button>
+      <header className="lg:hidden bg-white/80 backdrop-blur-md sticky top-0 z-40 border-b border-[#e5e5e5]">
+        <div className="h-16 px-4 flex items-center justify-between">
+          <Link href="/" className="text-lg font-semibold font-display">
+            Priisme
+          </Link>
+          <div className="flex items-center gap-1">
+            <NotificationBell />
+            <UserAccount showLabel={false} />
+            <button onClick={() => setMobileMenuOpen(true)} className="p-2 ml-1">
+              <Menu className="w-6 h-6" />
+            </button>
+          </div>
+        </div>
+        <div className="px-4 pb-3">
+          <SearchBar value={searchQuery} onChange={setSearchQuery} />
+        </div>
       </header>
 
       {/* Mobile Menu Overlay */}
@@ -158,31 +170,16 @@ export default function AppLayout({
       <div className="flex-1 min-w-0 flex flex-col relative overflow-x-hidden">
         {/* Header - Desktop Search */}
         <header className="hidden lg:flex h-16 border-b border-[#e5e5e5] bg-white/80 backdrop-blur-md sticky top-0 z-30 px-6 items-center justify-between">
-          <div className="flex-1 max-w-xl relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b6b6b]" />
-            <input
-              type="text"
-              placeholder="Search fashion, salons, styles..."
-              className="w-full pl-10 pr-4 py-2 bg-[#f5f5f5] border-transparent focus:bg-white focus:border-[#e5e5e5] rounded-full text-sm transition-all outline-none"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
+          <div className="flex-1 max-w-xl">
+            <SearchBar value={searchQuery} onChange={setSearchQuery} />
           </div>
 
           <div className="flex items-center gap-4 ml-4">
             <Link href="/app/wishlist" className="p-2 rounded-full hover:bg-[#f5f5f5] transition-colors relative">
               <Heart className={`w-5 h-5 ${pathname === '/app/wishlist' ? 'text-rose-500 fill-rose-500' : 'text-[#6b6b6b]'}`} />
             </Link>
-            <button className="p-2 rounded-full hover:bg-[#f5f5f5] transition-colors relative">
-              <Bell className="w-5 h-5 text-[#6b6b6b]" />
-              <span className="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full border-2 border-white"></span>
-            </button>
-            <button className="flex items-center gap-2 p-1.5 pr-3 rounded-full hover:bg-[#f5f5f5] transition-colors border border-transparent hover:border-[#e5e5e5]">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-violet-500 to-rose-500 flex items-center justify-center text-white font-medium text-xs">
-                JD
-              </div>
-              <span className="text-sm font-medium hidden sm:inline">Guest User</span>
-            </button>
+            <NotificationBell />
+            <UserAccount />
           </div>
         </header>
 
