@@ -21,6 +21,13 @@ import {
   Zap,
   Heart
 } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import ProgrammaticVideo from "@/components/ProgrammaticVideo";
 
 const navItems = ["Features", "AI", "Marketplace", "Salons", "Testimonials"];
 
@@ -147,6 +154,7 @@ export default function Home() {
   const [scrolled, setScrolled] = useState(false);
   const [activeFeature, setActiveFeature] = useState(0);
   const [isJoined, setIsJoined] = useState(false);
+  const [isVideoOpen, setIsVideoOpen] = useState(false);
 
   const scrollToWaitlist = () => {
     document.getElementById("waitlist-form")?.scrollIntoView({ behavior: "smooth" });
@@ -418,7 +426,10 @@ export default function Home() {
                 </button>
               </form>
             )}
-            <button className="w-full sm:w-auto px-8 py-4 h-14 rounded-full bg-white border border-[#e5e5e5] font-medium text-[17px] hover:bg-[#fafafa] transition-all hover:border-[#d4d4d4] active:scale-[0.98] flex items-center justify-center gap-2 group">
+            <button
+              onClick={() => setIsVideoOpen(true)}
+              className="w-full sm:w-auto px-8 py-4 h-14 rounded-full bg-white border border-[#e5e5e5] font-medium text-[17px] hover:bg-[#fafafa] transition-all hover:border-[#d4d4d4] active:scale-[0.98] flex items-center justify-center gap-2 group"
+            >
               <Play className="w-5 h-5 text-[#6b6b6b] group-hover:text-[#1a1a1a] transition-colors" />
               Watch Demo
             </button>
@@ -449,9 +460,13 @@ export default function Home() {
           <div className="relative aspect-[16/9] rounded-3xl overflow-hidden bg-gradient-to-br from-[#f5f5f5] to-white shadow-2xl shadow-black/10 border border-[#e5e5e5]">
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-center">
-                <div className="w-20 h-20 mx-auto rounded-full bg-[#1a1a1a] flex items-center justify-center cursor-pointer hover:scale-110 transition-transform shadow-xl">
+                <button
+                  onClick={() => setIsVideoOpen(true)}
+                  className="w-20 h-20 mx-auto rounded-full bg-[#1a1a1a] flex items-center justify-center cursor-pointer hover:scale-110 transition-transform shadow-xl outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-black"
+                  aria-label="Watch Demo Video"
+                >
                   <Play className="w-8 h-8 text-white ml-1" />
-                </div>
+                </button>
                 <p className="mt-4 text-[#6b6b6b] text-sm">Watch how Priisme works</p>
               </div>
             </div>
@@ -1036,6 +1051,28 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <Dialog open={isVideoOpen} onOpenChange={setIsVideoOpen}>
+        <DialogContent
+          showCloseButton={false}
+          className="max-w-none sm:max-w-none w-screen h-screen p-0 border-none bg-black rounded-none top-0 left-0 translate-x-0 translate-y-0 duration-500 overflow-hidden z-[100]"
+        >
+          <DialogTitle className="sr-only">Product Demo Video</DialogTitle>
+          <DialogDescription className="sr-only">
+            A programmatic motion sequence showing Priisme features.
+          </DialogDescription>
+          <div className="w-full h-full relative">
+            <ProgrammaticVideo />
+            <button
+              onClick={() => setIsVideoOpen(false)}
+              className="absolute top-6 right-6 p-2 rounded-full bg-white/10 text-white/70 hover:bg-white/20 hover:text-white transition-all z-[110] group"
+              aria-label="Close video"
+            >
+              <X className="w-6 h-6 transition-transform group-hover:scale-110" />
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       <footer className="py-16 bg-[#fafafa] border-t border-[#e5e5e5]">
         <div className="max-w-[1100px] mx-auto px-6">
