@@ -1,14 +1,15 @@
 "use client";
 
+import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
-import { 
-  ArrowRight, 
-  Play, 
-  ChevronRight, 
-  ShoppingBag, 
-  Scissors, 
-  Video, 
+import {
+  ArrowRight,
+  Play,
+  ChevronRight,
+  ShoppingBag,
+  Scissors,
+  Video,
   Sparkles,
   Menu,
   X,
@@ -233,15 +234,16 @@ export default function Home() {
             </div>
 
             <div className="flex items-center gap-4">
-              <motion.button
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                onClick={scrollToWaitlist}
-                className="hidden sm:block px-4 py-2 rounded-full bg-[#1a1a1a] text-white text-sm font-medium hover:bg-[#333] transition-all hover:shadow-lg hover:shadow-black/20 active:scale-95"
-              >
-                Join Waitlist
-              </motion.button>
-              <button 
+              <Link href="/auth">
+                <motion.button
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="hidden sm:block px-4 py-2 rounded-full bg-[#1a1a1a] text-white text-sm font-medium hover:bg-[#333] transition-all hover:shadow-lg hover:shadow-black/20 active:scale-95"
+                >
+                  Sign In
+                </motion.button>
+              </Link>
+              <button
                 className="md:hidden p-2 -mr-2"
                 onClick={() => setMobileMenuOpen(true)}
               >
@@ -289,15 +291,11 @@ export default function Home() {
                 </ul>
               </nav>
               <div className="px-6 py-8 border-t border-[#e5e5e5] space-y-3">
-                <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    scrollToWaitlist();
-                  }}
-                  className="w-full py-4 rounded-2xl bg-[#1a1a1a] text-white font-medium hover:bg-[#333] transition-colors"
-                >
-                  Join Waitlist
-                </button>
+                <Link href="/auth" onClick={() => setMobileMenuOpen(false)}>
+                  <button className="w-full py-4 rounded-2xl bg-[#1a1a1a] text-white font-medium hover:bg-[#333] transition-colors">
+                    Sign In
+                  </button>
+                </Link>
               </div>
             </div>
           </motion.div>
