@@ -9,6 +9,7 @@ import {
   Search,
   Bell,
   LayoutDashboard,
+  Compass,
   Settings,
   ArrowRight,
   ChevronRight,
@@ -28,7 +29,7 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 
 const sidebarItems = [
-  { icon: LayoutDashboard, label: "Dashboard", href: "/app" },
+  { icon: Compass, label: "Discover", href: "/app" },
   { icon: ShoppingBag, label: "Marketplace", href: "/app/marketplace" },
   { icon: Sparkles, label: "AI Stylist", href: "/app/ai-stylist" },
   { icon: Scissors, label: "Salons", href: "/app/salons" },
