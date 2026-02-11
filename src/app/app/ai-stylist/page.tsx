@@ -134,7 +134,7 @@ export default function AIStylistPage() {
                     }`}>
                       {msg.content}
                     </div>
-                    <p className={`text-[10px] font-bold text-[#c4c4c4] uppercase tracking-widest ${msg.type === "user" ? "text-right" : ""}`}>
+                    <p className={`text-[10px] font-bold text-muted-foreground/50 uppercase tracking-widest ${msg.type === "user" ? "text-right" : ""}`}>
                       {msg.timestamp}
                     </p>
                   </div>
@@ -189,7 +189,7 @@ export default function AIStylistPage() {
                 <Send className="w-5 h-5" />
               </button>
             </div>
-            <p className="text-center text-[11px] text-[#c4c4c4] mt-4 font-bold uppercase tracking-[0.2em]">
+            <p className="text-center text-[11px] text-muted-foreground/50 mt-4 font-bold uppercase tracking-[0.2em]">
               Powered by Priisme Style Engine v2.0
             </p>
           </div>

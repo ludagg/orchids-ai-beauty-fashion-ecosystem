@@ -100,7 +100,7 @@ export default function AppPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.1 }}
-            className="flex items-center gap-4 p-5 rounded-2xl bg-card border border-border hover:shadow-xl hover:shadow-black/5 hover:-translate-y-1 transition-all group text-left shadow-sm"
+            className="flex items-center gap-4 p-5 rounded-2xl bg-card border border-border hover:shadow-xl hover:shadow-foreground/5 hover:-translate-y-1 transition-all group text-left shadow-sm"
           >
             <div className={`w-12 h-12 rounded-xl ${item.bg} flex items-center justify-center ${item.color}`}>
               <item.icon className="w-6 h-6" />
@@ -223,23 +223,23 @@ export default function AppPage() {
           {/* Promo Banner */}
           <motion.div
             whileHover={{ scale: 1.01 }}
-            className="relative rounded-[32px] overflow-hidden bg-[#1a1a1a] dark:bg-card text-white p-8 sm:p-12 shadow-2xl shadow-black/20 border border-border"
+            className="relative rounded-[32px] overflow-hidden bg-foreground dark:bg-card text-white p-8 sm:p-12 shadow-2xl shadow-black/20 border border-border"
           >
             <div className="relative z-10 max-w-md">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500 text-[10px] font-bold uppercase tracking-wider mb-4">
-                <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                <span className="w-1.5 h-1.5 rounded-full bg-card animate-pulse" />
                 Live Now
               </div>
               <h3 className="text-3xl sm:text-4xl font-semibold mb-4 font-display leading-tight text-white">Video Commerce Experience</h3>
               <p className="text-white/70 text-base mb-8 leading-relaxed">
                 Watch top creators review the latest collections and shop instantly from the video feed.
               </p>
-              <button className="px-8 py-3.5 rounded-full bg-white text-[#1a1a1a] text-sm font-bold hover:bg-white/90 transition-all active:scale-95 flex items-center gap-2 shadow-xl shadow-white/10">
+              <button className="px-8 py-3.5 rounded-full bg-card text-foreground text-sm font-bold hover:bg-card/90 transition-all active:scale-95 flex items-center gap-2 shadow-xl shadow-white/10">
                 Join Live Stream <Video className="w-4 h-4" />
               </button>
             </div>
             <div className="absolute right-0 top-0 bottom-0 w-3/5 overflow-hidden hidden md:block">
-              <div className="absolute inset-0 bg-gradient-to-r from-[#1a1a1a] via-[#1a1a1a]/20 to-transparent z-10" />
+              <div className="absolute inset-0 bg-gradient-to-r from-background via-background/20 to-transparent z-10" />
               <img
                 src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&h=600&fit=crop"
                 alt="Live Commerce"
@@ -296,16 +296,16 @@ export default function AppPage() {
             animate={{ opacity: 1, scale: 1 }}
             className="p-8 rounded-[32px] bg-gradient-to-br from-violet-600 to-indigo-700 text-white space-y-6 shadow-xl relative overflow-hidden group"
           >
-            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 blur-[60px] rounded-full -mr-32 -mt-32" />
+            <div className="absolute top-0 right-0 w-64 h-64 bg-card/10 blur-[60px] rounded-full -mr-32 -mt-32" />
             <div className="relative z-10">
-              <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center mb-4">
+              <div className="w-14 h-14 rounded-2xl bg-card/20 backdrop-blur-md flex items-center justify-center mb-4">
                 <Sparkles className="w-7 h-7 text-white" />
               </div>
               <h3 className="text-2xl font-semibold mb-2 font-display">Uncover Your Style Persona</h3>
               <p className="text-white/80 text-sm leading-relaxed mb-6">
                 Take our 2-minute visual quiz and let our AI build your unique fashion DNA for hyper-personalized recommendations.
               </p>
-              <button className="w-full py-4 rounded-2xl bg-white text-[#1a1a1a] text-[15px] font-bold hover:bg-violet-50 transition-all active:scale-[0.98] shadow-lg">
+              <button className="w-full py-4 rounded-2xl bg-card text-foreground text-[15px] font-bold hover:bg-violet-50 transition-all active:scale-[0.98] shadow-lg">
                 Start Style Quiz
               </button>
             </div>
@@ -330,7 +330,7 @@ export default function AppPage() {
                 </div>
               ))}
             </div>
-            <button className="w-full py-4 rounded-2xl bg-[#1a1a1a] dark:bg-primary text-white dark:text-primary-foreground text-[15px] font-bold hover:bg-[#333] dark:hover:opacity-90 transition-all active:scale-[0.98] shadow-lg shadow-black/10">
+            <button className="w-full py-4 rounded-2xl bg-foreground dark:bg-primary text-white dark:text-primary-foreground text-[15px] font-bold hover:bg-[#333] dark:hover:opacity-90 transition-all active:scale-[0.98] shadow-lg shadow-foreground/10">
               Explore Your Style
             </button>
           </div>

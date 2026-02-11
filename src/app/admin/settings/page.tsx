@@ -121,7 +121,7 @@ export default function AdminSettingsPage() {
                         <p className="text-xs text-muted-foreground mt-0.5">{item.desc}</p>
                       </div>
                       <button className={`w-12 h-6 rounded-full relative transition-colors ${item.active ? 'bg-indigo-600' : 'bg-secondary-foreground/20'}`}>
-                        <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${item.active ? 'left-7' : 'left-1'}`} />
+                        <div className={`absolute top-1 w-4 h-4 bg-card rounded-full transition-all ${item.active ? 'left-7' : 'left-1'}`} />
                       </button>
                     </div>
                   ))}

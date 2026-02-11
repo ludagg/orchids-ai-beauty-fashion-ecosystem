@@ -423,7 +423,7 @@ export default function Home() {
           style={{ x: springX, y: springY }}
           className="relative w-full max-w-[1100px] mx-auto mt-16 px-6"
         >
-          <div className="relative aspect-[16/9] rounded-3xl overflow-hidden bg-gradient-to-br from-secondary to-card shadow-2xl shadow-black/10 border border-border">
+          <div className="relative aspect-[16/9] rounded-3xl overflow-hidden bg-gradient-to-br from-secondary to-card shadow-2xl shadow-foreground/10 border border-border">
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-center">
                 <div className="w-20 h-20 mx-auto rounded-full bg-primary flex items-center justify-center cursor-pointer hover:scale-110 transition-transform shadow-xl">
@@ -538,7 +538,7 @@ export default function Home() {
                       style={{ transformStyle: "preserve-3d" }}
                     >
                       <div 
-              className={`relative rounded-3xl overflow-hidden bg-card shadow-2xl transition-shadow duration-500 ${isActive ? "shadow-black/20 dark:shadow-white/5" : "shadow-black/10"}`}
+              className={`relative rounded-3xl overflow-hidden bg-card shadow-2xl transition-shadow duration-500 ${isActive ? "shadow-black/20 dark:shadow-white/5" : "shadow-foreground/10"}`}
                         style={{ 
                         border: isActive ? `2px solid ${feature.color}30` : "1px solid var(--border)",
                         }}
@@ -675,7 +675,7 @@ export default function Home() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
-                  className={`${sizeClasses[item.size as keyof typeof sizeClasses]} relative group p-6 rounded-3xl bg-card border border-border hover:shadow-xl hover:shadow-black/5 transition-all duration-500 hover:-translate-y-1 overflow-hidden cursor-pointer`}
+                  className={`${sizeClasses[item.size as keyof typeof sizeClasses]} relative group p-6 rounded-3xl bg-card border border-border hover:shadow-xl hover:shadow-foreground/5 transition-all duration-500 hover:-translate-y-1 overflow-hidden cursor-pointer`}
                 >
                   <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
                   <div className="relative z-10 h-full flex flex-col">
@@ -703,7 +703,7 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="text-center p-8 rounded-3xl bg-card border border-border hover:shadow-xl hover:shadow-black/5 transition-all duration-300 hover:-translate-y-1"
+                className="text-center p-8 rounded-3xl bg-card border border-border hover:shadow-xl hover:shadow-foreground/5 transition-all duration-300 hover:-translate-y-1"
               >
                 <p className="text-[48px] sm:text-[56px] md:text-[72px] font-semibold tracking-tight leading-none text-gradient-color">
                   {cap.metric}
@@ -769,7 +769,7 @@ export default function Home() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.1 }}
-                    className={`group rounded-2xl overflow-hidden shadow-xl shadow-black/10 bg-card ${i === 1 ? "mt-8" : ""}`}
+                    className={`group rounded-2xl overflow-hidden shadow-xl shadow-foreground/10 bg-card ${i === 1 ? "mt-8" : ""}`}
                   >
                     <div className="relative overflow-hidden">
                       <img
@@ -803,7 +803,7 @@ export default function Home() {
               viewport={{ once: true }}
               className="order-2 lg:order-1"
             >
-              <div className="rounded-3xl overflow-hidden bg-card shadow-xl shadow-black/10 hover:shadow-2xl transition-shadow duration-300">
+              <div className="rounded-3xl overflow-hidden bg-card shadow-xl shadow-foreground/10 hover:shadow-2xl transition-shadow duration-300">
                 <div className="relative overflow-hidden">
                   <img
                     src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=600&h=400&fit=crop"
@@ -903,7 +903,7 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="p-8 rounded-3xl bg-background border border-border relative group hover:shadow-xl hover:shadow-black/5 transition-all duration-300"
+                className="p-8 rounded-3xl bg-background border border-border relative group hover:shadow-xl hover:shadow-foreground/5 transition-all duration-300"
               >
                 <div className="flex gap-1 mb-6">
                   {[...Array(testimonial.rating)].map((_, i) => (

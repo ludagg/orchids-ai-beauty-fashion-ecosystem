@@ -60,10 +60,10 @@ export default function ProductDetailsPage() {
   const [isLiked, setIsLiked] = useState(false);
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 max-w-[1400px] mx-auto w-full">
+    <div className="p-4 sm:p-6 lg:p-8 max-w-[1400px] mx-auto w-full bg-background">
       <Link
         href="/app/marketplace"
-        className="inline-flex items-center gap-2 text-sm font-medium text-[#6b6b6b] hover:text-[#1a1a1a] transition-colors mb-8 group"
+        className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors mb-8 group"
       >
         <ChevronLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
         Back to Marketplace
@@ -75,7 +75,7 @@ export default function ProductDetailsPage() {
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="aspect-[4/5] rounded-[40px] overflow-hidden bg-[#f5f5f5] border border-[#e5e5e5] shadow-sm"
+            className="aspect-[4/5] rounded-[40px] overflow-hidden bg-muted border border-border shadow-sm"
           >
             <img
               src={product.images[activeImage]}
@@ -89,7 +89,7 @@ export default function ProductDetailsPage() {
                 key={i}
                 onClick={() => setActiveImage(i)}
                 className={`w-24 aspect-[4/5] rounded-2xl overflow-hidden border-2 transition-all flex-shrink-0 ${
-                  activeImage === i ? "border-[#1a1a1a] shadow-lg" : "border-transparent opacity-60 hover:opacity-100"
+                  activeImage === i ? "border-foreground shadow-lg" : "border-transparent opacity-60 hover:opacity-100"
                 }`}
               >
                 <img src={img} alt={`${product.title} ${i}`} className="w-full h-full object-cover" />
@@ -104,31 +104,31 @@ export default function ProductDetailsPage() {
             <div className="flex items-center justify-between">
               <p className="text-sm font-bold text-rose-600 uppercase tracking-widest">{product.designer}</p>
               <div className="flex gap-2">
-                <button className="p-2.5 rounded-full border border-[#e5e5e5] hover:bg-[#f5f5f5] transition-colors active:scale-90">
-                  <Share2 className="w-4 h-4 text-[#6b6b6b]" />
+                <button className="p-2.5 rounded-full border border-border hover:bg-muted transition-colors active:scale-90">
+                  <Share2 className="w-4 h-4 text-muted-foreground" />
                 </button>
                 <button
                   onClick={() => setIsLiked(!isLiked)}
-                  className={`p-2.5 rounded-full border transition-all active:scale-90 ${isLiked ? "border-rose-500 bg-rose-50" : "border-[#e5e5e5] hover:bg-[#f5f5f5]"}`}
+                  className={`p-2.5 rounded-full border transition-all active:scale-90 ${isLiked ? "border-rose-500 bg-rose-500/10" : "border-border hover:bg-muted"}`}
                 >
-                  <Heart className={`w-4 h-4 ${isLiked ? "fill-rose-500 text-rose-500" : "text-[#6b6b6b]"}`} />
+                  <Heart className={`w-4 h-4 ${isLiked ? "fill-rose-500 text-rose-500" : "text-muted-foreground"}`} />
                 </button>
               </div>
             </div>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold font-display tracking-tight text-[#1a1a1a]">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold font-display tracking-tight text-foreground">
               {product.title}
             </h1>
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 text-sm font-bold border border-amber-200/50">
+              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-400 text-sm font-bold border border-amber-500/20">
                 <Star className="w-4 h-4 fill-amber-500 text-amber-500" />
                 {product.rating}
               </div>
-              <p className="text-sm text-[#6b6b6b] font-medium">{product.reviews} verified reviews</p>
+              <p className="text-sm text-muted-foreground font-medium">{product.reviews} verified reviews</p>
             </div>
-            <p className="text-3xl font-bold text-[#1a1a1a] mt-4">{product.price}</p>
+            <p className="text-3xl font-bold text-foreground mt-4">{product.price}</p>
           </div>
 
-          <p className="text-[#6b6b6b] leading-relaxed text-lg">
+          <p className="text-muted-foreground leading-relaxed text-lg">
             {product.description}
           </p>
 
@@ -136,22 +136,22 @@ export default function ProductDetailsPage() {
           <div className="space-y-6 pt-4">
             {/* Color Selection */}
             <div className="space-y-3">
-              <p className="text-sm font-bold text-[#1a1a1a]">Color: <span className="font-normal text-[#6b6b6b]">{selectedColor}</span></p>
+              <p className="text-sm font-bold text-foreground">Color: <span className="font-normal text-muted-foreground">{selectedColor}</span></p>
               <div className="flex gap-3">
                 {product.colors.map((color) => (
                   <button
                     key={color.name}
                     onClick={() => setSelectedColor(color.name)}
                     className={`w-10 h-10 rounded-full border-2 transition-all flex items-center justify-center ${
-                      selectedColor === color.name ? "border-[#1a1a1a] ring-2 ring-[#1a1a1a]/10" : "border-transparent"
+                      selectedColor === color.name ? "border-foreground ring-2 ring-foreground/10" : "border-transparent"
                     }`}
                   >
                     <div
-                      className="w-7 h-7 rounded-full border border-black/10 shadow-inner"
+                      className="w-7 h-7 rounded-full border border-foreground/10 shadow-inner"
                       style={{ backgroundColor: color.hex }}
                     >
                       {selectedColor === color.name && (
-                        <Check className={`w-4 h-4 mx-auto mt-1.5 ${color.name === 'Black' ? 'text-white' : 'text-[#1a1a1a]'}`} />
+                        <Check className={`w-4 h-4 mx-auto mt-1.5 ${color.name === 'Black' ? 'text-white' : 'text-foreground'}`} />
                       )}
                     </div>
                   </button>
@@ -162,7 +162,7 @@ export default function ProductDetailsPage() {
             {/* Size Selection */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <p className="text-sm font-bold text-[#1a1a1a]">Select Size</p>
+                <p className="text-sm font-bold text-foreground">Select Size</p>
                 <button className="text-xs font-bold text-rose-600 hover:underline">Size Guide</button>
               </div>
               <div className="flex flex-wrap gap-2">
@@ -172,8 +172,8 @@ export default function ProductDetailsPage() {
                     onClick={() => setSelectedSize(size)}
                     className={`min-w-[56px] h-12 rounded-xl text-sm font-bold transition-all border ${
                       selectedSize === size
-                        ? "bg-[#1a1a1a] text-white border-[#1a1a1a] shadow-lg shadow-black/10"
-                        : "bg-white text-[#1a1a1a] border-[#e5e5e5] hover:border-[#1a1a1a]"
+                        ? "bg-foreground text-white border-foreground shadow-lg shadow-foreground/10"
+                        : "bg-card text-foreground border-border hover:border-foreground"
                     }`}
                   >
                     {size}
@@ -184,18 +184,18 @@ export default function ProductDetailsPage() {
 
             {/* Quantity */}
             <div className="space-y-3">
-              <p className="text-sm font-bold text-[#1a1a1a]">Quantity</p>
-              <div className="flex items-center w-32 h-12 rounded-xl border border-[#e5e5e5] bg-white overflow-hidden">
+              <p className="text-sm font-bold text-foreground">Quantity</p>
+              <div className="flex items-center w-32 h-12 rounded-xl border border-border bg-card overflow-hidden">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="flex-1 h-full flex items-center justify-center hover:bg-[#f5f5f5] transition-colors"
+                  className="flex-1 h-full flex items-center justify-center hover:bg-muted transition-colors"
                 >
                   <Minus className="w-4 h-4" />
                 </button>
                 <span className="flex-1 text-center font-bold">{quantity}</span>
                 <button
                   onClick={() => setQuantity(quantity + 1)}
-                  className="flex-1 h-full flex items-center justify-center hover:bg-[#f5f5f5] transition-colors"
+                  className="flex-1 h-full flex items-center justify-center hover:bg-muted transition-colors"
                 >
                   <Plus className="w-4 h-4" />
                 </button>
@@ -206,7 +206,7 @@ export default function ProductDetailsPage() {
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 pt-4">
             <Link href="/app/cart" className="flex-[2]">
-              <button className="w-full h-14 rounded-2xl bg-[#1a1a1a] text-white font-bold text-lg hover:bg-[#333] transition-all active:scale-[0.98] shadow-xl shadow-black/10 flex items-center justify-center gap-3">
+              <button className="w-full h-14 rounded-2xl bg-foreground text-white font-bold text-lg hover:opacity-90 transition-all active:scale-[0.98] shadow-xl shadow-foreground/10 flex items-center justify-center gap-3">
                 <ShoppingBag className="w-5 h-5" />
                 Add to Bag
               </button>
@@ -215,8 +215,8 @@ export default function ProductDetailsPage() {
               onClick={() => setIsWishlisted(!isWishlisted)}
               className={`flex-1 h-14 rounded-2xl border-2 font-bold text-lg transition-all active:scale-[0.98] flex items-center justify-center gap-2 ${
                 isWishlisted
-                  ? "border-rose-500 text-rose-500 bg-rose-50"
-                  : "border-[#1a1a1a] text-[#1a1a1a] hover:bg-[#fafafa]"
+                  ? "border-rose-500 text-rose-500 bg-rose-500/10"
+                  : "border-foreground text-foreground hover:bg-muted/30"
               }`}
             >
               <Heart className={`w-5 h-5 ${isWishlisted ? "fill-rose-500" : ""}`} />
@@ -225,24 +225,24 @@ export default function ProductDetailsPage() {
           </div>
 
           {/* Trust Badges */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-8 border-t border-[#e5e5e5]">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-8 border-t border-border">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-[#f5f5f5] flex items-center justify-center text-[#1a1a1a]">
+              <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-foreground">
                 <ShieldCheck className="w-5 h-5" />
               </div>
-              <p className="text-xs font-bold text-[#6b6b6b]">Authentic Product</p>
+              <p className="text-xs font-bold text-muted-foreground">Authentic Product</p>
             </div>
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-[#f5f5f5] flex items-center justify-center text-[#1a1a1a]">
+              <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-foreground">
                 <Truck className="w-5 h-5" />
               </div>
-              <p className="text-xs font-bold text-[#6b6b6b]">Free Shipping</p>
+              <p className="text-xs font-bold text-muted-foreground">Free Shipping</p>
             </div>
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-[#f5f5f5] flex items-center justify-center text-[#1a1a1a]">
+              <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-foreground">
                 <RotateCcw className="w-5 h-5" />
               </div>
-              <p className="text-xs font-bold text-[#6b6b6b]">15 Day Returns</p>
+              <p className="text-xs font-bold text-muted-foreground">15 Day Returns</p>
             </div>
           </div>
         </section>

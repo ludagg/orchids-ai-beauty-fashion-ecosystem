@@ -70,7 +70,7 @@ export default function AppLayout({
                 href={item.href}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
                   isActive
-                    ? "bg-primary text-primary-foreground shadow-lg shadow-black/10"
+                    ? "bg-primary text-primary-foreground shadow-lg shadow-foreground/10"
                     : "text-muted-foreground hover:bg-secondary hover:text-foreground"
                 }`}
               >

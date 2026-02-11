@@ -47,7 +47,7 @@ export default function CreatorProfilePage() {
   const [isFollowing, setIsFollowing] = useState(creatorData.isFollowing);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-card">
       {/* Header / Cover */}
       <div className="relative h-48 sm:h-64 lg:h-80 w-full overflow-hidden">
         <img src={creatorData.cover} alt="Cover" className="w-full h-full object-cover" />
@@ -62,29 +62,29 @@ export default function CreatorProfilePage() {
 
       {/* Profile Info */}
       <div className="max-w-5xl mx-auto px-6 -mt-12 sm:-mt-16 relative z-10">
-        <div className="flex flex-col sm:flex-row items-end justify-between gap-6 pb-8 border-b border-[#e5e5e5]">
+        <div className="flex flex-col sm:flex-row items-end justify-between gap-6 pb-8 border-b border-border">
           <div className="flex flex-col sm:flex-row items-end gap-6 w-full sm:w-auto">
-            <div className="w-24 h-24 sm:w-32 sm:h-32 lg:w-40 lg:h-40 rounded-[40px] border-4 border-white bg-white overflow-hidden shadow-2xl">
+            <div className="w-24 h-24 sm:w-32 sm:h-32 lg:w-40 lg:h-40 rounded-[40px] border-4 border-white bg-card overflow-hidden shadow-2xl">
               <img src={creatorData.avatar} alt={creatorData.name} className="w-full h-full object-cover" />
             </div>
             <div className="mb-2">
-              <h1 className="text-3xl font-bold flex items-center gap-2 text-[#1a1a1a]">
+              <h1 className="text-3xl font-bold flex items-center gap-2 text-foreground">
                 {creatorData.name}
                 <CheckCircle2 className="w-6 h-6 text-blue-500 fill-blue-500/10" />
               </h1>
-              <p className="text-[#6b6b6b] font-medium">{creatorData.role}</p>
+              <p className="text-muted-foreground font-medium">{creatorData.role}</p>
               <div className="flex items-center gap-4 mt-4">
                 <div className="text-center sm:text-left">
-                  <p className="font-bold text-[#1a1a1a]">{creatorData.followers}</p>
-                  <p className="text-[10px] font-bold text-[#c4c4c4] uppercase tracking-widest">Followers</p>
+                  <p className="font-bold text-foreground">{creatorData.followers}</p>
+                  <p className="text-[10px] font-bold text-muted-foreground/50 uppercase tracking-widest">Followers</p>
                 </div>
                 <div className="text-center sm:text-left">
-                  <p className="font-bold text-[#1a1a1a]">{creatorData.following}</p>
-                  <p className="text-[10px] font-bold text-[#c4c4c4] uppercase tracking-widest">Following</p>
+                  <p className="font-bold text-foreground">{creatorData.following}</p>
+                  <p className="text-[10px] font-bold text-muted-foreground/50 uppercase tracking-widest">Following</p>
                 </div>
                 <div className="text-center sm:text-left">
-                  <p className="font-bold text-[#1a1a1a]">{creatorData.likes}</p>
-                  <p className="text-[10px] font-bold text-[#c4c4c4] uppercase tracking-widest">Likes</p>
+                  <p className="font-bold text-foreground">{creatorData.likes}</p>
+                  <p className="text-[10px] font-bold text-muted-foreground/50 uppercase tracking-widest">Likes</p>
                 </div>
               </div>
             </div>
@@ -95,16 +95,16 @@ export default function CreatorProfilePage() {
               onClick={() => setIsFollowing(!isFollowing)}
               className={`flex-1 sm:flex-none h-12 px-8 rounded-2xl font-bold transition-all ${
                 isFollowing
-                  ? "bg-[#f5f5f5] text-[#1a1a1a] border border-[#e5e5e5]"
-                  : "bg-[#1a1a1a] text-white shadow-xl shadow-black/10 hover:bg-[#333]"
+                  ? "bg-muted text-foreground border border-border"
+                  : "bg-foreground text-white shadow-xl shadow-foreground/10 hover:bg-[#333]"
               }`}
             >
               {isFollowing ? "Following" : "Follow"}
             </button>
-            <button className="h-12 w-12 rounded-2xl border border-[#e5e5e5] flex items-center justify-center hover:bg-[#f5f5f5] transition-colors">
+            <button className="h-12 w-12 rounded-2xl border border-border flex items-center justify-center hover:bg-muted transition-colors">
               <MessageCircle className="w-5 h-5" />
             </button>
-            <button className="h-12 w-12 rounded-2xl border border-[#e5e5e5] flex items-center justify-center hover:bg-[#f5f5f5] transition-colors">
+            <button className="h-12 w-12 rounded-2xl border border-border flex items-center justify-center hover:bg-muted transition-colors">
               <MoreVertical className="w-5 h-5" />
             </button>
           </div>
@@ -112,13 +112,13 @@ export default function CreatorProfilePage() {
 
         {/* Bio */}
         <div className="py-8">
-          <p className="text-[#6b6b6b] leading-relaxed max-w-2xl italic">
+          <p className="text-muted-foreground leading-relaxed max-w-2xl italic">
             "{creatorData.bio}"
           </p>
         </div>
 
         {/* Tabs */}
-        <div className="flex border-b border-[#e5e5e5] mb-8 overflow-x-auto no-scrollbar">
+        <div className="flex border-b border-border mb-8 overflow-x-auto no-scrollbar">
           {[
             { label: "Videos", icon: Video, count: "42" },
             { label: "Collections", icon: ShoppingBag, count: "12" },
@@ -128,12 +128,12 @@ export default function CreatorProfilePage() {
             <button
               key={tab.label}
               className={`px-6 py-4 text-sm font-bold uppercase tracking-widest border-b-2 transition-all whitespace-nowrap flex items-center gap-2 ${
-                i === 0 ? "text-[#1a1a1a] border-[#1a1a1a]" : "text-[#c4c4c4] border-transparent hover:text-[#1a1a1a]"
+                i === 0 ? "text-foreground border-foreground" : "text-muted-foreground/50 border-transparent hover:text-foreground"
               }`}
             >
               <tab.icon className="w-4 h-4" />
               {tab.label}
-              {tab.count && <span className="px-1.5 py-0.5 rounded-full bg-[#f5f5f5] text-[10px]">{tab.count}</span>}
+              {tab.count && <span className="px-1.5 py-0.5 rounded-full bg-muted text-[10px]">{tab.count}</span>}
             </button>
           ))}
         </div>
@@ -144,7 +144,7 @@ export default function CreatorProfilePage() {
             <motion.div
               key={video.id}
               whileHover={{ y: -5 }}
-              className="relative aspect-[3/4] rounded-3xl overflow-hidden bg-[#f5f5f5] group cursor-pointer border border-[#e5e5e5]"
+              className="relative aspect-[3/4] rounded-3xl overflow-hidden bg-muted group cursor-pointer border border-border"
             >
               <img src={video.thumbnail} alt="Video" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -156,9 +156,9 @@ export default function CreatorProfilePage() {
           ))}
           <motion.button
             whileHover={{ scale: 0.98 }}
-            className="aspect-[3/4] rounded-3xl border-2 border-dashed border-[#e5e5e5] flex flex-col items-center justify-center gap-3 text-[#c4c4c4] hover:text-[#1a1a1a] hover:border-[#1a1a1a] transition-all"
+            className="aspect-[3/4] rounded-3xl border-2 border-dashed border-border flex flex-col items-center justify-center gap-3 text-muted-foreground/50 hover:text-foreground hover:border-foreground transition-all"
           >
-            <div className="w-12 h-12 rounded-full bg-[#f5f5f5] flex items-center justify-center">
+            <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center">
               <Plus className="w-6 h-6" />
             </div>
             <span className="text-xs font-bold uppercase tracking-widest">View More</span>

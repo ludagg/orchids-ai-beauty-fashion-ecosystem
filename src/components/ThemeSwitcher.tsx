@@ -28,7 +28,7 @@ export function ThemeSwitcher() {
       {resolvedTheme === "dark" ? (
         <Sun className="w-5 h-5 text-yellow-400" />
       ) : (
-        <Moon className="w-5 h-5 text-[#6b6b6b]" />
+        <Moon className="w-5 h-5 text-muted-foreground" />
       )}
     </button>
   );

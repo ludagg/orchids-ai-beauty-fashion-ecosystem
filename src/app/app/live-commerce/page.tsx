@@ -73,7 +73,7 @@ export default function LiveCommerceIndex() {
   return (
     <div className="flex-1 p-4 sm:p-6 lg:p-8 space-y-10 max-w-[1400px] mx-auto w-full">
       {/* Hero Section */}
-      <section className="relative h-[300px] sm:h-[400px] rounded-[40px] overflow-hidden bg-[#1a1a1a] dark:bg-card flex items-center px-8 sm:px-12 border border-border">
+      <section className="relative h-[300px] sm:h-[400px] rounded-[40px] overflow-hidden bg-foreground dark:bg-card flex items-center px-8 sm:px-12 border border-border">
         <div className="absolute inset-0 z-0">
           <img
             src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1600&h=900&fit=crop"
@@ -89,7 +89,7 @@ export default function LiveCommerceIndex() {
             animate={{ opacity: 1, y: 0 }}
             className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500 text-[10px] font-bold uppercase tracking-widest text-white"
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+            <span className="w-1.5 h-1.5 rounded-full bg-card animate-pulse" />
             Live Now
           </motion.div>
           <motion.h1
@@ -114,7 +114,7 @@ export default function LiveCommerceIndex() {
             transition={{ delay: 0.3 }}
           >
             <Link href="/app/live-commerce/1">
-              <button className="px-8 py-4 rounded-2xl bg-white text-[#1a1a1a] font-bold text-base hover:bg-rose-500 hover:text-white transition-all shadow-xl shadow-white/5 active:scale-95 flex items-center gap-3 group">
+              <button className="px-8 py-4 rounded-2xl bg-card text-foreground font-bold text-base hover:bg-rose-500 hover:text-white transition-all shadow-xl shadow-white/5 active:scale-95 flex items-center gap-3 group">
                 Watch Featured Stream
                 <Play className="w-5 h-5 fill-current transition-transform group-hover:scale-110" />
               </button>
@@ -172,7 +172,7 @@ export default function LiveCommerceIndex() {
 
                   <div className="absolute top-4 left-4 flex gap-2">
                     <div className="px-3 py-1.5 rounded-full bg-rose-500 text-white text-[10px] font-bold uppercase tracking-widest shadow-lg flex items-center gap-1.5">
-                      <span className="w-1 h-1 rounded-full bg-white animate-pulse" />
+                      <span className="w-1 h-1 rounded-full bg-card animate-pulse" />
                       Live
                     </div>
                     <div className="px-3 py-1.5 rounded-full bg-black/40 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-widest border border-white/10 flex items-center gap-1.5">
@@ -200,7 +200,7 @@ export default function LiveCommerceIndex() {
                   </div>
 
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center">
+                    <div className="w-16 h-16 rounded-full bg-card/20 backdrop-blur-md border border-white/30 flex items-center justify-center">
                       <Play className="w-8 h-8 text-white fill-current ml-1" />
                     </div>
                   </div>
@@ -273,9 +273,9 @@ export default function LiveCommerceIndex() {
       {/* Coming Soon / Categories Bento */}
       <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="p-10 rounded-[40px] bg-gradient-to-br from-violet-600 to-indigo-700 text-white relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 blur-[60px] rounded-full -mr-32 -mt-32" />
+          <div className="absolute top-0 right-0 w-64 h-64 bg-card/10 blur-[60px] rounded-full -mr-32 -mt-32" />
           <div className="relative z-10 space-y-6">
-            <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center">
+            <div className="w-14 h-14 rounded-2xl bg-card/20 backdrop-blur-md flex items-center justify-center">
               <Zap className="w-7 h-7" />
             </div>
             <div>
@@ -284,7 +284,7 @@ export default function LiveCommerceIndex() {
                 Are you a designer or fashion influencer? Start your own live stream and reach millions.
               </p>
             </div>
-            <button className="px-8 py-3.5 rounded-2xl bg-white text-indigo-700 font-bold hover:bg-indigo-50 transition-all active:scale-95 shadow-xl">
+            <button className="px-8 py-3.5 rounded-2xl bg-card text-indigo-700 font-bold hover:bg-indigo-50 transition-all active:scale-95 shadow-xl">
               Apply Now
             </button>
           </div>
