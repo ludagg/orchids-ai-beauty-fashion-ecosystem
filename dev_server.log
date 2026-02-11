@@ -1,0 +1,15 @@
+
+> app@0.1.0 dev /app
+> next dev --turbopack
+
+⚠ Port 3000 is in use by an unknown process, using available port 3001 instead.
+▲ Next.js 16.1.6 (Turbopack)
+- Local:         http://localhost:3001
+- Network:       http://192.168.0.2:3001
+
+✓ Starting...
+✓ Ready in 1616ms
+ GET /login 200 in 1728ms (compile: 1217ms, render: 511ms)
+ GET /signup 200 in 219ms (compile: 97ms, render: 121ms)
+ GET /login 200 in 80ms (compile: 5ms, render: 75ms)
+ GET /signup 200 in 69ms (compile: 5ms, render: 64ms)

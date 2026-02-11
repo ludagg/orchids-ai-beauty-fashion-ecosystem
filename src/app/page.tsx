@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import Link from "next/link";
 import { motion, useScroll, useTransform, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 import { 
   ArrowRight, 
@@ -233,14 +234,15 @@ export default function Home() {
             </div>
 
             <div className="flex items-center gap-4">
-              <motion.button
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                onClick={scrollToWaitlist}
-                className="hidden sm:block px-4 py-2 rounded-full bg-[#1a1a1a] text-white text-sm font-medium hover:bg-[#333] transition-all hover:shadow-lg hover:shadow-black/20 active:scale-95"
-              >
-                Join Waitlist
-              </motion.button>
+              <Link href="/login">
+                <motion.button
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="hidden sm:block px-4 py-2 rounded-full bg-[#1a1a1a] text-white text-sm font-medium hover:bg-[#333] transition-all hover:shadow-lg hover:shadow-black/20 active:scale-95"
+                >
+                  Se connecter
+                </motion.button>
+              </Link>
               <button 
                 className="md:hidden p-2 -mr-2"
                 onClick={() => setMobileMenuOpen(true)}
@@ -289,15 +291,13 @@ export default function Home() {
                 </ul>
               </nav>
               <div className="px-6 py-8 border-t border-[#e5e5e5] space-y-3">
-                <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    scrollToWaitlist();
-                  }}
-                  className="w-full py-4 rounded-2xl bg-[#1a1a1a] text-white font-medium hover:bg-[#333] transition-colors"
-                >
-                  Join Waitlist
-                </button>
+                <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
+                  <button
+                    className="w-full py-4 rounded-2xl bg-[#1a1a1a] text-white font-medium hover:bg-[#333] transition-colors"
+                  >
+                    Se connecter
+                  </button>
+                </Link>
               </div>
             </div>
           </motion.div>
