@@ -11,7 +11,7 @@ const navItems = [
   { icon: MessageSquare, label: "Chat", href: "/app/conversations" },
   //{ icon: Sparkles, label: "AI", href: "/app/ai-stylist" },
   { icon: Scissors, label: "Salons", href: "/app/salons" },
-  { icon: Video, label: "Live", href: "/app/live-commerce" },
+  { icon: Video, label: "Videos", href: "/app/videos-creations" },
 ];
 
 export default function BottomNav() {

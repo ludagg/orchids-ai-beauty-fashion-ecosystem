@@ -32,7 +32,7 @@ const sidebarItems = [
   { icon: ShoppingBag, label: "Marketplace", href: "/app/marketplace" },
   { icon: Sparkles, label: "AI Stylist", href: "/app/ai-stylist" },
   { icon: Scissors, label: "Salons", href: "/app/salons" },
-  { icon: Video, label: "Live Commerce", href: "/app/live-commerce" },
+  { icon: Video, label: "Videos & Creations", href: "/app/videos-creations" },
   { icon: MessageSquare, label: "Conversations", href: "/app/conversations" },
   { icon: Calendar, label: "My Bookings", href: "/app/bookings" },
 ];

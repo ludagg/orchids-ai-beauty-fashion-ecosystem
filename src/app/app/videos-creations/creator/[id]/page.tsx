@@ -5,15 +5,13 @@ import {
   ChevronLeft,
   CheckCircle2,
   Users,
-  Star,
-  MessageCircle,
   Video,
   ShoppingBag,
-  Heart,
   Grid,
   Calendar,
   MoreVertical,
-  Plus
+  Plus,
+  MessageCircle
 } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -53,7 +51,7 @@ export default function CreatorProfilePage() {
         <img src={creatorData.cover} alt="Cover" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
         <Link
-          href="/app/live-commerce"
+          href="/app/videos-creations"
           className="absolute top-6 left-6 p-2 rounded-full bg-black/20 backdrop-blur-md text-white border border-white/20 hover:bg-black/40 transition-all"
         >
           <ChevronLeft className="w-6 h-6" />
@@ -113,7 +111,7 @@ export default function CreatorProfilePage() {
         {/* Bio */}
         <div className="py-8">
           <p className="text-muted-foreground leading-relaxed max-w-2xl italic">
-            "{creatorData.bio}"
+            &quot;{creatorData.bio}&quot;
           </p>
         </div>
 
