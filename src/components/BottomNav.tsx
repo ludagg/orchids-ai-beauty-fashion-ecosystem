@@ -12,6 +12,7 @@ const navItems = [
   //{ icon: Sparkles, label: "AI", href: "/app/ai-stylist" },
   { icon: Scissors, label: "Salons", href: "/app/salons" },
   { icon: Video, label: "Videos", href: "/app/videos-creations" },
+  { icon: LayoutDashboard, label: "Studio", href: "/creator-studio" },
 ];
 
 export default function BottomNav() {
