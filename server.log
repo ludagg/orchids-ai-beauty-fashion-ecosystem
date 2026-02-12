@@ -1,0 +1,14 @@
+$ next dev --turbopack --turbopack
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+▲ Next.js 16.1.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.2:3000
+
+✓ Starting...
+✓ Ready in 1140ms
+○ Compiling /app/creator-studio ...
+ GET /app/creator-studio 200 in 6.2s (compile: 5.4s, render: 809ms)
+ GET /app/creator-studio 200 in 141ms (compile: 8ms, render: 134ms)
+ GET /app/creator-studio/content 200 in 1161ms (compile: 1089ms, render: 72ms)
+ GET /app/creator-studio/analytics 200 in 3.0s (compile: 3.0s, render: 51ms)
+ GET /app/creator-studio/community 200 in 1692ms (compile: 1564ms, render: 128ms)
