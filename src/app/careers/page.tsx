@@ -1,7 +1,11 @@
+import LandingNavbar from "@/components/landing/LandingNavbar";
+import LandingFooter from "@/components/landing/LandingFooter";
+
 export default function CareersPage() {
   return (
-    <div className="min-h-screen bg-background text-foreground pt-24 pb-12 px-6">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-background text-foreground">
+      <LandingNavbar />
+      <main className="pt-32 pb-16 px-6 max-w-4xl mx-auto">
         <h1 className="text-4xl font-bold font-display mb-6">Careers at Priisme</h1>
         <p className="text-xl text-muted-foreground mb-8">Join us in shaping the future of fashion tech.</p>
 
@@ -16,7 +20,8 @@ export default function CareersPage() {
             </div>
           ))}
         </div>
-      </div>
+      </main>
+      <LandingFooter />
     </div>
   );
 }
