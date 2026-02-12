@@ -12,3 +12,7 @@
 ## 2025-05-14 - Dark Mode Implementation with next-themes
 **Learning:** When implementing dark mode in Next.js with `next-themes`, use `resolvedTheme` instead of `theme` to account for system settings. Ensure hydration safety by checking a `mounted` state. Refactor hardcoded hex colors to semantic CSS variables early to ensure global consistency.
 **Action:** Always prefer `resolvedTheme` for icon logic and toggle states. Use semantic classes like `bg-background` and `text-foreground` in new components from the start.
+
+## 2025-02-13 - Keyboard Accessibility for Hover-Only Elements
+**Learning:** Interactive elements that appear only on hover (e.g., Quick View or Wishlist buttons on product cards) are completely inaccessible to keyboard users unless they are also made visible on focus. Simply having them in the DOM is not enough if they remain invisible and lack focus styles.
+**Action:** Always pair `group-hover:opacity-100` with `focus:opacity-100` (and corresponding transform classes) and ensure clear focus rings for these "hidden" interactive elements.

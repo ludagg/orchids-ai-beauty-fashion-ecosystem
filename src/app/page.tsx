@@ -239,6 +239,7 @@ export default function Home() {
               <button
                 className="md:hidden p-2 -mr-2"
                 onClick={() => setMobileMenuOpen(true)}
+                aria-label="Open mobile menu"
               >
                 <Menu className="w-6 h-6" />
               </button>
@@ -261,7 +262,11 @@ export default function Home() {
                   <span className="text-xl font-semibold font-display">Priisme</span>
                   <ThemeSwitcher />
                 </div>
-                <button onClick={() => setMobileMenuOpen(false)} className="p-2 -mr-2">
+                <button
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-2 -mr-2"
+                  aria-label="Close mobile menu"
+                >
                   <X className="w-6 h-6" />
                 </button>
               </div>
@@ -298,6 +303,7 @@ export default function Home() {
         )}
       </AnimatePresence>
 
+      <main id="main-content">
       <motion.section
         ref={heroRef}
         style={{ opacity: heroOpacity, scale: heroScale }}
@@ -613,6 +619,7 @@ export default function Home() {
               <button
                 onClick={() => setActiveFeature((prev) => (prev - 1 + features.length) % features.length)}
                 className="w-12 h-12 rounded-full border border-border flex items-center justify-center hover:bg-secondary transition-colors"
+                aria-label="Previous feature"
               >
                 <ChevronRight className="w-5 h-5 rotate-180" />
               </button>
@@ -624,6 +631,7 @@ export default function Home() {
               <button
                 onClick={() => setActiveFeature((prev) => (prev + 1) % features.length)}
                 className="w-12 h-12 rounded-full border border-border flex items-center justify-center hover:bg-secondary transition-colors"
+                aria-label="Next feature"
               >
                 <ChevronRight className="w-5 h-5" />
               </button>
@@ -778,7 +786,7 @@ export default function Home() {
                         className="w-full h-[240px] sm:h-[280px] object-cover transition-transform duration-500 group-hover:scale-110"
                       />
                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
-                      <button className="absolute bottom-4 left-4 right-4 py-3 rounded-xl bg-card text-foreground font-medium text-sm opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 hover:bg-secondary">
+                      <button className="absolute bottom-4 left-4 right-4 py-3 rounded-xl bg-card text-foreground font-medium text-sm opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 focus:opacity-100 focus:translate-y-0 transition-all duration-300 hover:bg-secondary outline-none focus:ring-2 focus:ring-primary">
                         Quick View
                       </button>
                     </div>
@@ -962,6 +970,7 @@ export default function Home() {
           </motion.div>
         </div>
         </section>
+      </main>
 
       <section className="py-16 md:py-20 bg-background border-t border-border">
         <div className="max-w-[1200px] mx-auto px-6">

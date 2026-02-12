@@ -72,6 +72,7 @@ export default function AppLayout({
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
             className="p-1 rounded-full hover:bg-secondary text-muted-foreground transition-colors"
+            aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
             {isCollapsed ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5" />}
           </button>
@@ -134,7 +135,11 @@ export default function AppLayout({
             <ThemeSwitcher />
             <NotificationBell />
             <UserAccount showLabel={false} />
-            <button onClick={() => setMobileMenuOpen(true)} className="p-2 ml-1">
+            <button
+              onClick={() => setMobileMenuOpen(true)}
+              className="p-2 ml-1"
+              aria-label="Open mobile menu"
+            >
               <Menu className="w-6 h-6" />
             </button>
           </div>
@@ -150,7 +155,11 @@ export default function AppLayout({
           <div className="flex flex-col h-full">
             <div className="flex items-center justify-between h-16 px-6 border-b border-border">
               <span className="text-xl font-semibold font-display">Priisme</span>
-              <button onClick={() => setMobileMenuOpen(false)} className="p-2">
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-2"
+                aria-label="Close mobile menu"
+              >
                 <X className="w-6 h-6" />
               </button>
             </div>
@@ -200,7 +209,11 @@ export default function AppLayout({
 
           <div className="flex items-center gap-4 ml-4">
             <ThemeSwitcher />
-            <Link href="/app/wishlist" className="p-2 rounded-full hover:bg-secondary transition-colors relative">
+            <Link
+              href="/app/wishlist"
+              className="p-2 rounded-full hover:bg-secondary transition-colors relative"
+              aria-label="Wishlist"
+            >
               <Heart className={`w-5 h-5 ${pathname === '/app/wishlist' ? 'text-rose-500 fill-rose-500' : 'text-muted-foreground'}`} />
             </Link>
             <NotificationBell />
@@ -208,7 +221,7 @@ export default function AppLayout({
           </div>
         </header>
 
-        <main className="flex-1 min-h-0 overflow-y-auto pb-20 lg:pb-0">
+        <main id="main-content" className="flex-1 min-h-0 overflow-y-auto pb-20 lg:pb-0">
           {children}
         </main>
 
