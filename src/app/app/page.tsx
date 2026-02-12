@@ -61,7 +61,10 @@ export default function DiscoverPage() {
         <div className="px-4 py-3 flex items-center justify-between lg:hidden">
             {/* Mobile Header elements if needed, though Layout handles some */}
             <h1 className="text-lg font-semibold font-display">Discover</h1>
-             <button className="p-2 -mr-2 text-muted-foreground">
+             <button
+              className="p-2 -mr-2 text-muted-foreground"
+              aria-label="Filter results"
+             >
               <Filter className="w-5 h-5" />
             </button>
         </div>
@@ -200,7 +203,10 @@ export default function DiscoverPage() {
               >
                 <div className="relative aspect-[3/4] rounded-2xl overflow-hidden mb-3 border border-border bg-secondary">
                   <img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                  <button className="absolute top-2 right-2 p-2 rounded-full bg-background/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity hover:bg-background">
+                  <button
+                    className="absolute top-2 right-2 p-2 rounded-full bg-background/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity hover:bg-background outline-none focus:ring-2 focus:ring-primary"
+                    aria-label="Add to wishlist"
+                  >
                     <Heart className="w-4 h-4 text-foreground" />
                   </button>
                 </div>
