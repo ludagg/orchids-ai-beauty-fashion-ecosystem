@@ -37,6 +37,7 @@ const sidebarItems = [
   { icon: Video, label: "Videos & Creations", href: "/app/videos-creations" },
   { icon: MessageSquare, label: "Conversations", href: "/app/conversations" },
   { icon: Calendar, label: "My Bookings", href: "/app/bookings" },
+  { icon: LayoutDashboard, label: "Creator Studio", href: "/app/creator-studio", distinct: true },
 ];
 
 export default function AppLayout({
@@ -79,18 +80,26 @@ export default function AppLayout({
 
         <nav className="flex-1 px-4 space-y-1">
           {sidebarItems.map((item) => {
-            const isActive = pathname === item.href;
+            const isActive = item.href === '/app'
+              ? pathname === '/app'
+              : pathname.startsWith(item.href);
+            const isDistinct = (item as any).distinct;
+
             return (
               <Link
                 key={item.label}
                 href={item.href}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
                   isActive
-                    ? "bg-primary text-primary-foreground shadow-lg shadow-foreground/10"
-                    : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+                    ? isDistinct
+                      ? "bg-gradient-to-r from-violet-600 via-fuchsia-500 to-amber-500 text-white shadow-lg shadow-violet-500/20"
+                      : "bg-primary text-primary-foreground shadow-lg shadow-foreground/10"
+                    : isDistinct
+                      ? "text-transparent bg-clip-text bg-gradient-to-r from-violet-600 via-fuchsia-500 to-amber-500 hover:bg-secondary/50"
+                      : "text-muted-foreground hover:bg-secondary hover:text-foreground"
                 } ${isCollapsed ? "justify-center" : ""}`}
               >
-                <item.icon className="w-5 h-5 flex-shrink-0" />
+                <item.icon className={`w-5 h-5 flex-shrink-0 ${isDistinct && !isActive ? "text-violet-500" : ""}`} />
                 {!isCollapsed && <span>{item.label}</span>}
               </Link>
             );
@@ -156,7 +165,11 @@ export default function AppLayout({
             </div>
             <nav className="flex-1 px-6 py-8 space-y-2">
               {sidebarItems.map((item) => {
-                const isActive = pathname === item.href;
+                const isActive = item.href === '/app'
+                  ? pathname === '/app'
+                  : pathname.startsWith(item.href);
+                const isDistinct = (item as any).distinct;
+
                 return (
                   <Link
                     key={item.label}
@@ -165,8 +178,8 @@ export default function AppLayout({
                       isActive ? "text-foreground" : "text-muted-foreground"
                     }`}
                   >
-                    <span className="flex items-center gap-4">
-                      <item.icon className="w-6 h-6" />
+                    <span className={`flex items-center gap-4 ${isDistinct ? "text-transparent bg-clip-text bg-gradient-to-r from-violet-600 via-fuchsia-500 to-amber-500 font-bold" : ""}`}>
+                      <item.icon className={`w-6 h-6 ${isDistinct ? "text-violet-500" : ""}`} />
                       {item.label}
                     </span>
                     <ChevronRight className="w-5 h-5" />
