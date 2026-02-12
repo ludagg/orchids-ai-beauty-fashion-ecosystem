@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Priisme - Frontend Prototype
 
-## Getting Started
+Priisme est une application Next.js conçue pour être une plateforme complète de gestion de salons de beauté et de commerce en direct ("Live Commerce"). Ce dépôt contient actuellement la structure frontend et l'interface utilisateur.
 
-First, run the development server:
+⚠️ **Note Importante :** Ce projet est actuellement un prototype frontend. La logique backend (base de données, authentification réelle, paiements) n'est pas implémentée, bien que des dépendances soient présentes.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚀 Technologies Utilisées
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Framework :** [Next.js 15+](https://nextjs.org/) (App Router)
+- **Langage :** TypeScript
+- **Style :** [Tailwind CSS v4](https://tailwindcss.com/)
+- **Composants UI :** [Shadcn/UI](https://ui.shadcn.com/) (basé sur Radix UI)
+- **Animations :** [Framer Motion](https://www.framer.com/motion/)
+- **Icônes :** [Lucide React](https://lucide.dev/)
+- **Graphiques :** [Recharts](https://recharts.org/)
+- **Gestionnaire de paquets :** [Bun](https://bun.sh/)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠️ Installation et Démarrage
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Assurez-vous d'avoir [Bun](https://bun.sh/) installé sur votre machine.
 
-## Learn More
+1.  **Installer les dépendances :**
+    ```bash
+    bun install
+    ```
 
-To learn more about Next.js, take a look at the following resources:
+2.  **Lancer le serveur de développement :**
+    ```bash
+    bun dev
+    ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3.  Ouvrez [http://localhost:3000](http://localhost:3000) dans votre navigateur.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📂 Structure du Projet
 
-## Deploy on Vercel
+L'application suit l'architecture App Router de Next.js :
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `src/app/auth` : Pages d'authentification (Login/Register - UI seulement).
+- `src/app/app` : Espace utilisateur principal (Recherche, Profil, Réservations).
+- `src/app/admin` : Tableau de bord Super Admin.
+- `src/app/salon-dashboard` : Tableau de bord pour les propriétaires de salons.
+- `src/app/videos-creations` : Interface de "Live Commerce" (style TikTok/Reels).
+- `src/components/ui` : Composants réutilisables (Boutons, Cards, Inputs...).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📝 Fonctionnalités (État Actuel)
+
+- **Interface Utilisateur Riche :** Design moderne et réactif.
+- **Tableaux de Bord :** Vues distinctes pour les Clients, les Salons et les Admins.
+- **Système de Thème :** Support Dark/Light mode.
+- **Visualisation de Données :** Graphiques intégrés pour les statistiques.
+
+## 🔗 Références Backend
+
+Voir le fichier `BACKEND_REFERENCE.md` pour la documentation technique sur l'architecture backend prévue (Authentification, Stripe, Emails, IA).
+
