@@ -140,7 +140,7 @@ export default function AppLayout({
           </div>
         </div>
         <div className="px-4 pb-3">
-          <SearchBar value={searchQuery} onChange={setSearchQuery} />
+          <SearchBar value={searchQuery} onChange={setSearchQuery} onSubmit={handleSearch} />
         </div>
       </header>
 
