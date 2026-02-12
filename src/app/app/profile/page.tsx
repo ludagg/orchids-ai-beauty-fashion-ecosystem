@@ -1,8 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { User, Mail, Phone, MapPin, Camera, Save, Globe, Instagram, Youtube } from "lucide-react";
+import { User, Mail, Phone, MapPin, Camera, Save, Globe, Instagram, Youtube, LayoutDashboard, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -11,8 +12,20 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useEffect, useState } from "react";
 
 export default function ProfilePage() {
+  const [isCreator, setIsCreator] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/creator/stats")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.isCreator) setIsCreator(true);
+      })
+      .catch(() => setIsCreator(false));
+  }, []);
+
   return (
     <div className="p-6 max-w-4xl mx-auto space-y-8">
       <div className="flex items-center justify-between">
@@ -114,6 +127,25 @@ export default function ProfilePage() {
             animate={{ opacity: 1, y: 0 }}
             className="space-y-6"
           >
+            <Card className="bg-gradient-to-br from-violet-500/10 to-rose-500/10 border-violet-200/20">
+              <CardContent className="flex items-center justify-between p-6">
+                <div>
+                  <h3 className="font-semibold text-lg">{isCreator ? "Creator Studio" : "Become a Creator"}</h3>
+                  <p className="text-sm text-muted-foreground">
+                    {isCreator
+                      ? "Manage your content, view analytics, and track earnings."
+                      : "Join our community of trendsetters and start earning."}
+                  </p>
+                </div>
+                <Link href={isCreator ? "/creator-studio" : "/become-creator"}>
+                  <Button variant={isCreator ? "default" : "outline"} className={!isCreator ? "border-primary text-primary hover:bg-primary/10" : ""}>
+                    {isCreator ? <LayoutDashboard className="w-4 h-4 mr-2" /> : <Sparkles className="w-4 h-4 mr-2" />}
+                    {isCreator ? "Go to Studio" : "Apply Now"}
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
             <Card>
               <CardHeader>
                 <CardTitle>Creator Profile</CardTitle>
