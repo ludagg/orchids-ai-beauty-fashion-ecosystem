@@ -18,7 +18,8 @@ import {
   X,
   Heart,
   MessageSquare,
-  Calendar
+  Calendar,
+  Clapperboard
 } from "lucide-react";
 import Link from "next/link";
 import BottomNav from "@/components/BottomNav";
@@ -95,6 +96,20 @@ export default function AppLayout({
               </Link>
             );
           })}
+
+          <div className="my-2 border-t border-border mx-4" />
+
+          <Link
+            href="/app/creator-studio"
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all bg-gradient-to-r from-violet-600/10 to-rose-500/10 hover:from-violet-600/20 hover:to-rose-500/20 text-violet-700 dark:text-violet-300 ${
+              pathname?.startsWith("/app/creator-studio")
+                ? "ring-1 ring-violet-500 shadow-md"
+                : ""
+            } ${isCollapsed ? "justify-center" : ""}`}
+          >
+            <Clapperboard className="w-5 h-5 flex-shrink-0" />
+            {!isCollapsed && <span>Creator Studio</span>}
+          </Link>
         </nav>
 
         {!isCollapsed && (
@@ -182,6 +197,18 @@ export default function AppLayout({
                 <span className="flex items-center gap-4">
                   <Heart className="w-6 h-6" />
                   Wishlist
+                </span>
+                <ChevronRight className="w-5 h-5" />
+              </Link>
+              <Link
+                href="/app/creator-studio"
+                className={`w-full flex items-center justify-between py-4 text-xl font-medium border-b border-border ${
+                  pathname?.startsWith("/app/creator-studio") ? "text-violet-600 dark:text-violet-400" : "text-muted-foreground"
+                }`}
+              >
+                <span className="flex items-center gap-4">
+                  <Clapperboard className="w-6 h-6" />
+                  Creator Studio
                 </span>
                 <ChevronRight className="w-5 h-5" />
               </Link>
