@@ -7,7 +7,8 @@ import {
   LogOut,
   CreditCard,
   UserCircle,
-  ChevronDown
+  ChevronDown,
+  LayoutDashboard
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -46,6 +47,12 @@ export default function UserAccount({ showLabel = true }: { showLabel?: boolean 
             <Link href="/app/profile" className="flex items-center w-full">
               <UserCircle className="mr-2 h-4 w-4" />
               <span>Profile</span>
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild className="cursor-pointer">
+            <Link href="/app/creator-studio" className="flex items-center w-full">
+              <LayoutDashboard className="mr-2 h-4 w-4" />
+              <span>Creator Studio</span>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild className="cursor-pointer">

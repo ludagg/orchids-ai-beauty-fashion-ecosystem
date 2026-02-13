@@ -31,6 +31,7 @@ import { useState, useEffect } from "react";
 
 const sidebarItems = [
   { icon: Compass, label: "Discover", href: "/app" },
+  { icon: LayoutDashboard, label: "Creator Studio", href: "/app/creator-studio" },
   { icon: ShoppingBag, label: "Marketplace", href: "/app/marketplace" },
   { icon: Sparkles, label: "AI Stylist", href: "/app/ai-stylist" },
   { icon: Scissors, label: "Salons", href: "/app/salons" },
