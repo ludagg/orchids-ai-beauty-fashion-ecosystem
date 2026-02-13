@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -9,8 +10,11 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Mail, Lock, User, Eye, EyeOff, ArrowLeft, Chrome, Github, Phone, MapPin, Globe } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { authClient } from '@/lib/auth-client'
+import { toast } from 'sonner'
 
 export default function AuthPage() {
+  const router = useRouter()
   const [isSignIn, setIsSignIn] = useState(true)
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -51,6 +55,9 @@ export default function AuthPage() {
       if (!formData.lastName) {
         newErrors.lastName = 'Last name is required'
       }
+      // Note: Extra fields (sex, country, city, phone) are collected but not currently stored
+      // in the basic user schema unless we extend it or use metadata.
+      // For this implementation we'll focus on the core auth fields (name, email, password).
       if (!formData.sex) {
         newErrors.sex = 'Sex is required'
       }
@@ -79,17 +86,52 @@ export default function AuthPage() {
     if (!validateForm()) return
 
     setIsLoading(true)
+    setErrors({})
 
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500))
+    try {
+      if (isSignIn) {
+        const { data, error } = await authClient.signIn.email({
+          email: formData.email,
+          password: formData.password
+        })
 
-    setIsLoading(false)
-    setIsSuccess(true)
+        if (error) {
+          toast.error(error.message || "Failed to sign in")
+          setErrors(prev => ({ ...prev, email: error.message || "Invalid credentials" }))
+          setIsLoading(false)
+          return
+        }
 
-    // Reset success state after 3 seconds
-    setTimeout(() => {
-      setIsSuccess(false)
-    }, 3000)
+        setIsSuccess(true)
+        setTimeout(() => {
+          router.push('/app')
+        }, 1500)
+
+      } else {
+        const { data, error } = await authClient.signUp.email({
+          email: formData.email,
+          password: formData.password,
+          name: `${formData.firstName} ${formData.lastName}`,
+          // TODO: Pass additional fields (sex, phone, etc.) once schema is updated
+        })
+
+        if (error) {
+          toast.error(error.message || "Failed to create account")
+          setErrors(prev => ({ ...prev, email: error.message || "Registration failed" }))
+          setIsLoading(false)
+          return
+        }
+
+        setIsSuccess(true)
+        setTimeout(() => {
+          router.push('/app')
+        }, 1500)
+      }
+    } catch (err) {
+      console.error(err)
+      toast.error("An unexpected error occurred")
+      setIsLoading(false)
+    }
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -105,6 +147,26 @@ export default function AuthPage() {
     setFormData(prev => ({ ...prev, sex: value }))
     if (errors.sex) {
       setErrors(prev => ({ ...prev, sex: '' }))
+    }
+  }
+
+  const handleSocialSignIn = async (provider: 'google' | 'github') => {
+    try {
+      setIsLoading(true)
+      const { data, error } = await authClient.signIn.social({
+        provider: provider,
+        callbackURL: '/app' // Redirect to app after social login
+      })
+
+      if (error) {
+        toast.error(error.message || `Failed to sign in with ${provider}`)
+        setIsLoading(false)
+      }
+      // Redirect happens automatically
+    } catch (err) {
+      console.error(err)
+      toast.error("An unexpected error occurred")
+      setIsLoading(false)
     }
   }
 
@@ -127,11 +189,9 @@ export default function AuthPage() {
           <p className="text-gray-600 dark:text-gray-400 mb-8">
             {isSignIn ? 'You have successfully signed in' : 'Your account has been created successfully'}
           </p>
-          <Link href="/">
-            <Button size="lg">
-              Go to Home
-            </Button>
-          </Link>
+          <Button size="lg" onClick={() => router.push('/app')}>
+              Go to Dashboard
+          </Button>
         </motion.div>
       </div>
     )
@@ -429,11 +489,11 @@ export default function AuthPage() {
             </div>
 
             <div className="grid grid-cols-2 gap-3">
-              <Button variant="outline" type="button" disabled={isLoading}>
+              <Button variant="outline" type="button" disabled={isLoading} onClick={() => handleSocialSignIn('google')}>
                 <Chrome className="mr-2 h-4 w-4" />
                 Google
               </Button>
-              <Button variant="outline" type="button" disabled={isLoading}>
+              <Button variant="outline" type="button" disabled={isLoading} onClick={() => handleSocialSignIn('github')}>
                 <Github className="mr-2 h-4 w-4" />
                 GitHub
               </Button>
