@@ -3,7 +3,8 @@
 import { useSearchParams } from "next/navigation";
 import { useState, useEffect, Suspense } from "react";
 import { motion } from "framer-motion";
-import { Search, MapPin, Star, ShoppingBag, Video, Scissors, Sparkles } from "lucide-react";
+import { Search, MapPin, Star, ShoppingBag, Video, Scissors, Sparkles, Users } from "lucide-react";
+import Link from "next/link";
 
 // Mock Data
 const MOCK_RESULTS = {
@@ -21,6 +22,12 @@ const MOCK_RESULTS = {
     { id: 1, title: "Summer Makeup Routine", creator: "BeautyBySam", views: "12K", image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=600&h=400&fit=crop" },
     { id: 2, title: "Hair Styling 101", creator: "HairMasters", views: "8.5K", image: "https://images.unsplash.com/photo-1522337660859-02fbefca4702?w=600&h=400&fit=crop" },
   ],
+  creators: [
+    { id: 1, name: "Ananya Sharma", handle: "@ananya_style", followers: "124K", image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop" },
+    { id: 2, name: "Marcus Chen", handle: "@marcus_cuts", followers: "89K", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop" },
+    { id: 3, name: "Elena Rodriguez", handle: "@elena_mua", followers: "210K", image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop" },
+    { id: 4, name: "David Kim", handle: "@stylebydavid", followers: "45K", image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop" },
+  ],
   styles: [
     { id: 1, title: "Boho Chic", creator: "@sarastyle", image: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400&h=500&fit=crop" },
     { id: 2, title: "Urban Edge", creator: "@cityvibe", image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=500&fit=crop" },
@@ -29,6 +36,7 @@ const MOCK_RESULTS = {
 
 const TABS = [
   { id: "all", label: "All Results" },
+  { id: "creators", label: "Creators", icon: Users },
   { id: "salons", label: "Salons", icon: Scissors },
   { id: "marketplace", label: "Marketplace", icon: ShoppingBag },
   { id: "videos", label: "Videos", icon: Video },
@@ -96,6 +104,38 @@ function SearchContent() {
         </div>
       ) : (
         <div className="space-y-12">
+
+           {/* Creators Section */}
+           {(activeTab === "all" || activeTab === "creators") && (
+            <section>
+              {activeTab === "all" && (
+                <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                  <Users className="w-5 h-5 text-purple-500" /> Creators
+                </h2>
+              )}
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                {MOCK_RESULTS.creators.map((creator) => (
+                  <Link href={`/app/videos-creations/creator/${creator.id}`} key={creator.id}>
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="bg-card border border-border rounded-2xl p-4 hover:shadow-lg transition-shadow group flex items-center space-x-4 cursor-pointer"
+                    >
+                      <div className="w-16 h-16 rounded-full overflow-hidden flex-shrink-0">
+                        <img src={creator.image} alt={creator.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-foreground truncate">{creator.name}</h3>
+                        <p className="text-sm text-muted-foreground truncate">{creator.handle}</p>
+                        <p className="text-xs font-medium text-primary mt-1">{creator.followers} followers</p>
+                      </div>
+                    </motion.div>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          )}
+
           {/* Salons Section */}
           {(activeTab === "all" || activeTab === "salons") && (
             <section>
