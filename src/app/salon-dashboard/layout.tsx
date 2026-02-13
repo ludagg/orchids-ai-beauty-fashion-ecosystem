@@ -40,8 +40,8 @@ export default function SalonLayout({
       {/* Sidebar - Desktop */}
       <aside className="w-64 bg-card border-r border-border hidden lg:flex flex-col sticky top-0 h-screen">
         <div className="p-6 border-b border-border">
-          <Link href="/salon-dashboard" className="text-xl font-bold tracking-tight text-blue-600">
-            Priisme <span className="text-foreground">Partner</span>
+          <Link href="/salon-dashboard" className="text-3xl font-script tracking-tight text-blue-600">
+            Rare <span className="text-foreground font-sans text-lg">Partner</span>
           </Link>
         </div>
 
@@ -90,8 +90,8 @@ export default function SalonLayout({
       {/* Mobile Header */}
       <header className="lg:hidden h-16 bg-card border-b border-border px-4 flex items-center justify-between sticky top-0 z-50">
         <div className="flex items-center gap-4">
-          <Link href="/salon-dashboard" className="text-lg font-bold text-primary">
-            Priisme Partner
+          <Link href="/salon-dashboard" className="text-3xl font-script tracking-tight text-blue-600">
+            Rare <span className="text-foreground font-sans text-lg">Partner</span>
           </Link>
           <ThemeSwitcher />
         </div>

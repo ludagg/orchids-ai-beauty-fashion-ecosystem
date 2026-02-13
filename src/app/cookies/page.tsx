@@ -9,7 +9,7 @@ export default function CookiesPage() {
         <h1 className="text-4xl font-bold font-display mb-8">Cookie Policy</h1>
         <div className="prose dark:prose-invert max-w-none space-y-6 text-muted-foreground">
            <p>
-            This Cookie Policy explains how Priisme uses cookies and similar technologies to recognize you when you visit our website.
+            This Cookie Policy explains how Rare uses cookies and similar technologies to recognize you when you visit our website.
           </p>
           <h2 className="text-2xl font-semibold text-foreground mt-8 mb-4">What are cookies?</h2>
           <p>

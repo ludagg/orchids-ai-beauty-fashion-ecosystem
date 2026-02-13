@@ -112,7 +112,7 @@ const testimonials = [
   {
     name: "Ananya Sharma",
     role: "Fashion Blogger",
-    content: "Priisme has completely changed how I discover new designers. The AI Stylist is surprisingly accurate and helps me find pieces I wouldn't have considered before.",
+    content: "Rare has completely changed how I discover new designers. The AI Stylist is surprisingly accurate and helps me find pieces I wouldn't have considered before.",
     avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
     rating: 5
   },
@@ -295,7 +295,7 @@ export default function Home() {
                 <div className="w-20 h-20 mx-auto rounded-full bg-primary flex items-center justify-center cursor-pointer hover:scale-110 transition-transform shadow-xl">
                   <Play className="w-8 h-8 text-primary-foreground ml-1" />
                 </div>
-                <p className="mt-4 text-muted-foreground text-sm">Watch how Priisme works</p>
+                <p className="mt-4 text-muted-foreground text-sm">Watch how Rare works</p>
               </div>
             </div>
             <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&h=675&fit=crop')] bg-cover bg-center opacity-30" />

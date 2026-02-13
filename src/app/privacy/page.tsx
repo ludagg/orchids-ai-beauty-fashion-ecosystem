@@ -10,7 +10,7 @@ export default function PrivacyPage() {
         <div className="prose dark:prose-invert max-w-none space-y-6 text-muted-foreground">
           <p className="text-sm text-foreground">Last updated: October 2024</p>
           <p>
-            At Priisme, we take your privacy seriously. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or use our mobile application.
+            At Rare, we take your privacy seriously. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or use our mobile application.
           </p>
           <h2 className="text-2xl font-semibold text-foreground mt-8 mb-4">Information We Collect</h2>
           <p>

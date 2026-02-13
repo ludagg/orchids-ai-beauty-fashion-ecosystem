@@ -21,7 +21,7 @@ const initialMessages = [
   {
     id: 1,
     type: "bot",
-    content: "Hi JD! I'm your Priisme AI Stylist. I've analyzed your recent browsing and noticed you're interested in minimalist summer wear. Would you like some personalized recommendations for your upcoming weekend trip?",
+    content: "Hi JD! I'm your Rare AI Stylist. I've analyzed your recent browsing and noticed you're interested in minimalist summer wear. Would you like some personalized recommendations for your upcoming weekend trip?",
     timestamp: "10:00 AM"
   }
 ];
@@ -190,7 +190,7 @@ export default function AIStylistPage() {
               </button>
             </div>
             <p className="text-center text-[11px] text-muted-foreground/50 mt-4 font-bold uppercase tracking-[0.2em]">
-              Powered by Priisme Style Engine v2.0
+              Powered by Rare Style Engine v2.0
             </p>
           </div>
         </main>
