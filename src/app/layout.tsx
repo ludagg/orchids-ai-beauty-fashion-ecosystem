@@ -5,6 +5,8 @@ import VisualEditsMessenger from "../visual-edits/VisualEditsMessenger";
 import ErrorReporter from "@/components/ErrorReporter";
 import Script from "next/script";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { Toaster } from "@/components/ui/sonner";
+import OfflineDetector from "@/components/OfflineDetector";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -56,6 +58,8 @@ export default function RootLayout({
         />
         {children}
         <VisualEditsMessenger />
+        <Toaster />
+        <OfflineDetector />
         </ThemeProvider>
       </body>
     </html>
