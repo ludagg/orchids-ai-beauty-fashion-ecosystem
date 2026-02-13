@@ -37,14 +37,16 @@ const notifications = [
   },
 ];
 
-export default function NotificationBell() {
+export default function NotificationBell({ "aria-label": ariaLabel = "Notifications" }: { "aria-label"?: string }) {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <button className="p-2 rounded-full hover:bg-secondary transition-colors relative outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+        <button
+          aria-label={ariaLabel}
+          className="p-2 rounded-full hover:bg-secondary transition-colors relative outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        >
           <Bell className="w-5 h-5 text-muted-foreground" />
           <span className="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full border-2 border-card"></span>
-          <span className="sr-only">Notifications</span>
         </button>
       </PopoverTrigger>
       <PopoverContent className="w-80 p-0 overflow-hidden" align="end">

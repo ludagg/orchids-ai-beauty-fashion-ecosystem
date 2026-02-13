@@ -83,6 +83,7 @@ export default function LandingNavbar() {
               <button
                 className="md:hidden p-2 -mr-2"
                 onClick={() => setMobileMenuOpen(true)}
+                aria-label="Open menu"
               >
                 <Menu className="w-6 h-6" />
               </button>
@@ -105,7 +106,11 @@ export default function LandingNavbar() {
                   <span className="text-3xl font-script text-black dark:text-white">Rare</span>
                   <ThemeSwitcher />
                 </div>
-                <button onClick={() => setMobileMenuOpen(false)} className="p-2 -mr-2">
+                <button
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-2 -mr-2"
+                  aria-label="Close menu"
+                >
                   <X className="w-6 h-6" />
                 </button>
               </div>
