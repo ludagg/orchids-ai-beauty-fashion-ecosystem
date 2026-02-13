@@ -195,7 +195,7 @@ export default function CreatorStudioPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Main Content Area - Analytics & Recent Videos */}
-        <div className="lg:col-span-2 space-y-8">
+        <div className="lg:col-span-2 space-y-8 order-2 lg:order-1 min-w-0">
 
           {/* Analytics Chart */}
           <Card>
@@ -302,7 +302,7 @@ export default function CreatorStudioPage() {
         </div>
 
         {/* Sidebar - Profile & Quick Actions */}
-        <div className="space-y-6">
+        <div className="space-y-6 order-1 lg:order-2 min-w-0">
             <Card>
                 <CardHeader className="text-center pb-2">
                     <div className="mx-auto w-24 h-24 rounded-full border-4 border-background shadow-xl overflow-hidden mb-4">
