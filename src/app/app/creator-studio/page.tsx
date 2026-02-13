@@ -9,17 +9,16 @@ import {
   Video,
   Share2,
   Lock,
-  Scissors,
-  ShoppingBag
+  LayoutDashboard
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useState } from "react";
-import { PartnerOnboardingModal, PartnerData } from "./components/PartnerOnboardingModal";
-import { ServiceManager } from "./components/ServiceManager";
-import { ProductManager } from "./components/ProductManager";
+import { useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { PartnerOnboardingModal, PartnerData, PartnerType } from "./components/PartnerOnboardingModal";
 
 // Mock Data
 const creatorProfile = {
@@ -92,11 +91,30 @@ const videos = [
   }
 ];
 
-export default function CreatorStudioPage() {
+function CreatorStudioContent() {
   const [activeTab, setActiveTab] = useState("videos");
   const [isPartner, setIsPartner] = useState(false);
   const [partnerData, setPartnerData] = useState<PartnerData | null>(null);
   const [isPartnerModalOpen, setIsPartnerModalOpen] = useState(false);
+
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    // Check for partner query params to restore state on back navigation
+    const isPartnerParam = searchParams.get("partner") === "true";
+    const typeParam = searchParams.get("type");
+    const businessNameParam = searchParams.get("businessName");
+
+    if (isPartnerParam) {
+      setIsPartner(true);
+      setPartnerData({
+        type: (typeParam as PartnerType) || "SALON",
+        businessName: businessNameParam || "My Business",
+        description: "",
+        address: ""
+      });
+    }
+  }, [searchParams]);
 
   const publishedVideos = videos.filter(v => v.status === 'Published');
   const draftVideos = videos.filter(v => v.status === 'Draft' || v.status === 'Private');
@@ -105,10 +123,7 @@ export default function CreatorStudioPage() {
   const handlePartnerComplete = (data: PartnerData) => {
     setPartnerData(data);
     setIsPartner(true);
-    // Switch to appropriate tab
-    if (data.type === 'SALON') setActiveTab("services");
-    else if (data.type === 'BOUTIQUE') setActiveTab("products");
-    else setActiveTab("services");
+    // Note: We no longer switch tabs here, as the content is now in the dashboard
   };
 
   return (
@@ -151,7 +166,7 @@ export default function CreatorStudioPage() {
             <Button className="flex-1 min-w-[120px]" size="lg">
                 Edit Profile
             </Button>
-            {!isPartner && (
+            {!isPartner ? (
                 <Button
                     className="flex-1 min-w-[120px] bg-gradient-to-r from-purple-500 to-pink-600 text-white hover:from-purple-600 hover:to-pink-700 border-0"
                     size="lg"
@@ -159,6 +174,20 @@ export default function CreatorStudioPage() {
                 >
                     Become a Partner
                 </Button>
+            ) : (
+                <Link
+                  href={`/app/creator-studio/partner-dashboard?type=${partnerData?.type || 'SALON'}&businessName=${encodeURIComponent(partnerData?.businessName || '')}`}
+                  passHref
+                  className="flex-1 min-w-[120px]"
+                >
+                    <Button
+                        className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 border-0 gap-2"
+                        size="lg"
+                    >
+                        <LayoutDashboard className="w-4 h-4" />
+                        Partner Dashboard
+                    </Button>
+                </Link>
             )}
             <Button variant="outline" size="icon" className="h-11 w-11">
                 <Share2 className="w-5 h-5" />
@@ -233,28 +262,6 @@ export default function CreatorStudioPage() {
             <Heart className="w-4 h-4 mr-2" />
             Liked
           </TabsTrigger>
-
-          {/* Partner Tabs */}
-          {isPartner && (partnerData?.type === 'SALON' || partnerData?.type === 'BOTH') && (
-            <TabsTrigger
-                value="services"
-                className="flex-1 min-w-[80px] h-full rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground data-[state=active]:text-foreground font-medium transition-all"
-            >
-                <Scissors className="w-4 h-4 mr-2" />
-                Services
-            </TabsTrigger>
-          )}
-
-          {isPartner && (partnerData?.type === 'BOUTIQUE' || partnerData?.type === 'BOTH') && (
-            <TabsTrigger
-                value="products"
-                className="flex-1 min-w-[80px] h-full rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground data-[state=active]:text-foreground font-medium transition-all"
-            >
-                <ShoppingBag className="w-4 h-4 mr-2" />
-                Products
-            </TabsTrigger>
-          )}
-
         </TabsList>
 
         <TabsContent value="videos" className="mt-0">
@@ -282,17 +289,6 @@ export default function CreatorStudioPage() {
                 ))}
              </div>
         </TabsContent>
-
-        {isPartner && (
-            <>
-                <TabsContent value="services" className="mt-0">
-                    <ServiceManager />
-                </TabsContent>
-                <TabsContent value="products" className="mt-0">
-                    <ProductManager />
-                </TabsContent>
-            </>
-        )}
 
       </Tabs>
 
@@ -344,4 +340,12 @@ function EmptyState({ type }: { type: string }) {
             <Button variant="outline">Upload Video</Button>
         </div>
     )
+}
+
+export default function CreatorStudioPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading Profile...</div>}>
+      <CreatorStudioContent />
+    </Suspense>
+  );
 }
