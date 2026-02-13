@@ -8,13 +8,18 @@ import {
   Settings,
   Video,
   Share2,
-  Lock
+  Lock,
+  Scissors,
+  ShoppingBag
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
+import { PartnerOnboardingModal, PartnerData } from "./components/PartnerOnboardingModal";
+import { ServiceManager } from "./components/ServiceManager";
+import { ProductManager } from "./components/ProductManager";
 
 // Mock Data
 const creatorProfile = {
@@ -89,10 +94,22 @@ const videos = [
 
 export default function CreatorStudioPage() {
   const [activeTab, setActiveTab] = useState("videos");
+  const [isPartner, setIsPartner] = useState(false);
+  const [partnerData, setPartnerData] = useState<PartnerData | null>(null);
+  const [isPartnerModalOpen, setIsPartnerModalOpen] = useState(false);
 
   const publishedVideos = videos.filter(v => v.status === 'Published');
   const draftVideos = videos.filter(v => v.status === 'Draft' || v.status === 'Private');
   const likedVideos = videos.slice(0, 3); // Mock liked videos
+
+  const handlePartnerComplete = (data: PartnerData) => {
+    setPartnerData(data);
+    setIsPartner(true);
+    // Switch to appropriate tab
+    if (data.type === 'SALON') setActiveTab("services");
+    else if (data.type === 'BOUTIQUE') setActiveTab("products");
+    else setActiveTab("services");
+  };
 
   return (
     <div className="max-w-4xl mx-auto min-h-screen pb-20 pt-8 px-4">
@@ -120,6 +137,11 @@ export default function CreatorStudioPage() {
                 <Badge variant="secondary" className="text-[10px] h-5 px-1.5 rounded-full bg-blue-100 text-blue-700 hover:bg-blue-200 dark:bg-blue-900/30 dark:text-blue-400">
                     Pro
                 </Badge>
+                {isPartner && (
+                  <Badge variant="default" className="text-[10px] h-5 px-1.5 rounded-full">
+                    Partner
+                  </Badge>
+                )}
             </h1>
             <p className="text-muted-foreground font-medium">{creatorProfile.handle}</p>
         </div>
@@ -129,6 +151,15 @@ export default function CreatorStudioPage() {
             <Button className="flex-1 min-w-[120px]" size="lg">
                 Edit Profile
             </Button>
+            {!isPartner && (
+                <Button
+                    className="flex-1 min-w-[120px] bg-gradient-to-r from-purple-500 to-pink-600 text-white hover:from-purple-600 hover:to-pink-700 border-0"
+                    size="lg"
+                    onClick={() => setIsPartnerModalOpen(true)}
+                >
+                    Become a Partner
+                </Button>
+            )}
             <Button variant="outline" size="icon" className="h-11 w-11">
                 <Share2 className="w-5 h-5" />
             </Button>
@@ -179,29 +210,51 @@ export default function CreatorStudioPage() {
       </div>
 
       {/* Content Tabs */}
-      <Tabs defaultValue="videos" className="w-full" onValueChange={setActiveTab}>
-        <TabsList className="w-full justify-start bg-transparent border-b h-12 p-0 rounded-none mb-6">
+      <Tabs value={activeTab} className="w-full" onValueChange={setActiveTab}>
+        <TabsList className="w-full justify-start bg-transparent border-b h-12 p-0 rounded-none mb-6 overflow-x-auto no-scrollbar">
           <TabsTrigger
             value="videos"
-            className="flex-1 h-full rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground data-[state=active]:text-foreground font-medium transition-all"
+            className="flex-1 min-w-[80px] h-full rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground data-[state=active]:text-foreground font-medium transition-all"
           >
             <Video className="w-4 h-4 mr-2" />
             Videos
           </TabsTrigger>
           <TabsTrigger
             value="drafts"
-            className="flex-1 h-full rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground data-[state=active]:text-foreground font-medium transition-all"
+            className="flex-1 min-w-[80px] h-full rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground data-[state=active]:text-foreground font-medium transition-all"
           >
             <Lock className="w-4 h-4 mr-2" />
             Drafts
           </TabsTrigger>
            <TabsTrigger
             value="liked"
-            className="flex-1 h-full rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground data-[state=active]:text-foreground font-medium transition-all"
+            className="flex-1 min-w-[80px] h-full rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground data-[state=active]:text-foreground font-medium transition-all"
           >
             <Heart className="w-4 h-4 mr-2" />
             Liked
           </TabsTrigger>
+
+          {/* Partner Tabs */}
+          {isPartner && (partnerData?.type === 'SALON' || partnerData?.type === 'BOTH') && (
+            <TabsTrigger
+                value="services"
+                className="flex-1 min-w-[80px] h-full rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground data-[state=active]:text-foreground font-medium transition-all"
+            >
+                <Scissors className="w-4 h-4 mr-2" />
+                Services
+            </TabsTrigger>
+          )}
+
+          {isPartner && (partnerData?.type === 'BOUTIQUE' || partnerData?.type === 'BOTH') && (
+            <TabsTrigger
+                value="products"
+                className="flex-1 min-w-[80px] h-full rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground data-[state=active]:text-foreground font-medium transition-all"
+            >
+                <ShoppingBag className="w-4 h-4 mr-2" />
+                Products
+            </TabsTrigger>
+          )}
+
         </TabsList>
 
         <TabsContent value="videos" className="mt-0">
@@ -229,7 +282,25 @@ export default function CreatorStudioPage() {
                 ))}
              </div>
         </TabsContent>
+
+        {isPartner && (
+            <>
+                <TabsContent value="services" className="mt-0">
+                    <ServiceManager />
+                </TabsContent>
+                <TabsContent value="products" className="mt-0">
+                    <ProductManager />
+                </TabsContent>
+            </>
+        )}
+
       </Tabs>
+
+      <PartnerOnboardingModal
+        isOpen={isPartnerModalOpen}
+        onOpenChange={setIsPartnerModalOpen}
+        onComplete={handlePartnerComplete}
+      />
     </div>
   );
 }
