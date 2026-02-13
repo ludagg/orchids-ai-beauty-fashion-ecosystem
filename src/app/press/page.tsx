@@ -1,7 +1,11 @@
+import LandingNavbar from "@/components/landing/LandingNavbar";
+import LandingFooter from "@/components/landing/LandingFooter";
+
 export default function PressPage() {
   return (
-    <div className="min-h-screen bg-background text-foreground pt-24 pb-12 px-6">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-background text-foreground">
+      <LandingNavbar />
+      <main className="pt-32 pb-16 px-6 max-w-4xl mx-auto">
         <h1 className="text-4xl font-bold font-display mb-6">Press & Media</h1>
         <p className="text-lg text-muted-foreground mb-8">Latest news and updates from Priisme.</p>
 
@@ -18,7 +22,8 @@ export default function PressPage() {
             </div>
           ))}
         </div>
-      </div>
+      </main>
+      <LandingFooter />
     </div>
   );
 }
