@@ -158,8 +158,7 @@ export default function DiscoverPage() {
 
       {/* Welcome Header */}
       <div className="px-6 py-6 pb-2">
-        <h1 className="text-2xl font-bold font-display">Good Morning, Alex!</h1>
-        <p className="text-muted-foreground text-sm">Ready for your glow up today?</p>
+        <h1 className="text-2xl font-bold font-display">Discover</h1>
       </div>
 
       {/* Sticky Category Tabs */}
