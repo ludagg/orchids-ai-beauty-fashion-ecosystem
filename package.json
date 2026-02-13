@@ -6,7 +6,10 @@
         "dev": "next dev --turbopack",
         "build": "next build",
         "start": "next start",
-        "lint": "next lint"
+        "lint": "next lint",
+        "db:generate": "drizzle-kit generate",
+        "db:push": "drizzle-kit push",
+        "db:migrate": "drizzle-kit migrate"
     },
     "dependencies": {
         "@babel/parser": "^7.28.5",
@@ -48,6 +51,7 @@
         "@tsparticles/engine": "^3.8.1",
         "@tsparticles/react": "^3.0.0",
         "@tsparticles/slim": "^3.8.1",
+        "@types/pg": "^8.16.0",
         "atmn": "^0.0.28",
         "autumn-js": "^0.1.43",
         "bcrypt": "^6.0.0",
@@ -72,6 +76,7 @@
         "motion-dom": "^12.23.23",
         "next": "^16.0.1",
         "next-themes": "^0.4.6",
+        "pg": "^8.18.0",
         "qss": "^3.0.0",
         "react": "^19.0.0",
         "react-day-picker": "^9.8.0",

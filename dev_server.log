@@ -3,13 +3,1238 @@ $ next dev --turbopack
 ▲ Next.js 16.1.6 (Turbopack)
 - Local:         http://localhost:3000
 - Network:       http://192.168.0.2:3000
+- Environments: .env
 
 ✓ Starting...
-Attention: Next.js now collects completely anonymous telemetry regarding usage.
-This information is used to shape Next.js' roadmap and prioritize features.
-You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
-https://nextjs.org/telemetry
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+✓ Ready in 1314ms
+○ Compiling /auth ...
+ GET /auth 200 in 5.5s (compile: 4.9s, proxy.ts: 87ms, render: 521ms)
+⨯ ./app/node_modules/next/dist/client/app-index.js:11:34
+Module not found: Can't resolve '@swc/helpers/_/_interop_require_default'
+Import map: aliased to module '@swc/helpers' with subpath '/_/_interop_require_default' inside of [project]/app/node_modules/next
 
-✓ Ready in 1336ms
-○ Compiling /app ...
- GET /app 200 in 7.0s (compile: 6.0s, render: 959ms)
+
+Import trace:
+  Client Component Browser:
+    ./app/node_modules/next/dist/client/app-index.js
+    ./app/node_modules/next/dist/client/app-next-turbopack.js
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/node_modules/next/dist/client/components/app-router.js:11:34
+Module not found: Can't resolve '@swc/helpers/_/_interop_require_default'
+Import map: aliased to module '@swc/helpers' with subpath '/_/_interop_require_default' inside of [project]/app/node_modules/next
+
+
+Import trace:
+  Client Component Browser:
+    ./app/node_modules/next/dist/client/components/app-router.js
+    ./app/node_modules/next/dist/client/app-index.js
+    ./app/node_modules/next/dist/client/app-next-turbopack.js
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/node_modules/next/dist/client/components/dev-root-http-access-fallback-boundary.js:24:34
+Module not found: Can't resolve '@swc/helpers/_/_interop_require_default'
+Import map: aliased to module '@swc/helpers' with subpath '/_/_interop_require_default' inside of [project]/app/node_modules/next
+
+
+Import trace:
+  Client Component Browser:
+    ./app/node_modules/next/dist/client/components/dev-root-http-access-fallback-boundary.js
+    ./app/node_modules/next/dist/client/components/app-router.js
+    ./app/node_modules/next/dist/client/app-index.js
+    ./app/node_modules/next/dist/client/app-next-turbopack.js
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/node_modules/next/dist/client/components/error-boundary.js:24:34
+Module not found: Can't resolve '@swc/helpers/_/_interop_require_default'
+Import map: aliased to module '@swc/helpers' with subpath '/_/_interop_require_default' inside of [project]/app/node_modules/next
+
+
+Import trace:
+  Client Component Browser:
+    ./app/node_modules/next/dist/client/components/error-boundary.js
+    ./app/node_modules/next/dist/client/react-client-callbacks/error-boundary-callbacks.js
+    ./app/node_modules/next/dist/client/app-index.js
+    ./app/node_modules/next/dist/client/app-next-turbopack.js
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/node_modules/next/dist/client/components/errors/root-error-boundary.js:12:34
+Module not found: Can't resolve '@swc/helpers/_/_interop_require_default'
+Import map: aliased to module '@swc/helpers' with subpath '/_/_interop_require_default' inside of [project]/app/node_modules/next
+
+
+Import trace:
+  Client Component Browser:
+    ./app/node_modules/next/dist/client/components/errors/root-error-boundary.js
+    ./app/node_modules/next/dist/client/components/app-router.js
+    ./app/node_modules/next/dist/client/app-index.js
+    ./app/node_modules/next/dist/client/app-next-turbopack.js
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/node_modules/next/dist/client/components/layout-router.js:15:34
+Module not found: Can't resolve '@swc/helpers/_/_interop_require_default'
+Import map: aliased to module '@swc/helpers' with subpath '/_/_interop_require_default' inside of [project]/app/node_modules/next
+
+
+Import trace:
+  Client Component Browser:
+    ./app/node_modules/next/dist/client/components/layout-router.js [Client Component Browser]
+    ./app/node_modules/next/dist/esm/client/components/layout-router.js [Server Component]
+    ./app/node_modules/next/dist/esm/server/app-render/entry-base.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/node_modules/next/dist/client/dev/hot-reloader/app/hot-reloader-app.js:32:34
+Module not found: Can't resolve '@swc/helpers/_/_interop_require_default'
+Import map: aliased to module '@swc/helpers' with subpath '/_/_interop_require_default' inside of [project]/app/node_modules/next
+
+
+Import trace:
+  Client Component Browser:
+    ./app/node_modules/next/dist/client/dev/hot-reloader/app/hot-reloader-app.js
+    ./app/node_modules/next/dist/client/dev/hot-reloader/app/web-socket.js
+    ./app/node_modules/next/dist/client/app-index.js
+    ./app/node_modules/next/dist/client/app-next-turbopack.js
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/node_modules/next/dist/client/lib/console.js:23:34
+Module not found: Can't resolve '@swc/helpers/_/_interop_require_default'
+Import map: aliased to module '@swc/helpers' with subpath '/_/_interop_require_default' inside of [project]/app/node_modules/next
+
+
+Import trace:
+  Client Component Browser:
+    ./app/node_modules/next/dist/client/lib/console.js
+    ./app/node_modules/next/dist/next-devtools/userspace/app/errors/use-error-handler.js
+    ./app/node_modules/next/dist/client/dev/hot-reloader/app/hot-reloader-app.js
+    ./app/node_modules/next/dist/client/components/app-router.js
+    ./app/node_modules/next/dist/client/app-index.js
+    ./app/node_modules/next/dist/client/app-next-turbopack.js
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/node_modules/next/dist/client/react-client-callbacks/error-boundary-callbacks.js:24:34
+Module not found: Can't resolve '@swc/helpers/_/_interop_require_default'
+Import map: aliased to module '@swc/helpers' with subpath '/_/_interop_require_default' inside of [project]/app/node_modules/next
+
+
+Import trace:
+  Client Component Browser:
+    ./app/node_modules/next/dist/client/react-client-callbacks/error-boundary-callbacks.js
+    ./app/node_modules/next/dist/client/app-index.js
+    ./app/node_modules/next/dist/client/app-next-turbopack.js
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/node_modules/next/dist/client/react-client-callbacks/on-recoverable-error.js:24:34
+Module not found: Can't resolve '@swc/helpers/_/_interop_require_default'
+Import map: aliased to module '@swc/helpers' with subpath '/_/_interop_require_default' inside of [project]/app/node_modules/next
+
+
+Import trace:
+  Client Component Browser:
+    ./app/node_modules/next/dist/client/react-client-callbacks/on-recoverable-error.js
+    ./app/node_modules/next/dist/client/app-next-turbopack.js
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/node_modules/next/dist/client/script.js:28:34
+Module not found: Can't resolve '@swc/helpers/_/_interop_require_default'
+Import map: aliased to module '@swc/helpers' with subpath '/_/_interop_require_default' inside of [project]/app/node_modules/next
+
+
+Import trace:
+  Server Component:
+    ./app/node_modules/next/dist/client/script.js
+    ./app/node_modules/next/script.js
+    ./app/src/app/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/node_modules/next/dist/client/script.js:28:34
+Module not found: Can't resolve '@swc/helpers/_/_interop_require_default'
+Import map: aliased to module '@swc/helpers' with subpath '/_/_interop_require_default' inside of [project]/app/node_modules/next
+
+
+Import trace:
+  Server Component:
+    ./app/node_modules/next/dist/client/script.js
+    ./app/node_modules/next/script.js
+    ./app/src/app/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/node_modules/next/dist/next-devtools/userspace/app/app-dev-overlay-error-boundary.js:11:34
+Module not found: Can't resolve '@swc/helpers/_/_interop_require_default'
+Import map: aliased to module '@swc/helpers' with subpath '/_/_interop_require_default' inside of [project]/app/node_modules/next
+
+
+Import trace:
+  Client Component Browser:
+    ./app/node_modules/next/dist/next-devtools/userspace/app/app-dev-overlay-error-boundary.js
+    ./app/node_modules/next/dist/next-devtools/userspace/app/client-entry.js
+    ./app/node_modules/next/dist/client/app-index.js
+    ./app/node_modules/next/dist/client/app-next-turbopack.js
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/node_modules/next/dist/next-devtools/userspace/app/client-entry.js:11:34
+Module not found: Can't resolve '@swc/helpers/_/_interop_require_default'
+Import map: aliased to module '@swc/helpers' with subpath '/_/_interop_require_default' inside of [project]/app/node_modules/next
+
+
+Import trace:
+  Client Component Browser:
+    ./app/node_modules/next/dist/next-devtools/userspace/app/client-entry.js
+    ./app/node_modules/next/dist/client/app-index.js
+    ./app/node_modules/next/dist/client/app-next-turbopack.js
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:23:34
+Module not found: Can't resolve '@swc/helpers/_/_interop_require_default'
+Import map: aliased to module '@swc/helpers' with subpath '/_/_interop_require_default' inside of [project]/app/node_modules/next
+
+
+Import trace:
+  Client Component Browser:
+    ./app/node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js
+    ./app/node_modules/next/dist/next-devtools/userspace/app/errors/index.js
+    ./app/node_modules/next/dist/client/react-client-callbacks/error-boundary-callbacks.js
+    ./app/node_modules/next/dist/client/app-index.js
+    ./app/node_modules/next/dist/client/app-next-turbopack.js
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/node_modules/next/dist/next-devtools/userspace/app/errors/stitched-error.js:35:34
+Module not found: Can't resolve '@swc/helpers/_/_interop_require_default'
+Import map: aliased to module '@swc/helpers' with subpath '/_/_interop_require_default' inside of [project]/app/node_modules/next
+
+
+Import trace:
+  Client Component Browser:
+    ./app/node_modules/next/dist/next-devtools/userspace/app/errors/stitched-error.js
+    ./app/node_modules/next/dist/client/app-next-turbopack.js
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/node_modules/next/dist/next-devtools/userspace/app/errors/use-error-handler.js:31:34
+Module not found: Can't resolve '@swc/helpers/_/_interop_require_default'
+Import map: aliased to module '@swc/helpers' with subpath '/_/_interop_require_default' inside of [project]/app/node_modules/next
+
+
+Import trace:
+  Client Component Browser:
+    ./app/node_modules/next/dist/next-devtools/userspace/app/errors/use-error-handler.js
+    ./app/node_modules/next/dist/client/dev/hot-reloader/app/hot-reloader-app.js
+    ./app/node_modules/next/dist/client/components/app-router.js
+    ./app/node_modules/next/dist/client/app-index.js
+    ./app/node_modules/next/dist/client/app-next-turbopack.js
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/node_modules/next/dist/shared/lib/app-router-context.shared-runtime.js:36:34
+Module not found: Can't resolve '@swc/helpers/_/_interop_require_default'
+Import map: aliased to module '@swc/helpers' with subpath '/_/_interop_require_default' inside of [project]/app/node_modules/next
+
+
+Import traces:
+  #1 [Client Component Browser]:
+    ./app/node_modules/next/dist/shared/lib/app-router-context.shared-runtime.js
+    ./app/node_modules/next/dist/client/app-index.js
+    ./app/node_modules/next/dist/client/app-next-turbopack.js
+
+  #2 [Client Component Browser]:
+    ./app/node_modules/next/dist/shared/lib/app-router-context.shared-runtime.js [Client Component Browser]
+    ./app/node_modules/next/dist/client/app-dir/link.js [Client Component Browser]
+    ./app/src/app/auth/page.tsx [Client Component Browser]
+    ./app/src/app/auth/page.tsx [Server Component]
+
+  #3 [Client Component Browser]:
+    ./app/node_modules/next/dist/shared/lib/app-router-context.shared-runtime.js [Client Component Browser]
+    ./app/node_modules/next/dist/client/app-dir/link.js [Client Component Browser]
+    ./app/src/app/not-found.tsx [Client Component Browser]
+    ./app/src/app/not-found.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/node_modules/next/dist/shared/lib/format-webpack-messages.js:33:34
+Module not found: Can't resolve '@swc/helpers/_/_interop_require_default'
+Import map: aliased to module '@swc/helpers' with subpath '/_/_interop_require_default' inside of [project]/app/node_modules/next
+
+
+Import trace:
+  Client Component Browser:
+    ./app/node_modules/next/dist/shared/lib/format-webpack-messages.js
+    ./app/node_modules/next/dist/client/dev/hot-reloader/app/hot-reloader-app.js
+    ./app/node_modules/next/dist/client/dev/hot-reloader/app/web-socket.js
+    ./app/node_modules/next/dist/client/app-index.js
+    ./app/node_modules/next/dist/client/app-next-turbopack.js
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/node_modules/next/dist/shared/lib/head-manager-context.shared-runtime.js:11:34
+Module not found: Can't resolve '@swc/helpers/_/_interop_require_default'
+Import map: aliased to module '@swc/helpers' with subpath '/_/_interop_require_default' inside of [project]/app/node_modules/next
+
+
+Import traces:
+  #1 [Client Component Browser]:
+    ./app/node_modules/next/dist/shared/lib/head-manager-context.shared-runtime.js
+    ./app/node_modules/next/dist/client/app-index.js
+    ./app/node_modules/next/dist/client/app-next-turbopack.js
+
+  #2 [Client Component Browser]:
+    ./app/node_modules/next/dist/shared/lib/head-manager-context.shared-runtime.js [Client Component Browser]
+    ./app/node_modules/next/dist/client/script.js [Client Component Browser]
+    ./app/node_modules/next/dist/client/script.js [Server Component]
+    ./app/node_modules/next/script.js [Server Component]
+    ./app/src/app/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/node_modules/next/dist/client/app-dir/link.js:33:35
+Module not found: Can't resolve '@swc/helpers/_/_interop_require_wildcard'
+Import map: aliased to module '@swc/helpers' with subpath '/_/_interop_require_wildcard' inside of [project]/app/node_modules/next
+
+
+Import traces:
+  #1 [Client Component Browser]:
+    ./app/node_modules/next/dist/client/app-dir/link.js [Client Component Browser]
+    ./app/src/app/auth/page.tsx [Client Component Browser]
+    ./app/src/app/auth/page.tsx [Server Component]
+
+  #2 [Client Component Browser]:
+    ./app/node_modules/next/dist/client/app-dir/link.js [Client Component Browser]
+    ./app/src/app/not-found.tsx [Client Component Browser]
+    ./app/src/app/not-found.tsx [Server Component]
+
+  #3 [Client Component SSR]:
+    ./app/node_modules/next/dist/client/app-dir/link.js [Client Component SSR]
+    ./app/src/app/auth/page.tsx [Client Component SSR]
+    ./app/src/app/auth/page.tsx [Server Component]
+
+  #4 [Client Component SSR]:
+    ./app/node_modules/next/dist/client/app-dir/link.js [Client Component SSR]
+    ./app/src/app/not-found.tsx [Client Component SSR]
+    ./app/src/app/not-found.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/node_modules/next/dist/client/app-dir/link.js:33:35
+Module not found: Can't resolve '@swc/helpers/_/_interop_require_wildcard'
+Import map: aliased to module '@swc/helpers' with subpath '/_/_interop_require_wildcard' inside of [project]/app/node_modules/next
+
+
+Import traces:
+  #1 [Client Component Browser]:
+    ./app/node_modules/next/dist/client/app-dir/link.js [Client Component Browser]
+    ./app/src/app/auth/page.tsx [Client Component Browser]
+    ./app/src/app/auth/page.tsx [Server Component]
+
+  #2 [Client Component Browser]:
+    ./app/node_modules/next/dist/client/app-dir/link.js [Client Component Browser]
+    ./app/src/app/not-found.tsx [Client Component Browser]
+    ./app/src/app/not-found.tsx [Server Component]
+
+  #3 [Client Component SSR]:
+    ./app/node_modules/next/dist/client/app-dir/link.js [Client Component SSR]
+    ./app/src/app/auth/page.tsx [Client Component SSR]
+    ./app/src/app/auth/page.tsx [Server Component]
+
+  #4 [Client Component SSR]:
+    ./app/node_modules/next/dist/client/app-dir/link.js [Client Component SSR]
+    ./app/src/app/not-found.tsx [Client Component SSR]
+    ./app/src/app/not-found.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/node_modules/next/dist/client/components/app-router.js:12:35
+Module not found: Can't resolve '@swc/helpers/_/_interop_require_wildcard'
+Import map: aliased to module '@swc/helpers' with subpath '/_/_interop_require_wildcard' inside of [project]/app/node_modules/next
+
+
+Import trace:
+  Client Component Browser:
+    ./app/node_modules/next/dist/client/components/app-router.js
+    ./app/node_modules/next/dist/client/app-index.js
+    ./app/node_modules/next/dist/client/app-next-turbopack.js
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/node_modules/next/dist/client/components/http-access-fallback/error-boundary.js:12:35
+Module not found: Can't resolve '@swc/helpers/_/_interop_require_wildcard'
+Import map: aliased to module '@swc/helpers' with subpath '/_/_interop_require_wildcard' inside of [project]/app/node_modules/next
+
+
+Import trace:
+  Client Component Browser:
+    ./app/node_modules/next/dist/client/components/http-access-fallback/error-boundary.js
+    ./app/node_modules/next/dist/client/components/dev-root-http-access-fallback-boundary.js
+    ./app/node_modules/next/dist/client/components/app-router.js
+    ./app/node_modules/next/dist/client/app-index.js
+    ./app/node_modules/next/dist/client/app-next-turbopack.js
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/node_modules/next/dist/client/components/layout-router.js:16:35
+Module not found: Can't resolve '@swc/helpers/_/_interop_require_wildcard'
+Import map: aliased to module '@swc/helpers' with subpath '/_/_interop_require_wildcard' inside of [project]/app/node_modules/next
+
+
+Import trace:
+  Client Component Browser:
+    ./app/node_modules/next/dist/client/components/layout-router.js [Client Component Browser]
+    ./app/node_modules/next/dist/esm/client/components/layout-router.js [Server Component]
+    ./app/node_modules/next/dist/esm/server/app-render/entry-base.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/node_modules/next/dist/client/components/navigation.js:85:35
+Module not found: Can't resolve '@swc/helpers/_/_interop_require_wildcard'
+Import map: aliased to module '@swc/helpers' with subpath '/_/_interop_require_wildcard' inside of [project]/app/node_modules/next
+
+
+Import traces:
+  #1 [Client Component Browser]:
+    ./app/node_modules/next/dist/client/components/navigation.js [Client Component Browser]
+    ./app/node_modules/next/navigation.js [Client Component Browser]
+    ./app/src/app/auth/page.tsx [Client Component Browser]
+    ./app/src/app/auth/page.tsx [Server Component]
+
+  #2 [Client Component SSR]:
+    ./app/node_modules/next/dist/client/components/navigation.js [Client Component SSR]
+    ./app/node_modules/next/navigation.js [Client Component SSR]
+    ./app/src/app/auth/page.tsx [Client Component SSR]
+    ./app/src/app/auth/page.tsx [Server Component]
+
+  #3 [Client Component Browser]:
+    ./app/node_modules/next/dist/client/components/navigation.js
+    ./app/node_modules/next/dist/client/components/redirect-boundary.js
+    ./app/node_modules/next/dist/client/components/app-router.js
+    ./app/node_modules/next/dist/client/app-index.js
+    ./app/node_modules/next/dist/client/app-next-turbopack.js
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/node_modules/next/dist/client/components/navigation.js:85:35
+Module not found: Can't resolve '@swc/helpers/_/_interop_require_wildcard'
+Import map: aliased to module '@swc/helpers' with subpath '/_/_interop_require_wildcard' inside of [project]/app/node_modules/next
+
+
+Import traces:
+  #1 [Client Component Browser]:
+    ./app/node_modules/next/dist/client/components/navigation.js [Client Component Browser]
+    ./app/node_modules/next/navigation.js [Client Component Browser]
+    ./app/src/app/auth/page.tsx [Client Component Browser]
+    ./app/src/app/auth/page.tsx [Server Component]
+
+  #2 [Client Component SSR]:
+    ./app/node_modules/next/dist/client/components/navigation.js [Client Component SSR]
+    ./app/node_modules/next/navigation.js [Client Component SSR]
+    ./app/src/app/auth/page.tsx [Client Component SSR]
+    ./app/src/app/auth/page.tsx [Server Component]
+
+  #3 [Client Component Browser]:
+    ./app/node_modules/next/dist/client/components/navigation.js
+    ./app/node_modules/next/dist/client/components/redirect-boundary.js
+    ./app/node_modules/next/dist/client/components/app-router.js
+    ./app/node_modules/next/dist/client/app-index.js
+    ./app/node_modules/next/dist/client/app-next-turbopack.js
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/node_modules/next/dist/client/components/redirect-boundary.js:24:35
+Module not found: Can't resolve '@swc/helpers/_/_interop_require_wildcard'
+Import map: aliased to module '@swc/helpers' with subpath '/_/_interop_require_wildcard' inside of [project]/app/node_modules/next
+
+
+Import trace:
+  Client Component Browser:
+    ./app/node_modules/next/dist/client/components/redirect-boundary.js
+    ./app/node_modules/next/dist/client/components/app-router.js
+    ./app/node_modules/next/dist/client/app-index.js
+    ./app/node_modules/next/dist/client/app-next-turbopack.js
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/node_modules/next/dist/client/components/render-from-template-context.js:12:35
+Module not found: Can't resolve '@swc/helpers/_/_interop_require_wildcard'
+Import map: aliased to module '@swc/helpers' with subpath '/_/_interop_require_wildcard' inside of [project]/app/node_modules/next
+
+
+Import trace:
+  Client Component Browser:
+    ./app/node_modules/next/dist/client/components/render-from-template-context.js [Client Component Browser]
+    ./app/node_modules/next/dist/esm/client/components/render-from-template-context.js [Server Component]
+    ./app/node_modules/next/dist/esm/server/app-render/entry-base.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/node_modules/next/dist/client/components/use-action-queue.js:23:35
+Module not found: Can't resolve '@swc/helpers/_/_interop_require_wildcard'
+Import map: aliased to module '@swc/helpers' with subpath '/_/_interop_require_wildcard' inside of [project]/app/node_modules/next
+
+
+Import traces:
+  #1 [Client Component Browser]:
+    ./app/node_modules/next/dist/client/components/use-action-queue.js
+    ./app/node_modules/next/dist/client/components/app-router-instance.js
+    ./app/node_modules/next/dist/client/app-index.js
+    ./app/node_modules/next/dist/client/app-next-turbopack.js
+
+  #2 [Client Component SSR]:
+    ./app/node_modules/next/dist/client/components/use-action-queue.js [Client Component SSR]
+    ./app/node_modules/next/dist/client/components/router-reducer/ppr-navigations.js [Client Component SSR]
+    ./app/node_modules/next/dist/client/components/router-reducer/reducers/navigate-reducer.js [Client Component SSR]
+    ./app/node_modules/next/dist/client/components/segment-cache/cache.js [Client Component SSR]
+    ./app/node_modules/next/dist/client/components/segment-cache/scheduler.js [Client Component SSR]
+    ./app/node_modules/next/dist/client/components/links.js [Client Component SSR]
+    ./app/node_modules/next/dist/client/app-dir/link.js [Client Component SSR]
+    ./app/src/app/auth/page.tsx [Client Component SSR]
+    ./app/src/app/auth/page.tsx [Server Component]
+
+  #3 [Client Component SSR]:
+    ./app/node_modules/next/dist/client/components/use-action-queue.js [Client Component SSR]
+    ./app/node_modules/next/dist/client/components/router-reducer/ppr-navigations.js [Client Component SSR]
+    ./app/node_modules/next/dist/client/components/router-reducer/reducers/navigate-reducer.js [Client Component SSR]
+    ./app/node_modules/next/dist/client/components/segment-cache/cache.js [Client Component SSR]
+    ./app/node_modules/next/dist/client/components/segment-cache/scheduler.js [Client Component SSR]
+    ./app/node_modules/next/dist/client/components/links.js [Client Component SSR]
+    ./app/node_modules/next/dist/client/app-dir/link.js [Client Component SSR]
+    ./app/src/app/not-found.tsx [Client Component SSR]
+    ./app/src/app/not-found.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/node_modules/next/dist/client/components/use-action-queue.js:23:35
+Module not found: Can't resolve '@swc/helpers/_/_interop_require_wildcard'
+Import map: aliased to module '@swc/helpers' with subpath '/_/_interop_require_wildcard' inside of [project]/app/node_modules/next
+
+
+Import traces:
+  #1 [Client Component Browser]:
+    ./app/node_modules/next/dist/client/components/use-action-queue.js
+    ./app/node_modules/next/dist/client/components/app-router-instance.js
+    ./app/node_modules/next/dist/client/app-index.js
+    ./app/node_modules/next/dist/client/app-next-turbopack.js
+
+  #2 [Client Component SSR]:
+    ./app/node_modules/next/dist/client/components/use-action-queue.js [Client Component SSR]
+    ./app/node_modules/next/dist/client/components/router-reducer/ppr-navigations.js [Client Component SSR]
+    ./app/node_modules/next/dist/client/components/router-reducer/reducers/navigate-reducer.js [Client Component SSR]
+    ./app/node_modules/next/dist/client/components/segment-cache/cache.js [Client Component SSR]
+    ./app/node_modules/next/dist/client/components/segment-cache/scheduler.js [Client Component SSR]
+    ./app/node_modules/next/dist/client/components/links.js [Client Component SSR]
+    ./app/node_modules/next/dist/client/app-dir/link.js [Client Component SSR]
+    ./app/src/app/auth/page.tsx [Client Component SSR]
+    ./app/src/app/auth/page.tsx [Server Component]
+
+  #3 [Client Component SSR]:
+    ./app/node_modules/next/dist/client/components/use-action-queue.js [Client Component SSR]
+    ./app/node_modules/next/dist/client/components/router-reducer/ppr-navigations.js [Client Component SSR]
+    ./app/node_modules/next/dist/client/components/router-reducer/reducers/navigate-reducer.js [Client Component SSR]
+    ./app/node_modules/next/dist/client/components/segment-cache/cache.js [Client Component SSR]
+    ./app/node_modules/next/dist/client/components/segment-cache/scheduler.js [Client Component SSR]
+    ./app/node_modules/next/dist/client/components/links.js [Client Component SSR]
+    ./app/node_modules/next/dist/client/app-dir/link.js [Client Component SSR]
+    ./app/src/app/not-found.tsx [Client Component SSR]
+    ./app/src/app/not-found.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/node_modules/next/dist/client/script.js:29:35
+Module not found: Can't resolve '@swc/helpers/_/_interop_require_wildcard'
+Import map: aliased to module '@swc/helpers' with subpath '/_/_interop_require_wildcard' inside of [project]/app/node_modules/next
+
+
+Import trace:
+  Server Component:
+    ./app/node_modules/next/dist/client/script.js
+    ./app/node_modules/next/script.js
+    ./app/src/app/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/node_modules/next/dist/client/script.js:29:35
+Module not found: Can't resolve '@swc/helpers/_/_interop_require_wildcard'
+Import map: aliased to module '@swc/helpers' with subpath '/_/_interop_require_wildcard' inside of [project]/app/node_modules/next
+
+
+Import trace:
+  Server Component:
+    ./app/node_modules/next/dist/client/script.js
+    ./app/node_modules/next/script.js
+    ./app/src/app/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/node_modules/next/dist/shared/lib/router/utils/format-url.js:48:35
+Module not found: Can't resolve '@swc/helpers/_/_interop_require_wildcard'
+Import map: aliased to module '@swc/helpers' with subpath '/_/_interop_require_wildcard' inside of [project]/app/node_modules/next
+
+
+Import traces:
+  #1 [Server Component]:
+    ./app/node_modules/next/dist/shared/lib/router/utils/format-url.js
+    ./app/node_modules/next/dist/server/server-utils.js
+    ./app/node_modules/next/dist/lib/metadata/get-metadata-route.js
+
+  #2 [Client Component Browser]:
+    ./app/node_modules/next/dist/shared/lib/router/utils/format-url.js [Client Component Browser]
+    ./app/node_modules/next/dist/client/app-dir/link.js [Client Component Browser]
+    ./app/src/app/auth/page.tsx [Client Component Browser]
+    ./app/src/app/auth/page.tsx [Server Component]
+
+  #3 [Client Component Browser]:
+    ./app/node_modules/next/dist/shared/lib/router/utils/format-url.js [Client Component Browser]
+    ./app/node_modules/next/dist/client/app-dir/link.js [Client Component Browser]
+    ./app/src/app/not-found.tsx [Client Component Browser]
+    ./app/src/app/not-found.tsx [Server Component]
+
+  #4 [Client Component SSR]:
+    ./app/node_modules/next/dist/shared/lib/router/utils/format-url.js [Client Component SSR]
+    ./app/node_modules/next/dist/client/app-dir/link.js [Client Component SSR]
+    ./app/src/app/auth/page.tsx [Client Component SSR]
+    ./app/src/app/auth/page.tsx [Server Component]
+
+  #5 [Client Component SSR]:
+    ./app/node_modules/next/dist/shared/lib/router/utils/format-url.js [Client Component SSR]
+    ./app/node_modules/next/dist/client/app-dir/link.js [Client Component SSR]
+    ./app/src/app/not-found.tsx [Client Component SSR]
+    ./app/src/app/not-found.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/node_modules/next/dist/shared/lib/router/utils/format-url.js:48:35
+Module not found: Can't resolve '@swc/helpers/_/_interop_require_wildcard'
+Import map: aliased to module '@swc/helpers' with subpath '/_/_interop_require_wildcard' inside of [project]/app/node_modules/next
+
+
+Import traces:
+  #1 [Server Component]:
+    ./app/node_modules/next/dist/shared/lib/router/utils/format-url.js
+    ./app/node_modules/next/dist/server/server-utils.js
+    ./app/node_modules/next/dist/lib/metadata/get-metadata-route.js
+
+  #2 [Client Component Browser]:
+    ./app/node_modules/next/dist/shared/lib/router/utils/format-url.js [Client Component Browser]
+    ./app/node_modules/next/dist/client/app-dir/link.js [Client Component Browser]
+    ./app/src/app/auth/page.tsx [Client Component Browser]
+    ./app/src/app/auth/page.tsx [Server Component]
+
+  #3 [Client Component Browser]:
+    ./app/node_modules/next/dist/shared/lib/router/utils/format-url.js [Client Component Browser]
+    ./app/node_modules/next/dist/client/app-dir/link.js [Client Component Browser]
+    ./app/src/app/not-found.tsx [Client Component Browser]
+    ./app/src/app/not-found.tsx [Server Component]
+
+  #4 [Client Component SSR]:
+    ./app/node_modules/next/dist/shared/lib/router/utils/format-url.js [Client Component SSR]
+    ./app/node_modules/next/dist/client/app-dir/link.js [Client Component SSR]
+    ./app/src/app/auth/page.tsx [Client Component SSR]
+    ./app/src/app/auth/page.tsx [Server Component]
+
+  #5 [Client Component SSR]:
+    ./app/node_modules/next/dist/shared/lib/router/utils/format-url.js [Client Component SSR]
+    ./app/node_modules/next/dist/client/app-dir/link.js [Client Component SSR]
+    ./app/src/app/not-found.tsx [Client Component SSR]
+    ./app/src/app/not-found.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/node_modules/next/dist/shared/lib/router/utils/format-url.js:48:35
+Module not found: Can't resolve '@swc/helpers/_/_interop_require_wildcard'
+Import map: aliased to module '@swc/helpers' with subpath '/_/_interop_require_wildcard' inside of [project]/app/node_modules/next
+
+
+Import traces:
+  #1 [Server Component]:
+    ./app/node_modules/next/dist/shared/lib/router/utils/format-url.js
+    ./app/node_modules/next/dist/server/server-utils.js
+    ./app/node_modules/next/dist/lib/metadata/get-metadata-route.js
+
+  #2 [Client Component Browser]:
+    ./app/node_modules/next/dist/shared/lib/router/utils/format-url.js [Client Component Browser]
+    ./app/node_modules/next/dist/client/app-dir/link.js [Client Component Browser]
+    ./app/src/app/auth/page.tsx [Client Component Browser]
+    ./app/src/app/auth/page.tsx [Server Component]
+
+  #3 [Client Component Browser]:
+    ./app/node_modules/next/dist/shared/lib/router/utils/format-url.js [Client Component Browser]
+    ./app/node_modules/next/dist/client/app-dir/link.js [Client Component Browser]
+    ./app/src/app/not-found.tsx [Client Component Browser]
+    ./app/src/app/not-found.tsx [Server Component]
+
+  #4 [Client Component SSR]:
+    ./app/node_modules/next/dist/shared/lib/router/utils/format-url.js [Client Component SSR]
+    ./app/node_modules/next/dist/client/app-dir/link.js [Client Component SSR]
+    ./app/src/app/auth/page.tsx [Client Component SSR]
+    ./app/src/app/auth/page.tsx [Server Component]
+
+  #5 [Client Component SSR]:
+    ./app/node_modules/next/dist/shared/lib/router/utils/format-url.js [Client Component SSR]
+    ./app/node_modules/next/dist/client/app-dir/link.js [Client Component SSR]
+    ./app/src/app/not-found.tsx [Client Component SSR]
+    ./app/src/app/not-found.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/node_modules/next/dist/shared/lib/server-inserted-html.shared-runtime.js:24:35
+Module not found: Can't resolve '@swc/helpers/_/_interop_require_wildcard'
+Import map: aliased to module '@swc/helpers' with subpath '/_/_interop_require_wildcard' inside of [project]/app/node_modules/next
+
+
+Import trace:
+  Client Component Browser:
+    ./app/node_modules/next/dist/shared/lib/server-inserted-html.shared-runtime.js
+    ./app/node_modules/next/dist/client/components/navigation.js
+    ./app/node_modules/next/dist/client/components/redirect-boundary.js
+    ./app/node_modules/next/dist/client/components/app-router.js
+    ./app/node_modules/next/dist/client/app-index.js
+    ./app/node_modules/next/dist/client/app-next-turbopack.js
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/src/app/auth/page.tsx:12:1
+Module not found: Can't resolve 'framer-motion'
+[0m [90m 10 |[39m [36mimport[39m { [33mSelect[39m[33m,[39m [33mSelectContent[39m[33m,[39m [33mSelectItem[39m[33m,[39m [33mSelectTrigger[39m[33m,[39m [33mSelectValue[39m } [36mfrom[39m [32m"@/components/ui/select"[39m
+ [90m 11 |[39m [36mimport[39m { [33mMail[39m[33m,[39m [33mLock[39m[33m,[39m [33mUser[39m[33m,[39m [33mEye[39m[33m,[39m [33mEyeOff[39m[33m,[39m [33mArrowLeft[39m[33m,[39m [33mChrome[39m[33m,[39m [33mGithub[39m[33m,[39m [33mPhone[39m[33m,[39m [33mMapPin[39m[33m,[39m [33mGlobe[39m } [36mfrom[39m [32m'lucide-react'[39m
+[31m[1m>[22m[39m[90m 12 |[39m [36mimport[39m { motion[33m,[39m [33mAnimatePresence[39m } [36mfrom[39m [32m'framer-motion'[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 13 |[39m [36mimport[39m { authClient } [36mfrom[39m [32m'@/lib/auth-client'[39m
+ [90m 14 |[39m [36mimport[39m { toast } [36mfrom[39m [32m'sonner'[39m
+ [90m 15 |[39m[0m
+
+
+
+Import traces:
+  Client Component Browser:
+    ./app/src/app/auth/page.tsx [Client Component Browser]
+    ./app/src/app/auth/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/src/app/auth/page.tsx [Client Component SSR]
+    ./app/src/app/auth/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/src/app/auth/page.tsx:12:1
+Module not found: Can't resolve 'framer-motion'
+[0m [90m 10 |[39m [36mimport[39m { [33mSelect[39m[33m,[39m [33mSelectContent[39m[33m,[39m [33mSelectItem[39m[33m,[39m [33mSelectTrigger[39m[33m,[39m [33mSelectValue[39m } [36mfrom[39m [32m"@/components/ui/select"[39m
+ [90m 11 |[39m [36mimport[39m { [33mMail[39m[33m,[39m [33mLock[39m[33m,[39m [33mUser[39m[33m,[39m [33mEye[39m[33m,[39m [33mEyeOff[39m[33m,[39m [33mArrowLeft[39m[33m,[39m [33mChrome[39m[33m,[39m [33mGithub[39m[33m,[39m [33mPhone[39m[33m,[39m [33mMapPin[39m[33m,[39m [33mGlobe[39m } [36mfrom[39m [32m'lucide-react'[39m
+[31m[1m>[22m[39m[90m 12 |[39m [36mimport[39m { motion[33m,[39m [33mAnimatePresence[39m } [36mfrom[39m [32m'framer-motion'[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 13 |[39m [36mimport[39m { authClient } [36mfrom[39m [32m'@/lib/auth-client'[39m
+ [90m 14 |[39m [36mimport[39m { toast } [36mfrom[39m [32m'sonner'[39m
+ [90m 15 |[39m[0m
+
+
+
+Import traces:
+  Client Component Browser:
+    ./app/src/app/auth/page.tsx [Client Component Browser]
+    ./app/src/app/auth/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/src/app/auth/page.tsx [Client Component SSR]
+    ./app/src/app/auth/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/src/app/auth/page.tsx:12:1
+Module not found: Can't resolve 'framer-motion'
+[0m [90m 10 |[39m [36mimport[39m { [33mSelect[39m[33m,[39m [33mSelectContent[39m[33m,[39m [33mSelectItem[39m[33m,[39m [33mSelectTrigger[39m[33m,[39m [33mSelectValue[39m } [36mfrom[39m [32m"@/components/ui/select"[39m
+ [90m 11 |[39m [36mimport[39m { [33mMail[39m[33m,[39m [33mLock[39m[33m,[39m [33mUser[39m[33m,[39m [33mEye[39m[33m,[39m [33mEyeOff[39m[33m,[39m [33mArrowLeft[39m[33m,[39m [33mChrome[39m[33m,[39m [33mGithub[39m[33m,[39m [33mPhone[39m[33m,[39m [33mMapPin[39m[33m,[39m [33mGlobe[39m } [36mfrom[39m [32m'lucide-react'[39m
+[31m[1m>[22m[39m[90m 12 |[39m [36mimport[39m { motion[33m,[39m [33mAnimatePresence[39m } [36mfrom[39m [32m'framer-motion'[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 13 |[39m [36mimport[39m { authClient } [36mfrom[39m [32m'@/lib/auth-client'[39m
+ [90m 14 |[39m [36mimport[39m { toast } [36mfrom[39m [32m'sonner'[39m
+ [90m 15 |[39m[0m
+
+
+
+Import traces:
+  Client Component Browser:
+    ./app/src/app/auth/page.tsx [Client Component Browser]
+    ./app/src/app/auth/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/src/app/auth/page.tsx [Client Component SSR]
+    ./app/src/app/auth/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/src/app/auth/page.tsx:12:1
+Module not found: Can't resolve 'framer-motion'
+[0m [90m 10 |[39m [36mimport[39m { [33mSelect[39m[33m,[39m [33mSelectContent[39m[33m,[39m [33mSelectItem[39m[33m,[39m [33mSelectTrigger[39m[33m,[39m [33mSelectValue[39m } [36mfrom[39m [32m"@/components/ui/select"[39m
+ [90m 11 |[39m [36mimport[39m { [33mMail[39m[33m,[39m [33mLock[39m[33m,[39m [33mUser[39m[33m,[39m [33mEye[39m[33m,[39m [33mEyeOff[39m[33m,[39m [33mArrowLeft[39m[33m,[39m [33mChrome[39m[33m,[39m [33mGithub[39m[33m,[39m [33mPhone[39m[33m,[39m [33mMapPin[39m[33m,[39m [33mGlobe[39m } [36mfrom[39m [32m'lucide-react'[39m
+[31m[1m>[22m[39m[90m 12 |[39m [36mimport[39m { motion[33m,[39m [33mAnimatePresence[39m } [36mfrom[39m [32m'framer-motion'[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 13 |[39m [36mimport[39m { authClient } [36mfrom[39m [32m'@/lib/auth-client'[39m
+ [90m 14 |[39m [36mimport[39m { toast } [36mfrom[39m [32m'sonner'[39m
+ [90m 15 |[39m[0m
+
+
+
+Import traces:
+  Client Component Browser:
+    ./app/src/app/auth/page.tsx [Client Component Browser]
+    ./app/src/app/auth/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/src/app/auth/page.tsx [Client Component SSR]
+    ./app/src/app/auth/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/src/app/auth/page.tsx:12:1
+Module not found: Can't resolve 'framer-motion'
+[0m [90m 10 |[39m [36mimport[39m { [33mSelect[39m[33m,[39m [33mSelectContent[39m[33m,[39m [33mSelectItem[39m[33m,[39m [33mSelectTrigger[39m[33m,[39m [33mSelectValue[39m } [36mfrom[39m [32m"@/components/ui/select"[39m
+ [90m 11 |[39m [36mimport[39m { [33mMail[39m[33m,[39m [33mLock[39m[33m,[39m [33mUser[39m[33m,[39m [33mEye[39m[33m,[39m [33mEyeOff[39m[33m,[39m [33mArrowLeft[39m[33m,[39m [33mChrome[39m[33m,[39m [33mGithub[39m[33m,[39m [33mPhone[39m[33m,[39m [33mMapPin[39m[33m,[39m [33mGlobe[39m } [36mfrom[39m [32m'lucide-react'[39m
+[31m[1m>[22m[39m[90m 12 |[39m [36mimport[39m { motion[33m,[39m [33mAnimatePresence[39m } [36mfrom[39m [32m'framer-motion'[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 13 |[39m [36mimport[39m { authClient } [36mfrom[39m [32m'@/lib/auth-client'[39m
+ [90m 14 |[39m [36mimport[39m { toast } [36mfrom[39m [32m'sonner'[39m
+ [90m 15 |[39m[0m
+
+
+
+Import traces:
+  Client Component Browser:
+    ./app/src/app/auth/page.tsx [Client Component Browser]
+    ./app/src/app/auth/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/src/app/auth/page.tsx [Client Component SSR]
+    ./app/src/app/auth/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/src/app/auth/page.tsx:12:1
+Module not found: Can't resolve 'framer-motion'
+[0m [90m 10 |[39m [36mimport[39m { [33mSelect[39m[33m,[39m [33mSelectContent[39m[33m,[39m [33mSelectItem[39m[33m,[39m [33mSelectTrigger[39m[33m,[39m [33mSelectValue[39m } [36mfrom[39m [32m"@/components/ui/select"[39m
+ [90m 11 |[39m [36mimport[39m { [33mMail[39m[33m,[39m [33mLock[39m[33m,[39m [33mUser[39m[33m,[39m [33mEye[39m[33m,[39m [33mEyeOff[39m[33m,[39m [33mArrowLeft[39m[33m,[39m [33mChrome[39m[33m,[39m [33mGithub[39m[33m,[39m [33mPhone[39m[33m,[39m [33mMapPin[39m[33m,[39m [33mGlobe[39m } [36mfrom[39m [32m'lucide-react'[39m
+[31m[1m>[22m[39m[90m 12 |[39m [36mimport[39m { motion[33m,[39m [33mAnimatePresence[39m } [36mfrom[39m [32m'framer-motion'[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 13 |[39m [36mimport[39m { authClient } [36mfrom[39m [32m'@/lib/auth-client'[39m
+ [90m 14 |[39m [36mimport[39m { toast } [36mfrom[39m [32m'sonner'[39m
+ [90m 15 |[39m[0m
+
+
+
+Import traces:
+  Client Component Browser:
+    ./app/src/app/auth/page.tsx [Client Component Browser]
+    ./app/src/app/auth/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/src/app/auth/page.tsx [Client Component SSR]
+    ./app/src/app/auth/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/src/app/not-found.tsx:3:1
+Module not found: Can't resolve 'framer-motion'
+[0m [90m 1 |[39m [32m"use client"[39m[33m;[39m
+ [90m 2 |[39m
+[31m[1m>[22m[39m[90m 3 |[39m [36mimport[39m { motion } [36mfrom[39m [32m"framer-motion"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 4 |[39m [36mimport[39m { [33mGhost[39m[33m,[39m [33mHome[39m[33m,[39m [33mArrowLeft[39m[33m,[39m [33mSearch[39m } [36mfrom[39m [32m"lucide-react"[39m[33m;[39m
+ [90m 5 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m"next/link"[39m[33m;[39m
+ [90m 6 |[39m[0m
+
+
+
+Import traces:
+  Client Component Browser:
+    ./app/src/app/not-found.tsx [Client Component Browser]
+    ./app/src/app/not-found.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/src/app/not-found.tsx [Client Component SSR]
+    ./app/src/app/not-found.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/src/app/not-found.tsx:3:1
+Module not found: Can't resolve 'framer-motion'
+[0m [90m 1 |[39m [32m"use client"[39m[33m;[39m
+ [90m 2 |[39m
+[31m[1m>[22m[39m[90m 3 |[39m [36mimport[39m { motion } [36mfrom[39m [32m"framer-motion"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 4 |[39m [36mimport[39m { [33mGhost[39m[33m,[39m [33mHome[39m[33m,[39m [33mArrowLeft[39m[33m,[39m [33mSearch[39m } [36mfrom[39m [32m"lucide-react"[39m[33m;[39m
+ [90m 5 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m"next/link"[39m[33m;[39m
+ [90m 6 |[39m[0m
+
+
+
+Import traces:
+  Client Component Browser:
+    ./app/src/app/not-found.tsx [Client Component Browser]
+    ./app/src/app/not-found.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/src/app/not-found.tsx [Client Component SSR]
+    ./app/src/app/not-found.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/src/app/not-found.tsx:3:1
+Module not found: Can't resolve 'framer-motion'
+[0m [90m 1 |[39m [32m"use client"[39m[33m;[39m
+ [90m 2 |[39m
+[31m[1m>[22m[39m[90m 3 |[39m [36mimport[39m { motion } [36mfrom[39m [32m"framer-motion"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 4 |[39m [36mimport[39m { [33mGhost[39m[33m,[39m [33mHome[39m[33m,[39m [33mArrowLeft[39m[33m,[39m [33mSearch[39m } [36mfrom[39m [32m"lucide-react"[39m[33m;[39m
+ [90m 5 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m"next/link"[39m[33m;[39m
+ [90m 6 |[39m[0m
+
+
+
+Import traces:
+  Client Component Browser:
+    ./app/src/app/not-found.tsx [Client Component Browser]
+    ./app/src/app/not-found.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/src/app/not-found.tsx [Client Component SSR]
+    ./app/src/app/not-found.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/src/app/not-found.tsx:3:1
+Module not found: Can't resolve 'framer-motion'
+[0m [90m 1 |[39m [32m"use client"[39m[33m;[39m
+ [90m 2 |[39m
+[31m[1m>[22m[39m[90m 3 |[39m [36mimport[39m { motion } [36mfrom[39m [32m"framer-motion"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 4 |[39m [36mimport[39m { [33mGhost[39m[33m,[39m [33mHome[39m[33m,[39m [33mArrowLeft[39m[33m,[39m [33mSearch[39m } [36mfrom[39m [32m"lucide-react"[39m[33m;[39m
+ [90m 5 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m"next/link"[39m[33m;[39m
+ [90m 6 |[39m[0m
+
+
+
+Import traces:
+  Client Component Browser:
+    ./app/src/app/not-found.tsx [Client Component Browser]
+    ./app/src/app/not-found.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/src/app/not-found.tsx [Client Component SSR]
+    ./app/src/app/not-found.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/src/components/ErrorReporter.tsx:4:1
+Module not found: Can't resolve 'framer-motion'
+[0m [90m 2 |[39m
+ [90m 3 |[39m [36mimport[39m { useEffect[33m,[39m useRef } [36mfrom[39m [32m"react"[39m[33m;[39m
+[31m[1m>[22m[39m[90m 4 |[39m [36mimport[39m { motion[33m,[39m [33mAnimatePresence[39m } [36mfrom[39m [32m"framer-motion"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 5 |[39m [36mimport[39m { [33mAlertCircle[39m[33m,[39m [33mRefreshCcw[39m[33m,[39m [33mHome[39m[33m,[39m [33mHammer[39m[33m,[39m [33mShieldAlert[39m } [36mfrom[39m [32m"lucide-react"[39m[33m;[39m
+ [90m 6 |[39m
+ [90m 7 |[39m type [33mReporterProps[39m [33m=[39m {[0m
+
+
+
+Import trace:
+  Server Component:
+    ./app/src/components/ErrorReporter.tsx
+    ./app/src/app/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/src/components/ErrorReporter.tsx:4:1
+Module not found: Can't resolve 'framer-motion'
+[0m [90m 2 |[39m
+ [90m 3 |[39m [36mimport[39m { useEffect[33m,[39m useRef } [36mfrom[39m [32m"react"[39m[33m;[39m
+[31m[1m>[22m[39m[90m 4 |[39m [36mimport[39m { motion[33m,[39m [33mAnimatePresence[39m } [36mfrom[39m [32m"framer-motion"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 5 |[39m [36mimport[39m { [33mAlertCircle[39m[33m,[39m [33mRefreshCcw[39m[33m,[39m [33mHome[39m[33m,[39m [33mHammer[39m[33m,[39m [33mShieldAlert[39m } [36mfrom[39m [32m"lucide-react"[39m[33m;[39m
+ [90m 6 |[39m
+ [90m 7 |[39m type [33mReporterProps[39m [33m=[39m {[0m
+
+
+
+Import trace:
+  Server Component:
+    ./app/src/components/ErrorReporter.tsx
+    ./app/src/app/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/src/components/ErrorReporter.tsx:4:1
+Module not found: Can't resolve 'framer-motion'
+[0m [90m 2 |[39m
+ [90m 3 |[39m [36mimport[39m { useEffect[33m,[39m useRef } [36mfrom[39m [32m"react"[39m[33m;[39m
+[31m[1m>[22m[39m[90m 4 |[39m [36mimport[39m { motion[33m,[39m [33mAnimatePresence[39m } [36mfrom[39m [32m"framer-motion"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 5 |[39m [36mimport[39m { [33mAlertCircle[39m[33m,[39m [33mRefreshCcw[39m[33m,[39m [33mHome[39m[33m,[39m [33mHammer[39m[33m,[39m [33mShieldAlert[39m } [36mfrom[39m [32m"lucide-react"[39m[33m;[39m
+ [90m 6 |[39m
+ [90m 7 |[39m type [33mReporterProps[39m [33m=[39m {[0m
+
+
+
+Import trace:
+  Server Component:
+    ./app/src/components/ErrorReporter.tsx
+    ./app/src/app/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/src/components/ErrorReporter.tsx:4:1
+Module not found: Can't resolve 'framer-motion'
+[0m [90m 2 |[39m
+ [90m 3 |[39m [36mimport[39m { useEffect[33m,[39m useRef } [36mfrom[39m [32m"react"[39m[33m;[39m
+[31m[1m>[22m[39m[90m 4 |[39m [36mimport[39m { motion[33m,[39m [33mAnimatePresence[39m } [36mfrom[39m [32m"framer-motion"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 5 |[39m [36mimport[39m { [33mAlertCircle[39m[33m,[39m [33mRefreshCcw[39m[33m,[39m [33mHome[39m[33m,[39m [33mHammer[39m[33m,[39m [33mShieldAlert[39m } [36mfrom[39m [32m"lucide-react"[39m[33m;[39m
+ [90m 6 |[39m
+ [90m 7 |[39m type [33mReporterProps[39m [33m=[39m {[0m
+
+
+
+Import trace:
+  Server Component:
+    ./app/src/components/ErrorReporter.tsx
+    ./app/src/app/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/src/components/ThemeProvider.tsx:4:1
+Module not found: Can't resolve 'next-themes'
+[0m [90m 2 |[39m
+ [90m 3 |[39m [36mimport[39m [33m*[39m [36mas[39m [33mReact[39m [36mfrom[39m [32m"react"[39m[33m;[39m
+[31m[1m>[22m[39m[90m 4 |[39m [36mimport[39m { [33mThemeProvider[39m [36mas[39m [33mNextThemesProvider[39m } [36mfrom[39m [32m"next-themes"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 5 |[39m
+ [90m 6 |[39m [36mexport[39m [36mfunction[39m [33mThemeProvider[39m({
+ [90m 7 |[39m   children[33m,[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./app/src/components/ThemeProvider.tsx
+    ./app/src/app/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/src/components/ThemeProvider.tsx:4:1
+Module not found: Can't resolve 'next-themes'
+[0m [90m 2 |[39m
+ [90m 3 |[39m [36mimport[39m [33m*[39m [36mas[39m [33mReact[39m [36mfrom[39m [32m"react"[39m[33m;[39m
+[31m[1m>[22m[39m[90m 4 |[39m [36mimport[39m { [33mThemeProvider[39m [36mas[39m [33mNextThemesProvider[39m } [36mfrom[39m [32m"next-themes"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 5 |[39m
+ [90m 6 |[39m [36mexport[39m [36mfunction[39m [33mThemeProvider[39m({
+ [90m 7 |[39m   children[33m,[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./app/src/components/ThemeProvider.tsx
+    ./app/src/app/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/src/components/ThemeProvider.tsx:4:1
+Module not found: Can't resolve 'next-themes'
+[0m [90m 2 |[39m
+ [90m 3 |[39m [36mimport[39m [33m*[39m [36mas[39m [33mReact[39m [36mfrom[39m [32m"react"[39m[33m;[39m
+[31m[1m>[22m[39m[90m 4 |[39m [36mimport[39m { [33mThemeProvider[39m [36mas[39m [33mNextThemesProvider[39m } [36mfrom[39m [32m"next-themes"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 5 |[39m
+ [90m 6 |[39m [36mexport[39m [36mfunction[39m [33mThemeProvider[39m({
+ [90m 7 |[39m   children[33m,[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./app/src/components/ThemeProvider.tsx
+    ./app/src/app/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/src/components/ThemeProvider.tsx:4:1
+Module not found: Can't resolve 'next-themes'
+[0m [90m 2 |[39m
+ [90m 3 |[39m [36mimport[39m [33m*[39m [36mas[39m [33mReact[39m [36mfrom[39m [32m"react"[39m[33m;[39m
+[31m[1m>[22m[39m[90m 4 |[39m [36mimport[39m { [33mThemeProvider[39m [36mas[39m [33mNextThemesProvider[39m } [36mfrom[39m [32m"next-themes"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 5 |[39m
+ [90m 6 |[39m [36mexport[39m [36mfunction[39m [33mThemeProvider[39m({
+ [90m 7 |[39m   children[33m,[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./app/src/components/ThemeProvider.tsx
+    ./app/src/app/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/src/components/ui/sonner.tsx:3:1
+Module not found: Can't resolve 'next-themes'
+[0m [90m 1 |[39m [32m"use client"[39m
+ [90m 2 |[39m
+[31m[1m>[22m[39m[90m 3 |[39m [36mimport[39m { useTheme } [36mfrom[39m [32m"next-themes"[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 4 |[39m [36mimport[39m { [33mToaster[39m [36mas[39m [33mSonner[39m[33m,[39m [33mToasterProps[39m } [36mfrom[39m [32m"sonner"[39m
+ [90m 5 |[39m
+ [90m 6 |[39m [36mconst[39m [33mToaster[39m [33m=[39m ({ [33m...[39mprops }[33m:[39m [33mToasterProps[39m) [33m=>[39m {[0m
+
+
+
+Import trace:
+  Server Component:
+    ./app/src/components/ui/sonner.tsx
+    ./app/src/app/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/src/components/ui/sonner.tsx:3:1
+Module not found: Can't resolve 'next-themes'
+[0m [90m 1 |[39m [32m"use client"[39m
+ [90m 2 |[39m
+[31m[1m>[22m[39m[90m 3 |[39m [36mimport[39m { useTheme } [36mfrom[39m [32m"next-themes"[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 4 |[39m [36mimport[39m { [33mToaster[39m [36mas[39m [33mSonner[39m[33m,[39m [33mToasterProps[39m } [36mfrom[39m [32m"sonner"[39m
+ [90m 5 |[39m
+ [90m 6 |[39m [36mconst[39m [33mToaster[39m [33m=[39m ({ [33m...[39mprops }[33m:[39m [33mToasterProps[39m) [33m=>[39m {[0m
+
+
+
+Import trace:
+  Server Component:
+    ./app/src/components/ui/sonner.tsx
+    ./app/src/app/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/src/components/ui/sonner.tsx:3:1
+Module not found: Can't resolve 'next-themes'
+[0m [90m 1 |[39m [32m"use client"[39m
+ [90m 2 |[39m
+[31m[1m>[22m[39m[90m 3 |[39m [36mimport[39m { useTheme } [36mfrom[39m [32m"next-themes"[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 4 |[39m [36mimport[39m { [33mToaster[39m [36mas[39m [33mSonner[39m[33m,[39m [33mToasterProps[39m } [36mfrom[39m [32m"sonner"[39m
+ [90m 5 |[39m
+ [90m 6 |[39m [36mconst[39m [33mToaster[39m [33m=[39m ({ [33m...[39mprops }[33m:[39m [33mToasterProps[39m) [33m=>[39m {[0m
+
+
+
+Import trace:
+  Server Component:
+    ./app/src/components/ui/sonner.tsx
+    ./app/src/app/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./app/src/components/ui/sonner.tsx:3:1
+Module not found: Can't resolve 'next-themes'
+[0m [90m 1 |[39m [32m"use client"[39m
+ [90m 2 |[39m
+[31m[1m>[22m[39m[90m 3 |[39m [36mimport[39m { useTheme } [36mfrom[39m [32m"next-themes"[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 4 |[39m [36mimport[39m { [33mToaster[39m [36mas[39m [33mSonner[39m[33m,[39m [33mToasterProps[39m } [36mfrom[39m [32m"sonner"[39m
+ [90m 5 |[39m
+ [90m 6 |[39m [36mconst[39m [33mToaster[39m [33m=[39m ({ [33m...[39mprops }[33m:[39m [33mToasterProps[39m) [33m=>[39m {[0m
+
+
+
+Import trace:
+  Server Component:
+    ./app/src/components/ui/sonner.tsx
+    ./app/src/app/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+
+-----
+[1m[31mFATAL[39m[0m: An unexpected Turbopack error occurred. A panic log has been written to /tmp/next-panic-d3c2bc5731c911c223475fab268f583c.log.
+
+To help make Turbopack better, report this error by clicking here: https://github.com/vercel/next.js/discussions/new?category=turbopack-error-report&title=Turbopack%20Error%3A%20Next.js%20package%20not%20found&body=Turbopack%20version%3A%20%600c06f068%60%0ANext.js%20version%3A%20%600.0.0%60%0A%0AError%20message%3A%0A%60%60%60%0ATurbopack%20Error%3A%20Next.js%20package%20not%20found%0A%60%60%60&labels=Turbopack,Turbopack%20Panic%20Backtrace
+-----
+
+Error: Turbopack build failed with 1 errors:
+./app/src/app
+Error: Next.js inferred your workspace root, but it may not be correct.
+    We couldn't find the Next.js package (next/package.json) from the project directory: /app/src/app
+     To fix this, set turbopack.root in your Next.js config, or ensure the Next.js package is resolvable from this directory.
+    Note: For security and performance reasons, files outside of the project directory will not be compiled.
+    See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+
+    at ignore-listed frames
+[?25h
+error: script "dev" exited with code 1
