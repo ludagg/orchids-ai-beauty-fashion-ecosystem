@@ -7,7 +7,8 @@ import {
   LogOut,
   CreditCard,
   UserCircle,
-  ChevronDown
+  ChevronDown,
+  LayoutDashboard
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -40,6 +41,15 @@ export default function UserAccount({ showLabel = true }: { showLabel?: boolean 
             <p className="text-xs leading-none text-muted-foreground">jane.doe@example.com</p>
           </div>
         </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          <DropdownMenuItem asChild className="cursor-pointer">
+            <Link href="/app/creator-studio" className="flex items-center w-full font-semibold">
+              <LayoutDashboard className="mr-2 h-4 w-4 text-violet-600 dark:text-violet-400" />
+              <span>Creator Studio</span>
+            </Link>
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem asChild className="cursor-pointer">

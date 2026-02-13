@@ -50,6 +50,8 @@ export default function AppLayout({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
+  const isCreatorStudio = pathname.startsWith('/app/creator-studio');
+
   // Close mobile menu on route change
   useEffect(() => {
     setMobileMenuOpen(false);
@@ -62,90 +64,94 @@ export default function AppLayout({
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col lg:flex-row">
       {/* Sidebar - Desktop */}
-      <aside className={`border-r border-border bg-card hidden lg:flex flex-col sticky top-0 h-screen transition-all duration-300 ${isCollapsed ? "w-20" : "w-64"}`}>
-        <div className={`p-6 flex items-center ${isCollapsed ? "justify-center" : "justify-between"}`}>
+      {!isCreatorStudio && (
+        <aside className={`border-r border-border bg-card hidden lg:flex flex-col sticky top-0 h-screen transition-all duration-300 ${isCollapsed ? "w-20" : "w-64"}`}>
+          <div className={`p-6 flex items-center ${isCollapsed ? "justify-center" : "justify-between"}`}>
+            {!isCollapsed && (
+              <Link href="/" className="text-xl font-semibold tracking-tight font-display bg-clip-text text-transparent bg-gradient-to-r from-violet-600 via-rose-500 to-amber-500">
+                Priisme
+              </Link>
+            )}
+            <button
+              onClick={() => setIsCollapsed(!isCollapsed)}
+              className="p-1 rounded-full hover:bg-secondary text-muted-foreground transition-colors"
+            >
+              {isCollapsed ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5" />}
+            </button>
+          </div>
+
+          <nav className="flex-1 px-4 space-y-1">
+            {sidebarItems.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+                    isActive
+                      ? "bg-primary text-primary-foreground shadow-lg shadow-foreground/10"
+                      : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+                  } ${isCollapsed ? "justify-center" : ""}`}
+                >
+                  <item.icon className="w-5 h-5 flex-shrink-0" />
+                  {!isCollapsed && <span>{item.label}</span>}
+                </Link>
+              );
+            })}
+          </nav>
+
           {!isCollapsed && (
-            <Link href="/" className="text-xl font-semibold tracking-tight font-display bg-clip-text text-transparent bg-gradient-to-r from-violet-600 via-rose-500 to-amber-500">
+            <div className="p-4 mt-auto">
+              <div className="p-4 rounded-2xl bg-gradient-to-br from-rose-500/10 to-violet-500/10 border border-rose-200/20">
+                <p className="text-xs font-semibold text-rose-600 mb-1 uppercase tracking-wider">AI Insight</p>
+                <p className="text-sm text-foreground font-medium leading-relaxed">
+                  Your style profile is 85% complete. Finish it to unlock personal picks.
+                </p>
+                <button className="mt-3 text-xs font-bold flex items-center gap-1 hover:gap-2 transition-all">
+                  Complete Profile <ArrowRight className="w-3 h-3" />
+                </button>
+              </div>
+            </div>
+          )}
+
+          <div className={`p-4 border-t border-border ${isCollapsed ? "flex justify-center" : ""}`}>
+            <Link
+              href="/app/settings"
+              className={`w-full flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors ${
+                pathname === "/app/settings" ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+              } ${isCollapsed ? "justify-center" : ""}`}
+            >
+              <Settings className="w-5 h-5 flex-shrink-0" />
+              {!isCollapsed && <span>Settings</span>}
+            </Link>
+          </div>
+        </aside>
+      )}
+
+      {/* Mobile Nav */}
+      {!isCreatorStudio && (
+        <header className="lg:hidden bg-card/80 backdrop-blur-md sticky top-0 z-40 border-b border-border">
+          <div className="h-16 px-4 flex items-center justify-between">
+            <Link href="/" className="text-lg font-semibold font-display">
               Priisme
             </Link>
-          )}
-          <button
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            className="p-1 rounded-full hover:bg-secondary text-muted-foreground transition-colors"
-          >
-            {isCollapsed ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5" />}
-          </button>
-        </div>
-
-        <nav className="flex-1 px-4 space-y-1">
-          {sidebarItems.map((item) => {
-            const isActive = pathname === item.href;
-            return (
-              <Link
-                key={item.label}
-                href={item.href}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
-                  isActive
-                    ? "bg-primary text-primary-foreground shadow-lg shadow-foreground/10"
-                    : "text-muted-foreground hover:bg-secondary hover:text-foreground"
-                } ${isCollapsed ? "justify-center" : ""}`}
-              >
-                <item.icon className="w-5 h-5 flex-shrink-0" />
-                {!isCollapsed && <span>{item.label}</span>}
-              </Link>
-            );
-          })}
-        </nav>
-
-        {!isCollapsed && (
-          <div className="p-4 mt-auto">
-            <div className="p-4 rounded-2xl bg-gradient-to-br from-rose-500/10 to-violet-500/10 border border-rose-200/20">
-              <p className="text-xs font-semibold text-rose-600 mb-1 uppercase tracking-wider">AI Insight</p>
-              <p className="text-sm text-foreground font-medium leading-relaxed">
-                Your style profile is 85% complete. Finish it to unlock personal picks.
-              </p>
-              <button className="mt-3 text-xs font-bold flex items-center gap-1 hover:gap-2 transition-all">
-                Complete Profile <ArrowRight className="w-3 h-3" />
+            <div className="flex items-center gap-1">
+              <ThemeSwitcher />
+              <NotificationBell />
+              <UserAccount showLabel={false} />
+              <button onClick={() => setMobileMenuOpen(true)} className="p-2 ml-1">
+                <Menu className="w-6 h-6" />
               </button>
             </div>
           </div>
-        )}
-
-        <div className={`p-4 border-t border-border ${isCollapsed ? "flex justify-center" : ""}`}>
-          <Link
-            href="/app/settings"
-            className={`w-full flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors ${
-              pathname === "/app/settings" ? "text-foreground" : "text-muted-foreground hover:text-foreground"
-            } ${isCollapsed ? "justify-center" : ""}`}
-          >
-            <Settings className="w-5 h-5 flex-shrink-0" />
-            {!isCollapsed && <span>Settings</span>}
-          </Link>
-        </div>
-      </aside>
-
-      {/* Mobile Nav */}
-      <header className="lg:hidden bg-card/80 backdrop-blur-md sticky top-0 z-40 border-b border-border">
-        <div className="h-16 px-4 flex items-center justify-between">
-          <Link href="/" className="text-lg font-semibold font-display">
-            Priisme
-          </Link>
-          <div className="flex items-center gap-1">
-            <ThemeSwitcher />
-            <NotificationBell />
-            <UserAccount showLabel={false} />
-            <button onClick={() => setMobileMenuOpen(true)} className="p-2 ml-1">
-              <Menu className="w-6 h-6" />
-            </button>
+          <div className="px-4 pb-3">
+            <SearchBar value={searchQuery} onChange={setSearchQuery} onSubmit={handleSearch} />
           </div>
-        </div>
-        <div className="px-4 pb-3">
-          <SearchBar value={searchQuery} onChange={setSearchQuery} onSubmit={handleSearch} />
-        </div>
-      </header>
+        </header>
+      )}
 
       {/* Mobile Menu Overlay */}
-      {mobileMenuOpen && (
+      {mobileMenuOpen && !isCreatorStudio && (
         <div className="fixed inset-0 z-[50] bg-background lg:hidden">
           <div className="flex flex-col h-full">
             <div className="flex items-center justify-between h-16 px-6 border-b border-border">
@@ -193,26 +199,28 @@ export default function AppLayout({
       {/* Main Content */}
       <div className="flex-1 min-w-0 flex flex-col relative overflow-x-hidden">
         {/* Header - Desktop Search */}
-        <header className="hidden lg:flex h-16 border-b border-border bg-card/80 backdrop-blur-md sticky top-0 z-30 px-6 items-center justify-between">
-          <div className="flex-1 max-w-xl">
-            <SearchBar value={searchQuery} onChange={setSearchQuery} onSubmit={handleSearch} />
-          </div>
+        {!isCreatorStudio && (
+          <header className="hidden lg:flex h-16 border-b border-border bg-card/80 backdrop-blur-md sticky top-0 z-30 px-6 items-center justify-between">
+            <div className="flex-1 max-w-xl">
+              <SearchBar value={searchQuery} onChange={setSearchQuery} onSubmit={handleSearch} />
+            </div>
 
-          <div className="flex items-center gap-4 ml-4">
-            <ThemeSwitcher />
-            <Link href="/app/wishlist" className="p-2 rounded-full hover:bg-secondary transition-colors relative">
-              <Heart className={`w-5 h-5 ${pathname === '/app/wishlist' ? 'text-rose-500 fill-rose-500' : 'text-muted-foreground'}`} />
-            </Link>
-            <NotificationBell />
-            <UserAccount />
-          </div>
-        </header>
+            <div className="flex items-center gap-4 ml-4">
+              <ThemeSwitcher />
+              <Link href="/app/wishlist" className="p-2 rounded-full hover:bg-secondary transition-colors relative">
+                <Heart className={`w-5 h-5 ${pathname === '/app/wishlist' ? 'text-rose-500 fill-rose-500' : 'text-muted-foreground'}`} />
+              </Link>
+              <NotificationBell />
+              <UserAccount />
+            </div>
+          </header>
+        )}
 
-        <main className="flex-1 min-h-0 overflow-y-auto pb-20 lg:pb-0">
+        <main className={`flex-1 min-h-0 overflow-y-auto ${isCreatorStudio ? '' : 'pb-20 lg:pb-0'}`}>
           {children}
         </main>
 
-        <BottomNav />
+        {!isCreatorStudio && <BottomNav />}
       </div>
     </div>
   );
