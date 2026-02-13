@@ -6,7 +6,8 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Mail, Lock, User, Eye, EyeOff, ArrowLeft, Chrome, Github } from 'lucide-react'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Mail, Lock, User, Eye, EyeOff, ArrowLeft, Chrome, Github, Phone, MapPin, Globe } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 export default function AuthPage() {
@@ -16,7 +17,12 @@ export default function AuthPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [formData, setFormData] = useState({
-    fullName: '',
+    firstName: '',
+    lastName: '',
+    sex: '',
+    country: '',
+    city: '',
+    phone: '',
     email: '',
     password: '',
     confirmPassword: ''
@@ -39,8 +45,23 @@ export default function AuthPage() {
     }
 
     if (!isSignIn) {
-      if (!formData.fullName) {
-        newErrors.fullName = 'Full name is required'
+      if (!formData.firstName) {
+        newErrors.firstName = 'First name is required'
+      }
+      if (!formData.lastName) {
+        newErrors.lastName = 'Last name is required'
+      }
+      if (!formData.sex) {
+        newErrors.sex = 'Sex is required'
+      }
+      if (!formData.country) {
+        newErrors.country = 'Country is required'
+      }
+      if (!formData.city) {
+        newErrors.city = 'City is required'
+      }
+      if (!formData.phone) {
+        newErrors.phone = 'Phone number is required'
       }
 
       if (formData.password !== formData.confirmPassword) {
@@ -77,6 +98,13 @@ export default function AuthPage() {
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }))
+    }
+  }
+
+  const handleSelectChange = (value: string) => {
+    setFormData(prev => ({ ...prev, sex: value }))
+    if (errors.sex) {
+      setErrors(prev => ({ ...prev, sex: '' }))
     }
   }
 
@@ -140,31 +168,125 @@ export default function AuthPage() {
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
-                    className="space-y-2"
+                    className="space-y-4"
                   >
-                    <Label htmlFor="fullName">Full Name</Label>
-                    <div className="relative">
-                      <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                      <Input
-                        id="fullName"
-                        name="fullName"
-                        type="text"
-                        placeholder="John Doe"
-                        value={formData.fullName}
-                        onChange={handleChange}
-                        className={`pl-10 ${errors.fullName ? 'border-red-500' : ''}`}
-                        disabled={isLoading}
-                      />
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="firstName">First Name</Label>
+                        <div className="relative">
+                          <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                          <Input
+                            id="firstName"
+                            name="firstName"
+                            type="text"
+                            placeholder="John"
+                            value={formData.firstName}
+                            onChange={handleChange}
+                            className={`pl-10 ${errors.firstName ? 'border-red-500' : ''}`}
+                            disabled={isLoading}
+                          />
+                        </div>
+                        {errors.firstName && (
+                          <p className="text-sm text-red-500">{errors.firstName}</p>
+                        )}
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="lastName">Last Name</Label>
+                        <div className="relative">
+                          <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                          <Input
+                            id="lastName"
+                            name="lastName"
+                            type="text"
+                            placeholder="Doe"
+                            value={formData.lastName}
+                            onChange={handleChange}
+                            className={`pl-10 ${errors.lastName ? 'border-red-500' : ''}`}
+                            disabled={isLoading}
+                          />
+                        </div>
+                        {errors.lastName && (
+                          <p className="text-sm text-red-500">{errors.lastName}</p>
+                        )}
+                      </div>
                     </div>
-                    {errors.fullName && (
-                      <motion.p
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="text-sm text-red-500"
-                      >
-                        {errors.fullName}
-                      </motion.p>
-                    )}
+
+                    <div className="space-y-2">
+                      <Label htmlFor="sex">Sex</Label>
+                      <Select onValueChange={handleSelectChange} value={formData.sex} disabled={isLoading}>
+                        <SelectTrigger className={`w-full ${errors.sex ? 'border-red-500' : ''}`}>
+                          <SelectValue placeholder="Select sex" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="male">Male</SelectItem>
+                          <SelectItem value="female">Female</SelectItem>
+                          <SelectItem value="other">Other</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      {errors.sex && (
+                        <p className="text-sm text-red-500">{errors.sex}</p>
+                      )}
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="country">Country</Label>
+                      <div className="relative">
+                        <Globe className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                        <Input
+                          id="country"
+                          name="country"
+                          type="text"
+                          placeholder="United States"
+                          value={formData.country}
+                          onChange={handleChange}
+                          className={`pl-10 ${errors.country ? 'border-red-500' : ''}`}
+                          disabled={isLoading}
+                        />
+                      </div>
+                      {errors.country && (
+                        <p className="text-sm text-red-500">{errors.country}</p>
+                      )}
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="city">City</Label>
+                      <div className="relative">
+                        <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                        <Input
+                          id="city"
+                          name="city"
+                          type="text"
+                          placeholder="New York"
+                          value={formData.city}
+                          onChange={handleChange}
+                          className={`pl-10 ${errors.city ? 'border-red-500' : ''}`}
+                          disabled={isLoading}
+                        />
+                      </div>
+                      {errors.city && (
+                        <p className="text-sm text-red-500">{errors.city}</p>
+                      )}
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="phone">Phone Number</Label>
+                      <div className="relative">
+                        <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                        <Input
+                          id="phone"
+                          name="phone"
+                          type="tel"
+                          placeholder="+1 (555) 000-0000"
+                          value={formData.phone}
+                          onChange={handleChange}
+                          className={`pl-10 ${errors.phone ? 'border-red-500' : ''}`}
+                          disabled={isLoading}
+                        />
+                      </div>
+                      {errors.phone && (
+                        <p className="text-sm text-red-500">{errors.phone}</p>
+                      )}
+                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -326,7 +448,12 @@ export default function AuthPage() {
                   setIsSignIn(!isSignIn)
                   setErrors({})
                   setFormData({
-                    fullName: '',
+                    firstName: '',
+                    lastName: '',
+                    sex: '',
+                    country: '',
+                    city: '',
+                    phone: '',
                     email: '',
                     password: '',
                     confirmPassword: ''
