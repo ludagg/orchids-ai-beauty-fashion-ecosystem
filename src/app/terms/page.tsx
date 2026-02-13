@@ -10,7 +10,7 @@ export default function TermsPage() {
         <div className="prose dark:prose-invert max-w-none space-y-6 text-muted-foreground">
           <p className="text-sm text-foreground">Last updated: October 2024</p>
           <p>
-            Please read these Terms of Service carefully before using the Priisme website or mobile application operated by us.
+            Please read these Terms of Service carefully before using the Rare website or mobile application operated by us.
           </p>
           <h2 className="text-2xl font-semibold text-foreground mt-8 mb-4">1. Acceptance of Terms</h2>
           <p>
@@ -24,7 +24,7 @@ export default function TermsPage() {
 
           <h2 className="text-2xl font-semibold text-foreground mt-8 mb-4">3. Intellectual Property</h2>
           <p>
-            The Service and its original content, features, and functionality are and will remain the exclusive property of Priisme and its licensors.
+            The Service and its original content, features, and functionality are and will remain the exclusive property of Rare and its licensors.
           </p>
         </div>
       </main>

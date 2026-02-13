@@ -41,8 +41,8 @@ export default function AdminLayout({
       {/* Sidebar - Desktop */}
       <aside className="w-64 bg-[#1e293b] dark:bg-card text-white hidden lg:flex flex-col sticky top-0 h-screen border-r border-border">
         <div className="p-6 border-b border-slate-700">
-          <Link href="/admin" className="text-xl font-bold tracking-tight">
-            Priisme <span className="text-indigo-400">Admin</span>
+          <Link href="/admin" className="text-3xl font-script tracking-tight">
+            Rare <span className="text-indigo-400 font-sans text-lg">Admin</span>
           </Link>
         </div>
 
@@ -82,8 +82,8 @@ export default function AdminLayout({
       {/* Mobile Header */}
       <header className="lg:hidden h-16 bg-[#1e293b] dark:bg-card text-white px-4 flex items-center justify-between sticky top-0 z-50 border-b border-border">
         <div className="flex items-center gap-4">
-          <Link href="/admin" className="text-lg font-bold">
-            Priisme Admin
+          <Link href="/admin" className="text-3xl font-script tracking-tight">
+            Rare <span className="text-indigo-400 font-sans text-lg">Admin</span>
           </Link>
           <ThemeSwitcher />
         </div>

@@ -220,10 +220,10 @@ export default function CheckoutPage() {
           <div className="p-8 rounded-[40px] bg-emerald-50 border border-emerald-100 space-y-4">
             <div className="flex items-center gap-3 text-emerald-600">
               <ShieldCheck className="w-6 h-6" />
-              <h3 className="font-bold">Priisme Protection</h3>
+              <h3 className="font-bold">Rare Protection</h3>
             </div>
             <p className="text-xs text-emerald-800 leading-relaxed">
-              Every order on Priisme is protected. If your item is not as described or never arrives, we'll refund your full purchase price.
+              Every order on Rare is protected. If your item is not as described or never arrives, we'll refund your full purchase price.
             </p>
           </div>
         </div>

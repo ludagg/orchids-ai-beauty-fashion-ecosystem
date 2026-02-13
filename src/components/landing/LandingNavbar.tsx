@@ -44,12 +44,12 @@ export default function LandingNavbar() {
       >
         <div className="max-w-[1200px] mx-auto px-6">
           <div className="flex items-center justify-between h-16">
-            <Link href="/" className="text-xl font-semibold tracking-tight font-display bg-clip-text text-transparent bg-gradient-to-r from-violet-600 via-rose-500 to-amber-500">
+            <Link href="/" className="text-3xl font-script text-black dark:text-white">
               <motion.span
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
               >
-                Priisme
+                Rare
               </motion.span>
             </Link>
 
@@ -102,7 +102,7 @@ export default function LandingNavbar() {
             <div className="flex flex-col h-full">
               <div className="flex items-center justify-between h-16 px-6 border-b border-border">
                 <div className="flex items-center gap-4">
-                  <span className="text-xl font-semibold font-display">Priisme</span>
+                  <span className="text-3xl font-script text-black dark:text-white">Rare</span>
                   <ThemeSwitcher />
                 </div>
                 <button onClick={() => setMobileMenuOpen(false)} className="p-2 -mr-2">

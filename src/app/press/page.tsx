@@ -7,13 +7,13 @@ export default function PressPage() {
       <LandingNavbar />
       <main className="pt-32 pb-16 px-6 max-w-4xl mx-auto">
         <h1 className="text-4xl font-bold font-display mb-6">Press & Media</h1>
-        <p className="text-lg text-muted-foreground mb-8">Latest news and updates from Priisme.</p>
+        <p className="text-lg text-muted-foreground mb-8">Latest news and updates from Rare.</p>
 
         <div className="space-y-8">
           {[
-            { date: "October 15, 2024", title: "Priisme Raises Series A to Revolutionize Fashion Tech" },
+            { date: "October 15, 2024", title: "Rare Raises Series A to Revolutionize Fashion Tech" },
             { date: "September 1, 2024", title: "Introducing AI Stylist: The Future of Personal Shopping" },
-            { date: "August 10, 2024", title: "Priisme Partners with Top 100 Salons in Bangalore" }
+            { date: "August 10, 2024", title: "Rare Partners with Top 100 Salons in Bangalore" }
           ].map((item) => (
             <div key={item.title} className="border-b border-border pb-6 last:border-0">
               <p className="text-sm text-primary font-medium mb-2">{item.date}</p>

@@ -66,8 +66,8 @@ export default function AppLayout({
       <aside className={`border-r border-border bg-card hidden lg:flex flex-col sticky top-0 h-screen transition-all duration-300 ${isCollapsed ? "w-20" : "w-64"}`}>
         <div className={`p-6 flex items-center ${isCollapsed ? "justify-center" : "justify-between"}`}>
           {!isCollapsed && (
-            <Link href="/" className="text-xl font-semibold tracking-tight font-display bg-clip-text text-transparent bg-gradient-to-r from-violet-600 via-rose-500 to-amber-500">
-              Priisme
+            <Link href="/" className="text-3xl font-script text-black dark:text-white">
+              Rare
             </Link>
           )}
           <button
@@ -128,8 +128,8 @@ export default function AppLayout({
       {/* Mobile Nav */}
       <header className="lg:hidden bg-card/80 backdrop-blur-md sticky top-0 z-40 border-b border-border">
         <div className="h-16 px-4 flex items-center justify-between">
-          <Link href="/" className="text-lg font-semibold font-display">
-            Priisme
+          <Link href="/" className="text-2xl font-script text-black dark:text-white">
+            Rare
           </Link>
           <div className="flex items-center gap-1">
             <ThemeSwitcher />
@@ -150,7 +150,7 @@ export default function AppLayout({
         <div className="fixed inset-0 z-[50] bg-background lg:hidden">
           <div className="flex flex-col h-full">
             <div className="flex items-center justify-between h-16 px-6 border-b border-border">
-              <span className="text-xl font-semibold font-display">Priisme</span>
+              <span className="text-3xl font-script text-black dark:text-white">Rare</span>
               <button onClick={() => setMobileMenuOpen(false)} className="p-2">
                 <X className="w-6 h-6" />
               </button>

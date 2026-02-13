@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Outfit } from "next/font/google";
+import { Playfair_Display, Outfit, Pinyon_Script } from "next/font/google";
 import "./globals.css";
 import VisualEditsMessenger from "../visual-edits/VisualEditsMessenger";
 import ErrorReporter from "@/components/ErrorReporter";
@@ -20,8 +20,15 @@ const outfit = Outfit({
   display: "swap",
 });
 
+const pinyon = Pinyon_Script({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-pinyon",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
-  title: "Priisme - India's First AI-Powered Beauty & Fashion Ecosystem",
+  title: "Rare - India's First AI-Powered Beauty & Fashion Ecosystem",
   description: "Discover fashion, book salons, and shop via video commerce - all powered by AI. Virtual fit intelligence, personalized style, and verified beauty services in one platform.",
 };
 
@@ -32,7 +39,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${playfair.variable} ${outfit.variable} font-sans antialiased`}>
+      <body className={`${playfair.variable} ${outfit.variable} ${pinyon.variable} font-sans antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
