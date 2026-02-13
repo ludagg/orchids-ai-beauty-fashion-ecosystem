@@ -18,41 +18,8 @@ import {
   RotateCcw
 } from "lucide-react";
 import { useState } from "react";
-
-const bookings = [
-  {
-    id: "BK-1024",
-    salon: "Aura Luxury Spa",
-    service: "Premium Haircut",
-    date: "Sunday, Oct 26",
-    time: "10:30 AM",
-    status: "Confirmed",
-    image: "https://images.unsplash.com/photo-1600948836101-f9ffda59d250?w=200&h=200&fit=crop",
-    address: "12th Main, Indiranagar, Bangalore"
-  },
-  {
-    id: "BK-1025",
-    salon: "The Grooming Co.",
-    service: "Beard Styling",
-    date: "Wednesday, Oct 22",
-    time: "02:15 PM",
-    status: "Completed",
-    image: "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=200&h=200&fit=crop",
-    address: "Koramangala 4th Block, Bangalore"
-  }
-];
-
-const orders = [
-  {
-    id: "ORD-9042",
-    item: "Summer Minimalist Dress",
-    designer: "Studio Épure",
-    status: "In Transit",
-    date: "Ordered Oct 21",
-    image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=200&h=200&fit=crop",
-    delivery: "Expected by Oct 25"
-  }
-];
+import Link from "next/link";
+import { bookings, orders } from "@/app/app/bookings/data";
 
 export default function BookingsAndOrdersPage() {
   const [activeTab, setActiveTab] = useState("Bookings");
@@ -90,48 +57,50 @@ export default function BookingsAndOrdersPage() {
                 transition={{ delay: i * 0.1 }}
                 className="group bg-card rounded-[40px] border border-border hover:border-foreground p-8 transition-all shadow-sm hover:shadow-xl hover:shadow-foreground/5"
               >
-                <div className="flex gap-6">
-                  <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-[32px] overflow-hidden bg-muted flex-shrink-0">
-                    <img src={booking.image} alt={booking.salon} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <h3 className="text-xl font-bold text-foreground truncate">{booking.salon}</h3>
-                          {booking.status === 'Completed' && <CheckCircle2 className="w-4 h-4 text-emerald-500" />}
-                        </div>
-                        <p className="text-rose-600 font-bold uppercase tracking-widest text-[10px] mt-1">{booking.service}</p>
-                      </div>
-                      <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest ${
-                        booking.status === 'Confirmed' ? 'bg-blue-500/10 text-blue-500' : 'bg-emerald-500/10 text-emerald-500'
-                      }`}>
-                        {booking.status}
-                      </span>
+                <Link href={`/app/bookings/${booking.id}`} className="block">
+                  <div className="flex gap-6 cursor-pointer">
+                    <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-[32px] overflow-hidden bg-muted flex-shrink-0">
+                      <img src={booking.image} alt={booking.salon} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                     </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <h3 className="text-xl font-bold text-foreground truncate">{booking.salon}</h3>
+                            {booking.status === 'Completed' && <CheckCircle2 className="w-4 h-4 text-emerald-500" />}
+                          </div>
+                          <p className="text-rose-600 font-bold uppercase tracking-widest text-[10px] mt-1">{booking.service}</p>
+                        </div>
+                        <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest ${
+                          booking.status === 'Confirmed' ? 'bg-blue-500/10 text-blue-500' : 'bg-emerald-500/10 text-emerald-500'
+                        }`}>
+                          {booking.status}
+                        </span>
+                      </div>
 
-                    <div className="grid grid-cols-2 gap-4 mt-6">
-                      <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-xl bg-muted flex items-center justify-center text-foreground">
-                          <Calendar className="w-4 h-4" />
+                      <div className="grid grid-cols-2 gap-4 mt-6">
+                        <div className="flex items-center gap-3">
+                          <div className="w-9 h-9 rounded-xl bg-muted flex items-center justify-center text-foreground">
+                            <Calendar className="w-4 h-4" />
+                          </div>
+                          <div>
+                            <p className="text-[10px] font-bold text-muted-foreground/50 uppercase tracking-widest">Date</p>
+                            <p className="text-xs font-bold text-foreground">{booking.date}</p>
+                          </div>
                         </div>
-                        <div>
-                          <p className="text-[10px] font-bold text-muted-foreground/50 uppercase tracking-widest">Date</p>
-                          <p className="text-xs font-bold text-foreground">{booking.date}</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-xl bg-muted flex items-center justify-center text-foreground">
-                          <Clock className="w-4 h-4" />
-                        </div>
-                        <div>
-                          <p className="text-[10px] font-bold text-muted-foreground/50 uppercase tracking-widest">Time</p>
-                          <p className="text-xs font-bold text-foreground">{booking.time}</p>
+                        <div className="flex items-center gap-3">
+                          <div className="w-9 h-9 rounded-xl bg-muted flex items-center justify-center text-foreground">
+                            <Clock className="w-4 h-4" />
+                          </div>
+                          <div>
+                            <p className="text-[10px] font-bold text-muted-foreground/50 uppercase tracking-widest">Time</p>
+                            <p className="text-xs font-bold text-foreground">{booking.time}</p>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
+                </Link>
 
                 <div className="mt-8 flex flex-wrap items-center gap-3">
                   <button className="flex-1 h-14 rounded-2xl bg-primary text-primary-foreground font-bold text-sm hover:opacity-90 transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary/10">
