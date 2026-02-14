@@ -15,32 +15,17 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Check for session by calling the auth API
-  try {
-    const response = await fetch(`${request.nextUrl.origin}/api/auth/get-session`, {
-      headers: {
-        cookie: request.headers.get("cookie") || "",
-      },
-    });
+  // Check for session cookie presence to avoid blocking API calls in middleware
+  // Actual session validation happens on the client (UserAccount) and server (API routes)
+  const hasSessionCookie =
+    request.cookies.has("better-auth.session_token") ||
+    request.cookies.has("__Secure-better-auth.session_token");
 
-    if (!response.ok) {
-        // If the session check fails (e.g. 401 or 500), assume unauthenticated
-        console.error("Middleware auth check failed. Status:", response.status);
-        return NextResponse.redirect(new URL("/auth", request.url));
-    }
-
-    const sessionData = await response.json();
-
-    // Better Auth typically returns null or an object with session/user if authenticated
-    if (!sessionData || !sessionData.session) {
-      return NextResponse.redirect(new URL("/auth", request.url));
-    }
-
-    return NextResponse.next();
-  } catch (error) {
-    console.error("Middleware auth check failed:", error);
+  if (!hasSessionCookie) {
     return NextResponse.redirect(new URL("/auth", request.url));
   }
+
+  return NextResponse.next();
 }
 
 export const config = {
