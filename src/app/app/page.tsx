@@ -156,36 +156,6 @@ export default function DiscoverPage() {
   return (
     <div className="flex-1 min-h-screen bg-background pb-20 lg:pb-10">
 
-      {/* Welcome Header */}
-      <div className="px-6 py-6 pb-2">
-        <h1 className="text-2xl font-bold font-display">Good Morning, Alex!</h1>
-        <p className="text-muted-foreground text-sm">Ready for your glow up today?</p>
-      </div>
-
-      {/* Sticky Category Tabs */}
-      <div className="sticky top-16 z-20 bg-background/95 backdrop-blur-md border-b border-border/50 py-3 px-6 transition-[top] duration-300">
-        <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
-          {CATEGORIES.map((cat) => {
-            const Icon = cat.icon;
-            const isActive = activeCategory === cat.id;
-            return (
-              <button
-                key={cat.id}
-                onClick={() => setActiveCategory(cat.id)}
-                className={`flex items-center gap-2 whitespace-nowrap px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${
-                  isActive
-                    ? "bg-foreground text-background shadow-lg scale-105"
-                    : "bg-secondary/50 text-muted-foreground hover:bg-secondary hover:text-foreground"
-                }`}
-              >
-                <Icon className={`w-4 h-4 ${isActive ? "text-background" : ""}`} />
-                {cat.label}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
       <div className="p-6 max-w-7xl mx-auto min-h-[500px]">
         <AnimatePresence mode="wait">
           <motion.div
@@ -224,7 +194,7 @@ function HeroCarousel({ slides }: { slides: typeof HERO_SLIDES }) {
   };
 
   return (
-    <div className="relative rounded-[32px] overflow-hidden aspect-[16/10] md:aspect-[21/9] group shadow-2xl shadow-black/5">
+    <div className="relative rounded-[32px] overflow-hidden aspect-[3/4] md:aspect-[21/9] group shadow-2xl shadow-black/5">
       <AnimatePresence initial={false} mode="popLayout">
         <motion.div
           key={current}
@@ -240,7 +210,7 @@ function HeroCarousel({ slides }: { slides: typeof HERO_SLIDES }) {
             className="absolute inset-0 w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-          <div className="absolute bottom-0 left-0 p-8 md:p-12 w-full max-w-2xl">
+          <div className="absolute bottom-0 left-0 p-6 md:p-12 w-full max-w-2xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -249,13 +219,13 @@ function HeroCarousel({ slides }: { slides: typeof HERO_SLIDES }) {
               <span className={`inline-block px-4 py-1.5 rounded-full bg-gradient-to-r ${slides[current].color} text-white text-xs font-bold mb-4 uppercase tracking-wider shadow-lg`}>
                 Featured
               </span>
-              <h2 className="text-3xl md:text-5xl font-bold font-display text-white mb-3 leading-tight">
+              <h2 className="text-2xl md:text-5xl font-bold font-display text-white mb-3 leading-tight">
                 {slides[current].title}
               </h2>
-              <p className="text-white/90 text-base md:text-lg mb-8 max-w-lg leading-relaxed">
+              <p className="text-white/90 text-sm md:text-lg mb-6 md:mb-8 max-w-lg leading-relaxed">
                 {slides[current].subtitle}
               </p>
-              <button className="px-8 py-4 rounded-full bg-white text-black font-semibold hover:bg-gray-100 transition-all hover:scale-105 active:scale-95 flex items-center gap-2 shadow-xl">
+              <button className="px-6 py-3 md:px-8 md:py-4 rounded-full bg-white text-black font-semibold hover:bg-gray-100 transition-all hover:scale-105 active:scale-95 flex items-center gap-2 shadow-xl text-sm md:text-base">
                 {slides[current].cta} <ArrowRight className="w-4 h-4" />
               </button>
             </motion.div>
