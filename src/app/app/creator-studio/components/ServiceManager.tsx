@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Plus, Scissors, Trash2 } from "lucide-react"
 import { Input } from "@/components/ui/input"
@@ -19,33 +19,102 @@ import { Card, CardContent } from "@/components/ui/card"
 interface Service {
   id: string
   name: string
-  price: string
-  duration: string
+  price: number // in cents
+  duration: number // in minutes
+  salonId: string
 }
 
-export function ServiceManager() {
-  const [services, setServices] = useState<Service[]>([
-    { id: "1", name: "Haircut & Style", price: "60", duration: "60 min" },
-    { id: "2", name: "Balayage", price: "150", duration: "120 min" },
-  ])
+interface ServiceManagerProps {
+    salonId: string;
+}
+
+export function ServiceManager({ salonId }: ServiceManagerProps) {
+  const [services, setServices] = useState<Service[]>([])
+  const [loading, setLoading] = useState(true)
   const [isAddOpen, setIsAddOpen] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [newService, setNewService] = useState({ name: "", price: "", duration: "" })
 
-  const handleAdd = () => {
-    if (!newService.name || !newService.price) return
+  useEffect(() => {
+    fetchServices();
+  }, [salonId]);
 
-    setServices([
-      ...services,
-      { ...newService, id: Math.random().toString(36).substr(2, 9) }
-    ])
-    setNewService({ name: "", price: "", duration: "" })
-    setIsAddOpen(false)
-    toast.success("Service added")
+  const fetchServices = async () => {
+    try {
+        const res = await fetch(`/api/salons/${salonId}/services`);
+        if (!res.ok) throw new Error("Failed to fetch services");
+        const data = await res.json();
+        setServices(data);
+    } catch (error) {
+        console.error(error);
+        toast.error("Could not load services");
+    } finally {
+        setLoading(false);
+    }
+  };
+
+  const handleAdd = async () => {
+    if (!newService.name || !newService.price || !newService.duration) {
+        toast.error("Please fill all fields");
+        return;
+    }
+
+    setIsSubmitting(true);
+    try {
+        const priceInCents = Math.round(parseFloat(newService.price) * 100);
+        const durationInMin = parseInt(newService.duration);
+
+        if (isNaN(priceInCents) || isNaN(durationInMin)) {
+             toast.error("Invalid price or duration");
+             return;
+        }
+
+        const res = await fetch(`/api/salons/${salonId}/services`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                name: newService.name,
+                price: priceInCents,
+                duration: durationInMin,
+            })
+        });
+
+        if (!res.ok) {
+             const err = await res.json();
+             throw new Error(err.error || "Failed to add service");
+        }
+
+        const savedService = await res.json();
+        setServices([...services, savedService]);
+        setNewService({ name: "", price: "", duration: "" });
+        setIsAddOpen(false);
+        toast.success("Service added");
+    } catch (error: any) {
+        toast.error(error.message || "Failed to add service");
+    } finally {
+        setIsSubmitting(false);
+    }
   }
 
-  const handleDelete = (id: string) => {
-    setServices(services.filter(s => s.id !== id))
-    toast.success("Service removed")
+  const handleDelete = async (id: string) => {
+    try {
+        const res = await fetch(`/api/services/${id}`, {
+            method: "DELETE"
+        });
+
+        if (!res.ok) {
+             throw new Error("Failed to delete service");
+        }
+
+        setServices(services.filter(s => s.id !== id))
+        toast.success("Service removed")
+    } catch (error) {
+        toast.error("Could not delete service");
+    }
+  }
+
+  if (loading) {
+      return <div className="text-center py-8 text-muted-foreground">Loading services...</div>
   }
 
   return (
@@ -72,6 +141,7 @@ export function ServiceManager() {
                   value={newService.name}
                   onChange={e => setNewService({...newService, name: e.target.value})}
                   placeholder="e.g. Manicure"
+                  disabled={isSubmitting}
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -82,20 +152,27 @@ export function ServiceManager() {
                     onChange={e => setNewService({...newService, price: e.target.value})}
                     type="number"
                     placeholder="50"
+                    min="0"
+                    disabled={isSubmitting}
                   />
                 </div>
                 <div className="grid gap-2">
-                  <Label>Duration</Label>
+                  <Label>Duration (min)</Label>
                   <Input
                     value={newService.duration}
                     onChange={e => setNewService({...newService, duration: e.target.value})}
-                    placeholder="e.g. 45 min"
+                    type="number"
+                    placeholder="45"
+                    min="1"
+                    disabled={isSubmitting}
                   />
                 </div>
               </div>
             </div>
             <DialogFooter>
-              <Button onClick={handleAdd}>Add Service</Button>
+              <Button onClick={handleAdd} disabled={isSubmitting}>
+                  {isSubmitting ? "Adding..." : "Add Service"}
+              </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
@@ -120,8 +197,8 @@ export function ServiceManager() {
               </div>
               <h4 className="font-semibold truncate">{service.name}</h4>
               <div className="flex items-center justify-between mt-2 text-sm text-muted-foreground">
-                <span>{service.duration}</span>
-                <span className="font-medium text-foreground">${service.price}</span>
+                <span>{service.duration} min</span>
+                <span className="font-medium text-foreground">${(service.price / 100).toFixed(2)}</span>
               </div>
             </CardContent>
           </Card>

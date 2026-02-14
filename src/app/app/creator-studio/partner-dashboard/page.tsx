@@ -13,6 +13,7 @@ function PartnerDashboardContent() {
   const router = useRouter();
   const type = searchParams.get("type") || "SALON";
   const businessName = searchParams.get("businessName") || "My Business";
+  const salonId = searchParams.get("salonId");
 
   // Determine initial active tab based on type
   const [activeTab, setActiveTab] = useState(() => {
@@ -73,7 +74,13 @@ function PartnerDashboardContent() {
 
         {showServices && (
           <TabsContent value="services" className="mt-0 focus-visible:outline-none focus-visible:ring-0">
-            <ServiceManager />
+             {salonId ? (
+                <ServiceManager salonId={salonId} />
+             ) : (
+                <div className="p-8 text-center text-muted-foreground border rounded-md">
+                    <p>Salon ID is missing. Please return to the studio and try again.</p>
+                </div>
+             )}
           </TabsContent>
         )}
 

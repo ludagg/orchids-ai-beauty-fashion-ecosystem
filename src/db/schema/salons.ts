@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, boolean, decimal, pgEnum } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, boolean, decimal, pgEnum, integer } from 'drizzle-orm/pg-core';
 import { users } from './auth';
 
 export const salonStatusEnum = pgEnum('salon_status', ['pending', 'active', 'suspended']);
@@ -21,6 +21,18 @@ export const salons = pgTable('salons', {
   status: salonStatusEnum('status').default('pending').notNull(),
   isVerified: boolean('is_verified').default(false).notNull(),
   type: partnerTypeEnum('type').default('SALON').notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const services = pgTable('services', {
+  id: text('id').primaryKey(),
+  salonId: text('salon_id').notNull().references(() => salons.id, { onDelete: 'cascade' }),
+  name: text('name').notNull(),
+  description: text('description'),
+  price: integer('price').notNull(), // Stored in cents
+  duration: integer('duration').notNull(), // In minutes
+  isActive: boolean('is_active').default(true).notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });

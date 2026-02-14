@@ -113,6 +113,7 @@ export default function CreatorStudioClient({ user, initialSalon }: CreatorStudi
         zipCode: "",
         type: initialSalon.type
   } : null);
+  const [salonId, setSalonId] = useState<string | null>(initialSalon?.id || null);
 
   const [isPartnerModalOpen, setIsPartnerModalOpen] = useState(false);
 
@@ -124,6 +125,7 @@ export default function CreatorStudioClient({ user, initialSalon }: CreatorStudi
         const isPartnerParam = searchParams.get("partner") === "true";
         const typeParam = searchParams.get("type");
         const businessNameParam = searchParams.get("businessName");
+        const salonIdParam = searchParams.get("salonId");
 
         if (isPartnerParam) {
             setIsPartner(true);
@@ -133,7 +135,10 @@ export default function CreatorStudioClient({ user, initialSalon }: CreatorStudi
                 description: "",
                 address: ""
             } as PartnerData); // Cast because we are missing fields but it's mock
+            if (salonIdParam) setSalonId(salonIdParam);
         }
+    } else {
+        setSalonId(initialSalon.id);
     }
   }, [searchParams, initialSalon]);
 
@@ -141,8 +146,9 @@ export default function CreatorStudioClient({ user, initialSalon }: CreatorStudi
   const draftVideos = videos.filter(v => v.status === 'Draft' || v.status === 'Private');
   const likedVideos = videos.slice(0, 3);
 
-  const handlePartnerComplete = (data: PartnerData) => {
+  const handlePartnerComplete = (data: PartnerData & { id?: string }) => {
     setPartnerData(data);
+    if (data.id) setSalonId(data.id);
     setIsPartner(true);
     // Refresh to update server components
     router.refresh();
@@ -212,7 +218,7 @@ export default function CreatorStudioClient({ user, initialSalon }: CreatorStudi
                 </Button>
             ) : (
                 <Link
-                  href={`/app/creator-studio/partner-dashboard?type=${partnerData?.type || 'SALON'}&businessName=${encodeURIComponent(partnerData?.businessName || '')}`}
+                  href={`/app/creator-studio/partner-dashboard?type=${partnerData?.type || 'SALON'}&businessName=${encodeURIComponent(partnerData?.businessName || '')}&salonId=${salonId || ''}`}
                   passHref
                   className="flex-1 min-w-[120px]"
                 >
