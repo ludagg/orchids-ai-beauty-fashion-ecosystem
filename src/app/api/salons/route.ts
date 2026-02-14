@@ -13,7 +13,21 @@ const salonSchema = z.object({
   city: z.string().min(2),
   zipCode: z.string().min(3),
   type: z.enum(["SALON", "BOUTIQUE", "BOTH"]),
+  image: z.string().optional(),
 });
+
+export async function GET() {
+  try {
+    const allSalons = await db.select().from(salons);
+    return NextResponse.json(allSalons);
+  } catch (error) {
+    console.error("Error fetching salons:", error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -48,7 +62,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { name, description, address, city, zipCode, type } = result.data;
+    const { name, description, address, city, zipCode, type, image } = result.data;
 
     // 3. Generate Slug (basic implementation)
     // In production, you might want to check for collisions or use a library like slugify
@@ -80,6 +94,7 @@ export async function POST(req: NextRequest) {
         city: city,
         zipCode: zipCode,
         type: type,
+        image: image,
         status: "pending",
         // isVerified defaults to false
         // createdAt and updatedAt default to now()

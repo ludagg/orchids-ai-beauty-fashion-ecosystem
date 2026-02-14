@@ -29,7 +29,12 @@ export async function GET(
     const salonServices = await db
       .select()
       .from(services)
-      .where(eq(services.salonId, salonId));
+      .where(
+        and(
+          eq(services.salonId, salonId),
+          eq(services.isActive, true)
+        )
+      );
 
     return NextResponse.json(salonServices);
   } catch (error) {

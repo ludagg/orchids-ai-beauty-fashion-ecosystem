@@ -13,18 +13,33 @@ import {
   CheckCircle2,
   Calendar as CalendarIcon,
   ChevronRight,
-  Info
+  Info,
+  Loader2
 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 
-const services = [
-  { id: 1, name: "Signature Haircut", duration: "45 min", price: "₹800", description: "Precision cut, wash, and style tailored to your face shape." },
-  { id: 2, name: "Hair Coloring (Global)", duration: "120 min", price: "₹3,500", description: "Full head color using premium ammonia-free products." },
-  { id: 3, name: "Deep Conditioning Spa", duration: "60 min", price: "₹1,800", description: "Intense hydration treatment for damaged or dry hair." },
-  { id: 4, name: "Beard Grooming & Styling", duration: "30 min", price: "₹500", description: "Trim, shape, and hot towel finish for a sharp look." }
-];
+interface Salon {
+  id: string;
+  name: string;
+  description: string | null;
+  address: string;
+  city: string;
+  phone: string | null;
+  email: string | null;
+  website: string | null;
+  image: string | null;
+  isVerified: boolean;
+}
+
+interface Service {
+  id: string;
+  name: string;
+  description: string | null;
+  price: number; // in cents
+  duration: number; // in minutes
+}
 
 const gallery = [
   "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=600&h=600&fit=crop",
@@ -35,7 +50,66 @@ const gallery = [
 
 export default function SalonDetailsPage() {
   const { id } = useParams();
-  const [selectedService, setSelectedService] = useState(1);
+  const [salon, setSalon] = useState<Salon | null>(null);
+  const [services, setServices] = useState<Service[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      if (!id) return;
+      try {
+        const [salonRes, servicesRes] = await Promise.all([
+          fetch(`/api/salons/${id}`),
+          fetch(`/api/salons/${id}/services`)
+        ]);
+
+        if (salonRes.ok) {
+          const salonData = await salonRes.json();
+          setSalon(salonData);
+        }
+
+        if (servicesRes.ok) {
+          const servicesData = await servicesRes.json();
+          setServices(servicesData);
+          if (servicesData.length > 0) {
+            setSelectedServiceId(servicesData[0].id);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchData();
+  }, [id]);
+
+  const formatPrice = (cents: number) => {
+    return (cents / 100).toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
+  };
+
+  const selectedService = services.find(s => s.id === selectedServiceId);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <Loader2 className="w-10 h-10 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (!salon) {
+    return (
+      <div className="p-8 text-center">
+        <h1 className="text-2xl font-bold">Salon not found</h1>
+        <Link href="/app/salons" className="text-primary hover:underline mt-4 block">
+          Back to Salons
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 max-w-[1400px] mx-auto w-full">
@@ -54,7 +128,7 @@ export default function SalonDetailsPage() {
           <section className="space-y-4">
             <div className="aspect-[21/9] rounded-[40px] overflow-hidden bg-muted border border-border shadow-sm">
               <img
-                src="https://images.unsplash.com/photo-1600948836101-f9ffda59d250?w=1200&h=600&fit=crop"
+                src={salon.image || "https://images.unsplash.com/photo-1600948836101-f9ffda59d250?w=1200&h=600&fit=crop"}
                 alt="Salon Interior"
                 className="w-full h-full object-cover"
               />
@@ -73,18 +147,20 @@ export default function SalonDetailsPage() {
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
               <div>
                 <div className="flex items-center gap-3 mb-2">
-                  <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold uppercase tracking-widest border border-emerald-100">
-                    Verified Partner
-                  </span>
+                  {salon.isVerified && (
+                    <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold uppercase tracking-widest border border-emerald-100">
+                      Verified Partner
+                    </span>
+                  )}
                   <div className="flex items-center gap-1 text-sm font-bold text-amber-500">
                     <Star className="w-4 h-4 fill-current" />
-                    4.9 (420 reviews)
+                    5.0 (0 reviews)
                   </div>
                 </div>
-                <h1 className="text-3xl sm:text-5xl font-semibold font-display tracking-tight text-foreground">Aura Luxury Spa</h1>
+                <h1 className="text-3xl sm:text-5xl font-semibold font-display tracking-tight text-foreground">{salon.name}</h1>
                 <div className="flex items-center gap-2 text-muted-foreground mt-2">
                   <MapPin className="w-4 h-4" />
-                  <p className="text-base">123, 100 Feet Rd, Indiranagar, Bangalore</p>
+                  <p className="text-base">{salon.address}, {salon.city}</p>
                 </div>
               </div>
               <div className="flex gap-2">
@@ -124,10 +200,7 @@ export default function SalonDetailsPage() {
             <div className="space-y-4">
               <h3 className="text-2xl font-semibold font-display">About the Salon</h3>
               <p className="text-muted-foreground leading-relaxed text-lg">
-                Aura Luxury Spa offers a premium grooming experience in the heart of Indiranagar.
-                Our team of expert stylists and therapists use only the finest international products
-                to ensure you look and feel your best. We specialize in contemporary haircuts,
-                rejuvenating spa treatments, and professional grooming for all genders.
+                {salon.description}
               </p>
               <div className="grid grid-cols-2 gap-4 pt-4">
                 {["Free Wi-Fi", "Valet Parking", "Air Conditioned", "Loyalty Program"].map(item => (
@@ -141,40 +214,44 @@ export default function SalonDetailsPage() {
 
             <div className="space-y-6 pt-4">
               <h3 className="text-2xl font-semibold font-display">Services</h3>
-              <div className="space-y-4">
-                {services.map((service) => (
-                  <div
-                    key={service.id}
-                    onClick={() => setSelectedService(service.id)}
-                    className={`p-6 rounded-3xl border transition-all cursor-pointer group ${
-                      selectedService === service.id
-                        ? "border-blue-600 bg-blue-50/30"
-                        : "border-border bg-card hover:border-blue-600"
-                    }`}
-                  >
-                    <div className="flex items-start justify-between mb-2">
-                      <div>
-                        <h4 className="font-bold text-lg text-foreground">{service.name}</h4>
-                        <p className="text-sm text-muted-foreground mt-1">{service.description}</p>
+              {services.length === 0 ? (
+                <p className="text-muted-foreground">No services available.</p>
+              ) : (
+                <div className="space-y-4">
+                  {services.map((service) => (
+                    <div
+                      key={service.id}
+                      onClick={() => setSelectedServiceId(service.id)}
+                      className={`p-6 rounded-3xl border transition-all cursor-pointer group ${
+                        selectedServiceId === service.id
+                          ? "border-blue-600 bg-blue-50/30"
+                          : "border-border bg-card hover:border-blue-600"
+                      }`}
+                    >
+                      <div className="flex items-start justify-between mb-2">
+                        <div>
+                          <h4 className="font-bold text-lg text-foreground">{service.name}</h4>
+                          <p className="text-sm text-muted-foreground mt-1">{service.description}</p>
+                        </div>
+                        <p className="font-bold text-xl text-blue-600">{formatPrice(service.price)}</p>
                       </div>
-                      <p className="font-bold text-xl text-blue-600">{service.price}</p>
-                    </div>
-                    <div className="flex items-center justify-between mt-4">
-                      <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-1.5 text-xs font-bold text-muted-foreground uppercase tracking-widest">
-                          <Clock className="w-3.5 h-3.5" />
-                          {service.duration}
+                      <div className="flex items-center justify-between mt-4">
+                        <div className="flex items-center gap-4">
+                          <div className="flex items-center gap-1.5 text-xs font-bold text-muted-foreground uppercase tracking-widest">
+                            <Clock className="w-3.5 h-3.5" />
+                            {service.duration} min
+                          </div>
+                        </div>
+                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
+                          selectedServiceId === service.id ? "border-blue-600 bg-blue-600" : "border-border"
+                        }`}>
+                          {selectedServiceId === service.id && <div className="w-2 h-2 rounded-full bg-card" />}
                         </div>
                       </div>
-                      <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
-                        selectedService === service.id ? "border-blue-600 bg-blue-600" : "border-border"
-                      }`}>
-                        {selectedService === service.id && <div className="w-2 h-2 rounded-full bg-card" />}
-                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
           </section>
         </div>
@@ -225,7 +302,7 @@ export default function SalonDetailsPage() {
             <div className="pt-6 border-t border-muted space-y-4">
               <div className="flex items-center justify-between">
                 <p className="text-muted-foreground">Service Total</p>
-                <p className="font-bold">{services.find(s => s.id === selectedService)?.price}</p>
+                <p className="font-bold">{selectedService ? formatPrice(selectedService.price) : "—"}</p>
               </div>
               <div className="flex items-center justify-between text-emerald-600">
                 <p className="text-sm">Booking Fee</p>
@@ -233,11 +310,18 @@ export default function SalonDetailsPage() {
               </div>
               <div className="flex items-center justify-between text-lg font-bold pt-2">
                 <p>Total</p>
-                <p>{services.find(s => s.id === selectedService)?.price || "₹800"}</p>
+                <p>{selectedService ? formatPrice(selectedService.price) : "—"}</p>
               </div>
             </div>
 
-            <button className="w-full h-14 rounded-2xl bg-foreground text-white font-bold text-lg hover:bg-blue-600 transition-all active:scale-[0.98] shadow-xl shadow-foreground/10 flex items-center justify-center gap-3">
+            <button
+              disabled={!selectedService}
+              className={`w-full h-14 rounded-2xl font-bold text-lg transition-all active:scale-[0.98] shadow-xl flex items-center justify-center gap-3 ${
+                selectedService
+                  ? "bg-foreground text-white hover:bg-blue-600 shadow-foreground/10"
+                  : "bg-muted text-muted-foreground cursor-not-allowed"
+              }`}
+            >
               <CalendarIcon className="w-5 h-5" />
               Confirm Booking
             </button>
