@@ -56,6 +56,31 @@ export function PartnerOnboardingModal({
       return
     }
 
+    if (formData.businessName.length < 2) {
+      toast.error("Business name must be at least 2 characters long")
+      return
+    }
+
+    if (formData.description.length < 10) {
+      toast.error("Description must be at least 10 characters long")
+      return
+    }
+
+    if (formData.address.length < 5) {
+      toast.error("Address must be at least 5 characters long")
+      return
+    }
+
+    if (formData.city.length < 2) {
+      toast.error("City must be at least 2 characters long")
+      return
+    }
+
+    if (formData.zipCode.length < 3) {
+      toast.error("Zip code must be at least 3 characters long")
+      return
+    }
+
     setLoading(true)
 
     try {
@@ -75,7 +100,8 @@ export function PartnerOnboardingModal({
       })
 
       if (!response.ok) {
-        throw new Error("Failed to create salon")
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || "Failed to create salon");
       }
 
       const data = await response.json()
@@ -83,9 +109,9 @@ export function PartnerOnboardingModal({
       onComplete(formData)
       onOpenChange(false)
       toast.success("Welcome, Partner! You can now manage your services and products.")
-    } catch (error) {
+    } catch (error: any) {
       console.error(error)
-      toast.error("Something went wrong. Please try again.")
+      toast.error(error.message || "Something went wrong. Please try again.")
     } finally {
       setLoading(false)
     }
