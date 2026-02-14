@@ -18,6 +18,7 @@ export const salons = pgTable('salons', {
   phone: text('phone'),
   email: text('email'),
   website: text('website'),
+  image: text('image'),
   status: salonStatusEnum('status').default('pending').notNull(),
   isVerified: boolean('is_verified').default(false).notNull(),
   type: partnerTypeEnum('type').default('SALON').notNull(),

@@ -1,0 +1,16 @@
+$ next dev --turbopack
+▲ Next.js 16.1.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.2:3000
+- Environments: .env
+
+✓ Starting...
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+✓ Ready in 1466ms
+○ Compiling /auth ...
+ GET /auth 200 in 6.6s (compile: 6.0s, proxy.ts: 5ms, render: 563ms)
+ GET /auth 200 in 84ms (compile: 9ms, proxy.ts: 5ms, render: 70ms)
+ GET /app/salons 200 in 2.1s (compile: 1702ms, proxy.ts: 6ms, render: 373ms)
+ GET /app/salons/1 200 in 1695ms (compile: 1536ms, proxy.ts: 7ms, render: 152ms)
+ GET /app/salons 200 in 152ms (compile: 7ms, proxy.ts: 6ms, render: 139ms)
+ GET /app/salons/1 200 in 246ms (compile: 45ms, proxy.ts: 4ms, render: 196ms)
