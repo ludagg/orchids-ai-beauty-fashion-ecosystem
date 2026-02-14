@@ -1,351 +1,40 @@
-"use client";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
+import { db } from "@/lib/db";
+import { salons } from "@/db/schema";
+import { eq } from "drizzle-orm";
+import { Suspense } from "react";
+import CreatorStudioClient from "./CreatorStudioClient";
 
-import {
-  Heart,
-  Upload,
-  Play,
-  Edit,
-  Settings,
-  Video,
-  Share2,
-  Lock,
-  LayoutDashboard
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useState, useEffect, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
-import Link from "next/link";
-import { PartnerOnboardingModal, PartnerData, PartnerType } from "./components/PartnerOnboardingModal";
+export default async function CreatorStudioPage() {
+  const session = await auth.api.getSession({
+    headers: await headers()
+  });
 
-// Mock Data
-const creatorProfile = {
-  name: "Jane Doe",
-  handle: "@janedoe_style",
-  avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop",
-  bio: "Fashion enthusiast & style curator. Bringing you the latest trends from Paris to Tokyo. 🌸✨",
-  stats: {
-    followers: "12.5K",
-    likes: "45.2K",
-    views: "1.2M",
-    engagement: "4.8%"
+  if (!session) {
+    redirect("/auth");
   }
-};
 
-const videos = [
-  {
-    id: "1",
-    title: "Summer 2024 Fashion Trends You Need to Know",
-    thumbnail: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=600&h=800&fit=crop",
-    views: 125000,
-    likes: 4500,
-    date: "2024-05-15",
-    status: "Published"
-  },
-  {
-    id: "2",
-    title: "My Daily Skincare Routine for Glowing Skin",
-    thumbnail: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=600&h=800&fit=crop",
-    views: 89000,
-    likes: 3200,
-    date: "2024-05-10",
-    status: "Published"
-  },
-  {
-    id: "3",
-    title: "Paris Fashion Week Vlog - Behind the Scenes",
-    thumbnail: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=600&h=800&fit=crop",
-    views: 210000,
-    likes: 15000,
-    date: "2024-05-01",
-    status: "Published"
-  },
-  {
-    id: "4",
-    title: "Testing Viral TikTok Makeup Hacks",
-    thumbnail: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=600&h=800&fit=crop",
-    views: 45000,
-    likes: 1800,
-    date: "2024-04-20",
-    status: "Draft"
-  },
-  {
-    id: "5",
-    title: "Street Style Inspo",
-    thumbnail: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600&h=800&fit=crop",
-    views: 12000,
-    likes: 900,
-    date: "2024-04-15",
-    status: "Published"
-  },
-   {
-    id: "6",
-    title: "GRWM for Date Night",
-    thumbnail: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&h=800&fit=crop",
-    views: 5600,
-    likes: 230,
-    date: "2024-04-10",
-    status: "Private"
-  }
-];
+  // Fetch the salon for the current user
+  const userSalons = await db
+    .select()
+    .from(salons)
+    .where(eq(salons.ownerId, session.user.id))
+    .limit(1);
 
-function CreatorStudioContent() {
-  const [activeTab, setActiveTab] = useState("videos");
-  const [isPartner, setIsPartner] = useState(false);
-  const [partnerData, setPartnerData] = useState<PartnerData | null>(null);
-  const [isPartnerModalOpen, setIsPartnerModalOpen] = useState(false);
-
-  const searchParams = useSearchParams();
-
-  useEffect(() => {
-    // Check for partner query params to restore state on back navigation
-    const isPartnerParam = searchParams.get("partner") === "true";
-    const typeParam = searchParams.get("type");
-    const businessNameParam = searchParams.get("businessName");
-
-    if (isPartnerParam) {
-      setIsPartner(true);
-      setPartnerData({
-        type: (typeParam as PartnerType) || "SALON",
-        businessName: businessNameParam || "My Business",
-        description: "",
-        address: ""
-      });
-    }
-  }, [searchParams]);
-
-  const publishedVideos = videos.filter(v => v.status === 'Published');
-  const draftVideos = videos.filter(v => v.status === 'Draft' || v.status === 'Private');
-  const likedVideos = videos.slice(0, 3); // Mock liked videos
-
-  const handlePartnerComplete = (data: PartnerData) => {
-    setPartnerData(data);
-    setIsPartner(true);
-    // Note: We no longer switch tabs here, as the content is now in the dashboard
-  };
+  const initialSalon = userSalons.length > 0 ? userSalons[0] : null;
 
   return (
-    <div className="max-w-4xl mx-auto min-h-screen pb-20 pt-8 px-4">
-
-      {/* Profile Header */}
-      <div className="flex flex-col items-center text-center space-y-6 mb-8">
-
-        {/* Avatar */}
-        <div className="relative group">
-           <div className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-background shadow-xl overflow-hidden">
-                <Avatar className="w-full h-full">
-                    <AvatarImage src={creatorProfile.avatar} className="object-cover" />
-                    <AvatarFallback>JD</AvatarFallback>
-                </Avatar>
-            </div>
-            <div className="absolute bottom-0 right-0 bg-primary text-primary-foreground rounded-full p-1.5 border-2 border-background cursor-pointer hover:scale-110 transition-transform">
-                <Edit className="w-4 h-4" />
-            </div>
-        </div>
-
-        {/* Name & Handle */}
-        <div className="space-y-1">
-            <h1 className="text-2xl font-bold tracking-tight font-display flex items-center justify-center gap-2">
-                {creatorProfile.name}
-                <Badge variant="secondary" className="text-[10px] h-5 px-1.5 rounded-full bg-blue-100 text-blue-700 hover:bg-blue-200 dark:bg-blue-900/30 dark:text-blue-400">
-                    Pro
-                </Badge>
-                {isPartner && (
-                  <Badge variant="default" className="text-[10px] h-5 px-1.5 rounded-full">
-                    Partner
-                  </Badge>
-                )}
-            </h1>
-            <p className="text-muted-foreground font-medium">{creatorProfile.handle}</p>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="flex flex-wrap items-center justify-center gap-3 w-full max-w-md">
-            <Button className="flex-1 min-w-[120px]" size="lg">
-                Edit Profile
-            </Button>
-            {!isPartner ? (
-                <Button
-                    className="flex-1 min-w-[120px] bg-gradient-to-r from-purple-500 to-pink-600 text-white hover:from-purple-600 hover:to-pink-700 border-0"
-                    size="lg"
-                    onClick={() => setIsPartnerModalOpen(true)}
-                >
-                    Become a Partner
-                </Button>
-            ) : (
-                <Link
-                  href={`/app/creator-studio/partner-dashboard?type=${partnerData?.type || 'SALON'}&businessName=${encodeURIComponent(partnerData?.businessName || '')}`}
-                  passHref
-                  className="flex-1 min-w-[120px]"
-                >
-                    <Button
-                        className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 border-0 gap-2"
-                        size="lg"
-                    >
-                        <LayoutDashboard className="w-4 h-4" />
-                        Partner Dashboard
-                    </Button>
-                </Link>
-            )}
-            <Button variant="outline" size="icon" className="h-11 w-11">
-                <Share2 className="w-5 h-5" />
-            </Button>
-             <Button variant="secondary" size="icon" className="h-11 w-11">
-                <Settings className="w-5 h-5" />
-            </Button>
-        </div>
-
-        {/* Main Actions (Upload / Live) */}
-        <div className="flex items-center justify-center gap-4 text-sm font-medium pt-2">
-             <Button variant="ghost" className="gap-2 text-muted-foreground hover:text-primary">
-                <Video className="w-4 h-4" />
-                Go Live
-            </Button>
-             <Button variant="ghost" className="gap-2 text-muted-foreground hover:text-primary">
-                <Upload className="w-4 h-4" />
-                Upload New
-            </Button>
-        </div>
-
-
-        {/* Stats Row */}
-        <div className="flex items-center justify-center gap-8 md:gap-12 py-4 border-y border-border/40 w-full max-w-2xl">
-            <div className="flex flex-col items-center">
-                <span className="text-lg font-bold">{creatorProfile.stats.followers}</span>
-                <span className="text-xs text-muted-foreground uppercase tracking-wider">Followers</span>
-            </div>
-            <div className="flex flex-col items-center">
-                <span className="text-lg font-bold">482</span>
-                <span className="text-xs text-muted-foreground uppercase tracking-wider">Following</span>
-            </div>
-             <div className="flex flex-col items-center">
-                <span className="text-lg font-bold">{creatorProfile.stats.likes}</span>
-                <span className="text-xs text-muted-foreground uppercase tracking-wider">Likes</span>
-            </div>
-             <div className="flex flex-col items-center hidden sm:flex">
-                <span className="text-lg font-bold">{creatorProfile.stats.views}</span>
-                <span className="text-xs text-muted-foreground uppercase tracking-wider">Views</span>
-            </div>
-        </div>
-
-        {/* Bio */}
-         <p className="text-sm text-center max-w-md mx-auto leading-relaxed">
-            {creatorProfile.bio} <br/>
-            <a href="#" className="text-primary hover:underline font-medium">linktr.ee/janedoe_style</a>
-        </p>
-
-      </div>
-
-      {/* Content Tabs */}
-      <Tabs value={activeTab} className="w-full" onValueChange={setActiveTab}>
-        <TabsList className="w-full justify-start bg-transparent border-b h-12 p-0 rounded-none mb-6 overflow-x-auto no-scrollbar">
-          <TabsTrigger
-            value="videos"
-            className="flex-1 min-w-[80px] h-full rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground data-[state=active]:text-foreground font-medium transition-all"
-          >
-            <Video className="w-4 h-4 mr-2" />
-            Videos
-          </TabsTrigger>
-          <TabsTrigger
-            value="drafts"
-            className="flex-1 min-w-[80px] h-full rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground data-[state=active]:text-foreground font-medium transition-all"
-          >
-            <Lock className="w-4 h-4 mr-2" />
-            Drafts
-          </TabsTrigger>
-           <TabsTrigger
-            value="liked"
-            className="flex-1 min-w-[80px] h-full rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground data-[state=active]:text-foreground font-medium transition-all"
-          >
-            <Heart className="w-4 h-4 mr-2" />
-            Liked
-          </TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="videos" className="mt-0">
-             <div className="grid grid-cols-3 gap-px md:gap-1">
-                {publishedVideos.map((video) => (
-                    <VideoCard key={video.id} video={video} />
-                ))}
-             </div>
-             {publishedVideos.length === 0 && <EmptyState type="videos" />}
-        </TabsContent>
-
-        <TabsContent value="drafts" className="mt-0">
-            <div className="grid grid-cols-3 gap-px md:gap-1">
-                {draftVideos.map((video) => (
-                     <VideoCard key={video.id} video={video} isPrivate />
-                ))}
-             </div>
-             {draftVideos.length === 0 && <EmptyState type="drafts" />}
-        </TabsContent>
-
-         <TabsContent value="liked" className="mt-0">
-            <div className="grid grid-cols-3 gap-px md:gap-1">
-                {likedVideos.map((video) => (
-                     <VideoCard key={video.id} video={video} isLiked />
-                ))}
-             </div>
-        </TabsContent>
-
-      </Tabs>
-
-      <PartnerOnboardingModal
-        isOpen={isPartnerModalOpen}
-        onOpenChange={setIsPartnerModalOpen}
-        onComplete={handlePartnerComplete}
+    <Suspense fallback={<div>Loading...</div>}>
+      <CreatorStudioClient
+        user={{
+          name: session.user.name,
+          image: session.user.image || null,
+          email: session.user.email,
+        }}
+        initialSalon={initialSalon}
       />
-    </div>
-  );
-}
-
-function VideoCard({ video, isPrivate, isLiked }: { video: any, isPrivate?: boolean, isLiked?: boolean }) {
-    return (
-        <div className="aspect-[9/16] relative bg-muted cursor-pointer overflow-hidden group">
-            <img
-                src={video.thumbnail}
-                alt={video.title}
-                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                 <Play className="w-8 h-8 text-white fill-white" />
-            </div>
-
-            <div className="absolute bottom-2 left-2 flex items-center gap-1 text-white drop-shadow-md">
-                {isPrivate ? <Lock className="w-3 h-3" /> : <Play className="w-3 h-3 fill-white" />}
-                <span className="text-xs font-semibold">{video.views >= 1000 ? `${(video.views/1000).toFixed(1)}K` : video.views}</span>
-            </div>
-
-            {isLiked && (
-                 <div className="absolute top-2 right-2 text-white drop-shadow-md">
-                    <Heart className="w-4 h-4 fill-red-500 text-red-500" />
-                 </div>
-            )}
-        </div>
-    )
-}
-
-function EmptyState({ type }: { type: string }) {
-    return (
-        <div className="flex flex-col items-center justify-center py-20 text-center space-y-4">
-            <div className="bg-muted rounded-full p-6">
-                {type === 'drafts' ? <Lock className="w-10 h-10 text-muted-foreground" /> : <Video className="w-10 h-10 text-muted-foreground" />}
-            </div>
-            <h3 className="text-lg font-medium">No {type} yet</h3>
-            <p className="text-muted-foreground text-sm max-w-xs">
-                Upload your first video to get started sharing your content with the world.
-            </p>
-            <Button variant="outline">Upload Video</Button>
-        </div>
-    )
-}
-
-export default function CreatorStudioPage() {
-  return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading Profile...</div>}>
-      <CreatorStudioContent />
     </Suspense>
   );
 }
