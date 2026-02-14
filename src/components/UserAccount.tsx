@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   User,
   Settings,
@@ -19,17 +20,38 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { authClient } from "@/lib/auth-client";
 
 export default function UserAccount({ showLabel = true }: { showLabel?: boolean }) {
+  const router = useRouter();
+  const { data: session } = authClient.useSession();
+  const user = session?.user;
+
+  const initials = user?.name
+    ? user.name
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2)
+    : "G";
+
+  const handleSignOut = async () => {
+    await authClient.signOut();
+    router.push("/");
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button className="flex items-center gap-2 p-1.5 pr-3 rounded-full hover:bg-secondary transition-colors border border-transparent hover:border-border outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 group">
           <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-violet-500 to-rose-500 flex items-center justify-center text-white font-medium text-xs shadow-sm group-hover:shadow-md transition-shadow">
-            JD
+            {initials}
           </div>
           {showLabel && (
-            <span className="text-sm font-medium hidden sm:inline text-foreground">Guest User</span>
+            <span className="text-sm font-medium hidden sm:inline text-foreground">
+              {user?.name || "Guest"}
+            </span>
           )}
           <ChevronDown className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors hidden sm:inline" />
         </button>
@@ -37,8 +59,12 @@ export default function UserAccount({ showLabel = true }: { showLabel?: boolean 
       <DropdownMenuContent className="w-56" align="end" sideOffset={8}>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none text-foreground">Jane Doe</p>
-            <p className="text-xs leading-none text-muted-foreground">jane.doe@example.com</p>
+            <p className="text-sm font-medium leading-none text-foreground">
+              {user?.name || "Guest User"}
+            </p>
+            <p className="text-xs leading-none text-muted-foreground">
+              {user?.email || "guest@example.com"}
+            </p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
@@ -69,7 +95,10 @@ export default function UserAccount({ showLabel = true }: { showLabel?: boolean 
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="text-rose-600 focus:text-rose-600 focus:bg-rose-50 cursor-pointer">
+        <DropdownMenuItem
+          className="text-rose-600 focus:text-rose-600 focus:bg-rose-50 cursor-pointer"
+          onClick={handleSignOut}
+        >
           <LogOut className="mr-2 h-4 w-4" />
           <span>Sign out</span>
         </DropdownMenuItem>
