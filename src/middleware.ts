@@ -25,6 +25,7 @@ export async function middleware(request: NextRequest) {
 
     if (!response.ok) {
         // If the session check fails (e.g. 401 or 500), assume unauthenticated
+        console.error("Middleware auth check failed. Status:", response.status);
         return NextResponse.redirect(new URL("/auth", request.url));
     }
 

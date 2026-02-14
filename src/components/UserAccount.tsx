@@ -21,11 +21,28 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { authClient } from "@/lib/auth-client";
+import { useEffect } from "react";
 
 export default function UserAccount({ showLabel = true }: { showLabel?: boolean }) {
   const router = useRouter();
-  const { data: session } = authClient.useSession();
+  const { data: session, isPending } = authClient.useSession();
   const user = session?.user;
+
+  useEffect(() => {
+    if (!isPending && !session) {
+      router.push("/auth");
+    }
+  }, [isPending, session, router]);
+
+  if (isPending || !session) {
+      // Return a skeleton or nothing while checking/redirecting
+      return (
+          <div className="flex items-center gap-2 p-1.5 pr-3">
+              <div className="w-8 h-8 rounded-full bg-muted animate-pulse" />
+              {showLabel && <div className="h-4 w-20 bg-muted rounded animate-pulse hidden sm:block" />}
+          </div>
+      );
+  }
 
   const initials = user?.name
     ? user.name
@@ -34,7 +51,7 @@ export default function UserAccount({ showLabel = true }: { showLabel?: boolean 
         .join("")
         .toUpperCase()
         .slice(0, 2)
-    : "G";
+    : "U";
 
   const handleSignOut = async () => {
     await authClient.signOut();
@@ -50,7 +67,7 @@ export default function UserAccount({ showLabel = true }: { showLabel?: boolean 
           </div>
           {showLabel && (
             <span className="text-sm font-medium hidden sm:inline text-foreground">
-              {user?.name || "Guest"}
+              {user?.name || "User"}
             </span>
           )}
           <ChevronDown className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors hidden sm:inline" />
@@ -60,10 +77,10 @@ export default function UserAccount({ showLabel = true }: { showLabel?: boolean 
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none text-foreground">
-              {user?.name || "Guest User"}
+              {user?.name || "User"}
             </p>
             <p className="text-xs leading-none text-muted-foreground">
-              {user?.email || "guest@example.com"}
+              {user?.email}
             </p>
           </div>
         </DropdownMenuLabel>
