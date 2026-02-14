@@ -17,13 +17,21 @@ export default async function CreatorStudioPage() {
   }
 
   // Fetch the salon for the current user
-  const userSalons = await db
-    .select()
-    .from(salons)
-    .where(eq(salons.ownerId, session.user.id))
-    .limit(1);
+  let initialSalon = null;
+  try {
+    const userSalons = await db
+      .select()
+      .from(salons)
+      .where(eq(salons.ownerId, session.user.id))
+      .limit(1);
 
-  const initialSalon = userSalons.length > 0 ? userSalons[0] : null;
+    if (userSalons.length > 0) {
+      initialSalon = userSalons[0];
+    }
+  } catch (error) {
+    console.error("Error fetching user salon:", error);
+    // initialSalon remains null, allowing the page to render in "Become a Partner" mode
+  }
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
