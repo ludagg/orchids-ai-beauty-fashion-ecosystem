@@ -173,17 +173,17 @@ export default function AuthPage() {
 
   if (isSuccess) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-background p-4">
+      <main id="main-content" className="min-h-screen flex flex-col items-center justify-center bg-background p-4">
         <Spinner className="size-12 text-primary mb-4" />
         <h2 className="text-xl font-medium text-foreground">
           {isSignIn ? 'Signing you in...' : 'Creating your account...'}
         </h2>
-      </div>
+      </main>
     )
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-pink-900/20 p-4">
+    <main id="main-content" className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-pink-900/20 p-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -513,6 +513,6 @@ export default function AuthPage() {
           </CardFooter>
         </Card>
       </motion.div>
-    </div>
+    </main>
   )
 }

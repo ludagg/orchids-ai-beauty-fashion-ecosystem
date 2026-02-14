@@ -209,7 +209,7 @@ export default function AppLayout({
           </div>
         </header>
 
-        <main className="flex-1 min-h-0 overflow-y-auto pb-20 lg:pb-0">
+        <main id="main-content" className="flex-1 min-h-0 overflow-y-auto pb-20 lg:pb-0">
           {children}
         </main>
 
