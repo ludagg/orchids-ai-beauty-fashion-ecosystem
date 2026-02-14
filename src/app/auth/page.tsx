@@ -12,6 +12,7 @@ import { Mail, Lock, User, Eye, EyeOff, ArrowLeft, Chrome, Github, Phone, MapPin
 import { motion, AnimatePresence } from 'framer-motion'
 import { authClient } from '@/lib/auth-client'
 import { toast } from 'sonner'
+import { Spinner } from '@/components/ui/spinner'
 
 export default function AuthPage() {
   const router = useRouter()
@@ -105,7 +106,7 @@ export default function AuthPage() {
         setIsSuccess(true)
         setTimeout(() => {
           router.push('/app')
-        }, 1500)
+        }, 1000)
 
       } else {
         const { data, error } = await authClient.signUp.email({
@@ -125,7 +126,7 @@ export default function AuthPage() {
         setIsSuccess(true)
         setTimeout(() => {
           router.push('/app')
-        }, 1500)
+        }, 1000)
       }
     } catch (err) {
       console.error(err)
@@ -172,27 +173,11 @@ export default function AuthPage() {
 
   if (isSuccess) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-pink-900/20 p-4">
-        <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          className="text-center"
-        >
-          <div className="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
-            <svg className="w-10 h-10 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-            </svg>
-          </div>
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            {isSignIn ? 'Welcome back!' : 'Account created!'}
-          </h2>
-          <p className="text-gray-600 dark:text-gray-400 mb-8">
-            {isSignIn ? 'You have successfully signed in' : 'Your account has been created successfully'}
-          </p>
-          <Button size="lg" onClick={() => router.push('/app')}>
-              Go to Dashboard
-          </Button>
-        </motion.div>
+      <div className="min-h-screen flex flex-col items-center justify-center bg-background p-4">
+        <Spinner className="size-12 text-primary mb-4" />
+        <h2 className="text-xl font-medium text-foreground">
+          {isSignIn ? 'Signing you in...' : 'Creating your account...'}
+        </h2>
       </div>
     )
   }
