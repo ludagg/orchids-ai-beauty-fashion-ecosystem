@@ -104,7 +104,7 @@ export default function AuthPage() {
 
         setIsSuccess(true)
         setTimeout(() => {
-          router.push('/app')
+          window.location.href = '/app'
         }, 1500)
 
       } else {
@@ -124,7 +124,7 @@ export default function AuthPage() {
 
         setIsSuccess(true)
         setTimeout(() => {
-          router.push('/app')
+          window.location.href = '/app'
         }, 1500)
       }
     } catch (err) {
@@ -189,7 +189,7 @@ export default function AuthPage() {
           <p className="text-gray-600 dark:text-gray-400 mb-8">
             {isSignIn ? 'You have successfully signed in' : 'Your account has been created successfully'}
           </p>
-          <Button size="lg" onClick={() => router.push('/app')}>
+          <Button size="lg" onClick={() => window.location.href = '/app'}>
               Go to Dashboard
           </Button>
         </motion.div>
