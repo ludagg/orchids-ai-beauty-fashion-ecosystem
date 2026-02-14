@@ -30,7 +30,7 @@ export interface PartnerData {
 interface PartnerOnboardingModalProps {
   isOpen: boolean
   onOpenChange: (open: boolean) => void
-  onComplete: (data: PartnerData) => void
+  onComplete: (data: PartnerData & { id?: string }) => void
 }
 
 export function PartnerOnboardingModal({
@@ -106,7 +106,7 @@ export function PartnerOnboardingModal({
 
       const data = await response.json()
 
-      onComplete(formData)
+      onComplete({ ...formData, id: data.id })
       onOpenChange(false)
       toast.success("Welcome, Partner! You can now manage your services and products.")
     } catch (error: any) {
