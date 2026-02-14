@@ -40,6 +40,12 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${playfair.variable} ${outfit.variable} ${pinyon.variable} font-sans antialiased`}>
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only fixed top-4 left-4 z-[100] px-4 py-2 bg-card text-foreground rounded-lg shadow-lg outline-none ring-2 ring-ring ring-offset-2"
+        >
+          Skip to content
+        </a>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
