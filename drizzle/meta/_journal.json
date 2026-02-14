@@ -1,0 +1,20 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1771059418115,
+      "tag": "0000_premium_moira_mactaggert",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1771059455271,
+      "tag": "0001_many_living_tribunal",
+      "breakpoints": true
+    }
+  ]
+}
