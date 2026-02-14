@@ -31,7 +31,7 @@ export async function middleware(request: NextRequest) {
     const sessionData = await response.json();
 
     // Better Auth typically returns null or an object with session/user if authenticated
-    if (!sessionData) {
+    if (!sessionData || !sessionData.session) {
       return NextResponse.redirect(new URL("/auth", request.url));
     }
 
