@@ -2,10 +2,13 @@
 
 import { useSearchParams, useRouter } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, LayoutDashboard, Scissors, ShoppingBag, Calendar } from "lucide-react";
+import { ArrowLeft, LayoutDashboard, Scissors, ShoppingBag, Calendar, Image as ImageIcon, Clock, Star } from "lucide-react";
 import { ServiceManager } from "../components/ServiceManager";
 import { ProductManager } from "../components/ProductManager";
-import { BookingManager } from "../components/BookingManager"; // Import BookingManager
+import { BookingManager } from "../components/BookingManager";
+import { SalonImageManager } from "../components/SalonImageManager";
+import { SalonHoursManager } from "../components/SalonHoursManager";
+import { SalonReviewsManager } from "../components/SalonReviewsManager";
 import { Suspense, useState } from "react";
 
 function PartnerDashboardContent() {
@@ -81,6 +84,30 @@ function PartnerDashboardContent() {
               Products
             </TabsTrigger>
           )}
+
+           <TabsTrigger
+            value="photos"
+            className="flex-1 md:flex-none min-w-[120px] h-full rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground data-[state=active]:text-foreground font-medium transition-all"
+          >
+            <ImageIcon className="w-4 h-4 mr-2" />
+            Photos
+          </TabsTrigger>
+
+          <TabsTrigger
+            value="hours"
+            className="flex-1 md:flex-none min-w-[120px] h-full rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground data-[state=active]:text-foreground font-medium transition-all"
+          >
+            <Clock className="w-4 h-4 mr-2" />
+            Hours
+          </TabsTrigger>
+
+          <TabsTrigger
+            value="reviews"
+            className="flex-1 md:flex-none min-w-[120px] h-full rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground data-[state=active]:text-foreground font-medium transition-all"
+          >
+            <Star className="w-4 h-4 mr-2" />
+            Reviews
+          </TabsTrigger>
         </TabsList>
 
         {showBookings && (
@@ -118,6 +145,37 @@ function PartnerDashboardContent() {
              )}
           </TabsContent>
         )}
+
+         <TabsContent value="photos" className="mt-0 focus-visible:outline-none focus-visible:ring-0">
+             {salonId ? (
+                <SalonImageManager salonId={salonId} />
+             ) : (
+                <div className="p-8 text-center text-muted-foreground border rounded-md">
+                    <p>Salon ID is missing. Please return to the studio and try again.</p>
+                </div>
+             )}
+        </TabsContent>
+
+        <TabsContent value="hours" className="mt-0 focus-visible:outline-none focus-visible:ring-0">
+             {salonId ? (
+                <SalonHoursManager salonId={salonId} />
+             ) : (
+                <div className="p-8 text-center text-muted-foreground border rounded-md">
+                    <p>Salon ID is missing. Please return to the studio and try again.</p>
+                </div>
+             )}
+        </TabsContent>
+
+        <TabsContent value="reviews" className="mt-0 focus-visible:outline-none focus-visible:ring-0">
+             {salonId ? (
+                <SalonReviewsManager salonId={salonId} />
+             ) : (
+                <div className="p-8 text-center text-muted-foreground border rounded-md">
+                    <p>Salon ID is missing. Please return to the studio and try again.</p>
+                </div>
+             )}
+        </TabsContent>
+
       </Tabs>
     </div>
   );
