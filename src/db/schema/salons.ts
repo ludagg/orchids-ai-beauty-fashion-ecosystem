@@ -51,6 +51,8 @@ export const services = pgTable('services', {
   description: text('description'),
   price: integer('price').notNull(), // Stored in cents
   duration: integer('duration').notNull(), // In minutes
+  category: text('category'),
+  image: text('image'),
   isActive: boolean('is_active').default(true).notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),

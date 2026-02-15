@@ -2,10 +2,17 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { products, salons } from "@/db/schema";
+import { products, salons, productVariants } from "@/db/schema";
 import { eq, and, desc } from "drizzle-orm";
 import { nanoid } from "nanoid";
 import { headers } from "next/headers";
+
+const variantSchema = z.object({
+  name: z.string().min(1),
+  price: z.number().int().nonnegative(),
+  stock: z.number().int().nonnegative(),
+  options: z.string().optional(),
+});
 
 const productSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -13,6 +20,9 @@ const productSchema = z.object({
   stock: z.number().int().nonnegative("Stock must be a non-negative integer"),
   description: z.string().optional(),
   images: z.array(z.string().url()).optional(),
+  category: z.string().optional(),
+  brand: z.string().optional(),
+  variants: z.array(variantSchema).optional(),
 });
 
 // GET /api/salons/[salonId]/products
@@ -27,16 +37,18 @@ export async function GET(
        return NextResponse.json({ error: "Salon ID is required" }, { status: 400 });
     }
 
-    const salonProducts = await db
-      .select()
-      .from(products)
-      .where(
-        and(
-          eq(products.salonId, salonId),
-          eq(products.isActive, true)
-        )
-      )
-      .orderBy(desc(products.createdAt));
+    console.log(`Fetching products for salon: ${salonId}`);
+    const salonProducts = await db.query.products.findMany({
+      where: and(
+        eq(products.salonId, salonId),
+        eq(products.isActive, true)
+      ),
+      orderBy: [desc(products.createdAt)],
+      with: {
+        variants: true,
+      }
+    });
+    console.log(`Found ${salonProducts.length} products`);
 
     return NextResponse.json(salonProducts);
   } catch (error) {
@@ -90,23 +102,45 @@ export async function POST(
       );
     }
 
-    const { name, price, stock, description, images } = result.data;
+    const { name, price, stock, description, images, category, brand, variants } = result.data;
+    const hasVariants = variants && variants.length > 0;
 
-    const newProduct = await db
-      .insert(products)
-      .values({
-        id: nanoid(),
-        salonId: salonId,
-        name,
-        price, // cents
-        stock,
-        description: description || null,
-        images: images || [],
-        isActive: true,
-      })
-      .returning();
+    // Use transaction to ensure product and variants are created together
+    const newProduct = await db.transaction(async (tx) => {
+      const [product] = await tx
+        .insert(products)
+        .values({
+          id: nanoid(),
+          salonId: salonId,
+          name,
+          price, // cents
+          stock,
+          description: description || null,
+          images: images || [],
+          category: category || null,
+          brand: brand || null,
+          hasVariants: hasVariants || false,
+          isActive: true,
+        })
+        .returning();
 
-    return NextResponse.json(newProduct[0], { status: 201 });
+      if (hasVariants) {
+        await tx.insert(productVariants).values(
+          variants.map((v) => ({
+            id: nanoid(),
+            productId: product.id,
+            name: v.name,
+            price: v.price,
+            stock: v.stock,
+            options: v.options || null,
+          }))
+        );
+      }
+
+      return product;
+    });
+
+    return NextResponse.json(newProduct, { status: 201 });
   } catch (error) {
     console.error("Error creating product:", error);
     return NextResponse.json(

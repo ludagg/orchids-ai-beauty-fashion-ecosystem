@@ -21,6 +21,9 @@ interface Service {
   name: string
   price: number // in cents
   duration: number // in minutes
+  description?: string | null
+  category?: string | null
+  image?: string | null
   salonId: string
 }
 
@@ -33,7 +36,7 @@ export function ServiceManager({ salonId }: ServiceManagerProps) {
   const [loading, setLoading] = useState(true)
   const [isAddOpen, setIsAddOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [newService, setNewService] = useState({ name: "", price: "", duration: "" })
+  const [newService, setNewService] = useState({ name: "", price: "", duration: "", description: "", category: "", image: "" })
 
   useEffect(() => {
     fetchServices();
@@ -76,6 +79,9 @@ export function ServiceManager({ salonId }: ServiceManagerProps) {
                 name: newService.name,
                 price: priceInCents,
                 duration: durationInMin,
+                description: newService.description,
+                category: newService.category,
+                image: newService.image
             })
         });
 
@@ -86,7 +92,7 @@ export function ServiceManager({ salonId }: ServiceManagerProps) {
 
         const savedService = await res.json();
         setServices([...services, savedService]);
-        setNewService({ name: "", price: "", duration: "" });
+        setNewService({ name: "", price: "", duration: "", description: "", category: "", image: "" });
         setIsAddOpen(false);
         toast.success("Service added");
     } catch (error: any) {
@@ -144,6 +150,35 @@ export function ServiceManager({ salonId }: ServiceManagerProps) {
                   disabled={isSubmitting}
                 />
               </div>
+              <div className="grid gap-2">
+                <Label>Description</Label>
+                <Input
+                  value={newService.description}
+                  onChange={e => setNewService({...newService, description: e.target.value})}
+                  placeholder="Brief description of the service"
+                  disabled={isSubmitting}
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                  <div className="grid gap-2">
+                    <Label>Category</Label>
+                    <Input
+                      value={newService.category}
+                      onChange={e => setNewService({...newService, category: e.target.value})}
+                      placeholder="e.g. Nails"
+                      disabled={isSubmitting}
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label>Image URL</Label>
+                    <Input
+                      value={newService.image}
+                      onChange={e => setNewService({...newService, image: e.target.value})}
+                      placeholder="https://..."
+                      disabled={isSubmitting}
+                    />
+                  </div>
+              </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid gap-2">
                   <Label>Price ($)</Label>
@@ -181,21 +216,36 @@ export function ServiceManager({ salonId }: ServiceManagerProps) {
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {services.map((service) => (
           <Card key={service.id} className="relative group overflow-hidden border-muted">
+            {service.image && (
+                <div className="h-32 w-full overflow-hidden">
+                    <img src={service.image} alt={service.name} className="w-full h-full object-cover transition-transform group-hover:scale-105" />
+                </div>
+            )}
             <CardContent className="p-5">
               <div className="flex items-start justify-between mb-2">
-                <div className="p-2 bg-primary/10 rounded-full text-primary">
-                    <Scissors className="w-5 h-5" />
-                </div>
+                {!service.image && (
+                    <div className="p-2 bg-primary/10 rounded-full text-primary">
+                        <Scissors className="w-5 h-5" />
+                    </div>
+                )}
+                {service.category && (
+                    <span className="text-xs font-medium px-2 py-1 rounded-full bg-secondary text-secondary-foreground">
+                        {service.category}
+                    </span>
+                )}
                 <Button
                     variant="ghost"
                     size="icon"
-                    className="h-8 w-8 text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="h-8 w-8 text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 transition-opacity absolute top-2 right-2 bg-background/80 backdrop-blur-sm"
                     onClick={() => handleDelete(service.id)}
                 >
                     <Trash2 className="w-4 h-4" />
                 </Button>
               </div>
               <h4 className="font-semibold truncate">{service.name}</h4>
+              {service.description && (
+                  <p className="text-sm text-muted-foreground line-clamp-2 mt-1 mb-2">{service.description}</p>
+              )}
               <div className="flex items-center justify-between mt-2 text-sm text-muted-foreground">
                 <span>{service.duration} min</span>
                 <span className="font-medium text-foreground">${(service.price / 100).toFixed(2)}</span>
