@@ -12,3 +12,7 @@
 ## 2025-05-14 - Dark Mode Implementation with next-themes
 **Learning:** When implementing dark mode in Next.js with `next-themes`, use `resolvedTheme` instead of `theme` to account for system settings. Ensure hydration safety by checking a `mounted` state. Refactor hardcoded hex colors to semantic CSS variables early to ensure global consistency.
 **Action:** Always prefer `resolvedTheme` for icon logic and toggle states. Use semantic classes like `bg-background` and `text-foreground` in new components from the start.
+
+## 2026-02-15 - Carousel Accessibility Improvements
+**Learning:** Carousels without proper ARIA roles and labels are difficult for screen reader users to navigate and understand. Simple indicators (dots) are often read as generic buttons without context.
+**Action:** Always add `role="region"`, `aria-roledescription="carousel"`, and a descriptive `aria-label` to carousel containers. Ensure navigation dots have `aria-label="Go to slide X"` and `aria-current` attributes.

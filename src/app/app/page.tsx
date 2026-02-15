@@ -219,7 +219,12 @@ function HeroCarousel({ slides }: { slides: typeof HERO_SLIDES }) {
   };
 
   return (
-    <div className="relative rounded-[32px] overflow-hidden aspect-[3/4] md:aspect-[21/9] group shadow-2xl shadow-black/5">
+    <div
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="Featured content carousel"
+      className="relative rounded-[32px] overflow-hidden aspect-[3/4] md:aspect-[21/9] group shadow-2xl shadow-black/5"
+    >
       <AnimatePresence initial={false} mode="popLayout">
         <motion.div
           key={current}
@@ -267,6 +272,8 @@ function HeroCarousel({ slides }: { slides: typeof HERO_SLIDES }) {
               setDirection(index > current ? 1 : -1);
               setCurrent(index);
             }}
+            aria-label={`Go to slide ${index + 1}`}
+            aria-current={index === current ? "true" : "false"}
             className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
               index === current ? "bg-white w-8" : "bg-white/50 hover:bg-white/80"
             }`}
