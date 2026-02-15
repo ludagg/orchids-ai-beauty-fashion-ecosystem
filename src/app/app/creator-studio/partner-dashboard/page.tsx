@@ -109,7 +109,13 @@ function PartnerDashboardContent() {
 
         {showProducts && (
           <TabsContent value="products" className="mt-0 focus-visible:outline-none focus-visible:ring-0">
-            <ProductManager />
+             {salonId ? (
+                <ProductManager salonId={salonId} />
+             ) : (
+                <div className="p-8 text-center text-muted-foreground border rounded-md">
+                    <p>Salon ID is missing. Please return to the studio and try again.</p>
+                </div>
+             )}
           </TabsContent>
         )}
       </Tabs>

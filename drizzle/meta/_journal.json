@@ -36,6 +36,13 @@
       "when": 1771135938796,
       "tag": "0004_tricky_talisman",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1771154060176,
+      "tag": "0005_last_tombstone",
+      "breakpoints": true
     }
   ]
 }

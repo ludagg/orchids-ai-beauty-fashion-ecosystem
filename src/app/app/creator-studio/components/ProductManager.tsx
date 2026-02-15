@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Plus, ShoppingBag, Trash2 } from "lucide-react"
 import { Input } from "@/components/ui/input"
@@ -19,33 +19,104 @@ import { Card, CardContent } from "@/components/ui/card"
 interface Product {
   id: string
   name: string
-  price: string
-  stock: string
+  price: number // cents
+  stock: number
+  salonId: string
 }
 
-export function ProductManager() {
-  const [products, setProducts] = useState<Product[]>([
-    { id: "1", name: "Silk Hair Serum", price: "45", stock: "12" },
-    { id: "2", name: "Organic Shampoo", price: "32", stock: "24" },
-  ])
+interface ProductManagerProps {
+    salonId: string;
+}
+
+export function ProductManager({ salonId }: ProductManagerProps) {
+  const [products, setProducts] = useState<Product[]>([])
+  const [loading, setLoading] = useState(true)
   const [isAddOpen, setIsAddOpen] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [newProduct, setNewProduct] = useState({ name: "", price: "", stock: "" })
 
-  const handleAdd = () => {
-    if (!newProduct.name || !newProduct.price) return
+  useEffect(() => {
+    if (salonId) {
+        fetchProducts();
+    }
+  }, [salonId]);
 
-    setProducts([
-      ...products,
-      { ...newProduct, id: Math.random().toString(36).substr(2, 9) }
-    ])
-    setNewProduct({ name: "", price: "", stock: "" })
-    setIsAddOpen(false)
-    toast.success("Product added")
+  const fetchProducts = async () => {
+    try {
+        const res = await fetch(`/api/salons/${salonId}/products`);
+        if (!res.ok) throw new Error("Failed to fetch products");
+        const data = await res.json();
+        setProducts(data);
+    } catch (error) {
+        console.error(error);
+        toast.error("Could not load products");
+    } finally {
+        setLoading(false);
+    }
+  };
+
+  const handleAdd = async () => {
+    if (!newProduct.name || !newProduct.price || !newProduct.stock) {
+        toast.error("Please fill all fields");
+        return;
+    }
+
+    setIsSubmitting(true);
+    try {
+        const priceInCents = Math.round(parseFloat(newProduct.price) * 100);
+        const stockInt = parseInt(newProduct.stock);
+
+        if (isNaN(priceInCents) || isNaN(stockInt)) {
+             toast.error("Invalid price or stock");
+             return;
+        }
+
+        const res = await fetch(`/api/salons/${salonId}/products`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                name: newProduct.name,
+                price: priceInCents,
+                stock: stockInt,
+            })
+        });
+
+        if (!res.ok) {
+             const err = await res.json();
+             throw new Error(err.error || "Failed to add product");
+        }
+
+        const savedProduct = await res.json();
+        setProducts([savedProduct, ...products]); // Add to top
+        setNewProduct({ name: "", price: "", stock: "" });
+        setIsAddOpen(false);
+        toast.success("Product added");
+    } catch (error: any) {
+        toast.error(error.message || "Failed to add product");
+    } finally {
+        setIsSubmitting(false);
+    }
   }
 
-  const handleDelete = (id: string) => {
-    setProducts(products.filter(p => p.id !== id))
-    toast.success("Product removed")
+  const handleDelete = async (id: string) => {
+    try {
+        const res = await fetch(`/api/products/${id}`, {
+            method: "DELETE"
+        });
+
+        if (!res.ok) {
+             throw new Error("Failed to delete product");
+        }
+
+        setProducts(products.filter(p => p.id !== id))
+        toast.success("Product removed")
+    } catch (error) {
+        toast.error("Could not delete product");
+    }
+  }
+
+  if (loading) {
+      return <div className="text-center py-8 text-muted-foreground">Loading products...</div>
   }
 
   return (
@@ -72,6 +143,7 @@ export function ProductManager() {
                   value={newProduct.name}
                   onChange={e => setNewProduct({...newProduct, name: e.target.value})}
                   placeholder="e.g. Silk Serum"
+                  disabled={isSubmitting}
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -82,6 +154,8 @@ export function ProductManager() {
                     onChange={e => setNewProduct({...newProduct, price: e.target.value})}
                     type="number"
                     placeholder="45"
+                    min="0"
+                    disabled={isSubmitting}
                   />
                 </div>
                 <div className="grid gap-2">
@@ -91,12 +165,16 @@ export function ProductManager() {
                     onChange={e => setNewProduct({...newProduct, stock: e.target.value})}
                     type="number"
                     placeholder="10"
+                    min="0"
+                    disabled={isSubmitting}
                   />
                 </div>
               </div>
             </div>
             <DialogFooter>
-              <Button onClick={handleAdd}>Add Product</Button>
+              <Button onClick={handleAdd} disabled={isSubmitting}>
+                  {isSubmitting ? "Adding..." : "Add Product"}
+              </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
@@ -122,7 +200,7 @@ export function ProductManager() {
               <h4 className="font-semibold truncate">{product.name}</h4>
               <div className="flex items-center justify-between mt-2 text-sm text-muted-foreground">
                 <span>{product.stock} in stock</span>
-                <span className="font-medium text-foreground">${product.price}</span>
+                <span className="font-medium text-foreground">${(product.price / 100).toFixed(2)}</span>
               </div>
             </CardContent>
           </Card>
