@@ -16,7 +16,8 @@ import {
   Package,
   Truck,
   RotateCcw,
-  Loader2
+  Loader2,
+  ShoppingBag
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -42,50 +43,54 @@ interface Booking {
   };
 }
 
-// Placeholder for orders (keep mock data for now)
-const orders = [
-  {
-    id: "#ORD-9284",
-    item: "Moroccan Hair Oil",
-    designer: "Argan Deluxe",
-    image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=200&h=200&fit=crop",
-    status: "In Transit",
-    date: "Ordered Feb 10",
-    delivery: "Arriving Feb 15"
-  },
-  {
-    id: "#ORD-8372",
-    item: "Silk Sleep Mask",
-    designer: "Blissy",
-    image: "https://images.unsplash.com/photo-1584620023253-2771239cf21f?w=200&h=200&fit=crop",
-    status: "Delivered",
-    date: "Ordered Jan 28",
-    delivery: "Delivered Jan 30"
-  }
-];
+interface Order {
+    id: string;
+    status: string;
+    totalAmount: number;
+    createdAt: string;
+    items: {
+        quantity: number;
+        product: {
+            name: string;
+            images: string[] | null;
+            salon: {
+                name: string;
+                city: string;
+            } | null;
+        };
+    }[];
+}
 
 export default function BookingsAndOrdersPage() {
   const [activeTab, setActiveTab] = useState("Bookings");
   const [bookings, setBookings] = useState<Booking[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [processingId, setProcessingId] = useState<string | null>(null);
 
   useEffect(() => {
-    async function fetchBookings() {
+    async function fetchData() {
+      setLoading(true);
       try {
-        const response = await fetch('/api/bookings');
-        if (response.ok) {
-          const data = await response.json();
-          setBookings(data);
+        const [bookingsRes, ordersRes] = await Promise.all([
+            fetch('/api/bookings'),
+            fetch('/api/orders')
+        ]);
+
+        if (bookingsRes.ok) {
+          setBookings(await bookingsRes.json());
+        }
+        if (ordersRes.ok) {
+            setOrders(await ordersRes.json());
         }
       } catch (error) {
-        console.error("Error fetching bookings:", error);
+        console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
       }
     }
 
-    fetchBookings();
+    fetchData();
   }, []);
 
   const handleCancelBooking = async (bookingId: string) => {
@@ -114,6 +119,10 @@ export default function BookingsAndOrdersPage() {
     }
   };
 
+  const formatPrice = (cents: number) => {
+    return (cents / 100).toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
+  };
+
   return (
     <div className="flex-1 p-4 sm:p-6 lg:p-8 max-w-[1400px] mx-auto w-full bg-background">
       <div className="space-y-8">
@@ -137,12 +146,12 @@ export default function BookingsAndOrdersPage() {
           ))}
         </div>
 
-        {activeTab === "Bookings" ? (
-          loading ? (
-            <div className="flex justify-center py-20">
-              <Loader2 className="w-10 h-10 animate-spin text-primary" />
-            </div>
-          ) : bookings.length === 0 ? (
+        {loading ? (
+             <div className="flex justify-center py-20">
+                <Loader2 className="w-10 h-10 animate-spin text-primary" />
+             </div>
+        ) : activeTab === "Bookings" ? (
+          bookings.length === 0 ? (
             <div className="text-center py-20 text-muted-foreground">
               <p>No bookings found.</p>
               <Link href="/app/salons" className="text-primary hover:underline mt-2 inline-block">Book an appointment</Link>
@@ -235,13 +244,83 @@ export default function BookingsAndOrdersPage() {
             </div>
           )
         ) : (
-          <div className="space-y-6">
-            {orders.map((order, i) => (
-                <div key={order.id} className="text-center p-8 border rounded-lg">
-                    <p className="text-muted-foreground">Orders implementation coming soon...</p>
-                </div>
-            ))}
-          </div>
+          orders.length === 0 ? (
+            <div className="text-center py-20 text-muted-foreground">
+                <p>No orders found.</p>
+                <Link href="/app/marketplace" className="text-primary hover:underline mt-2 inline-block">Browse Marketplace</Link>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {orders.map((order, i) => (
+                     <motion.div
+                        key={order.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: i * 0.1 }}
+                        className="group bg-card rounded-[40px] border border-border hover:border-foreground p-8 transition-all shadow-sm hover:shadow-xl hover:shadow-foreground/5"
+                     >
+                        <div className="flex gap-6">
+                            <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-[32px] overflow-hidden bg-muted flex-shrink-0">
+                                <img
+                                    src={order.items[0]?.product.images?.[0] || "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=200&h=200&fit=crop"}
+                                    alt={order.items[0]?.product.name}
+                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                                <div className="flex items-start justify-between">
+                                    <div>
+                                        <h3 className="text-xl font-bold text-foreground truncate">{order.items[0]?.product.name}</h3>
+                                        <p className="text-rose-600 font-bold uppercase tracking-widest text-[10px] mt-1">
+                                            {order.items[0]?.product.salon?.name || "Marketplace"}
+                                        </p>
+                                    </div>
+                                    <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest ${
+                                        order.status === 'reserved' ? 'bg-amber-500/10 text-amber-500' :
+                                        order.status === 'ready_for_pickup' ? 'bg-emerald-500/10 text-emerald-500' :
+                                        'bg-secondary text-muted-foreground'
+                                    }`}>
+                                        {order.status === 'reserved' ? 'Reserved' : order.status.replace('_', ' ')}
+                                    </span>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-4 mt-6">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-9 h-9 rounded-xl bg-muted flex items-center justify-center text-foreground">
+                                            <ShoppingBag className="w-4 h-4" />
+                                        </div>
+                                        <div>
+                                            <p className="text-[10px] font-bold text-muted-foreground/50 uppercase tracking-widest">Qty</p>
+                                            <p className="text-xs font-bold text-foreground">{order.items[0]?.quantity}</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-9 h-9 rounded-xl bg-muted flex items-center justify-center text-foreground">
+                                            <MapPin className="w-4 h-4" />
+                                        </div>
+                                        <div>
+                                            <p className="text-[10px] font-bold text-muted-foreground/50 uppercase tracking-widest">Pickup At</p>
+                                            <p className="text-xs font-bold text-foreground truncate">{order.items[0]?.product.salon?.city || "Salon"}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="mt-8 pt-6 border-t border-border flex items-center justify-between">
+                             <div>
+                                 <p className="text-xs text-muted-foreground">Total to Pay</p>
+                                 <p className="text-lg font-bold text-foreground">{formatPrice(order.totalAmount)}</p>
+                             </div>
+                             <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground">
+                                 <Clock className="w-4 h-4" />
+                                 Ordered on {format(new Date(order.createdAt), 'MMM d')}
+                             </div>
+                        </div>
+                     </motion.div>
+                ))}
+            </div>
+          )
         )}
       </div>
     </div>

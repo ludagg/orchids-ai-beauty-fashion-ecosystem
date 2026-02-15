@@ -16,12 +16,13 @@ import {
   Calendar,
   Clock,
   TrendingUp,
-  Zap
+  Zap,
+  Loader2
 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 
-// Mock Data
+// Mock Data for unimplemented sections
 const CATEGORIES = [
   { id: "all", label: "For You", icon: Sparkles },
   { id: "salons", label: "Salons", icon: Scissors },
@@ -64,19 +65,6 @@ const TRENDING_STYLES = [
   { id: 4, title: "Classic", image: "https://images.unsplash.com/photo-1550614000-4b9519e09063?w=400&h=500&fit=crop", creator: "@timeless", likes: "950" },
 ];
 
-const TOP_SALONS = [
-  { id: 1, name: "Luxe Beauty Lounge", location: "Koramangala, Bangalore", rating: 4.9, reviews: 128, image: "https://images.unsplash.com/photo-1600948836101-f9ffda59d250?w=600&h=400&fit=crop", tags: ["Hair", "Spa"] },
-  { id: 2, name: "The Grooming Co.", location: "Indiranagar, Bangalore", rating: 4.8, reviews: 95, image: "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=600&h=400&fit=crop", tags: ["Men", "Beard"] },
-  { id: 3, name: "Urban Sanctuary", location: "Whitefield, Bangalore", rating: 4.7, reviews: 210, image: "https://images.unsplash.com/photo-1521590832169-7dad1a9b70e6?w=600&h=400&fit=crop", tags: ["Massage", "Facial"] },
-];
-
-const MARKETPLACE_PICKS = [
-  { id: 1, name: "Silk Evening Gown", price: "₹15,999", brand: "Studio Épure", image: "https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=400&h=500&fit=crop", discount: "20% OFF" },
-  { id: 2, name: "Leather Biker Jacket", price: "₹8,499", brand: "Neo-Tokyo", image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400&h=500&fit=crop", isNew: true },
-  { id: 3, name: "Velvet Blazer", price: "₹6,299", brand: "Kalyan Heritage", image: "https://images.unsplash.com/photo-1594932224828-b4b059b6f684?w=400&h=500&fit=crop" },
-  { id: 4, name: "Designer Handbag", price: "₹12,499", brand: "Vogue", image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400&h=500&fit=crop", isNew: true },
-];
-
 const VIDEO_CLIPS = [
   { id: 1, title: "Summer Hair Trends", creator: "@hairbyjess", views: "12k", image: "https://images.unsplash.com/photo-1562322140-8baeececf3df?w=400&h=600&fit=crop" },
   { id: 2, title: "Makeup Tutorial 101", creator: "@glamguru", views: "8.5k", image: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=400&h=600&fit=crop" },
@@ -86,15 +74,49 @@ const VIDEO_CLIPS = [
 
 export default function DiscoverPage() {
   const [activeCategory, setActiveCategory] = useState("all");
+  const [topSalons, setTopSalons] = useState<any[]>([]);
+  const [marketplacePicks, setMarketplacePicks] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+        try {
+            const [salonsRes, productsRes] = await Promise.all([
+                fetch('/api/salons'), // In a real app, maybe ?sort=rating&limit=3
+                fetch('/api/products?limit=4')
+            ]);
+
+            if (salonsRes.ok) {
+                const data = await salonsRes.json();
+                setTopSalons(data.slice(0, 3)); // Client-side slice for now if API doesn't support limit
+            }
+            if (productsRes.ok) {
+                const data = await productsRes.json();
+                setMarketplacePicks(data);
+            }
+        } catch (error) {
+            console.error("Error fetching homepage data:", error);
+        } finally {
+            setLoading(false);
+        }
+    }
+    fetchData();
+  }, []);
+
 
   const filteredContent = () => {
+    if (loading) {
+        return <div className="flex justify-center py-20"><Loader2 className="w-10 h-10 animate-spin text-primary" /></div>;
+    }
+
     switch (activeCategory) {
       case "salons":
         return (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {TOP_SALONS.map((salon, i) => (
+            {topSalons.map((salon, i) => (
               <SalonCard key={salon.id} salon={salon} index={i} />
             ))}
+            {topSalons.length === 0 && <p className="text-muted-foreground">No salons found.</p>}
           </div>
         );
       case "styles":
@@ -108,9 +130,10 @@ export default function DiscoverPage() {
       case "shop":
         return (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {MARKETPLACE_PICKS.map((product, i) => (
+            {marketplacePicks.map((product, i) => (
               <ProductCard key={product.id} product={product} index={i} />
             ))}
+            {marketplacePicks.length === 0 && <p className="text-muted-foreground">No products found.</p>}
           </div>
         );
       case "videos":
@@ -137,16 +160,18 @@ export default function DiscoverPage() {
 
             <SectionHeader title="Top Rated Salons" icon={Scissors} href="/app/salons" />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {TOP_SALONS.slice(0, 2).map((salon, i) => (
+              {topSalons.slice(0, 2).map((salon, i) => (
                 <SalonCard key={salon.id} salon={salon} index={i} />
               ))}
+              {topSalons.length === 0 && <p className="text-muted-foreground">No salons found.</p>}
             </div>
 
-            <SectionHeader title="Recommended For You" icon={ShoppingBag} href="/app/shop" />
+            <SectionHeader title="Recommended For You" icon={ShoppingBag} href="/app/marketplace" />
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {MARKETPLACE_PICKS.map((product, i) => (
+              {marketplacePicks.map((product, i) => (
                 <ProductCard key={product.id} product={product} index={i} />
               ))}
+              {marketplacePicks.length === 0 && <p className="text-muted-foreground">No products found.</p>}
             </div>
           </div>
         );
@@ -330,40 +355,46 @@ function SalonCard({ salon, index }: { salon: any, index: number }) {
       transition={{ delay: index * 0.1 }}
       className="flex flex-col sm:flex-row bg-card p-4 rounded-3xl border border-border hover:shadow-xl hover:shadow-primary/5 transition-all duration-300 group cursor-pointer h-full"
     >
-      <div className="w-full sm:w-32 h-48 sm:h-32 rounded-2xl overflow-hidden flex-shrink-0 mb-4 sm:mb-0 relative">
-        <img src={salon.image} alt={salon.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-        <div className="absolute top-2 left-2 px-2 py-1 rounded-full bg-white/90 backdrop-blur text-[10px] font-bold flex items-center gap-1 text-black">
-          <Star className="w-3 h-3 fill-amber-400 text-amber-400" /> {salon.rating}
+        <Link href={`/app/salons/${salon.id}`} className="contents">
+        <div className="w-full sm:w-32 h-48 sm:h-32 rounded-2xl overflow-hidden flex-shrink-0 mb-4 sm:mb-0 relative">
+            <img src={salon.image || "https://images.unsplash.com/photo-1600948836101-f9ffda59d250?w=600&h=400&fit=crop"} alt={salon.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+            <div className="absolute top-2 left-2 px-2 py-1 rounded-full bg-white/90 backdrop-blur text-[10px] font-bold flex items-center gap-1 text-black">
+            <Star className="w-3 h-3 fill-amber-400 text-amber-400" /> 5.0
+            </div>
         </div>
-      </div>
-      <div className="sm:ml-5 flex-1 flex flex-col justify-between h-full">
-        <div>
-          <div className="flex justify-between items-start mb-1">
-            <h4 className="font-bold text-lg text-foreground group-hover:text-primary transition-colors">{salon.name}</h4>
-          </div>
-          <p className="text-sm text-muted-foreground flex items-center gap-1.5 mb-3">
-            <MapPin className="w-3.5 h-3.5 flex-shrink-0" /> {salon.location}
-          </p>
-          <div className="flex flex-wrap gap-2 mb-4">
-            {salon.tags?.map((tag: string) => (
-              <span key={tag} className="px-2.5 py-1 rounded-lg bg-secondary text-xs font-medium text-secondary-foreground">
-                {tag}
-              </span>
-            ))}
-          </div>
+        <div className="sm:ml-5 flex-1 flex flex-col justify-between h-full">
+            <div>
+            <div className="flex justify-between items-start mb-1">
+                <h4 className="font-bold text-lg text-foreground group-hover:text-primary transition-colors">{salon.name}</h4>
+            </div>
+            <p className="text-sm text-muted-foreground flex items-center gap-1.5 mb-3">
+                <MapPin className="w-3.5 h-3.5 flex-shrink-0" /> {salon.city}
+            </p>
+            <div className="flex flex-wrap gap-2 mb-4">
+                {[salon.type].map((tag: string) => (
+                <span key={tag} className="px-2.5 py-1 rounded-lg bg-secondary text-xs font-medium text-secondary-foreground">
+                    {tag}
+                </span>
+                ))}
+            </div>
+            </div>
+            <div className="flex items-center justify-between mt-auto pt-2 border-t border-border/50">
+            <span className="text-xs font-medium text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 px-2 py-1 rounded-full">Open Now</span>
+            <span className="text-sm font-bold text-primary hover:underline">
+                Book
+            </span>
+            </div>
         </div>
-        <div className="flex items-center justify-between mt-auto pt-2 border-t border-border/50">
-          <span className="text-xs font-medium text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 px-2 py-1 rounded-full">Open Now</span>
-          <button className="text-sm font-bold text-primary hover:underline">
-            Book
-          </button>
-        </div>
-      </div>
+      </Link>
     </motion.div>
   );
 }
 
 function ProductCard({ product, index }: { product: any, index: number }) {
+  const formatPrice = (cents: number) => {
+    return (cents / 100).toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
@@ -371,38 +402,40 @@ function ProductCard({ product, index }: { product: any, index: number }) {
       transition={{ delay: index * 0.05 }}
       className="group cursor-pointer flex flex-col h-full"
     >
-      <div className="relative aspect-[3/4] rounded-2xl overflow-hidden mb-3 border border-border bg-secondary">
-        <img src={product.image} alt={product.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+      <Link href={`/app/marketplace/${product.id}`} className="contents">
+        <div className="relative aspect-[3/4] rounded-2xl overflow-hidden mb-3 border border-border bg-secondary">
+            <img src={product.images?.[0] || "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=500&fit=crop"} alt={product.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
 
-        {product.discount && (
-          <div className="absolute top-2 left-2 px-2 py-1 bg-rose-500 text-white text-[10px] font-bold rounded-md shadow-sm">
-            {product.discount}
-          </div>
-        )}
-        {product.isNew && (
-          <div className="absolute top-2 left-2 px-2 py-1 bg-primary text-primary-foreground text-[10px] font-bold rounded-md shadow-sm">
-            NEW
-          </div>
-        )}
+            {/* {product.discount && (
+            <div className="absolute top-2 left-2 px-2 py-1 bg-rose-500 text-white text-[10px] font-bold rounded-md shadow-sm">
+                {product.discount}
+            </div>
+            )} */}
+            {product.rating > 4.5 && (
+            <div className="absolute top-2 left-2 px-2 py-1 bg-primary text-primary-foreground text-[10px] font-bold rounded-md shadow-sm">
+                HOT
+            </div>
+            )}
 
-        <button className="absolute top-2 right-2 p-2 rounded-full bg-white/80 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all hover:bg-white hover:text-rose-500 hover:scale-110">
-          <Heart className="w-4 h-4" />
-        </button>
+            <button className="absolute top-2 right-2 p-2 rounded-full bg-white/80 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all hover:bg-white hover:text-rose-500 hover:scale-110">
+            <Heart className="w-4 h-4" />
+            </button>
 
-        <div className="absolute bottom-0 left-0 right-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-gradient-to-t from-black/80 to-transparent">
-          <button className="w-full py-2 rounded-xl bg-white text-black text-xs font-bold hover:bg-gray-100 transition-colors shadow-lg">
-            Add to Bag
-          </button>
+            <div className="absolute bottom-0 left-0 right-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-gradient-to-t from-black/80 to-transparent">
+            <button className="w-full py-2 rounded-xl bg-white text-black text-xs font-bold hover:bg-gray-100 transition-colors shadow-lg">
+                View
+            </button>
+            </div>
         </div>
-      </div>
 
-      <div className="mt-auto">
-        <div className="flex justify-between items-start gap-2">
-          <h4 className="font-medium text-sm text-foreground truncate">{product.name}</h4>
+        <div className="mt-auto">
+            <div className="flex justify-between items-start gap-2">
+            <h4 className="font-medium text-sm text-foreground truncate">{product.name}</h4>
+            </div>
+            <p className="text-xs text-muted-foreground mb-1">{product.brand || product.salon?.name}</p>
+            <p className="font-bold text-sm text-foreground">{formatPrice(product.price)}</p>
         </div>
-        <p className="text-xs text-muted-foreground mb-1">{product.brand}</p>
-        <p className="font-bold text-sm text-foreground">{product.price}</p>
-      </div>
+      </Link>
     </motion.div>
   );
 }
