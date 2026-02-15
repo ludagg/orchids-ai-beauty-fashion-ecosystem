@@ -46,7 +46,12 @@ export async function PATCH(
     }
 
     // Authorization Logic
-    if (isUser) {
+    if (isOwner) {
+        // Owners Logic
+        if (booking.status === 'cancelled' || booking.status === 'completed') {
+             return NextResponse.json({ error: 'Booking is already finalized' }, { status: 400 });
+        }
+    } else if (isUser) {
         // Users can only cancel
         if (status !== 'cancelled') {
             return NextResponse.json({ error: 'Users can only cancel bookings' }, { status: 403 });
@@ -54,13 +59,6 @@ export async function PATCH(
         // Users can only cancel pending or confirmed bookings
         if (!['pending', 'confirmed'].includes(booking.status)) {
              return NextResponse.json({ error: 'Cannot cancel this booking' }, { status: 400 });
-        }
-    }
-
-    if (isOwner) {
-        // Owners Logic
-        if (booking.status === 'cancelled' || booking.status === 'completed') {
-             return NextResponse.json({ error: 'Booking is already finalized' }, { status: 400 });
         }
     }
 
