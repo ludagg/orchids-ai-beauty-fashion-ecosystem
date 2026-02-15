@@ -1,4 +1,5 @@
 import { pgTable, text, timestamp, boolean, decimal, pgEnum, integer } from 'drizzle-orm/pg-core';
+import { relations } from 'drizzle-orm';
 import { users } from './auth';
 
 export const salonStatusEnum = pgEnum('salon_status', ['pending', 'active', 'suspended']);
@@ -26,6 +27,23 @@ export const salons = pgTable('salons', {
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
+export const salonImages = pgTable('salon_images', {
+  id: text('id').primaryKey(),
+  salonId: text('salon_id').notNull().references(() => salons.id, { onDelete: 'cascade' }),
+  url: text('url').notNull(),
+  caption: text('caption'),
+  order: integer('order').default(0),
+});
+
+export const openingHours = pgTable('opening_hours', {
+  id: text('id').primaryKey(),
+  salonId: text('salon_id').notNull().references(() => salons.id, { onDelete: 'cascade' }),
+  dayOfWeek: integer('day_of_week').notNull(), // 0-6
+  openTime: text('open_time'), // HH:MM
+  closeTime: text('close_time'), // HH:MM
+  isClosed: boolean('is_closed').default(false).notNull(),
+});
+
 export const services = pgTable('services', {
   id: text('id').primaryKey(),
   salonId: text('salon_id').notNull().references(() => salons.id, { onDelete: 'cascade' }),
@@ -37,3 +55,30 @@ export const services = pgTable('services', {
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
+
+export const salonsRelations = relations(salons, ({ many }) => ({
+  images: many(salonImages),
+  openingHours: many(openingHours),
+  services: many(services),
+}));
+
+export const salonImagesRelations = relations(salonImages, ({ one }) => ({
+  salon: one(salons, {
+    fields: [salonImages.salonId],
+    references: [salons.id],
+  }),
+}));
+
+export const openingHoursRelations = relations(openingHours, ({ one }) => ({
+  salon: one(salons, {
+    fields: [openingHours.salonId],
+    references: [salons.id],
+  }),
+}));
+
+export const servicesRelations = relations(services, ({ one }) => ({
+  salon: one(salons, {
+    fields: [services.salonId],
+    references: [salons.id],
+  }),
+}));

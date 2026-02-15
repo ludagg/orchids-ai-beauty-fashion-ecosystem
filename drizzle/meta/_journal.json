@@ -43,6 +43,13 @@
       "when": 1771154060176,
       "tag": "0005_last_tombstone",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1771156097653,
+      "tag": "0006_bouncy_jocasta",
+      "breakpoints": true
     }
   ]
 }

@@ -10,17 +10,23 @@ export async function GET(
   try {
     const { salonId } = await params;
 
-    const salon = await db
-      .select()
-      .from(salons)
-      .where(eq(salons.id, salonId))
-      .limit(1);
+    const salon = await db.query.salons.findFirst({
+      where: eq(salons.id, salonId),
+      with: {
+        images: {
+          orderBy: (images, { asc }) => [asc(images.order)],
+        },
+        openingHours: {
+          orderBy: (hours, { asc }) => [asc(hours.dayOfWeek)],
+        },
+      },
+    });
 
-    if (salon.length === 0) {
+    if (!salon) {
       return NextResponse.json({ error: "Salon not found" }, { status: 404 });
     }
 
-    return NextResponse.json(salon[0]);
+    return NextResponse.json(salon);
   } catch (error) {
     console.error("Error fetching salon:", error);
     return NextResponse.json(
