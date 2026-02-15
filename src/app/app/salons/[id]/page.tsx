@@ -14,7 +14,9 @@ import {
   Calendar as CalendarIcon,
   ChevronRight,
   Info,
-  Loader2
+  Loader2,
+  Store,
+  User
 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
@@ -22,6 +24,7 @@ import { useParams, useRouter } from "next/navigation";
 import { addDays, format, parse } from "date-fns";
 import { toast } from "sonner";
 import { useSession } from "@/lib/auth-client";
+import { Textarea } from "@/components/ui/textarea";
 
 interface Salon {
   id: string;
@@ -34,6 +37,9 @@ interface Salon {
   website: string | null;
   image: string | null;
   isVerified: boolean;
+  type: "SALON" | "BOUTIQUE" | "BOTH";
+  images: { id: string; url: string; caption: string | null }[];
+  openingHours: { dayOfWeek: number; openTime: string; closeTime: string; isClosed: boolean }[];
 }
 
 interface Service {
@@ -44,12 +50,26 @@ interface Service {
   duration: number; // in minutes
 }
 
-const gallery = [
+interface Review {
+  id: string;
+  rating: number;
+  comment: string | null;
+  createdAt: string;
+  user: {
+    id: string;
+    name: string;
+    image: string | null;
+  };
+}
+
+const defaultGallery = [
   "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=600&h=600&fit=crop",
   "https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?w=600&h=600&fit=crop",
   "https://images.unsplash.com/photo-1580618672591-eb180b1a973f?w=600&h=600&fit=crop",
   "https://images.unsplash.com/photo-1562322140-8baeececf3df?w=600&h=600&fit=crop"
 ];
+
+const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 export default function SalonDetailsPage() {
   const { id } = useParams();
@@ -57,6 +77,7 @@ export default function SalonDetailsPage() {
   const { data: session } = useSession();
   const [salon, setSalon] = useState<Salon | null>(null);
   const [services, setServices] = useState<Service[]>([]);
+  const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -65,13 +86,19 @@ export default function SalonDetailsPage() {
   const [loadingSlots, setLoadingSlots] = useState(false);
   const [bookingLoading, setBookingLoading] = useState(false);
 
+  // Review form state
+  const [reviewRating, setReviewRating] = useState(5);
+  const [reviewComment, setReviewComment] = useState("");
+  const [submittingReview, setSubmittingReview] = useState(false);
+
   useEffect(() => {
     async function fetchData() {
       if (!id) return;
       try {
-        const [salonRes, servicesRes] = await Promise.all([
+        const [salonRes, servicesRes, reviewsRes] = await Promise.all([
           fetch(`/api/salons/${id}`),
-          fetch(`/api/salons/${id}/services`)
+          fetch(`/api/salons/${id}/services`),
+          fetch(`/api/salons/${id}/reviews`)
         ]);
 
         if (salonRes.ok) {
@@ -85,6 +112,11 @@ export default function SalonDetailsPage() {
           if (servicesData.length > 0) {
             setSelectedServiceId(servicesData[0].id);
           }
+        }
+
+        if (reviewsRes.ok) {
+          const reviewsData = await reviewsRes.json();
+          setReviews(reviewsData);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -172,6 +204,57 @@ export default function SalonDetailsPage() {
     }
   };
 
+  const handleSubmitReview = async () => {
+    if (!session) {
+      toast.error("Please login to submit a review");
+      router.push("/auth?mode=signin");
+      return;
+    }
+
+    if (!reviewRating) {
+        toast.error("Please select a rating");
+        return;
+    }
+
+    setSubmittingReview(true);
+
+    try {
+        const res = await fetch(`/api/salons/${id}/reviews`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                rating: reviewRating,
+                comment: reviewComment
+            })
+        });
+
+        if (res.ok) {
+            const newReview = await res.json();
+            // Optimistically add review or refetch.
+            // Since the response structure might slightly differ (e.g. user object is not fully populated immediately if not joined),
+            // we'll manually construct it for display or just reload reviews.
+            // For now, let's just refetch reviews to be safe.
+            const reviewsRes = await fetch(`/api/salons/${id}/reviews`);
+            if (reviewsRes.ok) {
+                setReviews(await reviewsRes.json());
+            }
+
+            toast.success("Review submitted successfully!");
+            setReviewComment("");
+            setReviewRating(5);
+        } else {
+            const error = await res.json();
+            toast.error(error.error || "Failed to submit review");
+        }
+    } catch (error) {
+        console.error("Review error:", error);
+        toast.error("Something went wrong");
+    } finally {
+        setSubmittingReview(false);
+    }
+  };
+
+
   const formatPrice = (cents: number) => {
     return (cents / 100).toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
   };
@@ -180,6 +263,19 @@ export default function SalonDetailsPage() {
 
   // Generate next 7 days
   const days = Array.from({ length: 7 }, (_, i) => addDays(new Date(), i));
+
+  // Helper to get formatted hours for today
+  const getTodayHours = () => {
+    if (!salon?.openingHours) return "10:00 AM - 09:00 PM";
+    const todayIndex = new Date().getDay();
+    const todayHours = salon.openingHours.find(h => h.dayOfWeek === todayIndex);
+    if (!todayHours || todayHours.isClosed) return "Closed Today";
+    return `${todayHours.openTime} - ${todayHours.closeTime}`;
+  };
+
+  const averageRating = reviews.length > 0
+    ? (reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length).toFixed(1)
+    : "5.0";
 
   if (loading) {
     return (
@@ -223,9 +319,13 @@ export default function SalonDetailsPage() {
               />
             </div>
             <div className="grid grid-cols-4 gap-4">
-              {gallery.map((img, i) => (
+              {(salon.images && salon.images.length > 0 ? salon.images : defaultGallery).slice(0, 4).map((img, i) => (
                 <div key={i} className="aspect-square rounded-2xl overflow-hidden border border-border hover:border-foreground transition-colors cursor-pointer group">
-                  <img src={img} alt="Interior" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                  <img
+                    src={typeof img === 'string' ? img : img.url}
+                    alt="Interior"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
                 </div>
               ))}
             </div>
@@ -241,9 +341,12 @@ export default function SalonDetailsPage() {
                       Verified Partner
                     </span>
                   )}
+                  <span className="px-3 py-1 rounded-full bg-secondary text-secondary-foreground text-[10px] font-bold uppercase tracking-widest border border-border">
+                    {salon.type}
+                  </span>
                   <div className="flex items-center gap-1 text-sm font-bold text-amber-500">
                     <Star className="w-4 h-4 fill-current" />
-                    5.0 (0 reviews)
+                    {averageRating} ({reviews.length} reviews)
                   </div>
                 </div>
                 <h1 className="text-3xl sm:text-5xl font-semibold font-display tracking-tight text-foreground">{salon.name}</h1>
@@ -271,8 +374,8 @@ export default function SalonDetailsPage() {
                   <Clock className="w-6 h-6" />
                 </div>
                 <div>
-                  <p className="text-xs font-bold text-muted-foreground/50 uppercase tracking-widest">Opening Hours</p>
-                  <p className="text-sm font-bold text-foreground">10:00 AM - 09:00 PM</p>
+                  <p className="text-xs font-bold text-muted-foreground/50 uppercase tracking-widest">Today's Hours</p>
+                  <p className="text-sm font-bold text-foreground">{getTodayHours()}</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
@@ -285,6 +388,23 @@ export default function SalonDetailsPage() {
                 </div>
               </div>
             </div>
+
+             {/* Expanded Opening Hours */}
+             {salon.openingHours && salon.openingHours.length > 0 && (
+                <div className="py-4">
+                  <h4 className="text-sm font-bold text-muted-foreground uppercase tracking-widest mb-3">Weekly Schedule</h4>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                    {salon.openingHours.map((hours) => (
+                      <div key={hours.dayOfWeek} className="p-3 rounded-xl bg-secondary/30 border border-border text-xs">
+                        <p className="font-bold text-muted-foreground mb-1">{daysOfWeek[hours.dayOfWeek]}</p>
+                        <p className="font-medium text-foreground">
+                          {hours.isClosed ? "Closed" : `${hours.openTime} - ${hours.closeTime}`}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+            )}
 
             <div className="space-y-4">
               <h3 className="text-2xl font-semibold font-display">About the Salon</h3>
@@ -342,6 +462,106 @@ export default function SalonDetailsPage() {
                 </div>
               )}
             </div>
+
+             {/* Reviews Section */}
+             <div className="space-y-8 pt-8 border-t border-border">
+                <div className="flex items-center justify-between">
+                    <h3 className="text-2xl font-semibold font-display">Reviews</h3>
+                    <div className="flex items-center gap-2 bg-amber-50 dark:bg-amber-950/30 px-4 py-2 rounded-xl border border-amber-100 dark:border-amber-900/30">
+                        <Star className="w-5 h-5 fill-amber-500 text-amber-500" />
+                        <span className="font-bold text-amber-700 dark:text-amber-400">{averageRating}</span>
+                        <span className="text-sm text-amber-600/80 dark:text-amber-500/80">({reviews.length})</span>
+                    </div>
+                </div>
+
+                {/* Review Form */}
+                {session ? (
+                    <div className="p-6 rounded-3xl bg-secondary/30 border border-border space-y-4">
+                        <h4 className="font-bold text-lg">Write a Review</h4>
+                        <div className="flex gap-2 mb-2">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                                <button
+                                    key={star}
+                                    type="button"
+                                    onClick={() => setReviewRating(star)}
+                                    className="focus:outline-none transition-transform active:scale-90"
+                                >
+                                    <Star
+                                        className={`w-6 h-6 ${
+                                            star <= reviewRating
+                                            ? "fill-amber-500 text-amber-500"
+                                            : "text-muted-foreground"
+                                        }`}
+                                    />
+                                </button>
+                            ))}
+                        </div>
+                        <Textarea
+                            placeholder="Share your experience..."
+                            className="bg-card min-h-[100px]"
+                            value={reviewComment}
+                            onChange={(e) => setReviewComment(e.target.value)}
+                        />
+                        <div className="flex justify-end">
+                             <button
+                                onClick={handleSubmitReview}
+                                disabled={submittingReview}
+                                className="px-5 py-2.5 rounded-xl bg-foreground text-background text-sm font-bold hover:bg-foreground/90 transition-all disabled:opacity-50"
+                              >
+                                {submittingReview ? "Submitting..." : "Submit Review"}
+                            </button>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="p-6 rounded-3xl bg-secondary/30 border border-border text-center">
+                        <p className="text-muted-foreground mb-4">Log in to leave a review.</p>
+                        <Link href="/auth?mode=signin" className="px-5 py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-bold hover:bg-blue-600 transition-all inline-block">
+                            Login
+                        </Link>
+                    </div>
+                )}
+
+                {/* Reviews List */}
+                <div className="space-y-4">
+                    {reviews.length === 0 ? (
+                        <p className="text-muted-foreground text-center py-8">No reviews yet. Be the first to review!</p>
+                    ) : (
+                        reviews.map((review) => (
+                            <div key={review.id} className="p-6 rounded-3xl bg-card border border-border">
+                                <div className="flex justify-between items-start mb-4">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 rounded-full bg-secondary overflow-hidden flex items-center justify-center text-muted-foreground">
+                                            {review.user.image ? (
+                                                <img src={review.user.image} alt={review.user.name} className="w-full h-full object-cover" />
+                                            ) : (
+                                                <User className="w-5 h-5" />
+                                            )}
+                                        </div>
+                                        <div>
+                                            <p className="font-bold text-foreground">{review.user.name}</p>
+                                            <p className="text-xs text-muted-foreground">{format(new Date(review.createdAt), "MMM d, yyyy")}</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex gap-0.5">
+                                        {[...Array(5)].map((_, i) => (
+                                            <Star
+                                                key={i}
+                                                className={`w-4 h-4 ${
+                                                    i < review.rating
+                                                    ? "fill-amber-500 text-amber-500"
+                                                    : "text-muted-foreground/30"
+                                                }`}
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
+                                <p className="text-muted-foreground leading-relaxed">{review.comment}</p>
+                            </div>
+                        ))
+                    )}
+                </div>
+             </div>
+
           </section>
         </div>
 
