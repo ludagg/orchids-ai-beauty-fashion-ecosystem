@@ -12,6 +12,8 @@ const serviceSchema = z.object({
   price: z.number().int().nonnegative(), // in cents
   duration: z.number().int().positive(), // in minutes
   description: z.string().optional(),
+  category: z.string().optional(),
+  image: z.string().url().optional(),
 });
 
 // GET /api/salons/[salonId]/services
@@ -88,7 +90,7 @@ export async function POST(
       );
     }
 
-    const { name, price, duration, description } = result.data;
+    const { name, price, duration, description, category, image } = result.data;
 
     const newService = await db
       .insert(services)
@@ -99,6 +101,8 @@ export async function POST(
         price, // cents
         duration, // minutes
         description: description || null,
+        category: category || null,
+        image: image || null,
         isActive: true,
       })
       .returning();
