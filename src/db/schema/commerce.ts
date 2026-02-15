@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, integer, boolean, pgEnum } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, integer, boolean, pgEnum, real } from 'drizzle-orm/pg-core';
 import { users } from './auth';
 import { salons } from './salons';
 import { relations } from 'drizzle-orm';
@@ -12,11 +12,15 @@ export const products = pgTable('products', {
   stock: integer('stock').default(0).notNull(),
   images: text('images').array(), // Postgres array of strings
   isActive: boolean('is_active').default(true).notNull(),
+  category: text('category'), // e.g. "Apparel", "Beauty"
+  brand: text('brand'),
+  rating: real('rating').default(0),
+  reviewCount: integer('review_count').default(0),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
-export const orderStatusEnum = pgEnum('order_status', ['pending', 'paid', 'processing', 'shipped', 'delivered', 'cancelled']);
+export const orderStatusEnum = pgEnum('order_status', ['pending', 'reserved', 'paid', 'processing', 'ready_for_pickup', 'shipped', 'delivered', 'cancelled', 'completed']);
 
 export const orders = pgTable('orders', {
   id: text('id').primaryKey(),
@@ -24,7 +28,8 @@ export const orders = pgTable('orders', {
   status: orderStatusEnum('status').default('pending').notNull(),
   totalAmount: integer('total_amount').notNull(), // In cents
   stripePaymentIntentId: text('stripe_payment_intent_id'),
-  shippingAddress: text('shipping_address').notNull(), // JSON string or related table
+  shippingAddress: text('shipping_address'), // Optional now for pickup
+  pickupDate: timestamp('pickup_date'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
