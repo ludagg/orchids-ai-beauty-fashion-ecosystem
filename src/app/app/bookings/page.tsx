@@ -21,6 +21,7 @@ import {
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { format } from "date-fns";
+import { toast } from "sonner";
 
 interface Booking {
   id: string;
@@ -67,6 +68,7 @@ export default function BookingsAndOrdersPage() {
   const [activeTab, setActiveTab] = useState("Bookings");
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
+  const [processingId, setProcessingId] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchBookings() {
@@ -85,6 +87,32 @@ export default function BookingsAndOrdersPage() {
 
     fetchBookings();
   }, []);
+
+  const handleCancelBooking = async (bookingId: string) => {
+    if (!confirm("Are you sure you want to cancel this booking?")) return;
+
+    setProcessingId(bookingId);
+    try {
+        const res = await fetch(`/api/bookings/${bookingId}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: 'cancelled' })
+        });
+
+        if (res.ok) {
+            setBookings(prev => prev.map(b => b.id === bookingId ? { ...b, status: 'cancelled' } : b));
+            toast.success("Booking cancelled successfully");
+        } else {
+            const error = await res.json();
+            toast.error(error.error || "Failed to cancel booking");
+        }
+    } catch (error) {
+        console.error("Cancellation error:", error);
+        toast.error("Something went wrong");
+    } finally {
+        setProcessingId(null);
+    }
+  };
 
   return (
     <div className="flex-1 p-4 sm:p-6 lg:p-8 max-w-[1400px] mx-auto w-full bg-background">
@@ -127,7 +155,9 @@ export default function BookingsAndOrdersPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.1 }}
-                  className="group bg-card rounded-[40px] border border-border hover:border-foreground p-8 transition-all shadow-sm hover:shadow-xl hover:shadow-foreground/5"
+                  className={`group bg-card rounded-[40px] border border-border hover:border-foreground p-8 transition-all shadow-sm hover:shadow-xl hover:shadow-foreground/5 ${
+                    booking.status === 'cancelled' ? 'opacity-60 grayscale' : ''
+                  }`}
                 >
                   <div className="flex gap-6 cursor-pointer">
                     <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-[32px] overflow-hidden bg-muted flex-shrink-0">
@@ -149,6 +179,7 @@ export default function BookingsAndOrdersPage() {
                         <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest ${
                           booking.status === 'confirmed' ? 'bg-blue-500/10 text-blue-500' :
                           booking.status === 'pending' ? 'bg-amber-500/10 text-amber-500' :
+                          booking.status === 'cancelled' ? 'bg-rose-500/10 text-rose-500' :
                           'bg-emerald-500/10 text-emerald-500'
                         }`}>
                           {booking.status}
@@ -188,9 +219,14 @@ export default function BookingsAndOrdersPage() {
                             Reschedule
                         </button>
                     )}
-                    {booking.status === 'pending' && (
-                        <button className="h-14 w-14 rounded-2xl border border-border flex items-center justify-center text-muted-foreground hover:text-rose-600 hover:bg-rose-500/10 transition-all group/cancel">
-                            <XCircle className="w-6 h-6" />
+                    {(booking.status === 'pending' || booking.status === 'confirmed') && (
+                        <button
+                            onClick={() => handleCancelBooking(booking.id)}
+                            disabled={processingId === booking.id}
+                            className="h-14 w-14 rounded-2xl border border-border flex items-center justify-center text-muted-foreground hover:text-rose-600 hover:bg-rose-500/10 transition-all group/cancel"
+                            title="Cancel Booking"
+                        >
+                            {processingId === booking.id ? <Loader2 className="w-6 h-6 animate-spin" /> : <XCircle className="w-6 h-6" />}
                         </button>
                     )}
                   </div>
