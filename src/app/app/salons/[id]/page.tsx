@@ -18,7 +18,10 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { addDays, format, parse } from "date-fns";
+import { toast } from "sonner";
+import { useSession } from "@/lib/auth-client";
 
 interface Salon {
   id: string;
@@ -50,10 +53,17 @@ const gallery = [
 
 export default function SalonDetailsPage() {
   const { id } = useParams();
+  const router = useRouter();
+  const { data: session } = useSession();
   const [salon, setSalon] = useState<Salon | null>(null);
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(null);
+  const [availableSlots, setAvailableSlots] = useState<string[]>([]);
+  const [loadingSlots, setLoadingSlots] = useState(false);
+  const [bookingLoading, setBookingLoading] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -86,11 +96,90 @@ export default function SalonDetailsPage() {
     fetchData();
   }, [id]);
 
+  useEffect(() => {
+    async function fetchAvailability() {
+      if (!id || !selectedServiceId || !selectedDate) return;
+
+      setLoadingSlots(true);
+      setAvailableSlots([]);
+      setSelectedTimeSlot(null);
+
+      try {
+        const dateStr = format(selectedDate, 'yyyy-MM-dd');
+        const res = await fetch(`/api/bookings/availability?salonId=${id}&serviceId=${selectedServiceId}&date=${dateStr}`);
+        if (res.ok) {
+          const slots = await res.json();
+          setAvailableSlots(slots);
+        }
+      } catch (error) {
+        console.error("Error fetching slots:", error);
+      } finally {
+        setLoadingSlots(false);
+      }
+    }
+
+    fetchAvailability();
+  }, [id, selectedServiceId, selectedDate]);
+
+
+  const handleBooking = async () => {
+    if (!session) {
+      toast.error("Please login to book an appointment");
+      router.push("/auth?mode=signin");
+      return;
+    }
+
+    if (!selectedServiceId || !selectedDate || !selectedTimeSlot) {
+        toast.error("Please select a service, date, and time");
+        return;
+    }
+
+    setBookingLoading(true);
+
+    try {
+        const timeParts = parse(selectedTimeSlot, 'hh:mm a', new Date());
+        const startTime = new Date(selectedDate);
+        startTime.setHours(timeParts.getHours(), timeParts.getMinutes(), 0, 0);
+
+        const selectedService = services.find(s => s.id === selectedServiceId);
+        const duration = selectedService?.duration || 30;
+        const endTime = new Date(startTime.getTime() + duration * 60000);
+
+        const res = await fetch('/api/bookings', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                salonId: id,
+                serviceId: selectedServiceId,
+                startTime: startTime.toISOString(),
+                endTime: endTime.toISOString(),
+                notes: ''
+            })
+        });
+
+        if (res.ok) {
+            toast.success("Booking confirmed successfully!");
+            router.push('/app/bookings');
+        } else {
+            const error = await res.json();
+            toast.error(error.error || "Failed to create booking");
+        }
+    } catch (error) {
+        console.error("Booking error:", error);
+        toast.error("Something went wrong");
+    } finally {
+        setBookingLoading(false);
+    }
+  };
+
   const formatPrice = (cents: number) => {
     return (cents / 100).toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
   };
 
   const selectedService = services.find(s => s.id === selectedServiceId);
+
+  // Generate next 7 days
+  const days = Array.from({ length: 7 }, (_, i) => addDays(new Date(), i));
 
   if (loading) {
     return (
@@ -192,7 +281,7 @@ export default function SalonDetailsPage() {
                 </div>
                 <div>
                   <p className="text-xs font-bold text-muted-foreground/50 uppercase tracking-widest">Available Slots</p>
-                  <p className="text-sm font-bold text-foreground">8 slots left today</p>
+                  <p className="text-sm font-bold text-foreground">Check Availability</p>
                 </div>
               </div>
             </div>
@@ -264,39 +353,52 @@ export default function SalonDetailsPage() {
               <p className="text-sm text-muted-foreground">Select your preferred date and time.</p>
             </div>
 
-            {/* Date Selection (Simplified) */}
+            {/* Date Selection */}
             <div className="space-y-4">
               <p className="text-xs font-bold text-muted-foreground/50 uppercase tracking-widest">Select Date</p>
               <div className="grid grid-cols-4 gap-2">
-                {[12, 13, 14, 15].map((day, i) => (
-                  <button
-                    key={day}
-                    className={`flex flex-col items-center justify-center py-3 rounded-2xl border transition-all ${
-                      i === 0 ? "border-blue-600 bg-blue-600 text-white shadow-lg shadow-blue-200" : "border-border hover:border-foreground"
-                    }`}
-                  >
-                    <span className="text-[10px] font-bold uppercase tracking-widest mb-1">{i === 0 ? "Today" : ["Wed", "Thu", "Fri"][i-1]}</span>
-                    <span className="text-lg font-bold">{day}</span>
-                  </button>
-                ))}
+                {days.map((day, i) => {
+                    const isSelected = format(day, 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd');
+                    return (
+                        <button
+                            key={i}
+                            onClick={() => setSelectedDate(day)}
+                            className={`flex flex-col items-center justify-center py-3 rounded-2xl border transition-all ${
+                            isSelected ? "border-blue-600 bg-blue-600 text-white shadow-lg shadow-blue-200" : "border-border hover:border-foreground"
+                            }`}
+                        >
+                            <span className="text-[10px] font-bold uppercase tracking-widest mb-1">{format(day, 'EEE')}</span>
+                            <span className="text-lg font-bold">{format(day, 'd')}</span>
+                        </button>
+                    )
+                })}
               </div>
             </div>
 
             {/* Time Slots */}
             <div className="space-y-4">
               <p className="text-xs font-bold text-muted-foreground/50 uppercase tracking-widest">Available Slots</p>
-              <div className="grid grid-cols-2 gap-2">
-                {["10:00 AM", "11:30 AM", "01:00 PM", "02:30 PM", "04:00 PM", "05:30 PM"].map((time, i) => (
-                  <button
-                    key={time}
-                    className={`py-3 rounded-xl border text-sm font-bold transition-all ${
-                      i === 1 ? "border-foreground bg-foreground text-white" : "border-border hover:border-foreground"
-                    }`}
-                  >
-                    {time}
-                  </button>
-                ))}
-              </div>
+              {loadingSlots ? (
+                <div className="flex justify-center py-4">
+                    <Loader2 className="w-6 h-6 animate-spin text-primary" />
+                </div>
+              ) : availableSlots.length === 0 ? (
+                <p className="text-sm text-muted-foreground">No slots available for this date.</p>
+              ) : (
+                <div className="grid grid-cols-2 gap-2 h-48 overflow-y-auto pr-2 no-scrollbar">
+                    {availableSlots.map((time) => (
+                    <button
+                        key={time}
+                        onClick={() => setSelectedTimeSlot(time)}
+                        className={`py-3 rounded-xl border text-sm font-bold transition-all ${
+                        selectedTimeSlot === time ? "border-foreground bg-foreground text-white" : "border-border hover:border-foreground"
+                        }`}
+                    >
+                        {time}
+                    </button>
+                    ))}
+                </div>
+              )}
             </div>
 
             <div className="pt-6 border-t border-muted space-y-4">
@@ -315,15 +417,16 @@ export default function SalonDetailsPage() {
             </div>
 
             <button
-              disabled={!selectedService}
+              onClick={handleBooking}
+              disabled={!selectedService || !selectedTimeSlot || bookingLoading}
               className={`w-full h-14 rounded-2xl font-bold text-lg transition-all active:scale-[0.98] shadow-xl flex items-center justify-center gap-3 ${
-                selectedService
+                selectedService && selectedTimeSlot && !bookingLoading
                   ? "bg-foreground text-white hover:bg-blue-600 shadow-foreground/10"
                   : "bg-muted text-muted-foreground cursor-not-allowed"
               }`}
             >
-              <CalendarIcon className="w-5 h-5" />
-              Confirm Booking
+              {bookingLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <CalendarIcon className="w-5 h-5" />}
+              {bookingLoading ? "Processing..." : "Confirm Booking"}
             </button>
 
             <div className="flex items-start gap-3 p-4 rounded-2xl bg-blue-50/50 border border-blue-100">
