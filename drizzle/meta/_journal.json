@@ -29,6 +29,13 @@
       "when": 1771071841505,
       "tag": "0003_common_galactus",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1771135938796,
+      "tag": "0004_tricky_talisman",
+      "breakpoints": true
     }
   ]
 }

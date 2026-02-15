@@ -1,12 +1,12 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, LayoutDashboard, Scissors, ShoppingBag } from "lucide-react";
+import { ArrowLeft, LayoutDashboard, Scissors, ShoppingBag, Calendar } from "lucide-react";
 import { ServiceManager } from "../components/ServiceManager";
 import { ProductManager } from "../components/ProductManager";
-import { Suspense, useState, useEffect } from "react";
+import { BookingManager } from "../components/BookingManager"; // Import BookingManager
+import { Suspense, useState } from "react";
 
 function PartnerDashboardContent() {
   const searchParams = useSearchParams();
@@ -18,11 +18,12 @@ function PartnerDashboardContent() {
   // Determine initial active tab based on type
   const [activeTab, setActiveTab] = useState(() => {
     if (type === "BOUTIQUE") return "products";
-    return "services";
+    return "bookings"; // Default to bookings for quick access
   });
 
   const showServices = type === "SALON" || type === "BOTH";
   const showProducts = type === "BOUTIQUE" || type === "BOTH";
+  const showBookings = type === "SALON" || type === "BOTH"; // Only salons receive bookings for now
 
   // Handle back navigation to preserve partner state via query params
   const handleBack = () => {
@@ -51,6 +52,16 @@ function PartnerDashboardContent() {
       {/* Main Content Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="w-full md:w-auto justify-start bg-transparent border-b h-12 p-0 rounded-none mb-6 overflow-x-auto no-scrollbar">
+          {showBookings && (
+            <TabsTrigger
+              value="bookings"
+              className="flex-1 md:flex-none min-w-[120px] h-full rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground data-[state=active]:text-foreground font-medium transition-all"
+            >
+              <Calendar className="w-4 h-4 mr-2" />
+              Bookings
+            </TabsTrigger>
+          )}
+
           {showServices && (
             <TabsTrigger
               value="services"
@@ -71,6 +82,18 @@ function PartnerDashboardContent() {
             </TabsTrigger>
           )}
         </TabsList>
+
+        {showBookings && (
+          <TabsContent value="bookings" className="mt-0 focus-visible:outline-none focus-visible:ring-0">
+             {salonId ? (
+                <BookingManager salonId={salonId} />
+             ) : (
+                <div className="p-8 text-center text-muted-foreground border rounded-md">
+                    <p>Salon ID is missing. Please return to the studio and try again.</p>
+                </div>
+             )}
+          </TabsContent>
+        )}
 
         {showServices && (
           <TabsContent value="services" className="mt-0 focus-visible:outline-none focus-visible:ring-0">
