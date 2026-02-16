@@ -31,6 +31,7 @@ interface Product {
   hasVariants: boolean
   variants?: any[]
   image?: string
+  images?: string[]
   category?: string
   salonId: string
 }

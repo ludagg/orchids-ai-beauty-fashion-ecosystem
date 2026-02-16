@@ -4,6 +4,8 @@ import { bookings } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
+import { sendEmail } from '@/lib/email';
+import { EmailTemplates } from '@/lib/email-templates';
 
 export async function PATCH(
   req: Request,
@@ -31,6 +33,7 @@ export async function PATCH(
       where: eq(bookings.id, id),
       with: {
         salon: true,
+        user: true, // Need user info for email
       },
     });
 
@@ -69,6 +72,24 @@ export async function PATCH(
         updatedAt: new Date()
       })
       .where(eq(bookings.id, id));
+
+    // Send Cancellation Email
+    if (status === 'cancelled') {
+        (async () => {
+            try {
+                 if (booking.user?.email) {
+                    const html = EmailTemplates.bookingCancellation(booking, booking.user);
+                    await sendEmail({
+                        to: booking.user.email,
+                        subject: `Booking Cancelled - ${booking.salon.name}`,
+                        html
+                    });
+                }
+            } catch (emailError) {
+                console.error("Failed to send cancellation email", emailError);
+            }
+        })();
+    }
 
     return NextResponse.json({ success: true, status });
 

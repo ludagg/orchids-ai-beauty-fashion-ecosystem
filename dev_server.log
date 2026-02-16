@@ -1,0 +1,113 @@
+$ next dev --turbopack
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+▲ Next.js 16.1.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.2:3000
+
+✓ Starting...
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
+
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+✓ Ready in 1791ms
+○ Compiling /app/search ...
+ GET /app/search 200 in 13.3s (compile: 12.0s, proxy.ts: 145ms, render: 1140ms)
+○ Compiling /api/auth/[...all] ...
+Error fetching products: Error: Failed query: select "products"."id", "products"."salon_id", "products"."name", "products"."description", "products"."price", "products"."stock", "products"."has_variants", "products"."images", "products"."is_active", "products"."category", "products"."brand", "products"."rating", "products"."review_count", "products"."created_at", "products"."updated_at", "products_salon"."data" as "salon" from "products" "products" left join lateral (select json_build_array("products_salon"."name", "products_salon"."id", "products_salon"."slug") as "data" from (select * from "salons" "products_salon" where "products_salon"."id" = "products"."salon_id" limit $1) "products_salon") "products_salon" on true where "products"."is_active" = $2 order by "products"."created_at" desc limit $3
+params: 1,true,8
+    at async GET (src/app/api/products/route.ts:35:18)
+  33 |     }
+  34 |
+> 35 |     const data = await db.query.products.findMany({
+     |                  ^
+  36 |       where: and(...conditions),
+  37 |       limit: limit,
+  38 |       with: { {
+  query: 'select "products"."id", "products"."salon_id", "products"."name", "products"."description", "products"."price", "products"."stock", "products"."has_variants", "products"."images", "products"."is_active", "products"."category", "products"."brand", "products"."rating", "products"."review_count", "products"."created_at", "products"."updated_at", "products_salon"."data" as "salon" from "products" "products" left join lateral (select json_build_array("products_salon"."name", "products_salon"."id", "products_salon"."slug") as "data" from (select * from "salons" "products_salon" where "products_salon"."id" = "products"."salon_id" limit $1) "products_salon") "products_salon" on true where "products"."is_active" = $2 order by "products"."created_at" desc limit $3',
+  params: [Array],
+  [cause]: AggregateError:
+      at async GET (src/app/api/products/route.ts:35:18)
+    33 |     }
+    34 |
+  > 35 |     const data = await db.query.products.findMany({
+       |                  ^
+    36 |       where: and(...conditions),
+    37 |       limit: limit,
+    38 |       with: { {
+    code: 'ECONNREFUSED'
+  }
+}
+[2m2026-02-16T18:44:40.063Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
+[2m2026-02-16T18:44:40.067Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
+[2m2026-02-16T18:44:40.068Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
+Error fetching salons: Error: Failed query: select "id", "owner_id", "name", "slug", "description", "address", "city", "zip_code", "latitude", "longitude", "phone", "email", "website", "image", "status", "is_verified", "type", "created_at", "updated_at" from "salons" where exists (select "id", "salon_id", "name", "description", "price", "duration", "category", "image", "is_active", "created_at", "updated_at" from "services" where ("services"."salon_id" = "salons"."id" and "services"."price" >= $1 and "services"."price" <= $2)) order by "salons"."created_at" desc limit $3
+params: 1000,50000,6
+    at async GET (src/app/api/salons/route.ts:80:21)
+  78 |     }
+  79 |
+> 80 |     const results = await db
+     |                     ^
+  81 |       .select()
+  82 |       .from(salons)
+  83 |       .where(and(...conditions)) {
+  query: 'select "id", "owner_id", "name", "slug", "description", "address", "city", "zip_code", "latitude", "longitude", "phone", "email", "website", "image", "status", "is_verified", "type", "created_at", "updated_at" from "salons" where exists (select "id", "salon_id", "name", "description", "price", "duration", "category", "image", "is_active", "created_at", "updated_at" from "services" where ("services"."salon_id" = "salons"."id" and "services"."price" >= $1 and "services"."price" <= $2)) order by "salons"."created_at" desc limit $3',
+  params: [Array],
+  [cause]: AggregateError:
+      at async GET (src/app/api/salons/route.ts:80:21)
+    78 |     }
+    79 |
+  > 80 |     const results = await db
+       |                     ^
+    81 |       .select()
+    82 |       .from(salons)
+    83 |       .where(and(...conditions)) {
+    code: 'ECONNREFUSED'
+  }
+}
+Error fetching salons: Error: Failed query: select "id", "owner_id", "name", "slug", "description", "address", "city", "zip_code", "latitude", "longitude", "phone", "email", "website", "image", "status", "is_verified", "type", "created_at", "updated_at" from "salons" order by "salons"."created_at" desc limit $1
+params: 6
+    at async GET (src/app/api/salons/route.ts:80:21)
+  78 |     }
+  79 |
+> 80 |     const results = await db
+     |                     ^
+  81 |       .select()
+  82 |       .from(salons)
+  83 |       .where(and(...conditions)) {
+  query: 'select "id", "owner_id", "name", "slug", "description", "address", "city", "zip_code", "latitude", "longitude", "phone", "email", "website", "image", "status", "is_verified", "type", "created_at", "updated_at" from "salons" order by "salons"."created_at" desc limit $1',
+  params: [Array],
+  [cause]: AggregateError:
+      at async GET (src/app/api/salons/route.ts:80:21)
+    78 |     }
+    79 |
+  > 80 |     const results = await db
+       |                     ^
+    81 |       .select()
+    82 |       .from(salons)
+    83 |       .where(and(...conditions)) {
+    code: 'ECONNREFUSED'
+  }
+}
+[2m2026-02-16T18:44:41.521Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
+[2m2026-02-16T18:44:41.526Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
+[2m2026-02-16T18:44:41.526Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
+
+-----
+[1m[31mFATAL[39m[0m: An unexpected Turbopack error occurred. A panic log has been written to /tmp/next-panic-1df298157d2117b5b12d974b2f47f30.log.
+
+To help make Turbopack better, report this error by clicking here: https://github.com/vercel/next.js/discussions/new?category=turbopack-error-report&title=Turbopack%20Error%3A%20Next.js%20package%20not%20found&body=Turbopack%20version%3A%20%600c06f068%60%0ANext.js%20version%3A%20%600.0.0%60%0A%0AError%20message%3A%0A%60%60%60%0ATurbopack%20Error%3A%20Next.js%20package%20not%20found%0A%60%60%60&labels=Turbopack,Turbopack%20Panic%20Backtrace
+-----
+
+Error: Turbopack build failed with 1 errors:
+./app/src/app
+Error: Next.js inferred your workspace root, but it may not be correct.
+    We couldn't find the Next.js package (next/package.json) from the project directory: /app/src/app
+     To fix this, set turbopack.root in your Next.js config, or ensure the Next.js package is resolvable from this directory.
+    Note: For security and performance reasons, files outside of the project directory will not be compiled.
+    See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+
+    at ignore-listed frames
+[?25h
+error: script "dev" exited with code 1

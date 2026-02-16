@@ -2,10 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { auth } from "@/lib/auth"; // We'll use getSession
 import { db } from "@/lib/db";
-import { salons } from "@/db/schema/salons";
+import { salons, services } from "@/db/schema/salons";
 import { nanoid } from "nanoid";
 import { headers } from "next/headers";
-import { and, or, ilike, eq, desc } from "drizzle-orm";
+import { and, or, ilike, eq, desc, gte, lte, exists } from "drizzle-orm";
 
 const salonSchema = z.object({
   name: z.string().min(2),
@@ -23,6 +23,8 @@ export async function GET(req: NextRequest) {
     const query = searchParams.get("search") || searchParams.get("query"); // Accept both
     const city = searchParams.get("city");
     const type = searchParams.get("type"); // SALON, BOUTIQUE, BOTH
+    const minPrice = searchParams.get("minPrice");
+    const maxPrice = searchParams.get("maxPrice");
     const limit = parseInt(searchParams.get("limit") || "50");
 
     const conditions = [];
@@ -53,6 +55,26 @@ export async function GET(req: NextRequest) {
         } else if (type === 'BOTH') {
              conditions.push(eq(salons.type, 'BOTH'));
         }
+    }
+
+    // Filter by Price Range (using services)
+    if (minPrice || maxPrice) {
+        const min = minPrice ? parseInt(minPrice) * 100 : 0;
+        const max = maxPrice ? parseInt(maxPrice) * 100 : 10000000; // Large number
+
+        conditions.push(
+            exists(
+                db.select()
+                    .from(services)
+                    .where(
+                        and(
+                            eq(services.salonId, salons.id),
+                            gte(services.price, min),
+                            lte(services.price, max)
+                        )
+                    )
+            )
+        );
     }
 
     const results = await db

@@ -5,6 +5,8 @@ import { orders, orderItems, products } from "@/db/schema/commerce";
 import { eq, desc } from "drizzle-orm";
 import { nanoid } from "nanoid";
 import { headers } from "next/headers";
+import { sendEmail } from "@/lib/email";
+import { EmailTemplates } from "@/lib/email-templates";
 
 export async function GET(req: NextRequest) {
     try {
@@ -101,6 +103,33 @@ export async function POST(req: NextRequest) {
                 .set({ stock: product.stock - quantity })
                 .where(eq(products.id, productId));
         });
+
+        // Send Order Confirmation Email
+        (async () => {
+            try {
+                const orderDetails = await db.query.orders.findFirst({
+                    where: eq(orders.id, orderId),
+                    with: {
+                         items: {
+                             with: {
+                                 product: true
+                             }
+                         }
+                    }
+                });
+
+                if (orderDetails && session.user?.email) {
+                    const html = EmailTemplates.orderConfirmation(orderDetails, session.user);
+                    await sendEmail({
+                        to: session.user.email,
+                        subject: `Order Confirmation #${orderDetails.id}`,
+                        html
+                    });
+                }
+            } catch (emailError) {
+                console.error("Failed to send order confirmation email", emailError);
+            }
+        })();
 
         return NextResponse.json({ success: true, orderId }, { status: 201 });
 
