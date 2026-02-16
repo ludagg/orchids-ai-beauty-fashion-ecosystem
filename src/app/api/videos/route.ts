@@ -10,11 +10,15 @@ export async function GET(req: NextRequest) {
     try {
         const { searchParams } = new URL(req.url);
         const category = searchParams.get('category');
+        const userId = searchParams.get('userId');
         const limit = parseInt(searchParams.get('limit') || '20');
 
         const conditions = [];
         if (category && category !== 'All') {
             conditions.push(eq(videos.category, category));
+        }
+        if (userId) {
+            conditions.push(eq(videos.userId, userId));
         }
 
         const videosList = await db.query.videos.findMany({
@@ -46,7 +50,7 @@ export async function POST(req: NextRequest) {
         }
 
         const body = await req.json();
-        const { title, videoUrl, thumbnailUrl, category, description, salonId, isLive } = body;
+        const { title, videoUrl, thumbnailUrl, category, description, salonId, isLive, status } = body;
 
         if (!title || !videoUrl) {
             return NextResponse.json({ error: "Title and Video URL are required" }, { status: 400 });
@@ -63,6 +67,7 @@ export async function POST(req: NextRequest) {
             videoUrl,
             thumbnailUrl: thumbnailUrl || videoUrl, // Fallback if no thumb
             category,
+            status: status || 'published',
             views: 0,
             likes: 0,
             isLive: isLive || false,

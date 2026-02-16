@@ -1,7 +1,9 @@
-import { pgTable, text, timestamp, integer, boolean, uniqueIndex } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, integer, boolean, uniqueIndex, pgEnum } from 'drizzle-orm/pg-core';
 import { users } from './auth';
 import { salons } from './salons';
 import { relations } from 'drizzle-orm';
+
+export const videoStatusEnum = pgEnum('video_status', ['published', 'draft', 'private']);
 
 export const videos = pgTable('videos', {
   id: text('id').primaryKey(),
@@ -12,6 +14,7 @@ export const videos = pgTable('videos', {
   videoUrl: text('video_url').notNull(),
   thumbnailUrl: text('thumbnail_url'),
   category: text('category'), // e.g. "Fashion", "Beauty"
+  status: videoStatusEnum('status').default('published').notNull(),
   views: integer('views').default(0).notNull(),
   likes: integer('likes').default(0).notNull(),
   isLive: boolean('is_live').default(false).notNull(),

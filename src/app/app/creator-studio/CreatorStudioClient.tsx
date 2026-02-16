@@ -9,22 +9,25 @@ import {
   Video,
   Share2,
   Lock,
-  LayoutDashboard
+  LayoutDashboard,
+  Loader2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, Suspense, useCallback } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { PartnerOnboardingModal, PartnerData, PartnerType } from "./components/PartnerOnboardingModal";
+import { VideoUploadModal } from "./components/VideoUploadModal";
 
 // Interface for User Data
 interface UserData {
     name: string;
     image: string | null;
     email: string;
+    id: string;
 }
 
 // Interface for Salon Data (matching DB or similar)
@@ -36,68 +39,21 @@ interface SalonData {
     type: "SALON" | "BOUTIQUE" | "BOTH";
 }
 
+interface VideoData {
+    id: string;
+    title: string;
+    thumbnailUrl: string | null;
+    videoUrl: string;
+    views: number;
+    likes: number;
+    createdAt: string;
+    status: 'published' | 'draft' | 'private';
+}
+
 interface CreatorStudioClientProps {
     user: UserData;
     initialSalon: SalonData | null;
 }
-
-// Mock Data for videos (kept as is for now)
-const videos = [
-  {
-    id: "1",
-    title: "Summer 2024 Fashion Trends You Need to Know",
-    thumbnail: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=600&h=800&fit=crop",
-    views: 125000,
-    likes: 4500,
-    date: "2024-05-15",
-    status: "Published"
-  },
-  {
-    id: "2",
-    title: "My Daily Skincare Routine for Glowing Skin",
-    thumbnail: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=600&h=800&fit=crop",
-    views: 89000,
-    likes: 3200,
-    date: "2024-05-10",
-    status: "Published"
-  },
-  {
-    id: "3",
-    title: "Paris Fashion Week Vlog - Behind the Scenes",
-    thumbnail: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=600&h=800&fit=crop",
-    views: 210000,
-    likes: 15000,
-    date: "2024-05-01",
-    status: "Published"
-  },
-  {
-    id: "4",
-    title: "Testing Viral TikTok Makeup Hacks",
-    thumbnail: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=600&h=800&fit=crop",
-    views: 45000,
-    likes: 1800,
-    date: "2024-04-20",
-    status: "Draft"
-  },
-  {
-    id: "5",
-    title: "Street Style Inspo",
-    thumbnail: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600&h=800&fit=crop",
-    views: 12000,
-    likes: 900,
-    date: "2024-04-15",
-    status: "Published"
-  },
-   {
-    id: "6",
-    title: "GRWM for Date Night",
-    thumbnail: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&h=800&fit=crop",
-    views: 5600,
-    likes: 230,
-    date: "2024-04-10",
-    status: "Private"
-  }
-];
 
 export default function CreatorStudioClient({ user, initialSalon }: CreatorStudioClientProps) {
   const router = useRouter();
@@ -116,8 +72,35 @@ export default function CreatorStudioClient({ user, initialSalon }: CreatorStudi
   const [salonId, setSalonId] = useState<string | null>(initialSalon?.id || null);
 
   const [isPartnerModalOpen, setIsPartnerModalOpen] = useState(false);
+  const [isVideoUploadModalOpen, setIsVideoUploadModalOpen] = useState(false);
+
+  const [videos, setVideos] = useState<VideoData[]>([]);
+  const [isLoadingVideos, setIsLoadingVideos] = useState(true);
 
   const searchParams = useSearchParams();
+
+  const fetchVideos = useCallback(async () => {
+    try {
+        const res = await fetch(`/api/videos?userId=${user.id}`, { cache: 'no-store' });
+        if (res.ok) {
+            const data = await res.json();
+            // Transform data if needed, assuming API returns array matching VideoData mostly
+            setVideos(data.map((v: any) => ({
+                ...v,
+                status: v.status || 'published', // Default to published if missing
+                thumbnailUrl: v.thumbnailUrl || v.videoUrl // Fallback
+            })));
+        }
+    } catch (error) {
+        console.error("Failed to fetch videos", error);
+    } finally {
+        setIsLoadingVideos(false);
+    }
+  }, [user.id]);
+
+  useEffect(() => {
+    fetchVideos();
+  }, [fetchVideos]);
 
   useEffect(() => {
     // Keep search params logic as a fallback or for deep links, but prioritize props
@@ -142,9 +125,10 @@ export default function CreatorStudioClient({ user, initialSalon }: CreatorStudi
     }
   }, [searchParams, initialSalon]);
 
-  const publishedVideos = videos.filter(v => v.status === 'Published');
-  const draftVideos = videos.filter(v => v.status === 'Draft' || v.status === 'Private');
-  const likedVideos = videos.slice(0, 3);
+  const publishedVideos = videos.filter(v => v.status === 'published');
+  const draftVideos = videos.filter(v => v.status === 'draft' || v.status === 'private');
+  // Mock liked videos for now as we don't have liked videos API yet
+  const likedVideos: VideoData[] = [];
 
   const handlePartnerComplete = (data: PartnerData & { id?: string }) => {
     setPartnerData(data);
@@ -245,7 +229,11 @@ export default function CreatorStudioClient({ user, initialSalon }: CreatorStudi
                 <Video className="w-4 h-4" />
                 Go Live
             </Button>
-             <Button variant="ghost" className="gap-2 text-muted-foreground hover:text-primary">
+             <Button
+                variant="ghost"
+                className="gap-2 text-muted-foreground hover:text-primary"
+                onClick={() => setIsVideoUploadModalOpen(true)}
+             >
                 <Upload className="w-4 h-4" />
                 Upload New
             </Button>
@@ -307,21 +295,37 @@ export default function CreatorStudioClient({ user, initialSalon }: CreatorStudi
         </TabsList>
 
         <TabsContent value="videos" className="mt-0">
-             <div className="grid grid-cols-3 gap-px md:gap-1">
-                {publishedVideos.map((video) => (
-                    <VideoCard key={video.id} video={video} />
-                ))}
-             </div>
-             {publishedVideos.length === 0 && <EmptyState type="videos" />}
+             {isLoadingVideos ? (
+                 <div className="flex justify-center py-20">
+                     <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
+                 </div>
+             ) : (
+                 <>
+                    <div className="grid grid-cols-3 gap-px md:gap-1">
+                        {publishedVideos.map((video) => (
+                            <VideoCard key={video.id} video={video} />
+                        ))}
+                    </div>
+                    {publishedVideos.length === 0 && <EmptyState type="videos" onUpload={() => setIsVideoUploadModalOpen(true)} />}
+                 </>
+             )}
         </TabsContent>
 
         <TabsContent value="drafts" className="mt-0">
-            <div className="grid grid-cols-3 gap-px md:gap-1">
-                {draftVideos.map((video) => (
-                     <VideoCard key={video.id} video={video} isPrivate />
-                ))}
-             </div>
-             {draftVideos.length === 0 && <EmptyState type="drafts" />}
+             {isLoadingVideos ? (
+                 <div className="flex justify-center py-20">
+                     <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
+                 </div>
+             ) : (
+                <>
+                    <div className="grid grid-cols-3 gap-px md:gap-1">
+                        {draftVideos.map((video) => (
+                            <VideoCard key={video.id} video={video} isPrivate />
+                        ))}
+                    </div>
+                    {draftVideos.length === 0 && <EmptyState type="drafts" onUpload={() => setIsVideoUploadModalOpen(true)} />}
+                </>
+             )}
         </TabsContent>
 
          <TabsContent value="liked" className="mt-0">
@@ -330,6 +334,7 @@ export default function CreatorStudioClient({ user, initialSalon }: CreatorStudi
                      <VideoCard key={video.id} video={video} isLiked />
                 ))}
              </div>
+             {likedVideos.length === 0 && <div className="text-center py-20 text-muted-foreground">No liked videos yet</div>}
         </TabsContent>
 
       </Tabs>
@@ -339,18 +344,31 @@ export default function CreatorStudioClient({ user, initialSalon }: CreatorStudi
         onOpenChange={setIsPartnerModalOpen}
         onComplete={handlePartnerComplete}
       />
+
+      <VideoUploadModal
+        isOpen={isVideoUploadModalOpen}
+        onOpenChange={setIsVideoUploadModalOpen}
+        onSuccess={fetchVideos}
+      />
     </div>
   );
 }
 
-function VideoCard({ video, isPrivate, isLiked }: { video: any, isPrivate?: boolean, isLiked?: boolean }) {
+function VideoCard({ video, isPrivate, isLiked }: { video: VideoData, isPrivate?: boolean, isLiked?: boolean }) {
     return (
         <div className="aspect-[9/16] relative bg-muted cursor-pointer overflow-hidden group">
-            <img
-                src={video.thumbnail}
-                alt={video.title}
-                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-            />
+            {video.thumbnailUrl ? (
+                 <img
+                    src={video.thumbnailUrl}
+                    alt={video.title}
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+            ) : (
+                <div className="w-full h-full flex items-center justify-center bg-muted text-muted-foreground">
+                    <Video className="w-8 h-8 opacity-20" />
+                </div>
+            )}
+
             <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                  <Play className="w-8 h-8 text-white fill-white" />
             </div>
@@ -369,7 +387,7 @@ function VideoCard({ video, isPrivate, isLiked }: { video: any, isPrivate?: bool
     )
 }
 
-function EmptyState({ type }: { type: string }) {
+function EmptyState({ type, onUpload }: { type: string, onUpload?: () => void }) {
     return (
         <div className="flex flex-col items-center justify-center py-20 text-center space-y-4">
             <div className="bg-muted rounded-full p-6">
@@ -379,7 +397,7 @@ function EmptyState({ type }: { type: string }) {
             <p className="text-muted-foreground text-sm max-w-xs">
                 Upload your first video to get started sharing your content with the world.
             </p>
-            <Button variant="outline">Upload Video</Button>
+            {onUpload && <Button variant="outline" onClick={onUpload}>Upload Video</Button>}
         </div>
     )
 }
