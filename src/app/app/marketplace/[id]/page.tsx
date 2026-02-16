@@ -12,7 +12,8 @@ import {
   RotateCcw,
   Loader2,
   MapPin,
-  Clock
+  Clock,
+  MessageCircle
 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
@@ -63,6 +64,7 @@ export default function ProductDetailsPage() {
   const [activeImage, setActiveImage] = useState(0);
   const [reserving, setReserving] = useState(false);
   const [quantity, setQuantity] = useState(1);
+  const [chatLoading, setChatLoading] = useState(false);
 
   // Review form
   const [reviewRating, setReviewRating] = useState(5);
@@ -126,6 +128,39 @@ export default function ProductDetailsPage() {
         toast.error("Something went wrong");
     } finally {
         setReserving(false);
+    }
+  };
+
+  const handleChat = async () => {
+    if (!session) {
+        toast.error("Please login to chat");
+        router.push("/auth?mode=signin");
+        return;
+    }
+
+    if (!product?.salon) {
+        toast.error("Seller information not available");
+        return;
+    }
+
+    setChatLoading(true);
+    try {
+        const res = await fetch('/api/conversations', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ salonId: product.salon.id })
+        });
+
+        if (res.ok) {
+            const data = await res.json();
+            router.push(`/app/conversations/${data.id}`);
+        } else {
+            toast.error("Failed to start chat");
+        }
+    } catch (error) {
+        console.error("Chat error:", error);
+    } finally {
+        setChatLoading(false);
     }
   };
 
@@ -305,6 +340,15 @@ export default function ProductDetailsPage() {
             <p className="text-center text-xs text-muted-foreground">
                 Reserve online, pay when you collect at <strong>{product.salon?.name || "the salon"}</strong>.
             </p>
+
+            <button
+                onClick={handleChat}
+                disabled={!product.salon || chatLoading}
+                className="w-full h-14 rounded-2xl border border-border bg-card hover:bg-secondary/50 text-foreground font-bold text-lg transition-all flex items-center justify-center gap-2"
+            >
+                {chatLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <MessageCircle className="w-5 h-5" />}
+                Chat with Seller
+            </button>
           </div>
 
           {/* Delivery/Pickup Info */}

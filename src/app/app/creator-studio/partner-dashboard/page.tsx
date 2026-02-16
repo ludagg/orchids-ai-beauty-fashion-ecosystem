@@ -2,7 +2,8 @@
 
 import { useSearchParams, useRouter } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, LayoutDashboard, Scissors, ShoppingBag, Calendar, Image as ImageIcon, Clock, Star } from "lucide-react";
+import { ArrowLeft, LayoutDashboard, Scissors, ShoppingBag, Calendar, Image as ImageIcon, Clock, Star, MessageCircle } from "lucide-react";
+import Link from "next/link";
 import { ServiceManager } from "../components/ServiceManager";
 import { ProductManager } from "../components/ProductManager";
 import { BookingManager } from "../components/BookingManager";
@@ -50,6 +51,14 @@ function PartnerDashboardContent() {
             Manage your {type === "BOTH" ? "Salon & Boutique" : type === "SALON" ? "Salon" : "Boutique"} offerings for {businessName}.
           </p>
         </div>
+
+        <Link
+          href="/app/conversations"
+          className="inline-flex items-center justify-center px-4 py-2 rounded-xl bg-card border border-border text-sm font-medium hover:bg-muted transition-colors"
+        >
+          <MessageCircle className="w-4 h-4 mr-2" />
+          Inbox
+        </Link>
       </div>
 
       {/* Main Content Tabs */}
