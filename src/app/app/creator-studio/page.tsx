@@ -40,6 +40,7 @@ export default async function CreatorStudioPage() {
           name: session.user.name,
           image: session.user.image || null,
           email: session.user.email,
+          id: session.user.id,
         }}
         initialSalon={initialSalon}
       />
