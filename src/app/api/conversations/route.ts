@@ -129,13 +129,14 @@ export async function POST(req: NextRequest) {
         }
 
         const body = await req.json();
-        const { salonId } = body;
+        const { salonId, initialMessage } = body;
 
         if (!salonId) {
             return NextResponse.json({ error: "Salon ID is required" }, { status: 400 });
         }
 
         // Check if conversation already exists
+        let conversationId: string;
         const existing = await db.query.conversations.findFirst({
             where: and(
                 eq(conversations.userId, session.user.id),
@@ -144,19 +145,35 @@ export async function POST(req: NextRequest) {
         });
 
         if (existing) {
-            return NextResponse.json({ id: existing.id });
+            conversationId = existing.id;
+        } else {
+            // Create new
+            const newId = nanoid();
+            await db.insert(conversations).values({
+                id: newId,
+                userId: session.user.id,
+                salonId: salonId,
+                lastMessageAt: new Date(),
+            });
+            conversationId = newId;
         }
 
-        // Create new
-        const newId = nanoid();
-        await db.insert(conversations).values({
-            id: newId,
-            userId: session.user.id,
-            salonId: salonId,
-            lastMessageAt: new Date(),
-        });
+        if (initialMessage && typeof initialMessage === 'string' && initialMessage.trim().length > 0) {
+            await db.insert(messages).values({
+                id: nanoid(),
+                conversationId: conversationId,
+                senderId: session.user.id,
+                content: initialMessage,
+                isRead: false,
+                createdAt: new Date(),
+            });
 
-        return NextResponse.json({ id: newId }, { status: 201 });
+            await db.update(conversations)
+                .set({ lastMessageAt: new Date() })
+                .where(eq(conversations.id, conversationId));
+        }
+
+        return NextResponse.json({ id: conversationId }, { status: 201 });
 
     } catch (error) {
         console.error("Error creating conversation:", error);
