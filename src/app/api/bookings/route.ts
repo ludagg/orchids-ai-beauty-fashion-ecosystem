@@ -6,6 +6,8 @@ import { nanoid } from 'nanoid';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import { getDay } from 'date-fns';
+import { sendEmail } from '@/lib/email';
+import { EmailTemplates } from '@/lib/email-templates';
 
 export async function POST(req: Request) {
   try {
@@ -109,6 +111,32 @@ export async function POST(req: Request) {
     if ('error' in result) {
         return NextResponse.json({ error: result.error }, { status: result.status });
     }
+
+    // Send Confirmation Email asynchronously
+    // We need to fetch the booking details to populate the email template
+    // Ideally this should be a background job, but for now we'll do it here.
+    (async () => {
+        try {
+            const bookingDetails = await db.query.bookings.findFirst({
+                where: eq(bookings.id, result.bookingId),
+                with: {
+                    salon: true,
+                    service: true
+                }
+            });
+
+            if (bookingDetails && session.user?.email) {
+                const html = EmailTemplates.bookingConfirmation(bookingDetails, session.user);
+                await sendEmail({
+                    to: session.user.email,
+                    subject: `Booking Confirmed at ${bookingDetails.salon.name}`,
+                    html
+                });
+            }
+        } catch (emailError) {
+            console.error("Failed to send confirmation email", emailError);
+        }
+    })();
 
     return NextResponse.json(result);
   } catch (error) {

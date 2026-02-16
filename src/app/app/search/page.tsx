@@ -32,6 +32,8 @@ function SearchContent() {
   const [query, setQuery] = useState(searchParams.get("q") || "");
   const [city, setCity] = useState(searchParams.get("city") || "");
   const [type, setType] = useState(searchParams.get("type") || ""); // SALON, BOUTIQUE, BOTH
+  const [minPrice, setMinPrice] = useState(searchParams.get("minPrice") || "");
+  const [maxPrice, setMaxPrice] = useState(searchParams.get("maxPrice") || "");
   const [activeTab, setActiveTab] = useState(searchParams.get("tab") || "all");
 
   const [results, setResults] = useState<{ salons: any[], marketplace: any[] }>({ salons: [], marketplace: [] });
@@ -44,12 +46,14 @@ function SearchContent() {
     if (query) params.set("q", query);
     if (city) params.set("city", city);
     if (type) params.set("type", type);
+    if (minPrice) params.set("minPrice", minPrice);
+    if (maxPrice) params.set("maxPrice", maxPrice);
     if (activeTab !== "all") params.set("tab", activeTab);
 
     const newUrl = `/app/search?${params.toString()}`;
     // Use replace to avoid cluttering history stack with every keystroke
     window.history.replaceState(null, "", newUrl);
-  }, [query, city, type, activeTab]);
+  }, [query, city, type, minPrice, maxPrice, activeTab]);
 
   // Fetch Data
   useEffect(() => {
@@ -66,6 +70,8 @@ function SearchContent() {
             if (query) params.append("query", query);
             if (city) params.append("city", city);
             if (type) params.append("type", type);
+            if (minPrice) params.append("minPrice", minPrice);
+            if (maxPrice) params.append("maxPrice", maxPrice);
             if (activeTab === "all") params.append("limit", "6");
             promises.push(fetch(`/api/salons?${params.toString()}`).then(res => res.json()));
         } else {
@@ -105,15 +111,17 @@ function SearchContent() {
 
     const timer = setTimeout(fetchData, 500);
     return () => clearTimeout(timer);
-  }, [query, city, type, activeTab]);
+  }, [query, city, type, minPrice, maxPrice, activeTab]);
 
   const clearFilters = () => {
     setQuery("");
     setCity("");
     setType("");
+    setMinPrice("");
+    setMaxPrice("");
   };
 
-  const hasFilters = query || city || type;
+  const hasFilters = query || city || type || minPrice || maxPrice;
   const resultCount = results.salons.length + results.marketplace.length;
 
   return (
@@ -181,10 +189,29 @@ function SearchContent() {
                                 <option value="BOTH">Full Service (Both)</option>
                             </select>
                         </div>
-                        <div className="flex items-end">
+                        <div>
+                             <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5 block">Price Range (₹)</label>
+                             <div className="flex gap-2">
+                                 <input
+                                    type="number"
+                                    placeholder="Min"
+                                    value={minPrice}
+                                    onChange={(e) => setMinPrice(e.target.value)}
+                                    className="w-full px-3 py-2 rounded-xl bg-background border border-border text-sm"
+                                 />
+                                 <input
+                                    type="number"
+                                    placeholder="Max"
+                                    value={maxPrice}
+                                    onChange={(e) => setMaxPrice(e.target.value)}
+                                    className="w-full px-3 py-2 rounded-xl bg-background border border-border text-sm"
+                                 />
+                             </div>
+                        </div>
+                        <div className="col-span-1 sm:col-span-3 lg:col-span-3 flex justify-end pt-2">
                             <button
                                 onClick={clearFilters}
-                                className="w-full py-2 rounded-xl border border-dashed border-muted-foreground/50 text-muted-foreground text-sm hover:text-foreground hover:border-foreground transition-colors"
+                                className="px-6 py-2 rounded-xl border border-dashed border-muted-foreground/50 text-muted-foreground text-sm hover:text-foreground hover:border-foreground transition-colors"
                             >
                                 Clear All Filters
                             </button>
