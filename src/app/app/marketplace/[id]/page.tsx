@@ -145,10 +145,14 @@ export default function ProductDetailsPage() {
 
     setChatLoading(true);
     try {
+        const initialMessage = `Hello, I'm interested in ${product.name}. Is it available?`;
         const res = await fetch('/api/conversations', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ salonId: product.salon.id })
+            body: JSON.stringify({
+                salonId: product.salon.id,
+                initialMessage
+            })
         });
 
         if (res.ok) {
