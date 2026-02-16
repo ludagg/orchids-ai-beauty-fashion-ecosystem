@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Phone,
   Video,
@@ -14,36 +14,146 @@ import {
   ArrowLeft,
   User,
   ShoppingBag,
-  Star
+  Star,
+  Loader2
 } from "lucide-react";
 import Link from "next/link";
-import { chats, initialMessages } from "@/app/app/conversations/data";
+import { useSession } from "@/lib/auth-client";
+import { format } from "date-fns";
 
 interface ChatWindowProps {
   chatId: number | string;
 }
 
-export default function ChatWindow({ chatId }: ChatWindowProps) {
-  const selectedChat = chats.find(c => c.id === Number(chatId));
-  const [messages, setMessages] = useState(initialMessages);
-  const [newMessage, setNewMessage] = useState("");
+interface Message {
+  id: string;
+  content: string;
+  senderId: string;
+  createdAt: string;
+  isRead: boolean;
+}
 
-  if (!selectedChat) {
-      return <div className="flex items-center justify-center h-full">Chat not found</div>;
+interface Conversation {
+  id: string;
+  otherParty: {
+    id: string;
+    name: string;
+    image: string | null;
+    type: string;
+  };
+}
+
+export default function ChatWindow({ chatId }: ChatWindowProps) {
+  const { data: session } = useSession();
+  const [conversation, setConversation] = useState<Conversation | null>(null);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [newMessage, setNewMessage] = useState("");
+  const [loading, setLoading] = useState(true);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    async function fetchData() {
+      if (!chatId || !session?.user) return;
+      try {
+        const [convRes, msgsRes] = await Promise.all([
+          fetch(`/api/conversations/${chatId}`),
+          fetch(`/api/conversations/${chatId}/messages`)
+        ]);
+
+        if (convRes.ok) {
+          setConversation(await convRes.json());
+        }
+
+        if (msgsRes.ok) {
+          setMessages(await msgsRes.json());
+        }
+      } catch (error) {
+        console.error("Error fetching chat data:", error);
+      } finally {
+        setLoading(false);
+        scrollToBottom();
+      }
+    }
+
+    fetchData();
+
+    // Poll for new messages every 5s
+    const interval = setInterval(async () => {
+        if (!chatId) return;
+        const msgsRes = await fetch(`/api/conversations/${chatId}/messages`);
+        if (msgsRes.ok) {
+            const newMessages = await msgsRes.json();
+            // Only update if length changed to avoid re-renders or scroll jumps if not needed
+            // Actually, comparing JSON string is easier for deep equality in this simple case
+            setMessages(prev => {
+                if (JSON.stringify(prev) !== JSON.stringify(newMessages)) {
+                    return newMessages;
+                }
+                return prev;
+            });
+        }
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [chatId, session]);
+
+  // Scroll to bottom when messages change
+  useEffect(() => {
+      scrollToBottom();
+  }, [messages]);
+
+
+  const handleSendMessage = async () => {
+    if (!newMessage.trim() || !session?.user) return;
+
+    const optimisticMsg: Message = {
+      id: Date.now().toString(), // Temp ID
+      content: newMessage,
+      senderId: session.user.id,
+      createdAt: new Date().toISOString(),
+      isRead: false
+    };
+
+    setMessages([...messages, optimisticMsg]);
+    setNewMessage("");
+
+    try {
+        const res = await fetch(`/api/conversations/${chatId}/messages`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ content: optimisticMsg.content })
+        });
+
+        if (res.ok) {
+            // Re-fetch to get real ID and server timestamp
+            const msgsRes = await fetch(`/api/conversations/${chatId}/messages`);
+            if (msgsRes.ok) {
+                setMessages(await msgsRes.json());
+            }
+        } else {
+            // Handle error (maybe toast)
+            console.error("Failed to send message");
+        }
+    } catch (error) {
+        console.error("Error sending message:", error);
+    }
+  };
+
+  if (loading) {
+      return (
+          <div className="flex items-center justify-center h-full w-full">
+              <Loader2 className="w-8 h-8 animate-spin text-primary" />
+          </div>
+      );
   }
 
-  const handleSendMessage = () => {
-    if (!newMessage.trim()) return;
-    const msg = {
-      id: messages.length + 1,
-      text: newMessage,
-      sender: "me",
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      status: "sent"
-    };
-    setMessages([...messages, msg]);
-    setNewMessage("");
-  };
+  if (!conversation) {
+      return <div className="flex items-center justify-center h-full">Chat not found</div>;
+  }
 
   return (
     <div className="flex h-full w-full">
@@ -59,17 +169,20 @@ export default function ChatWindow({ chatId }: ChatWindowProps) {
                   <ArrowLeft className="w-6 h-6" />
                 </Link>
                 <div className="relative">
-                  <div className="w-12 h-12 rounded-2xl overflow-hidden shadow-sm border border-border">
-                    <img src={selectedChat.avatar} alt={selectedChat.name} className="w-full h-full object-cover" />
+                  <div className="w-12 h-12 rounded-2xl overflow-hidden shadow-sm border border-border bg-secondary">
+                    <img
+                        src={conversation.otherParty.image || "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=100&h=100&fit=crop"}
+                        alt={conversation.otherParty.name}
+                        className="w-full h-full object-cover"
+                    />
                   </div>
-                  {selectedChat.online && (
-                    <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-card" />
-                  )}
+                  {/* Online status placeholder */}
+                   <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-card" />
                 </div>
                 <div>
-                  <h2 className="font-bold text-foreground">{selectedChat.name}</h2>
+                  <h2 className="font-bold text-foreground">{conversation.otherParty.name}</h2>
                   <p className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest">
-                    {selectedChat.online ? 'Online' : 'Offline'}
+                    Online
                   </p>
                 </div>
               </div>
@@ -94,30 +207,34 @@ export default function ChatWindow({ chatId }: ChatWindowProps) {
                 </span>
               </div>
 
-              {messages.map((msg) => (
-                <div
-                  key={msg.id}
-                  className={`flex ${msg.sender === 'me' ? 'justify-end' : 'justify-start'}`}
-                >
-                  <div className={`max-w-[70%] space-y-1 ${msg.sender === 'me' ? 'items-end' : 'items-start'}`}>
+              {messages.map((msg, index) => {
+                const isMe = msg.senderId === session?.user?.id;
+                return (
                     <div
-                      className={`p-4 rounded-[24px] text-sm shadow-sm ${
-                        msg.sender === 'me'
-                          ? "bg-primary text-primary-foreground rounded-tr-none"
-                          : "bg-card border border-border text-foreground rounded-tl-none"
-                      }`}
+                    key={msg.id || index}
+                    className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}
                     >
-                      {msg.text}
+                    <div className={`max-w-[70%] space-y-1 ${isMe ? 'items-end' : 'items-start'}`}>
+                        <div
+                        className={`p-4 rounded-[24px] text-sm shadow-sm ${
+                            isMe
+                            ? "bg-primary text-primary-foreground rounded-tr-none"
+                            : "bg-card border border-border text-foreground rounded-tl-none"
+                        }`}
+                        >
+                        {msg.content}
+                        </div>
+                        <div className={`flex items-center gap-1.5 text-[10px] font-bold text-muted-foreground ${isMe ? 'flex-row-reverse' : ''}`}>
+                        {format(new Date(msg.createdAt), "h:mm a")}
+                        {isMe && (
+                            msg.isRead ? <CheckCheck className="w-3 h-3 text-blue-500" /> : <Check className="w-3 h-3" />
+                        )}
+                        </div>
                     </div>
-                    <div className={`flex items-center gap-1.5 text-[10px] font-bold text-muted-foreground ${msg.sender === 'me' ? 'flex-row-reverse' : ''}`}>
-                      {msg.time}
-                      {msg.sender === 'me' && (
-                        msg.status === 'read' ? <CheckCheck className="w-3 h-3 text-blue-500" /> : <Check className="w-3 h-3" />
-                      )}
                     </div>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
+              <div ref={messagesEndRef} />
             </div>
 
             {/* Input Area */}
@@ -158,12 +275,16 @@ export default function ChatWindow({ chatId }: ChatWindowProps) {
         {/* Info Sidebar - Desktop Only */}
         <aside className="hidden xl:flex w-80 border-l border-border flex-col bg-card">
           <div className="p-8 text-center space-y-6">
-            <div className="w-32 h-32 mx-auto rounded-[40px] overflow-hidden shadow-2xl border-4 border-muted">
-              <img src={selectedChat.avatar} alt={selectedChat.name} className="w-full h-full object-cover" />
+            <div className="w-32 h-32 mx-auto rounded-[40px] overflow-hidden shadow-2xl border-4 border-muted bg-secondary">
+              <img
+                src={conversation.otherParty.image || "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=100&h=100&fit=crop"}
+                alt={conversation.otherParty.name}
+                className="w-full h-full object-cover"
+              />
             </div>
             <div>
-              <h3 className="text-xl font-bold text-foreground">{selectedChat.name}</h3>
-              <p className="text-sm text-muted-foreground mt-1">{selectedChat.type}</p>
+              <h3 className="text-xl font-bold text-foreground">{conversation.otherParty.name}</h3>
+              <p className="text-sm text-muted-foreground mt-1">{conversation.otherParty.type}</p>
             </div>
             <div className="flex justify-center gap-3">
               <button className="p-3 rounded-2xl border border-border hover:bg-muted transition-all">
@@ -182,7 +303,7 @@ export default function ChatWindow({ chatId }: ChatWindowProps) {
             <section>
               <h4 className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-4">Shared Media</h4>
               <div className="grid grid-cols-3 gap-2">
-                {[1,2,3,4,5,6].map(i => (
+                {[1,2,3].map(i => (
                   <div key={i} className="aspect-square rounded-xl bg-muted overflow-hidden border border-border">
                     <img src={`https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=100&h=100&fit=crop&q=${i}`} alt="media" className="w-full h-full object-cover" />
                   </div>

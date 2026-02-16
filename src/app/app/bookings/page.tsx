@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { format } from "date-fns";
 import { toast } from "sonner";
 
@@ -67,6 +68,8 @@ export default function BookingsAndOrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [processingId, setProcessingId] = useState<string | null>(null);
+  const [messageLoadingId, setMessageLoadingId] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     async function fetchData() {
@@ -116,6 +119,29 @@ export default function BookingsAndOrdersPage() {
         toast.error("Something went wrong");
     } finally {
         setProcessingId(null);
+    }
+  };
+
+  const handleMessage = async (salonId: string, bookingId: string) => {
+    setMessageLoadingId(bookingId);
+    try {
+        const res = await fetch('/api/conversations', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ salonId })
+        });
+
+        if (res.ok) {
+            const data = await res.json();
+            router.push(`/app/conversations/${data.id}`);
+        } else {
+            toast.error("Failed to start conversation");
+        }
+    } catch (error) {
+        console.error("Message error:", error);
+        toast.error("Something went wrong");
+    } finally {
+        setMessageLoadingId(null);
     }
   };
 
@@ -223,6 +249,16 @@ export default function BookingsAndOrdersPage() {
                       <Navigation className="w-4 h-4" />
                       Get Directions
                     </button>
+
+                    <button
+                        onClick={() => handleMessage(booking.salonId, booking.id)}
+                        disabled={messageLoadingId === booking.id}
+                        className="h-14 w-14 rounded-2xl border border-border flex items-center justify-center text-foreground hover:bg-muted transition-all"
+                        title="Message Salon"
+                    >
+                        {messageLoadingId === booking.id ? <Loader2 className="w-5 h-5 animate-spin" /> : <MessageCircle className="w-5 h-5" />}
+                    </button>
+
                     {booking.status !== 'cancelled' && booking.status !== 'completed' && (
                         <button className="flex-1 h-14 rounded-2xl border border-border text-foreground font-bold text-sm hover:bg-muted transition-all">
                             Reschedule

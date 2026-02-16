@@ -16,7 +16,8 @@ import {
   Info,
   Loader2,
   Store,
-  User
+  User,
+  MessageCircle
 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
@@ -85,6 +86,7 @@ export default function SalonDetailsPage() {
   const [availableSlots, setAvailableSlots] = useState<string[]>([]);
   const [loadingSlots, setLoadingSlots] = useState(false);
   const [bookingLoading, setBookingLoading] = useState(false);
+  const [messageLoading, setMessageLoading] = useState(false);
 
   // Review form state
   const [reviewRating, setReviewRating] = useState(5);
@@ -201,6 +203,36 @@ export default function SalonDetailsPage() {
         toast.error("Something went wrong");
     } finally {
         setBookingLoading(false);
+    }
+  };
+
+  const handleMessage = async () => {
+    if (!session) {
+      toast.error("Please login to message the salon");
+      router.push("/auth?mode=signin");
+      return;
+    }
+
+    setMessageLoading(true);
+
+    try {
+        const res = await fetch('/api/conversations', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ salonId: id })
+        });
+
+        if (res.ok) {
+            const data = await res.json();
+            router.push(`/app/conversations/${data.id}`);
+        } else {
+            toast.error("Failed to start conversation");
+        }
+    } catch (error) {
+        console.error("Message error:", error);
+        toast.error("Something went wrong");
+    } finally {
+        setMessageLoading(false);
     }
   };
 
@@ -356,6 +388,14 @@ export default function SalonDetailsPage() {
                 </div>
               </div>
               <div className="flex gap-2">
+                <button
+                  onClick={handleMessage}
+                  disabled={messageLoading}
+                  className="p-3 rounded-2xl border border-border hover:bg-muted transition-all disabled:opacity-50"
+                  title="Message Salon"
+                >
+                  {messageLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <MessageCircle className="w-5 h-5 text-muted-foreground" />}
+                </button>
                 <button className="p-3 rounded-2xl border border-border hover:bg-muted transition-all">
                   <Phone className="w-5 h-5 text-muted-foreground" />
                 </button>
