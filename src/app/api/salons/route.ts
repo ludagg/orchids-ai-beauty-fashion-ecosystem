@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { salons } from "@/db/schema/salons";
 import { nanoid } from "nanoid";
 import { headers } from "next/headers";
+import { and, or, ilike, eq, desc } from "drizzle-orm";
 
 const salonSchema = z.object({
   name: z.string().min(2),
@@ -16,10 +17,52 @@ const salonSchema = z.object({
   image: z.string().optional(),
 });
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
-    const allSalons = await db.select().from(salons);
-    return NextResponse.json(allSalons);
+    const { searchParams } = new URL(req.url);
+    const query = searchParams.get("search") || searchParams.get("query"); // Accept both
+    const city = searchParams.get("city");
+    const type = searchParams.get("type"); // SALON, BOUTIQUE, BOTH
+    const limit = parseInt(searchParams.get("limit") || "50");
+
+    const conditions = [];
+
+    // Filter by name or description (case-insensitive)
+    if (query) {
+      conditions.push(
+        or(
+          ilike(salons.name, `%${query}%`),
+          ilike(salons.description, `%${query}%`)
+        )
+      );
+    }
+
+    // Filter by city (case-insensitive)
+    if (city) {
+      conditions.push(ilike(salons.city, `%${city}%`));
+    }
+
+    // Filter by type
+    if (type) {
+        if (type === 'SALON') {
+             // Show salons that provide SALON services or both
+             conditions.push(or(eq(salons.type, 'SALON'), eq(salons.type, 'BOTH')));
+        } else if (type === 'BOUTIQUE') {
+             // Show salons that provide BOUTIQUE services or both
+             conditions.push(or(eq(salons.type, 'BOUTIQUE'), eq(salons.type, 'BOTH')));
+        } else if (type === 'BOTH') {
+             conditions.push(eq(salons.type, 'BOTH'));
+        }
+    }
+
+    const results = await db
+      .select()
+      .from(salons)
+      .where(and(...conditions))
+      .limit(limit)
+      .orderBy(desc(salons.createdAt));
+
+    return NextResponse.json(results);
   } catch (error) {
     console.error("Error fetching salons:", error);
     return NextResponse.json(

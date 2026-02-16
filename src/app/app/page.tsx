@@ -82,13 +82,13 @@ export default function DiscoverPage() {
     async function fetchData() {
         try {
             const [salonsRes, productsRes] = await Promise.all([
-                fetch('/api/salons'), // In a real app, maybe ?sort=rating&limit=3
+                fetch('/api/salons?limit=4'),
                 fetch('/api/products?limit=4')
             ]);
 
             if (salonsRes.ok) {
                 const data = await salonsRes.json();
-                setTopSalons(data.slice(0, 3)); // Client-side slice for now if API doesn't support limit
+                setTopSalons(data);
             }
             if (productsRes.ok) {
                 const data = await productsRes.json();
@@ -158,7 +158,7 @@ export default function DiscoverPage() {
               ))}
             </div>
 
-            <SectionHeader title="Top Rated Salons" icon={Scissors} href="/app/salons" />
+            <SectionHeader title="Top Rated Salons" icon={Scissors} href="/app/search?tab=salons" />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {topSalons.slice(0, 2).map((salon, i) => (
                 <SalonCard key={salon.id} salon={salon} index={i} />
@@ -166,7 +166,7 @@ export default function DiscoverPage() {
               {topSalons.length === 0 && <p className="text-muted-foreground">No salons found.</p>}
             </div>
 
-            <SectionHeader title="Recommended For You" icon={ShoppingBag} href="/app/marketplace" />
+            <SectionHeader title="Recommended For You" icon={ShoppingBag} href="/app/search?tab=marketplace" />
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {marketplacePicks.map((product, i) => (
                 <ProductCard key={product.id} product={product} index={i} />
