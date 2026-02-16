@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import {
   User,
   Settings,
@@ -9,7 +9,8 @@ import {
   CreditCard,
   UserCircle,
   ChevronDown,
-  LayoutDashboard
+  LayoutDashboard,
+  LogIn
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -25,23 +26,40 @@ import { useEffect } from "react";
 
 export default function UserAccount({ showLabel = true }: { showLabel?: boolean }) {
   const router = useRouter();
+  const pathname = usePathname();
   const { data: session, isPending } = authClient.useSession();
   const user = session?.user;
 
+  const isPublicPath =
+    pathname?.startsWith("/app/search") ||
+    pathname?.startsWith("/app/salons") ||
+    pathname?.startsWith("/app/marketplace");
+
   useEffect(() => {
-    if (!isPending && !session) {
+    if (!isPending && !session && !isPublicPath) {
       router.push("/auth");
     }
-  }, [isPending, session, router]);
+  }, [isPending, session, router, isPublicPath]);
 
-  if (isPending || !session) {
-      // Return a skeleton or nothing while checking/redirecting
+  if (isPending) {
       return (
           <div className="flex items-center gap-2 p-1.5 pr-3">
               <div className="w-8 h-8 rounded-full bg-muted animate-pulse" />
               {showLabel && <div className="h-4 w-20 bg-muted rounded animate-pulse hidden sm:block" />}
           </div>
       );
+  }
+
+  if (!session) {
+    if (isPublicPath) {
+      return (
+        <Link href="/auth" className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-primary-foreground hover:opacity-90 transition-opacity text-sm font-medium">
+          <LogIn className="w-4 h-4" />
+          <span>Sign In</span>
+        </Link>
+      );
+    }
+    return null; // Will redirect shortly
   }
 
   const initials = user?.name
