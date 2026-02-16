@@ -4,3 +4,5 @@ export * from './bookings';
 export * from './commerce';
 export * from './reviews';
 export * from './messaging';
+export * from './favorites';
+export * from './content';
