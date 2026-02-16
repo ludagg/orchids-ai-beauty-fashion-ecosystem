@@ -164,6 +164,7 @@ export default function Home() {
     <div className="min-h-screen bg-background text-foreground selection:bg-primary/10">
       <LandingNavbar />
 
+      <main id="main-content">
       <motion.section
         ref={heroRef}
         style={{ opacity: heroOpacity, scale: heroScale }}
@@ -863,6 +864,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      </main>
 
       <LandingFooter />
     </div>

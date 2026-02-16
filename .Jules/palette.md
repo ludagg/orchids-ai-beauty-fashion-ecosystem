@@ -12,3 +12,7 @@
 ## 2025-05-14 - Dark Mode Implementation with next-themes
 **Learning:** When implementing dark mode in Next.js with `next-themes`, use `resolvedTheme` instead of `theme` to account for system settings. Ensure hydration safety by checking a `mounted` state. Refactor hardcoded hex colors to semantic CSS variables early to ensure global consistency.
 **Action:** Always prefer `resolvedTheme` for icon logic and toggle states. Use semantic classes like `bg-background` and `text-foreground` in new components from the start.
+
+## 2026-02-16 - Layout Accessibility and Skip Links
+**Learning:** For a multi-page application, a consistent accessibility foundation requires not just ARIA labels on icon-only buttons, but also a global "Skip to Content" link and corresponding semantic <main id="main-content"> landmarks across all key entry points (landing, auth, and app layout).
+**Action:** Always implement a "Skip to Content" link in the root layout and ensure every major page or layout wraps its primary content in a <main id="main-content"> landmark.
