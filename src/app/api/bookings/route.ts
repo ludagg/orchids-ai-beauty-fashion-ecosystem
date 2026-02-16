@@ -1,10 +1,11 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
-import { bookings, services } from '@/db/schema';
+import { bookings, services, openingHours } from '@/db/schema';
 import { eq, desc, and, or, lt, gt } from 'drizzle-orm';
 import { nanoid } from 'nanoid';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
+import { getDay } from 'date-fns';
 
 export async function POST(req: Request) {
   try {
@@ -41,7 +42,35 @@ export async function POST(req: Request) {
         return { error: 'Service not found', status: 404 };
       }
 
-      // 2. Check for overlapping bookings
+      // 2. Validate Operating Hours
+      const dayOfWeek = getDay(start);
+      const salonHours = await tx.query.openingHours.findFirst({
+        where: and(
+            eq(openingHours.salonId, salonId),
+            eq(openingHours.dayOfWeek, dayOfWeek)
+        )
+      });
+
+      if (!salonHours || salonHours.isClosed || !salonHours.openTime || !salonHours.closeTime) {
+          return { error: 'Salon is closed on this day', status: 400 };
+      }
+
+      // Parse HH:MM to compare
+      const [openHour, openMinute] = salonHours.openTime.split(':').map(Number);
+      const [closeHour, closeMinute] = salonHours.closeTime.split(':').map(Number);
+
+      const openDateTime = new Date(start);
+      openDateTime.setHours(openHour, openMinute, 0, 0);
+
+      const closeDateTime = new Date(start);
+      closeDateTime.setHours(closeHour, closeMinute, 0, 0);
+
+      // Allow bookings that end exactly at closing time? Yes.
+      if (start < openDateTime || end > closeDateTime) {
+          return { error: 'Booking time is outside operating hours', status: 400 };
+      }
+
+      // 3. Check for overlapping bookings
       // Overlap condition: (StartA < EndB) and (EndA > StartB)
       // Only check against 'pending' or 'confirmed' bookings
       const conflicts = await tx.query.bookings.findMany({
@@ -60,7 +89,7 @@ export async function POST(req: Request) {
         return { error: 'This time slot is already booked', status: 409 };
       }
 
-      // 3. Create Booking
+      // 4. Create Booking
       const bookingId = nanoid();
       await tx.insert(bookings).values({
         id: bookingId,
