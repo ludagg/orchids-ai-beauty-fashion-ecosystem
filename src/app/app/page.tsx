@@ -17,10 +17,18 @@ import {
   Clock,
   TrendingUp,
   Zap,
-  Loader2
+  Loader2,
+  User
 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 // Mock Data for unimplemented sections
 const CATEGORIES = [
@@ -149,19 +157,68 @@ export default function DiscoverPage() {
           <div className="space-y-12">
             <HeroCarousel slides={HERO_SLIDES} />
 
-            <div className="grid grid-cols-2 gap-4">
-              <Link href="/app/ai-stylist" className="flex flex-col items-center justify-center p-4 rounded-2xl bg-gradient-to-br from-violet-500/10 to-fuchsia-500/10 border border-violet-200/20 hover:border-violet-500/30 transition-all group">
-                <div className="w-12 h-12 rounded-full bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                  <Sparkles className="w-6 h-6 text-violet-600 dark:text-violet-400" />
+            <div className="py-2">
+              <h2 className="text-2xl font-bold text-center mb-6 font-display">All you need</h2>
+              <Carousel
+                opts={{
+                  align: "start",
+                }}
+                className="w-full"
+              >
+                <CarouselContent className="-ml-2 md:-ml-4">
+                  {[
+                    {
+                      label: "AI Stylist",
+                      href: "/app/ai-stylist",
+                      icon: Sparkles,
+                      bg: "bg-gradient-to-br from-violet-500/10 to-fuchsia-500/10",
+                      border: "border-violet-200/20 hover:border-violet-500/30",
+                      iconBg: "bg-violet-100 dark:bg-violet-900/30",
+                      iconColor: "text-violet-600 dark:text-violet-400"
+                    },
+                    {
+                      label: "My Bookings",
+                      href: "/app/bookings",
+                      icon: Calendar,
+                      bg: "bg-gradient-to-br from-emerald-500/10 to-teal-500/10",
+                      border: "border-emerald-200/20 hover:border-emerald-500/30",
+                      iconBg: "bg-emerald-100 dark:bg-emerald-900/30",
+                      iconColor: "text-emerald-600 dark:text-emerald-400"
+                    },
+                    {
+                      label: "Wishlist",
+                      href: "/app/wishlist",
+                      icon: Heart,
+                      bg: "bg-gradient-to-br from-rose-500/10 to-pink-500/10",
+                      border: "border-rose-200/20 hover:border-rose-500/30",
+                      iconBg: "bg-rose-100 dark:bg-rose-900/30",
+                      iconColor: "text-rose-600 dark:text-rose-400"
+                    },
+                    {
+                      label: "My Profile",
+                      href: "/app/profile",
+                      icon: User,
+                      bg: "bg-gradient-to-br from-blue-500/10 to-cyan-500/10",
+                      border: "border-blue-200/20 hover:border-blue-500/30",
+                      iconBg: "bg-blue-100 dark:bg-blue-900/30",
+                      iconColor: "text-blue-600 dark:text-blue-400"
+                    }
+                  ].map((item, index) => (
+                    <CarouselItem key={index} className="pl-2 md:pl-4 basis-1/2 md:basis-1/3 lg:basis-1/4">
+                      <Link href={item.href} className={`flex flex-col items-center justify-center p-4 rounded-2xl border transition-all group h-full ${item.bg} ${item.border}`}>
+                        <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform ${item.iconBg}`}>
+                          <item.icon className={`w-6 h-6 ${item.iconColor}`} />
+                        </div>
+                        <span className="font-semibold text-sm text-foreground">{item.label}</span>
+                      </Link>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <div className="hidden md:block">
+                  <CarouselPrevious className="-left-4" />
+                  <CarouselNext className="-right-4" />
                 </div>
-                <span className="font-semibold text-sm text-foreground">AI Stylist</span>
-              </Link>
-              <Link href="/app/bookings" className="flex flex-col items-center justify-center p-4 rounded-2xl bg-gradient-to-br from-emerald-500/10 to-teal-500/10 border border-emerald-200/20 hover:border-emerald-500/30 transition-all group">
-                <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                  <Calendar className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
-                </div>
-                <span className="font-semibold text-sm text-foreground">My Bookings</span>
-              </Link>
+              </Carousel>
             </div>
 
             <SectionHeader title="Trending Styles" icon={Sparkles} href="/app/styles" />
