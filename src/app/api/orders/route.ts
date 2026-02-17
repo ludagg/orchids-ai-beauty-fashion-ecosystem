@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { orders, orderItems, products } from "@/db/schema/commerce";
-import { eq, desc } from "drizzle-orm";
+import { users } from "@/db/schema/auth";
+import { eq, desc, sql } from "drizzle-orm";
 import { nanoid } from "nanoid";
 import { headers } from "next/headers";
 import { sendEmail } from "@/lib/email";
@@ -97,11 +98,18 @@ export async function POST(req: NextRequest) {
                 priceAtPurchase: product.price
             });
 
-            // Update Stock (Optional: Reserve stock)
-            // For now, let's just decrement
+            // Update Stock
             await tx.update(products)
                 .set({ stock: product.stock - quantity })
                 .where(eq(products.id, productId));
+
+            // Award Loyalty Points (1 point per 1 unit currency i.e. 100 cents)
+            const pointsEarned = Math.floor(totalAmount / 100);
+            if (pointsEarned > 0) {
+                await tx.update(users)
+                    .set({ loyaltyPoints: sql`${users.loyaltyPoints} + ${pointsEarned}` })
+                    .where(eq(users.id, session.user.id));
+            }
         });
 
         // Send Order Confirmation Email

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { User, Mail, Phone, MapPin, Camera, Save, Globe, Instagram, Youtube, Loader2 } from "lucide-react";
+import { User, Mail, Phone, MapPin, Camera, Save, Globe, Instagram, Youtube, Loader2, Gift } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -84,7 +84,7 @@ export default function ProfilePage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold font-display">My Profile</h1>
-          <p className="text-muted-foreground mt-1">Manage your personal information and creator profile.</p>
+          <p className="text-muted-foreground mt-1">Manage your personal information, creator profile, and rewards.</p>
         </div>
         <Button onClick={handleSave} disabled={loading}>
           {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
@@ -93,9 +93,13 @@ export default function ProfilePage() {
       </div>
 
       <Tabs defaultValue="personal" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 mb-8">
+        <TabsList className="grid w-full grid-cols-3 mb-8">
           <TabsTrigger value="personal">Personal Info</TabsTrigger>
           <TabsTrigger value="creator">Creator Profile</TabsTrigger>
+          <TabsTrigger value="rewards" className="flex items-center gap-2">
+             <Gift className="w-4 h-4" />
+             Rewards
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="personal">
@@ -259,6 +263,64 @@ export default function ProfilePage() {
                   <Switch defaultChecked />
                 </div>
               </CardContent>
+            </Card>
+          </motion.div>
+        </TabsContent>
+
+        <TabsContent value="rewards">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="space-y-6"
+          >
+             <div className="grid md:grid-cols-3 gap-6">
+                <Card className="md:col-span-2 bg-gradient-to-br from-indigo-500 to-purple-600 text-white border-none shadow-xl relative overflow-hidden">
+                    <div className="absolute top-0 right-0 p-8 opacity-10">
+                        <Gift className="w-48 h-48 transform rotate-12" />
+                    </div>
+                    <CardHeader>
+                        <CardTitle className="text-2xl flex items-center gap-2">
+                             My Loyalty Points
+                        </CardTitle>
+                        <CardDescription className="text-indigo-100">Earn points with every booking and purchase.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="flex items-end gap-2">
+                            <span className="text-6xl font-bold font-display">{(session?.user as any)?.loyaltyPoints || 0}</span>
+                            <span className="text-xl font-medium mb-4 opacity-80">points</span>
+                        </div>
+                        <p className="mt-4 text-sm text-indigo-100 bg-white/10 p-3 rounded-lg inline-block border border-white/10 backdrop-blur-sm">
+                            100 points = $1.00 discount (Redemption Coming Soon)
+                        </p>
+                    </CardContent>
+                </Card>
+
+                <Card className="md:col-span-1">
+                     <CardHeader>
+                        <CardTitle>Level</CardTitle>
+                        <CardDescription>Your current tier</CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex flex-col items-center justify-center pt-2">
+                         <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-yellow-300 to-yellow-500 flex items-center justify-center shadow-lg mb-4">
+                             <span className="text-3xl">🌟</span>
+                         </div>
+                         <h3 className="text-xl font-bold text-yellow-600">Gold Member</h3>
+                         <p className="text-xs text-muted-foreground mt-1">Top 10% of users</p>
+                    </CardContent>
+                </Card>
+             </div>
+
+            <Card>
+                <CardHeader>
+                    <CardTitle>History</CardTitle>
+                    <CardDescription>Recent point activity.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <div className="text-center py-10 text-muted-foreground flex flex-col items-center">
+                        <Gift className="w-8 h-8 opacity-20 mb-2" />
+                        <p>No recent activity.</p>
+                    </div>
+                </CardContent>
             </Card>
           </motion.div>
         </TabsContent>

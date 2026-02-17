@@ -22,6 +22,15 @@ export const videos = pgTable('videos', {
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 
+export const videoComments = pgTable('video_comments', {
+  id: text('id').primaryKey(),
+  userId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  videoId: text('video_id').notNull().references(() => videos.id, { onDelete: 'cascade' }),
+  content: text('content').notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
 export const videoLikes = pgTable('video_likes', {
   id: text('id').primaryKey(),
   userId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
@@ -50,7 +59,19 @@ export const videosRelations = relations(videos, ({ one, many }) => ({
     references: [salons.id],
   }),
   likes: many(videoLikes),
+  comments: many(videoComments),
   products: many(videoProducts),
+}));
+
+export const videoCommentsRelations = relations(videoComments, ({ one }) => ({
+  user: one(users, {
+    fields: [videoComments.userId],
+    references: [users.id],
+  }),
+  video: one(videos, {
+    fields: [videoComments.videoId],
+    references: [videos.id],
+  }),
 }));
 
 export const videoLikesRelations = relations(videoLikes, ({ one }) => ({
