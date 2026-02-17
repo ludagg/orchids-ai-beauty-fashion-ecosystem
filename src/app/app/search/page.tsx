@@ -10,10 +10,7 @@ const TABS = [
   { id: "all", label: "All Results" },
   { id: "salons", label: "Salons", icon: Scissors },
   { id: "marketplace", label: "Marketplace", icon: ShoppingBag },
-  // Keeping these as comments or disabled to show future roadmap but focusing on real data
-  // { id: "videos", label: "Videos", icon: Video },
-  // { id: "creators", label: "Creators", icon: Users },
-  // { id: "styles", label: "Styles", icon: Sparkles },
+  { id: "videos", label: "Videos", icon: Video },
 ];
 
 export default function SearchPage() {
@@ -36,9 +33,15 @@ function SearchContent() {
   const [maxPrice, setMaxPrice] = useState(searchParams.get("maxPrice") || "");
   const [activeTab, setActiveTab] = useState(searchParams.get("tab") || "all");
 
-  const [results, setResults] = useState<{ salons: any[], marketplace: any[] }>({ salons: [], marketplace: [] });
+  const [results, setResults] = useState<{ salons: any[], marketplace: any[], videos: any[] }>({ salons: [], marketplace: [], videos: [] });
   const [loading, setLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
+
+  const latParam = searchParams.get("lat");
+  const lngParam = searchParams.get("lng");
+  const [userLoc, setUserLoc] = useState<{lat: number, lng: number} | null>(
+      latParam && lngParam ? { lat: parseFloat(latParam), lng: parseFloat(lngParam) } : null
+  );
 
   // Sync URL with state (debounced)
   useEffect(() => {
@@ -49,11 +52,14 @@ function SearchContent() {
     if (minPrice) params.set("minPrice", minPrice);
     if (maxPrice) params.set("maxPrice", maxPrice);
     if (activeTab !== "all") params.set("tab", activeTab);
+    if (userLoc) {
+        params.set("lat", userLoc.lat.toString());
+        params.set("lng", userLoc.lng.toString());
+    }
 
     const newUrl = `/app/search?${params.toString()}`;
-    // Use replace to avoid cluttering history stack with every keystroke
     window.history.replaceState(null, "", newUrl);
-  }, [query, city, type, minPrice, maxPrice, activeTab]);
+  }, [query, city, type, minPrice, maxPrice, activeTab, userLoc]);
 
   // Fetch Data
   useEffect(() => {
@@ -62,16 +68,21 @@ function SearchContent() {
       try {
         const fetchSalons = activeTab === "all" || activeTab === "salons";
         const fetchProducts = activeTab === "all" || activeTab === "marketplace";
+        const fetchVideos = activeTab === "all" || activeTab === "videos";
 
         const promises = [];
 
         if (fetchSalons) {
             const params = new URLSearchParams();
             if (query) params.append("query", query);
-            if (city) params.append("city", city);
+            if (city && city !== "Current Location") params.append("city", city);
             if (type) params.append("type", type);
             if (minPrice) params.append("minPrice", minPrice);
             if (maxPrice) params.append("maxPrice", maxPrice);
+            if (userLoc) {
+                params.append("lat", userLoc.lat.toString());
+                params.append("lng", userLoc.lng.toString());
+            }
             if (activeTab === "all") params.append("limit", "6");
             promises.push(fetch(`/api/salons?${params.toString()}`).then(res => res.json()));
         } else {
@@ -81,25 +92,27 @@ function SearchContent() {
         if (fetchProducts) {
             const params = new URLSearchParams();
             if (query) params.append("search", query);
-            // Products API doesn't support city filtering directly on the product table efficiently without join logic in API
-            // For now, product search is mainly by name/category.
-            // If we need city for products, we'd pass salonId or handle it in backend.
-            // The API logic for products does filter by salonId but not city directly on product level unless we updated it.
-            // But let's check product API again... it has `salon: { columns: { name: true, city: true... } }`
-            // But filtering happens in `where`.
-            // The current products API `src/app/api/products/route.ts` only filters by `category`, `salonId`, `search` (name), `featured`.
-            // So City filter won't apply to products yet. That's fine for now.
             if (activeTab === "all") params.append("limit", "8");
             promises.push(fetch(`/api/products?${params.toString()}`).then(res => res.json()));
         } else {
             promises.push(Promise.resolve([]));
         }
 
-        const [salonsData, productsData] = await Promise.all(promises);
+        if (fetchVideos) {
+            const params = new URLSearchParams();
+            // Video search could be added later, currently fetches recent/popular
+            if (activeTab === "all") params.append("limit", "8");
+            promises.push(fetch(`/api/videos?${params.toString()}`).then(res => res.json()));
+        } else {
+             promises.push(Promise.resolve([]));
+        }
+
+        const [salonsData, productsData, videosData] = await Promise.all(promises);
 
         setResults({
             salons: Array.isArray(salonsData) ? salonsData : [],
-            marketplace: Array.isArray(productsData) ? productsData : []
+            marketplace: Array.isArray(productsData) ? productsData : [],
+            videos: Array.isArray(videosData) ? videosData : []
         });
 
       } catch (error) {
@@ -111,7 +124,7 @@ function SearchContent() {
 
     const timer = setTimeout(fetchData, 500);
     return () => clearTimeout(timer);
-  }, [query, city, type, minPrice, maxPrice, activeTab]);
+  }, [query, city, type, minPrice, maxPrice, activeTab, userLoc]);
 
   const clearFilters = () => {
     setQuery("");
@@ -119,10 +132,28 @@ function SearchContent() {
     setType("");
     setMinPrice("");
     setMaxPrice("");
+    setUserLoc(null);
   };
 
-  const hasFilters = query || city || type || minPrice || maxPrice;
-  const resultCount = results.salons.length + results.marketplace.length;
+  const handleUseLocation = () => {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+            setUserLoc({
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            });
+            setCity("Current Location"); // Visual feedback
+        }, (error) => {
+            console.error("Error getting location", error);
+            alert("Could not retrieve your location.");
+        });
+    } else {
+        alert("Geolocation is not supported by this browser.");
+    }
+  };
+
+  const hasFilters = query || city || type || minPrice || maxPrice || userLoc;
+  const resultCount = results.salons.length + results.marketplace.length + results.videos.length;
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -147,11 +178,11 @@ function SearchContent() {
                 </div>
                 <button
                     onClick={() => setShowFilters(!showFilters)}
-                    className={`flex items-center gap-2 px-5 py-3 rounded-2xl font-medium transition-all ${showFilters || (city || type) ? 'bg-primary text-primary-foreground' : 'bg-secondary text-foreground hover:bg-secondary/80'}`}
+                    className={`flex items-center gap-2 px-5 py-3 rounded-2xl font-medium transition-all ${showFilters || (city || type || userLoc) ? 'bg-primary text-primary-foreground' : 'bg-secondary text-foreground hover:bg-secondary/80'}`}
                 >
                     <Filter className="w-5 h-5" />
                     Filters
-                    {(city || type) && <span className="ml-1 w-2 h-2 rounded-full bg-rose-500" />}
+                    {(city || type || userLoc) && <span className="ml-1 w-2 h-2 rounded-full bg-rose-500" />}
                 </button>
             </div>
 
@@ -164,7 +195,12 @@ function SearchContent() {
                 >
                     <div className="p-4 rounded-2xl bg-secondary/50 border border-border grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
-                            <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5 block">City</label>
+                            <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5 flex justify-between">
+                                City
+                                <button onClick={handleUseLocation} className="text-primary hover:underline flex items-center gap-1">
+                                    <MapPin className="w-3 h-3" /> Near Me
+                                </button>
+                            </label>
                             <div className="relative">
                                 <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                                 <input
@@ -366,9 +402,53 @@ function SearchContent() {
                         </div>
                     </section>
                 )}
+
+                 {/* Videos Grid */}
+                 {results.videos.length > 0 && (activeTab === "all" || activeTab === "videos") && (
+                    <section>
+                        {activeTab === "all" && (
+                            <div className="flex items-center justify-between mb-6">
+                                <h2 className="text-xl font-bold flex items-center gap-2">
+                                    <Video className="w-5 h-5 text-purple-500" /> Videos
+                                </h2>
+                                <button onClick={() => setActiveTab('videos')} className="text-sm font-semibold text-primary hover:underline">View All</button>
+                            </div>
+                        )}
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            {results.videos.map((video, i) => (
+                                <VideoCard key={video.id} video={video} index={i} />
+                            ))}
+                        </div>
+                    </section>
+                 )}
             </div>
         )}
       </div>
     </div>
+  );
+}
+
+function VideoCard({ video, index }: { video: any, index: number }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.05 }}
+      className="group cursor-pointer"
+    >
+      <div className="relative aspect-[9/16] rounded-2xl overflow-hidden mb-3 shadow-md border border-border bg-black">
+        <img src={video.thumbnailUrl || video.videoUrl || "https://images.unsplash.com/photo-1562322140-8baeececf3df?w=400&h=600&fit=crop"} alt={video.title} className="w-full h-full object-cover opacity-80 group-hover:opacity-60 transition-opacity duration-300" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+            <Play className="w-5 h-5 text-white fill-white" />
+          </div>
+        </div>
+        <div className="absolute bottom-3 left-3 right-3 text-white">
+          <p className="text-xs font-medium bg-black/50 backdrop-blur px-2 py-1 rounded-full inline-block mb-1">{video.views} views</p>
+          <p className="font-semibold text-sm truncate">{video.title}</p>
+          <p className="text-xs opacity-80">@{video.user?.name || "creator"}</p>
+        </div>
+      </div>
+    </motion.div>
   );
 }

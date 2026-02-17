@@ -58,32 +58,22 @@ const HERO_SLIDES = [
   }
 ];
 
-const TRENDING_STYLES = [
-  { id: 1, title: "Boho Chic", image: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400&h=500&fit=crop", creator: "@sarastyle", likes: "2.4k" },
-  { id: 2, title: "Urban Edge", image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=500&fit=crop", creator: "@cityvibe", likes: "1.8k" },
-  { id: 3, title: "Minimalist", image: "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=400&h=500&fit=crop", creator: "@pure", likes: "3.1k" },
-  { id: 4, title: "Classic", image: "https://images.unsplash.com/photo-1550614000-4b9519e09063?w=400&h=500&fit=crop", creator: "@timeless", likes: "950" },
-];
-
-const VIDEO_CLIPS = [
-  { id: 1, title: "Summer Hair Trends", creator: "@hairbyjess", views: "12k", image: "https://images.unsplash.com/photo-1562322140-8baeececf3df?w=400&h=600&fit=crop" },
-  { id: 2, title: "Makeup Tutorial 101", creator: "@glamguru", views: "8.5k", image: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=400&h=600&fit=crop" },
-  { id: 3, title: "OOTD Inspiration", creator: "@fashionista", views: "22k", image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=600&fit=crop" },
-  { id: 4, title: "Skincare Routine", creator: "@skinfirst", views: "5k", image: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=400&h=600&fit=crop" },
-];
-
 export default function DiscoverPage() {
   const [activeCategory, setActiveCategory] = useState("all");
   const [topSalons, setTopSalons] = useState<any[]>([]);
   const [marketplacePicks, setMarketplacePicks] = useState<any[]>([]);
+  const [trendingStyles, setTrendingStyles] = useState<any[]>([]);
+  const [videoClips, setVideoClips] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
         try {
-            const [salonsRes, productsRes] = await Promise.all([
+            const [salonsRes, productsRes, stylesRes, videosRes] = await Promise.all([
                 fetch('/api/salons?limit=4'),
-                fetch('/api/products?limit=4')
+                fetch('/api/products?limit=4'),
+                fetch('/api/videos?sortBy=popular&limit=4'), // Using popular videos as trending styles for now
+                fetch('/api/videos?limit=4')
             ]);
 
             if (salonsRes.ok) {
@@ -93,6 +83,14 @@ export default function DiscoverPage() {
             if (productsRes.ok) {
                 const data = await productsRes.json();
                 setMarketplacePicks(data);
+            }
+            if (stylesRes.ok) {
+                const data = await stylesRes.json();
+                setTrendingStyles(data);
+            }
+             if (videosRes.ok) {
+                const data = await videosRes.json();
+                setVideoClips(data);
             }
         } catch (error) {
             console.error("Error fetching homepage data:", error);
@@ -122,9 +120,10 @@ export default function DiscoverPage() {
       case "styles":
         return (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {TRENDING_STYLES.map((style, i) => (
+            {trendingStyles.map((style, i) => (
               <StyleCard key={style.id} style={style} index={i} />
             ))}
+             {trendingStyles.length === 0 && <p className="text-muted-foreground">No styles found.</p>}
           </div>
         );
       case "shop":
@@ -139,9 +138,10 @@ export default function DiscoverPage() {
       case "videos":
         return (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {VIDEO_CLIPS.map((video, i) => (
+            {videoClips.map((video, i) => (
               <VideoCard key={video.id} video={video} index={i} />
             ))}
+            {videoClips.length === 0 && <p className="text-muted-foreground">No videos found.</p>}
           </div>
         );
       default:
@@ -151,11 +151,12 @@ export default function DiscoverPage() {
 
             <SectionHeader title="Trending Styles" icon={Sparkles} href="/app/styles" />
             <div className="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4 scroll-smooth no-scrollbar">
-              {TRENDING_STYLES.map((style, i) => (
+              {trendingStyles.map((style, i) => (
                 <div key={style.id} className="w-[180px] flex-shrink-0">
                   <StyleCard style={style} index={i} />
                 </div>
               ))}
+              {trendingStyles.length === 0 && <p className="text-muted-foreground pl-4">No trending styles yet.</p>}
             </div>
 
             <SectionHeader title="Top Rated Salons" icon={Scissors} href="/app/search?tab=salons" />
@@ -299,7 +300,7 @@ function StyleCard({ style, index }: { style: any, index: number }) {
       className="group cursor-pointer"
     >
       <div className="relative aspect-[3/4] rounded-2xl overflow-hidden mb-3 shadow-md border border-border bg-secondary">
-        <img src={style.image} alt={style.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+        <img src={style.thumbnailUrl || style.videoUrl || "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400&h=500&fit=crop"} alt={style.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
         <div className="absolute top-3 right-3 translate-y-[-10px] opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
@@ -309,7 +310,7 @@ function StyleCard({ style, index }: { style: any, index: number }) {
         </div>
 
         <div className="absolute bottom-3 left-3 text-white translate-y-[10px] opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-          <p className="text-xs font-medium bg-black/50 backdrop-blur px-2 py-1 rounded-full">{style.creator}</p>
+          <p className="text-xs font-medium bg-black/50 backdrop-blur px-2 py-1 rounded-full">@{style.user?.name || "creator"}</p>
         </div>
       </div>
       <div className="flex justify-between items-start">
@@ -331,7 +332,7 @@ function VideoCard({ video, index }: { video: any, index: number }) {
       className="group cursor-pointer"
     >
       <div className="relative aspect-[9/16] rounded-2xl overflow-hidden mb-3 shadow-md border border-border bg-black">
-        <img src={video.image} alt={video.title} className="w-full h-full object-cover opacity-80 group-hover:opacity-60 transition-opacity duration-300" />
+        <img src={video.thumbnailUrl || video.videoUrl || "https://images.unsplash.com/photo-1562322140-8baeececf3df?w=400&h=600&fit=crop"} alt={video.title} className="w-full h-full object-cover opacity-80 group-hover:opacity-60 transition-opacity duration-300" />
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
             <Play className="w-5 h-5 text-white fill-white" />
@@ -340,7 +341,7 @@ function VideoCard({ video, index }: { video: any, index: number }) {
         <div className="absolute bottom-3 left-3 right-3 text-white">
           <p className="text-xs font-medium bg-black/50 backdrop-blur px-2 py-1 rounded-full inline-block mb-1">{video.views} views</p>
           <p className="font-semibold text-sm truncate">{video.title}</p>
-          <p className="text-xs opacity-80">{video.creator}</p>
+          <p className="text-xs opacity-80">@{video.user?.name || "creator"}</p>
         </div>
       </div>
     </motion.div>
