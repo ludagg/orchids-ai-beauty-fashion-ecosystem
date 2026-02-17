@@ -10,45 +10,130 @@ import {
   Video,
   Lock,
   Grid,
-  Users
+  Users,
+  Loader2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useParams } from "next/navigation";
-import { useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { toast } from "sonner";
+import { useSession } from "@/lib/auth-client";
 
-type CreatorVideo = {
-  id: number;
-  views: string;
-  thumbnail: string;
-};
+interface CreatorProfile {
+    user: {
+        id: string;
+        name: string;
+        image: string | null;
+        bio: string;
+        handle: string;
+    };
+    stats: {
+        followers: number;
+        following: number;
+        likes: number;
+    };
+    isFollowing: boolean;
+}
 
-// Mock Data matching the previous structure but adapted for the new layout
-const creatorData = {
-  name: "Ananya Sharma",
-  handle: "@ananya_style",
-  role: "Fashion & Lifestyle Creator",
-  bio: "Exploring the intersection of sustainability and high fashion. India-based. Minimalist at heart. 🌿",
-  avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop",
-  followers: "124K",
-  following: "432",
-  likes: "2.4M",
-  isFollowing: false,
-  recentVideos: [
-    { id: 1, views: "45K", thumbnail: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400&h=600&fit=crop" },
-    { id: 2, views: "12K", thumbnail: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=400&h=600&fit=crop" },
-    { id: 3, views: "89K", thumbnail: "https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=400&h=600&fit=crop" },
-    { id: 4, views: "34K", thumbnail: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=600&fit=crop" },
-    { id: 5, views: "15K", thumbnail: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400&h=600&fit=crop" },
-    { id: 6, views: "28K", thumbnail: "https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?w=400&h=600&fit=crop" },
-  ] as CreatorVideo[]
-};
+interface Video {
+    id: string;
+    title: string;
+    thumbnailUrl: string;
+    views: number;
+}
 
 export default function CreatorProfilePage() {
   const { id } = useParams();
-  const [isFollowing, setIsFollowing] = useState(creatorData.isFollowing);
+  const router = useRouter();
+  const { data: session } = useSession();
+
+  const [profile, setProfile] = useState<CreatorProfile | null>(null);
+  const [videos, setVideos] = useState<Video[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [followingLoading, setFollowingLoading] = useState(false);
+
+  useEffect(() => {
+    async function fetchData() {
+        if (!id) return;
+        try {
+            const [profileRes, videosRes] = await Promise.all([
+                fetch(`/api/users/${id}`),
+                fetch(`/api/videos?userId=${id}`)
+            ]);
+
+            if (profileRes.ok) {
+                setProfile(await profileRes.json());
+            }
+            if (videosRes.ok) {
+                setVideos(await videosRes.json());
+            }
+        } catch (error) {
+            console.error("Error fetching creator:", error);
+            toast.error("Failed to load profile");
+        } finally {
+            setLoading(false);
+        }
+    }
+    fetchData();
+  }, [id]);
+
+  const handleFollow = async () => {
+      if (!session) {
+          toast.error("Please login to follow creators");
+          router.push("/auth?mode=signin");
+          return;
+      }
+      if (!profile) return;
+
+      setFollowingLoading(true);
+      try {
+          const res = await fetch(`/api/users/${profile.user.id}/follow`, {
+              method: 'POST'
+          });
+
+          if (res.ok) {
+              const data = await res.json();
+              setProfile(prev => prev ? ({
+                  ...prev,
+                  isFollowing: data.following,
+                  stats: {
+                      ...prev.stats,
+                      followers: data.following ? prev.stats.followers + 1 : prev.stats.followers - 1
+                  }
+              }) : null);
+              toast.success(data.following ? "Following!" : "Unfollowed");
+          } else {
+              const err = await res.json();
+              toast.error(err.error || "Action failed");
+          }
+      } catch (error) {
+          console.error("Follow error", error);
+          toast.error("Something went wrong");
+      } finally {
+          setFollowingLoading(false);
+      }
+  };
+
+  if (loading) {
+      return (
+          <div className="flex justify-center items-center h-screen">
+              <Loader2 className="w-10 h-10 animate-spin text-primary" />
+          </div>
+      )
+  }
+
+  if (!profile) {
+      return (
+        <div className="text-center py-20">
+            <h2 className="text-xl font-bold">User not found</h2>
+        </div>
+      )
+  }
+
+  const { user, stats, isFollowing } = profile;
 
   return (
     <div className="max-w-4xl mx-auto min-h-screen pb-20 pt-8 px-4">
@@ -59,8 +144,8 @@ export default function CreatorProfilePage() {
         <div className="relative group">
            <div className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-background shadow-xl overflow-hidden">
                 <Avatar className="w-full h-full">
-                    <AvatarImage src={creatorData.avatar} className="object-cover" />
-                    <AvatarFallback>AS</AvatarFallback>
+                    <AvatarImage src={user.image || undefined} className="object-cover" />
+                    <AvatarFallback>{user.name.substring(0, 2).toUpperCase()}</AvatarFallback>
                 </Avatar>
             </div>
         </div>
@@ -68,26 +153,25 @@ export default function CreatorProfilePage() {
         {/* Name & Handle */}
         <div className="space-y-1">
             <h1 className="text-2xl font-bold tracking-tight font-display flex items-center justify-center gap-2">
-                {creatorData.name}
-                <Badge variant="secondary" className="text-[10px] h-5 px-1.5 rounded-full bg-blue-100 text-blue-700 hover:bg-blue-200 dark:bg-blue-900/30 dark:text-blue-400">
-                    Pro
-                </Badge>
+                {user.name}
+                {/* Check role if available, for now assume standard badge logic or hide */}
+                {/* <Badge variant="secondary" className="text-[10px] h-5 px-1.5 rounded-full bg-blue-100 text-blue-700 hover:bg-blue-200 dark:bg-blue-900/30 dark:text-blue-400">Pro</Badge> */}
             </h1>
-            <p className="text-muted-foreground font-medium">{creatorData.handle}</p>
+            <p className="text-muted-foreground font-medium">{user.handle}</p>
         </div>
 
         {/* Stats Row */}
         <div className="flex items-center justify-center gap-8 md:gap-12 py-2 w-full max-w-2xl">
             <div className="flex flex-col items-center cursor-pointer hover:opacity-80 transition-opacity">
-                <span className="text-lg font-bold">{creatorData.following}</span>
+                <span className="text-lg font-bold">{stats.following}</span>
                 <span className="text-xs text-muted-foreground uppercase tracking-wider">Following</span>
             </div>
             <div className="flex flex-col items-center cursor-pointer hover:opacity-80 transition-opacity">
-                <span className="text-lg font-bold">{creatorData.followers}</span>
+                <span className="text-lg font-bold">{stats.followers}</span>
                 <span className="text-xs text-muted-foreground uppercase tracking-wider">Followers</span>
             </div>
              <div className="flex flex-col items-center">
-                <span className="text-lg font-bold">{creatorData.likes}</span>
+                <span className="text-lg font-bold">{stats.likes}</span>
                 <span className="text-xs text-muted-foreground uppercase tracking-wider">Likes</span>
             </div>
         </div>
@@ -97,10 +181,11 @@ export default function CreatorProfilePage() {
             <Button
                 className={`flex-1 min-w-[120px] transition-all ${isFollowing ? "bg-muted text-foreground hover:bg-muted/80" : ""}`}
                 size="lg"
-                onClick={() => setIsFollowing(!isFollowing)}
+                onClick={handleFollow}
+                disabled={followingLoading}
                 variant={isFollowing ? "secondary" : "default"}
             >
-                {isFollowing ? "Following" : "Follow"}
+                {followingLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : (isFollowing ? "Following" : "Follow")}
             </Button>
             <Button variant="secondary" size="lg" className="flex-1 min-w-[120px]">
                 Message
@@ -112,8 +197,7 @@ export default function CreatorProfilePage() {
 
         {/* Bio */}
          <p className="text-sm text-center max-w-md mx-auto leading-relaxed pt-2">
-            {creatorData.bio} <br/>
-            <a href="#" className="text-primary hover:underline font-medium">linktr.ee/ananya_style</a>
+            {user.bio}
         </p>
 
       </div>
@@ -138,11 +222,15 @@ export default function CreatorProfilePage() {
         </TabsList>
 
         <TabsContent value="videos" className="mt-0">
-             <div className="grid grid-cols-3 gap-px md:gap-1">
-                {creatorData.recentVideos.map((video) => (
-                    <VideoCard key={video.id} video={video} />
-                ))}
-             </div>
+             {videos.length === 0 ? (
+                 <div className="text-center py-20 text-muted-foreground">No videos yet.</div>
+             ) : (
+                <div className="grid grid-cols-3 gap-px md:gap-1">
+                    {videos.map((video) => (
+                        <VideoCard key={video.id} video={video} />
+                    ))}
+                </div>
+             )}
         </TabsContent>
 
          <TabsContent value="liked" className="mt-0">
@@ -152,7 +240,7 @@ export default function CreatorProfilePage() {
                 </div>
                 <h3 className="text-lg font-medium">This user's liked videos are private</h3>
                 <p className="text-muted-foreground text-sm max-w-xs">
-                    Videos liked by {creatorData.name} are currently hidden.
+                    Videos liked by {user.name} are currently hidden.
                 </p>
             </div>
         </TabsContent>
@@ -161,14 +249,20 @@ export default function CreatorProfilePage() {
   );
 }
 
-function VideoCard({ video }: { video: CreatorVideo }) {
+function VideoCard({ video }: { video: Video }) {
     return (
         <div className="aspect-[9/16] relative bg-muted cursor-pointer overflow-hidden group">
-            <img
-                src={video.thumbnail}
-                alt="Video thumbnail"
-                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-            />
+            {video.thumbnailUrl ? (
+                 <img
+                    src={video.thumbnailUrl}
+                    alt={video.title}
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+            ) : (
+                <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+                    <Video className="w-8 h-8 opacity-20" />
+                </div>
+            )}
             <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                  <Play className="w-8 h-8 text-white fill-white" />
             </div>

@@ -134,6 +134,16 @@ export async function POST(req: NextRequest) {
                             });
                         }
 
+                        // Notify Booker (User)
+                        await createNotification({
+                            userId: session.user.id,
+                            type: 'booking',
+                            title: 'Booking Confirmed',
+                            message: `Your booking for ${bookingDetails.service.name} at ${bookingDetails.salon.name} is confirmed.`,
+                            link: `/app/bookings`,
+                            metadata: { bookingId: newBookingId }
+                        });
+
                         if (session.user?.email) {
                             const html = EmailTemplates.bookingConfirmation(bookingDetails, session.user);
                             await sendEmail({
