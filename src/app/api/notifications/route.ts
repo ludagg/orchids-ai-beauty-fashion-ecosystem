@@ -21,6 +21,7 @@ export async function GET(req: NextRequest) {
       limit: 50, // Limit to 50 recent notifications
     });
 
+    console.log(`Fetched ${userNotifications.length} notifications for user ${session.user.id}`);
     return NextResponse.json(userNotifications);
   } catch (error) {
     console.error("Error fetching notifications:", error);

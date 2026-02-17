@@ -15,10 +15,14 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: 'Missing parameters' }, { status: 400 });
     }
 
-    const date = new Date(dateStr);
-    if (isNaN(date.getTime())) {
-        return NextResponse.json({ error: 'Invalid date' }, { status: 400 });
+    // Fix Date Parsing: Force local interpretation of YYYY-MM-DD
+    const [year, month, day] = dateStr.split('-').map(Number);
+    if (!year || !month || !day) {
+        return NextResponse.json({ error: 'Invalid date format (YYYY-MM-DD)' }, { status: 400 });
     }
+    const date = new Date(year, month - 1, day); // Local time midnight
+
+    console.log(`Checking availability for Salon: ${salonId}, Service: ${serviceId}, Date: ${dateStr} (Day: ${getDay(date)})`);
 
     const dayStart = startOfDay(date);
     const dayEnd = endOfDay(date);
@@ -30,6 +34,7 @@ export async function GET(req: Request) {
     });
 
     if (!service) {
+      console.error(`Service ${serviceId} not found`);
       return NextResponse.json({ error: 'Service not found' }, { status: 404 });
     }
 
@@ -45,6 +50,7 @@ export async function GET(req: Request) {
 
     // If no hours found or closed, return empty slots
     if (!salonHours || salonHours.isClosed || !salonHours.openTime || !salonHours.closeTime) {
+        console.log(`Salon closed or no hours for day ${dayOfWeek}`);
         return NextResponse.json([]);
     }
 
@@ -83,10 +89,9 @@ export async function GET(req: Request) {
     const endTime = new Date(dayStart);
     endTime.setHours(closeHour, closeMinute, 0, 0);
 
-    // If the close time is past midnight (e.g. 02:00 next day), we'd need more complex logic.
-    // For now, assuming standard day hours (e.g., 09:00 - 21:00).
     // If endTime is before startTime (e.g. open 10am close 9am), return empty.
     if (endTime <= currentTime) {
+        console.log(`Invalid operating hours: Open ${salonHours.openTime} - Close ${salonHours.closeTime}`);
         return NextResponse.json([]);
     }
 
@@ -113,6 +118,7 @@ export async function GET(req: Request) {
       currentTime = addMinutes(currentTime, interval);
     }
 
+    console.log(`Generated ${slots.length} slots`);
     return NextResponse.json(slots);
   } catch (error) {
     console.error('Error checking availability:', error);

@@ -63,6 +63,7 @@ export default function ProductDetailsPage() {
   const [loading, setLoading] = useState(true);
   const [activeImage, setActiveImage] = useState(0);
   const [reserving, setReserving] = useState(false);
+  const [wishlisting, setWishlisting] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [chatLoading, setChatLoading] = useState(false);
 
@@ -97,6 +98,33 @@ export default function ProductDetailsPage() {
 
     fetchData();
   }, [id]);
+
+  const handleWishlist = async () => {
+    if (!session) {
+        toast.error("Please login to save items");
+        router.push("/auth?mode=signin");
+        return;
+    }
+
+    setWishlisting(true);
+    try {
+        const res = await fetch('/api/favorites', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ productId: id })
+        });
+
+        if (res.ok) {
+            toast.success("Added to wishlist!");
+        } else {
+            toast.error("Failed to add to wishlist");
+        }
+    } catch (error) {
+        console.error("Wishlist error:", error);
+    } finally {
+        setWishlisting(false);
+    }
+  };
 
   const handleReserve = async () => {
     if (!session) {
@@ -333,14 +361,23 @@ export default function ProductDetailsPage() {
                  </div>
              </div>
 
-            <button
-                onClick={handleReserve}
-                disabled={product.stock === 0 || reserving}
-                className="w-full h-16 rounded-2xl bg-foreground text-background font-bold text-lg hover:bg-foreground/90 transition-all shadow-xl shadow-foreground/10 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-            >
-                {reserving ? <Loader2 className="w-5 h-5 animate-spin" /> : <ShoppingBag className="w-5 h-5" />}
-                {reserving ? "Reserving..." : "Reserve for Pickup"}
-            </button>
+            <div className="flex gap-3">
+                <button
+                    onClick={handleReserve}
+                    disabled={product.stock === 0 || reserving}
+                    className="flex-1 h-16 rounded-2xl bg-foreground text-background font-bold text-lg hover:bg-foreground/90 transition-all shadow-xl shadow-foreground/10 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                    {reserving ? <Loader2 className="w-5 h-5 animate-spin" /> : <ShoppingBag className="w-5 h-5" />}
+                    {reserving ? "Reserving..." : "Reserve for Pickup"}
+                </button>
+                <button
+                    onClick={handleWishlist}
+                    disabled={wishlisting}
+                    className="h-16 w-16 flex items-center justify-center rounded-2xl bg-secondary hover:bg-rose-100 dark:hover:bg-rose-900/20 text-foreground hover:text-rose-600 transition-colors shadow-lg shadow-black/5 flex-shrink-0"
+                >
+                    {wishlisting ? <Loader2 className="w-6 h-6 animate-spin" /> : <Heart className="w-6 h-6" />}
+                </button>
+            </div>
             <p className="text-center text-xs text-muted-foreground">
                 Reserve online, pay when you collect at <strong>{product.salon?.name || "the salon"}</strong>.
             </p>
