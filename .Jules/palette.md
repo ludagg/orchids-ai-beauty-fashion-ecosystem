@@ -12,3 +12,7 @@
 ## 2025-05-14 - Dark Mode Implementation with next-themes
 **Learning:** When implementing dark mode in Next.js with `next-themes`, use `resolvedTheme` instead of `theme` to account for system settings. Ensure hydration safety by checking a `mounted` state. Refactor hardcoded hex colors to semantic CSS variables early to ensure global consistency.
 **Action:** Always prefer `resolvedTheme` for icon logic and toggle states. Use semantic classes like `bg-background` and `text-foreground` in new components from the start.
+
+## 2026-02-17 - Header Accessibility and Search UX
+**Learning:** Adding a keyboard shortcut hint (`/`) and a clear button to the search bar significantly improves the "native-app" feel and accessibility. Using `offsetParent !== null` is a robust way to ensure a global shortcut only focuses a visible element in layouts with multiple responsive headers.
+**Action:** Always include `aria-label` for icon-only buttons and implement clear functionality for search inputs to reduce user friction.
