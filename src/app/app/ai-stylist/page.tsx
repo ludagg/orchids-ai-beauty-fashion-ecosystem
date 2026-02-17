@@ -16,13 +16,22 @@ import {
   ShoppingBag
 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
+import Link from "next/link";
 
-const initialMessages = [
+interface Message {
+    id: number;
+    type: "user" | "bot";
+    content: string;
+    timestamp: string;
+    products?: any[];
+}
+
+const initialMessages: Message[] = [
   {
     id: 1,
     type: "bot",
-    content: "Hi JD! I'm your Rare AI Stylist. I've analyzed your recent browsing and noticed you're interested in minimalist summer wear. Would you like some personalized recommendations for your upcoming weekend trip?",
-    timestamp: "10:00 AM"
+    content: "Hi there! I'm your AI Stylist. Tell me what you're looking for! For example: 'I need a red dress for a party' or 'Show me summer sneakers'.",
+    timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
   }
 ];
 
@@ -33,9 +42,10 @@ const stylePersonalities = [
 ];
 
 export default function AIStylistPage() {
-  const [messages, setMessages] = useState(initialMessages);
+  const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [sidebarProducts, setSidebarProducts] = useState<any[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -44,10 +54,10 @@ export default function AIStylistPage() {
     }
   }, [messages, isTyping]);
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!inputValue.trim()) return;
 
-    const userMsg = {
+    const userMsg: Message = {
       id: Date.now(),
       type: "user",
       content: inputValue,
@@ -58,17 +68,33 @@ export default function AIStylistPage() {
     setInputValue("");
     setIsTyping(true);
 
-    // Simulate bot response
-    setTimeout(() => {
-      setIsTyping(false);
-      const botMsg = {
-        id: Date.now() + 1,
-        type: "bot",
-        content: "That sounds like a great plan! For a weekend in Goa, I recommend lightweight linen shirts paired with tailored chino shorts. I've found a few pieces from Studio Épure that would fit your style perfectly. Should I show them to you?",
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      };
-      setMessages(prev => [...prev, botMsg]);
-    }, 1500);
+    try {
+        const res = await fetch('/api/ai-stylist/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: userMsg.content })
+        });
+
+        if (res.ok) {
+            const data = await res.json();
+            const botMsg: Message = {
+                id: Date.now() + 1,
+                type: "bot",
+                content: data.message,
+                timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                products: data.products
+            };
+            setMessages(prev => [...prev, botMsg]);
+
+            if (data.products && data.products.length > 0) {
+                setSidebarProducts(data.products);
+            }
+        }
+    } catch (error) {
+        console.error("Chat error", error);
+    } finally {
+        setIsTyping(false);
+    }
   };
 
   return (
@@ -126,14 +152,31 @@ export default function AIStylistPage() {
                   }`}>
                     {msg.type === "user" ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
                   </div>
-                  <div className="space-y-1">
-                    <div className={`p-4 rounded-[24px] text-[15px] leading-relaxed shadow-sm border ${
+                  <div className="space-y-1 w-full min-w-0">
+                    <div className={`p-4 rounded-[24px] text-[15px] leading-relaxed shadow-sm border inline-block ${
                       msg.type === "user"
                         ? "bg-primary text-primary-foreground border-primary rounded-tr-none"
                         : "bg-card text-foreground border-border rounded-tl-none"
                     }`}>
                       {msg.content}
                     </div>
+
+                    {msg.products && msg.products.length > 0 && (
+                        <div className="mt-4 grid grid-cols-2 gap-3 max-w-md">
+                            {msg.products.map((product: any) => (
+                                <Link href={`/app/marketplace/${product.id}`} key={product.id} className="bg-card border border-border rounded-xl overflow-hidden hover:shadow-md transition-all group block">
+                                    <div className="aspect-[3/4] bg-muted relative">
+                                         <img src={product.images?.[0]} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                                    </div>
+                                    <div className="p-3">
+                                        <p className="font-bold text-xs truncate mb-1">{product.name}</p>
+                                        <p className="text-xs text-muted-foreground">{(product.price / 100).toLocaleString('en-IN', { style: 'currency', currency: 'INR' })}</p>
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
+                    )}
+
                     <p className={`text-[10px] font-bold text-muted-foreground/50 uppercase tracking-widest ${msg.type === "user" ? "text-right" : ""}`}>
                       {msg.timestamp}
                     </p>
@@ -204,41 +247,37 @@ export default function AIStylistPage() {
             </h3>
           </div>
           <div className="flex-1 overflow-y-auto p-6 space-y-6 no-scrollbar">
-            {[1, 2].map((i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="group cursor-pointer"
-              >
-                <div className="aspect-[4/5] rounded-3xl overflow-hidden mb-3 relative shadow-md border border-border">
-                  <img
-                    src={`https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=500&fit=crop&sig=${i}`}
-                    alt="Suggestion"
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                  <div className="absolute top-3 right-3 p-2 rounded-full bg-background/90 backdrop-blur-md shadow-sm opacity-0 group-hover:opacity-100 transition-opacity">
-                    <ShoppingBag className="w-4 h-4 text-foreground" />
-                  </div>
+            {sidebarProducts.length > 0 ? (
+               sidebarProducts.map((product) => (
+                <motion.div
+                    key={`sidebar-${product.id}`}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    className="group cursor-pointer"
+                >
+                    <Link href={`/app/marketplace/${product.id}`} className="block">
+                    <div className="aspect-[4/5] rounded-3xl overflow-hidden mb-3 relative shadow-md border border-border">
+                        <img
+                        src={product.images?.[0]}
+                        alt="Suggestion"
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        />
+                        <div className="absolute top-3 right-3 p-2 rounded-full bg-background/90 backdrop-blur-md shadow-sm opacity-0 group-hover:opacity-100 transition-opacity">
+                        <ShoppingBag className="w-4 h-4 text-foreground" />
+                        </div>
+                    </div>
+                    <h4 className="font-bold text-sm text-foreground truncate">{product.name}</h4>
+                    <p className="text-xs text-muted-foreground mt-0.5 font-medium">{(product.price / 100).toLocaleString('en-IN', { style: 'currency', currency: 'INR' })}</p>
+                    </Link>
+                </motion.div>
+                ))
+            ) : (
+                <div className="p-5 rounded-3xl bg-secondary/50 border border-border space-y-3">
+                    <p className="text-sm text-muted-foreground leading-relaxed font-medium">
+                        Start chatting to see personalized recommendations here!
+                    </p>
                 </div>
-                <h4 className="font-bold text-sm text-foreground truncate">Linen Utility Shirt</h4>
-                <p className="text-xs text-muted-foreground mt-0.5 font-medium">Studio Épure • ₹2,899</p>
-              </motion.div>
-            ))}
-
-            <div className="p-5 rounded-3xl bg-violet-50 dark:bg-violet-950/30 border border-violet-100 dark:border-violet-900/30 space-y-3">
-              <div className="flex items-center gap-2 text-violet-700 dark:text-violet-400">
-                <CheckCircle2 className="w-4 h-4" />
-                <span className="text-xs font-bold uppercase tracking-widest">Style Score</span>
-              </div>
-              <p className="text-sm text-violet-900 dark:text-violet-200 leading-relaxed font-medium">
-                These pieces match your "Minimalist" profile with <span className="font-bold">94% accuracy</span>.
-              </p>
-              <button className="w-full py-2.5 rounded-xl bg-card text-violet-700 dark:text-violet-400 text-xs font-bold shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2">
-                <RefreshCcw className="w-3.5 h-3.5" />
-                Regenerate Picks
-              </button>
-            </div>
+            )}
           </div>
         </aside>
       </div>

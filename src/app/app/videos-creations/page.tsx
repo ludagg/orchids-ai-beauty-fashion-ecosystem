@@ -6,7 +6,7 @@ import LiveHero from "@/components/videos-creations/LiveHero";
 import CategoryPills from "@/components/videos-creations/CategoryPills";
 import CreatorRail from "@/components/videos-creations/CreatorRail";
 import VideoCard, { VideoCardProps } from "@/components/videos-creations/VideoCard";
-import { Loader2, Video as VideoIcon, Plus } from "lucide-react";
+import { Loader2, Video as VideoIcon, Plus, X } from "lucide-react";
 import { toast } from "sonner";
 import { useSession } from "@/lib/auth-client";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -44,6 +44,29 @@ export default function VideosCreationsPage() {
   const [uploadUrl, setUploadUrl] = useState("");
   const [uploadCategory, setUploadCategory] = useState("Fashion");
   const [isUploading, setIsUploading] = useState(false);
+
+  // Product Tagging State
+  const [productSearch, setProductSearch] = useState("");
+  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [selectedProducts, setSelectedProducts] = useState<any[]>([]);
+
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(async () => {
+        if (productSearch.length > 2) {
+            try {
+                const res = await fetch(`/api/products?search=${productSearch}&limit=5`);
+                if (res.ok) {
+                    setSearchResults(await res.json());
+                }
+            } catch (error) {
+                console.error("Search error", error);
+            }
+        } else {
+            setSearchResults([]);
+        }
+    }, 500);
+    return () => clearTimeout(delayDebounceFn);
+  }, [productSearch]);
 
   const fetchVideos = async () => {
     setLoading(true);
@@ -105,7 +128,8 @@ export default function VideosCreationsPage() {
                 videoUrl: uploadUrl,
                 category: uploadCategory,
                 // Simple mock thumbnail logic for now
-                thumbnailUrl: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=800&h=1000&fit=crop"
+                thumbnailUrl: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=800&h=1000&fit=crop",
+                productIds: selectedProducts.map(p => p.id)
             })
         });
 
@@ -114,6 +138,8 @@ export default function VideosCreationsPage() {
             setIsUploadOpen(false);
             setUploadTitle("");
             setUploadUrl("");
+            setSelectedProducts([]);
+            setProductSearch("");
             fetchVideos(); // Refresh list
         } else {
             toast.error("Failed to upload video");
@@ -179,6 +205,56 @@ export default function VideosCreationsPage() {
                                       ))}
                                   </select>
                               </div>
+
+                              <div className="space-y-2">
+                                  <Label>Tag Products (Shoppable)</Label>
+                                  <Input
+                                      placeholder="Search products to tag..."
+                                      value={productSearch}
+                                      onChange={e => setProductSearch(e.target.value)}
+                                  />
+                                  {searchResults.length > 0 && (
+                                      <div className="border rounded-xl p-2 mt-2 bg-secondary/50 max-h-40 overflow-y-auto z-50">
+                                          {searchResults.map(product => (
+                                              <div
+                                                  key={product.id}
+                                                  className="flex items-center gap-3 p-2 hover:bg-background rounded-lg cursor-pointer transition-colors"
+                                                  onClick={() => {
+                                                      if (!selectedProducts.find(p => p.id === product.id)) {
+                                                          setSelectedProducts([...selectedProducts, product]);
+                                                          setProductSearch("");
+                                                          setSearchResults([]);
+                                                      }
+                                                  }}
+                                              >
+                                                  <img src={product.images?.[0]} className="w-8 h-8 rounded-md object-cover bg-muted" />
+                                                  <div className="flex-1 overflow-hidden">
+                                                    <p className="text-sm font-medium truncate">{product.name}</p>
+                                                    <p className="text-xs text-muted-foreground truncate">{(product.price / 100).toLocaleString('en-IN', { style: 'currency', currency: 'INR' })}</p>
+                                                  </div>
+                                                  <Plus className="w-4 h-4 text-muted-foreground" />
+                                              </div>
+                                          ))}
+                                      </div>
+                                  )}
+                                  {selectedProducts.length > 0 && (
+                                      <div className="flex flex-wrap gap-2 mt-2">
+                                          {selectedProducts.map(p => (
+                                               <div key={p.id} className="flex items-center gap-1.5 pl-3 pr-2 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold border border-primary/20">
+                                                  <span className="max-w-[150px] truncate">{p.name}</span>
+                                                  <button
+                                                    type="button"
+                                                    onClick={() => setSelectedProducts(selectedProducts.filter(sp => sp.id !== p.id))}
+                                                    className="p-0.5 hover:bg-primary/20 rounded-full transition-colors"
+                                                  >
+                                                      <X className="w-3 h-3" />
+                                                  </button>
+                                               </div>
+                                          ))}
+                                      </div>
+                                  )}
+                              </div>
+
                               <button
                                 type="submit"
                                 disabled={isUploading}
