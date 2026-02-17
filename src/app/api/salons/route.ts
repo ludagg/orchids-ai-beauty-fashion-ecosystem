@@ -5,7 +5,7 @@ import { db } from "@/lib/db";
 import { salons, services } from "@/db/schema/salons";
 import { nanoid } from "nanoid";
 import { headers } from "next/headers";
-import { and, or, ilike, eq, desc, gte, lte, exists } from "drizzle-orm";
+import { and, or, ilike, eq, desc, gte, lte, exists, sql, getTableColumns } from "drizzle-orm";
 
 const salonSchema = z.object({
   name: z.string().min(2),
@@ -25,9 +25,35 @@ export async function GET(req: NextRequest) {
     const type = searchParams.get("type"); // SALON, BOUTIQUE, BOTH
     const minPrice = searchParams.get("minPrice");
     const maxPrice = searchParams.get("maxPrice");
+    const lat = searchParams.get("lat");
+    const lng = searchParams.get("lng");
+    const radius = parseFloat(searchParams.get("radius") || "50"); // km
     const limit = parseInt(searchParams.get("limit") || "50");
 
     const conditions = [];
+
+    // Filter by Location (Haversine)
+    let distanceField = sql<number>`0`;
+    let locationProvided = false;
+
+    if (lat && lng) {
+        const userLat = parseFloat(lat);
+        const userLng = parseFloat(lng);
+
+        if (!isNaN(userLat) && !isNaN(userLng)) {
+            locationProvided = true;
+            // 6371 is Earth radius in km
+            // acos(sin(lat1)*sin(lat2)+cos(lat1)*cos(lat2)*cos(lon2-lon1))*6371
+            distanceField = sql<number>`(
+                6371 * acos(
+                    cos(radians(${userLat})) * cos(radians(${salons.latitude})) * cos(radians(${salons.longitude}) - radians(${userLng})) +
+                    sin(radians(${userLat})) * sin(radians(${salons.latitude}))
+                )
+            )`;
+
+            conditions.push(sql`${distanceField} <= ${radius}`);
+        }
+    }
 
     // Filter by name or description (case-insensitive)
     if (query) {
@@ -77,12 +103,23 @@ export async function GET(req: NextRequest) {
         );
     }
 
-    const results = await db
-      .select()
+    let queryBuilder = db
+      .select({
+          ...getTableColumns(salons),
+          distance: distanceField
+      })
       .from(salons)
       .where(and(...conditions))
-      .limit(limit)
-      .orderBy(desc(salons.createdAt));
+      .limit(limit);
+
+    if (locationProvided) {
+        // Order by distance if location provided
+        queryBuilder = queryBuilder.orderBy(distanceField);
+    } else {
+        queryBuilder = queryBuilder.orderBy(desc(salons.createdAt));
+    }
+
+    const results = await queryBuilder;
 
     return NextResponse.json(results);
   } catch (error) {

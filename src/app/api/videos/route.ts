@@ -11,6 +11,7 @@ export async function GET(req: NextRequest) {
         const { searchParams } = new URL(req.url);
         const category = searchParams.get('category');
         const userId = searchParams.get('userId');
+        const sortBy = searchParams.get('sortBy'); // 'newest' | 'popular'
         const limit = parseInt(searchParams.get('limit') || '20');
 
         const conditions = [];
@@ -21,13 +22,18 @@ export async function GET(req: NextRequest) {
             conditions.push(eq(videos.userId, userId));
         }
 
+        let orderByClause = [desc(videos.createdAt)];
+        if (sortBy === 'popular') {
+            orderByClause = [desc(videos.views), desc(videos.likes)];
+        }
+
         const videosList = await db.query.videos.findMany({
             where: conditions.length > 0 ? and(...conditions) : undefined,
             with: {
                 user: true,
                 salon: true,
             },
-            orderBy: [desc(videos.createdAt)],
+            orderBy: orderByClause,
             limit: limit
         });
 
