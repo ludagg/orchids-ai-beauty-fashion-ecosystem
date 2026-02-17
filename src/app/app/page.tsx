@@ -149,6 +149,21 @@ export default function DiscoverPage() {
           <div className="space-y-12">
             <HeroCarousel slides={HERO_SLIDES} />
 
+            <div className="grid grid-cols-2 gap-4">
+              <Link href="/app/ai-stylist" className="flex flex-col items-center justify-center p-4 rounded-2xl bg-gradient-to-br from-violet-500/10 to-fuchsia-500/10 border border-violet-200/20 hover:border-violet-500/30 transition-all group">
+                <div className="w-12 h-12 rounded-full bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                  <Sparkles className="w-6 h-6 text-violet-600 dark:text-violet-400" />
+                </div>
+                <span className="font-semibold text-sm text-foreground">AI Stylist</span>
+              </Link>
+              <Link href="/app/bookings" className="flex flex-col items-center justify-center p-4 rounded-2xl bg-gradient-to-br from-emerald-500/10 to-teal-500/10 border border-emerald-200/20 hover:border-emerald-500/30 transition-all group">
+                <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                  <Calendar className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+                </div>
+                <span className="font-semibold text-sm text-foreground">My Bookings</span>
+              </Link>
+            </div>
+
             <SectionHeader title="Trending Styles" icon={Sparkles} href="/app/styles" />
             <div className="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4 scroll-smooth no-scrollbar">
               {trendingStyles.map((style, i) => (
