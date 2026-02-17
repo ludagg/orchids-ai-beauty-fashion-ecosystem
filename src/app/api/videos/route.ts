@@ -1,13 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { videos, videoProducts } from "@/db/schema/content";
+import { videos, videoProducts, videoLikes } from "@/db/schema/content";
 import { headers } from "next/headers";
-import { eq, desc, and } from "drizzle-orm";
+import { eq, desc, and, inArray } from "drizzle-orm";
 import { nanoid } from "nanoid";
 
 export async function GET(req: NextRequest) {
     try {
+        const session = await auth.api.getSession({
+            headers: await headers()
+        });
+
         const { searchParams } = new URL(req.url);
         const category = searchParams.get('category');
         const userId = searchParams.get('userId');
@@ -42,10 +46,22 @@ export async function GET(req: NextRequest) {
             limit: limit
         });
 
+        let likedVideoIds = new Set();
+        if (session?.user && videosList.length > 0) {
+            const likes = await db.query.videoLikes.findMany({
+                where: and(
+                    eq(videoLikes.userId, session.user.id),
+                    inArray(videoLikes.videoId, videosList.map(v => v.id))
+                )
+            });
+            likes.forEach(l => likedVideoIds.add(l.videoId));
+        }
+
         // Flatten products
         const formatted = videosList.map(v => ({
             ...v,
-            products: v.products.map((vp: any) => vp.product)
+            products: v.products.map((vp: any) => vp.product),
+            isLiked: likedVideoIds.has(v.id)
         }));
 
         return NextResponse.json(formatted);

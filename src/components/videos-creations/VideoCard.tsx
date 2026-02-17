@@ -18,6 +18,7 @@ export interface VideoCardProps {
   likes: string;
   isLive?: boolean;
   category?: string;
+  isLiked?: boolean;
 }
 
 export default function VideoCard({ video }: { video: VideoCardProps }) {
@@ -79,7 +80,7 @@ export default function VideoCard({ video }: { video: VideoCardProps }) {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <img
-                src={video.creator.avatar}
+                src={video.creator.avatar || "https://github.com/shadcn.png"}
                 alt={video.creator.name}
                 className="w-6 h-6 rounded-full border border-white/50 object-cover"
               />
@@ -93,7 +94,7 @@ export default function VideoCard({ video }: { video: VideoCardProps }) {
 
             <div className="flex items-center gap-3">
                 <div className="flex items-center gap-1 text-white/80">
-                    <Heart className="w-3.5 h-3.5" />
+                    <Heart className={`w-3.5 h-3.5 ${video.isLiked ? "fill-rose-500 text-rose-500" : ""}`} />
                     <span className="text-[10px] font-bold">{video.likes}</span>
                 </div>
             </div>

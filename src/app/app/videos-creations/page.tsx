@@ -25,18 +25,12 @@ const categories = [
   "Minimalist",
 ];
 
-// Mock creators for the rail (can be fetched dynamically later)
-const creators = [
-  { id: "1", name: "Ananya Sharma", avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop", isLive: true },
-  { id: "2", name: "Rahul Mehra", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop", isLive: false },
-  { id: "3", name: "Priya Patel", avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop", isLive: true },
-];
-
 export default function VideosCreationsPage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [videos, setVideos] = useState<VideoCardProps[]>([]);
   const [loading, setLoading] = useState(true);
   const { data: session } = useSession();
+  const [creators, setCreators] = useState<any[]>([]);
 
   // Upload State
   const [isUploadOpen, setIsUploadOpen] = useState(false);
@@ -49,6 +43,20 @@ export default function VideosCreationsPage() {
   const [productSearch, setProductSearch] = useState("");
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [selectedProducts, setSelectedProducts] = useState<any[]>([]);
+
+  useEffect(() => {
+    async function fetchCreators() {
+        try {
+            const res = await fetch("/api/creators");
+            if (res.ok) {
+                setCreators(await res.json());
+            }
+        } catch (error) {
+            console.error("Error fetching creators:", error);
+        }
+    }
+    fetchCreators();
+  }, []);
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(async () => {
@@ -91,7 +99,8 @@ export default function VideosCreationsPage() {
                 views: v.views.toString(),
                 likes: v.likes.toString(),
                 isLive: v.isLive,
-                category: v.category
+                category: v.category,
+                isLiked: v.isLiked
             }));
 
             if (selectedCategory === "Live Now") {
