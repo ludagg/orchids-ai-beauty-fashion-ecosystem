@@ -14,48 +14,40 @@ import {
   RotateCcw
 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
-
-const initialCartItems = [
-  {
-    id: 1,
-    title: "Summer Minimalist Dress",
-    designer: "Studio Épure",
-    price: 4999,
-    image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=500&fit=crop",
-    size: "M",
-    color: "Cream",
-    quantity: 1
-  },
-  {
-    id: 2,
-    title: "Eco-Linen Summer Set",
-    designer: "Studio Épure",
-    price: 3499,
-    image: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=400&h=500&fit=crop",
-    size: "S",
-    color: "Olive",
-    quantity: 1
-  }
-];
+import { useCart } from "@/lib/cart-context";
 
 export default function CartPage() {
-  const [items, setItems] = useState(initialCartItems);
+  const { items, updateQuantity, removeItem, totalAmount } = useCart();
 
-  const updateQuantity = (id: number, delta: number) => {
-    setItems(items.map(item =>
-      item.id === id ? { ...item, quantity: Math.max(1, item.quantity + delta) } : item
-    ));
-  };
+  // Price calculation
+  // Assuming item.price is in cents, need to convert to units if totalAmount is in cents
+  // The context totalAmount is sum(price * qty).
+  // If price in DB is cents (e.g. 499900 for ₹4999), then totalAmount is in cents.
+  // The UI currently displays price as is.
+  // Let's assume the cart items store price in actual currency units (based on mock data 4999)
+  // OR the mock data was just numbers.
+  // The Product details page fetched `/api/products/:id`.
+  // The DB schema says `price` is integer in cents.
+  // So `4999` in DB means ₹49.99.
+  // Wait, `src/db/schema/commerce.ts` says `price: integer('price').notNull(), // In cents`.
+  // If a dress is ₹4999, it should be 499900 cents.
+  // The mock data had `4999`.
+  // I need to be careful with units.
 
-  const removeItem = (id: number) => {
-    setItems(items.filter(item => item.id !== id));
-  };
+  // Let's assume the context items store price as it comes from the product object.
+  // If I add a product from `ProductDetailsPage`, I should probably store it in cents to be consistent with DB.
+  // Then format it here.
 
-  const subtotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
-  const shipping = subtotal > 5000 ? 0 : 150;
+  const subtotal = totalAmount; // In whatever unit the items are stored
+  const shipping = subtotal > 500000 ? 0 : 15000; // 5000.00 -> 500000 cents. Shipping 150.00 -> 15000 cents.
   const tax = Math.round(subtotal * 0.18);
   const total = subtotal + shipping + tax;
+
+  // Helper to format currency
+  const formatPrice = (amount: number) => {
+    // If amount is in cents
+    return (amount / 100).toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
+  };
 
   return (
     <div className="flex-1 p-4 sm:p-6 lg:p-8 max-w-[1400px] mx-auto w-full">
@@ -91,13 +83,13 @@ export default function CartPage() {
                     <div className="flex items-start justify-between gap-4">
                       <div>
                         <h3 className="font-bold text-foreground text-lg">{item.title}</h3>
-                        <p className="text-sm text-rose-600 font-bold uppercase tracking-widest">{item.designer}</p>
+                        <p className="text-sm text-rose-600 font-bold uppercase tracking-widest">{item.brand || item.salonName}</p>
                         <div className="flex gap-4 mt-2">
-                          <p className="text-xs text-muted-foreground font-medium">Size: <span className="text-foreground font-bold">{item.size}</span></p>
-                          <p className="text-xs text-muted-foreground font-medium">Color: <span className="text-foreground font-bold">{item.color}</span></p>
+                           {item.size && <p className="text-xs text-muted-foreground font-medium">Size: <span className="text-foreground font-bold">{item.size}</span></p>}
+                           {item.color && <p className="text-xs text-muted-foreground font-medium">Color: <span className="text-foreground font-bold">{item.color}</span></p>}
                         </div>
                       </div>
-                      <p className="font-bold text-lg text-foreground">₹{item.price.toLocaleString()}</p>
+                      <p className="font-bold text-lg text-foreground">{formatPrice(item.price)}</p>
                     </div>
 
                     <div className="flex items-center justify-between mt-4">
@@ -161,22 +153,22 @@ export default function CartPage() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground font-medium">Subtotal</span>
-                  <span className="text-foreground font-bold">₹{subtotal.toLocaleString()}</span>
+                  <span className="text-foreground font-bold">{formatPrice(subtotal)}</span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground font-medium">Shipping</span>
                   <span className={`font-bold ${shipping === 0 ? "text-emerald-600" : "text-foreground"}`}>
-                    {shipping === 0 ? "FREE" : `₹${shipping}`}
+                    {shipping === 0 ? "FREE" : formatPrice(shipping)}
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground font-medium">Estimated Tax (18%)</span>
-                  <span className="text-foreground font-bold">₹{tax.toLocaleString()}</span>
+                  <span className="text-foreground font-bold">{formatPrice(tax)}</span>
                 </div>
                 <div className="h-px bg-border my-2" />
                 <div className="flex items-center justify-between text-lg">
                   <span className="text-foreground font-bold">Total</span>
-                  <span className="text-foreground font-bold">₹{total.toLocaleString()}</span>
+                  <span className="text-foreground font-bold">{formatPrice(total)}</span>
                 </div>
               </div>
 
