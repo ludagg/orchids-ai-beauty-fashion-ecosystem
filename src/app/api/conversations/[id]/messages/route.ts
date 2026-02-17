@@ -5,6 +5,7 @@ import { conversations, messages, salons, users } from "@/db/schema";
 import { eq, desc, and, ne } from "drizzle-orm";
 import { nanoid } from "nanoid";
 import { headers } from "next/headers";
+import { createNotification } from "@/lib/notifications";
 
 export async function GET(
     req: NextRequest,
@@ -122,6 +123,22 @@ export async function POST(
         await db.update(conversations)
             .set({ lastMessageAt: new Date() })
             .where(eq(conversations.id, conversationId));
+
+        // 4. Send Notification
+        const recipientId = session.user.id === conversation.userId
+            ? conversation.salon?.ownerId
+            : conversation.userId;
+
+        if (recipientId) {
+            await createNotification({
+                userId: recipientId,
+                type: 'message',
+                title: 'New Message',
+                message: `New message from ${session.user.name || 'User'}`,
+                link: `/conversations/${conversationId}`,
+                metadata: { conversationId, messageId }
+            });
+        }
 
         return NextResponse.json({ success: true, messageId }, { status: 201 });
 

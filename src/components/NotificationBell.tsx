@@ -1,86 +1,167 @@
 "use client";
 
-import { Bell, Package, Sparkles, Heart } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Bell, Package, Sparkles, Heart, MessageSquare, Calendar, Info, Check } from "lucide-react";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useRouter } from "next/navigation";
+import { formatDistanceToNow } from "date-fns";
 
-const notifications = [
-  {
-    id: 1,
-    title: "Order Delivered",
-    description: "Your Summer Minimalist Dress has been delivered.",
-    time: "2h ago",
-    icon: Package,
-    color: "text-emerald-500",
-    bg: "bg-emerald-50",
-  },
-  {
-    id: 2,
-    title: "New AI Recommendations",
-    description: "We've found 3 new styles matching your profile.",
-    time: "5h ago",
-    icon: Sparkles,
-    color: "text-violet-500",
-    bg: "bg-violet-50",
-  },
-  {
-    id: 3,
-    title: "Price Drop",
-    description: "An item in your wishlist is now 20% off.",
-    time: "1d ago",
-    icon: Heart,
-    color: "text-rose-500",
-    bg: "bg-rose-50",
-  },
-];
+type Notification = {
+  id: string;
+  type: 'booking' | 'message' | 'system' | 'order' | 'promotion';
+  title: string;
+  message: string;
+  link: string | null;
+  isRead: boolean;
+  createdAt: string;
+};
 
 export default function NotificationBell() {
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
+
+  const fetchNotifications = async () => {
+    try {
+      const res = await fetch("/api/notifications");
+      if (res.ok) {
+        const data = await res.json();
+        setNotifications(data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch notifications", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchNotifications();
+    // Poll every minute
+    const interval = setInterval(fetchNotifications, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const markAsRead = async (id: string) => {
+    try {
+      await fetch(`/api/notifications/${id}/read`, { method: "POST" });
+      setNotifications((prev) =>
+        prev.map((n) => (n.id === id ? { ...n, isRead: true } : n))
+      );
+    } catch (error) {
+      console.error("Failed to mark as read", error);
+    }
+  };
+
+  const markAllAsRead = async () => {
+    try {
+      await fetch("/api/notifications", { method: "PATCH" });
+      setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
+    } catch (error) {
+      console.error("Failed to mark all as read", error);
+    }
+  };
+
+  const handleNotificationClick = async (notification: Notification) => {
+    if (!notification.isRead) {
+      await markAsRead(notification.id);
+    }
+    if (notification.link) {
+      setIsOpen(false);
+      router.push(notification.link);
+    }
+  };
+
+  const unreadCount = notifications.filter((n) => !n.isRead).length;
+
+  const getIcon = (type: string) => {
+    switch (type) {
+      case "booking":
+        return { icon: Calendar, color: "text-blue-500", bg: "bg-blue-50" };
+      case "message":
+        return { icon: MessageSquare, color: "text-green-500", bg: "bg-green-50" };
+      case "order":
+        return { icon: Package, color: "text-orange-500", bg: "bg-orange-50" };
+      case "promotion":
+        return { icon: Sparkles, color: "text-purple-500", bg: "bg-purple-50" };
+      default:
+        return { icon: Info, color: "text-gray-500", bg: "bg-gray-50" };
+    }
+  };
+
   return (
-    <Popover>
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
         <button className="p-2 rounded-full hover:bg-secondary transition-colors relative outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
           <Bell className="w-5 h-5 text-muted-foreground" />
-          <span className="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full border-2 border-card"></span>
+          {unreadCount > 0 && (
+            <span className="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full border-2 border-card"></span>
+          )}
           <span className="sr-only">Notifications</span>
         </button>
       </PopoverTrigger>
       <PopoverContent className="w-80 p-0 overflow-hidden" align="end">
         <div className="p-4 border-b border-border flex items-center justify-between bg-card">
           <h3 className="font-semibold text-sm">Notifications</h3>
-          <button className="text-xs text-primary font-medium hover:underline">
-            Mark all as read
-          </button>
+          {unreadCount > 0 && (
+            <button
+              onClick={markAllAsRead}
+              className="text-xs text-primary font-medium hover:underline"
+            >
+              Mark all as read
+            </button>
+          )}
         </div>
         <div className="max-h-[400px] overflow-y-auto">
-          {notifications.map((notification) => (
-            <div
-              key={notification.id}
-              className="p-4 flex gap-3 hover:bg-secondary transition-colors cursor-pointer border-b border-border last:border-0"
-            >
-              <div className={`w-10 h-10 rounded-full ${notification.bg} dark:bg-primary/10 flex items-center justify-center flex-shrink-0`}>
-                <notification.icon className={`w-5 h-5 ${notification.color}`} />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-foreground leading-snug">
-                  {notification.title}
-                </p>
-                <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
-                  {notification.description}
-                </p>
-                <p className="text-[10px] text-muted-foreground opacity-70 mt-1 uppercase font-semibold tracking-wider">
-                  {notification.time}
-                </p>
-              </div>
+          {loading ? (
+            <div className="p-4 text-center text-sm text-muted-foreground">
+              Loading...
             </div>
-          ))}
-        </div>
-        <div className="p-3 border-t border-border text-center">
-          <button className="text-sm font-medium text-foreground hover:underline">
-            View all notifications
-          </button>
+          ) : notifications.length === 0 ? (
+            <div className="p-4 text-center text-sm text-muted-foreground">
+              No notifications
+            </div>
+          ) : (
+            notifications.map((notification) => {
+              const style = getIcon(notification.type);
+              return (
+                <div
+                  key={notification.id}
+                  onClick={() => handleNotificationClick(notification)}
+                  className={`p-4 flex gap-3 hover:bg-secondary transition-colors cursor-pointer border-b border-border last:border-0 ${
+                    !notification.isRead ? "bg-secondary/30" : ""
+                  }`}
+                >
+                  <div
+                    className={`w-10 h-10 rounded-full ${style.bg} dark:bg-primary/10 flex items-center justify-center flex-shrink-0`}
+                  >
+                    <style.icon className={`w-5 h-5 ${style.color}`} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className={`text-sm text-foreground leading-snug ${!notification.isRead ? 'font-semibold' : 'font-medium'}`}>
+                      {notification.title}
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
+                      {notification.message}
+                    </p>
+                    <p className="text-[10px] text-muted-foreground opacity-70 mt-1 uppercase font-semibold tracking-wider">
+                      {formatDistanceToNow(new Date(notification.createdAt), { addSuffix: true })}
+                    </p>
+                  </div>
+                  {!notification.isRead && (
+                     <div className="flex items-center justify-center">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                     </div>
+                  )}
+                </div>
+              );
+            })
+          )}
         </div>
       </PopoverContent>
     </Popover>

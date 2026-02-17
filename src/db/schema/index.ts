@@ -6,3 +6,4 @@ export * from './reviews';
 export * from './messaging';
 export * from './favorites';
 export * from './content';
+export * from './notifications';
