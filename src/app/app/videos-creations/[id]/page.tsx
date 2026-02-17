@@ -6,6 +6,7 @@ import { useState, useEffect, useRef } from "react";
 import { useParams } from "next/navigation";
 import { useSession } from "@/lib/auth-client";
 import { toast } from "sonner";
+import { CommentSection } from "@/components/videos-creations/CommentSection";
 
 export default function VideoDetailPage() {
   const { id } = useParams();
@@ -229,6 +230,9 @@ export default function VideoDetailPage() {
                     <p className="font-bold mb-1">Description</p>
                     {video.description || "No description provided."}
                 </div>
+
+                {/* Comment Section */}
+                <CommentSection videoId={id as string} initialCommentsCount={video.commentsCount} />
             </div>
 
             {/* Shop the Look Sidebar */}
