@@ -58,7 +58,11 @@ export const services = pgTable('services', {
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
-export const salonsRelations = relations(salons, ({ many }) => ({
+export const salonsRelations = relations(salons, ({ one, many }) => ({
+  owner: one(users, {
+    fields: [salons.ownerId],
+    references: [users.id],
+  }),
   images: many(salonImages),
   openingHours: many(openingHours),
   services: many(services),
