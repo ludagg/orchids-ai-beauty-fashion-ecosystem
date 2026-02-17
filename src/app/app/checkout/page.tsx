@@ -13,19 +13,65 @@ import {
   Calendar
 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useCart } from "@/lib/cart-context";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { useSession } from "@/lib/auth-client";
 
 export default function CheckoutPage() {
+  const { items, cartTotal, clearCart } = useCart();
   const [step, setStep] = useState(1);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [orderId, setOrderId] = useState<string | null>(null);
+  const { data: session } = useSession();
+  const router = useRouter();
 
-  const handlePlaceOrder = () => {
+  const subtotal = cartTotal;
+  const shipping = items.length > 0 && subtotal < 500000 ? 15000 : 0;
+  const tax = Math.round(subtotal * 0.18);
+  const total = subtotal + shipping + tax;
+
+  const formatPrice = (cents: number) => {
+    return (cents / 100).toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
+  };
+
+  const handlePlaceOrder = async () => {
+    if (!session) {
+        toast.error("Please login to checkout");
+        router.push("/auth?mode=signin");
+        return;
+    }
+
     setIsProcessing(true);
-    setTimeout(() => {
-      setIsProcessing(false);
-      setIsSuccess(true);
-    }, 2000);
+    try {
+        const payload = {
+            items: items.map(i => ({ productId: i.productId, quantity: i.quantity }))
+        };
+
+        const res = await fetch('/api/orders', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+            const data = await res.json();
+            setOrderId(data.orderId);
+            clearCart();
+            setIsSuccess(true);
+            toast.success("Order placed successfully!");
+        } else {
+            const error = await res.json();
+            toast.error(error.error || "Failed to place order");
+        }
+    } catch (e) {
+        console.error(e);
+        toast.error("Something went wrong");
+    } finally {
+        setIsProcessing(false);
+    }
   };
 
   if (isSuccess) {
@@ -42,11 +88,11 @@ export default function CheckoutPage() {
           <div className="space-y-2">
             <h1 className="text-3xl font-bold text-foreground">Order Placed!</h1>
             <p className="text-muted-foreground leading-relaxed">
-              Your order #PR-2026-8942 has been successfully placed and is being processed.
+              Your order #{orderId || "unknown"} has been successfully placed and is being processed.
             </p>
           </div>
           <div className="space-y-3 pt-4">
-            <Link href="/app/bookings" className="block w-full">
+            <Link href="/app/bookings?tab=Orders" className="block w-full">
               <button className="w-full py-4 rounded-2xl bg-foreground text-white font-bold hover:bg-[#333] transition-all shadow-xl shadow-foreground/10">
                 Track Order
               </button>
@@ -187,15 +233,15 @@ export default function CheckoutPage() {
           <div className="p-8 rounded-[40px] bg-card border border-border space-y-6 shadow-sm">
             <h3 className="font-bold text-foreground">Review Bag</h3>
             <div className="space-y-4">
-              {[1, 2].map((i) => (
-                <div key={i} className="flex gap-4">
+              {items.map((item) => (
+                <div key={item.productId} className="flex gap-4">
                   <div className="w-16 h-20 rounded-xl overflow-hidden bg-muted flex-shrink-0">
-                    <img src={`https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=100&h=100&fit=crop&q=${i}`} alt="item" className="w-full h-full object-cover" />
+                    <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                   </div>
                   <div className="flex-1 py-1">
-                    <p className="text-sm font-bold text-foreground line-clamp-1">Summer Minimalist Dress</p>
-                    <p className="text-xs text-muted-foreground mt-1">Size: M • Qty: 1</p>
-                    <p className="text-sm font-bold text-foreground mt-1">₹4,999</p>
+                    <p className="text-sm font-bold text-foreground line-clamp-1">{item.name}</p>
+                    <p className="text-xs text-muted-foreground mt-1">Qty: {item.quantity}</p>
+                    <p className="text-sm font-bold text-foreground mt-1">{formatPrice(item.price)}</p>
                   </div>
                 </div>
               ))}
@@ -204,15 +250,15 @@ export default function CheckoutPage() {
             <div className="space-y-2">
               <div className="flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">Subtotal</span>
-                <span className="font-bold">₹8,498</span>
+                <span className="font-bold">{formatPrice(subtotal)}</span>
               </div>
               <div className="flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">Shipping</span>
-                <span className="font-bold text-emerald-600">FREE</span>
+                <span className="font-bold text-emerald-600">{shipping === 0 ? "FREE" : formatPrice(shipping)}</span>
               </div>
               <div className="flex items-center justify-between text-lg pt-4 border-t border-border mt-4">
                 <span className="font-bold">Total</span>
-                <span className="font-bold text-rose-600">₹10,027</span>
+                <span className="font-bold text-rose-600">{formatPrice(total)}</span>
               </div>
             </div>
           </div>

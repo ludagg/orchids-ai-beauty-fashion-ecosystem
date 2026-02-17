@@ -28,6 +28,8 @@ import UserAccount from "@/components/UserAccount";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import { CartProvider } from "@/lib/cart-context";
+import CartButton from "@/components/CartButton";
 
 const sidebarItems = [
   { icon: Compass, label: "Discover", href: "/app" },
@@ -61,6 +63,7 @@ export default function AppLayout({
   };
 
   return (
+    <CartProvider>
     <div className="min-h-screen bg-background text-foreground flex flex-col lg:flex-row">
       {/* Sidebar - Desktop */}
       <aside className={`border-r border-border bg-card hidden lg:flex flex-col sticky top-0 h-screen transition-all duration-300 ${isCollapsed ? "w-20" : "w-64"}`}>
@@ -134,6 +137,7 @@ export default function AppLayout({
           <div className="flex items-center gap-1">
             <ThemeSwitcher />
             <NotificationBell />
+            <CartButton />
             <UserAccount showLabel={false} />
             <button onClick={() => setMobileMenuOpen(true)} className="p-2 ml-1">
               <Menu className="w-6 h-6" />
@@ -204,6 +208,7 @@ export default function AppLayout({
             <Link href="/app/wishlist" className="p-2 rounded-full hover:bg-secondary transition-colors relative">
               <Heart className={`w-5 h-5 ${pathname === '/app/wishlist' ? 'text-rose-500 fill-rose-500' : 'text-muted-foreground'}`} />
             </Link>
+            <CartButton />
             <NotificationBell />
             <UserAccount />
           </div>
@@ -216,5 +221,6 @@ export default function AppLayout({
         <BottomNav />
       </div>
     </div>
+    </CartProvider>
   );
 }

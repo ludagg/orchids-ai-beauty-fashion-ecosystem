@@ -22,6 +22,7 @@ import { toast } from "sonner";
 import { useSession } from "@/lib/auth-client";
 import { Textarea } from "@/components/ui/textarea";
 import { format } from "date-fns";
+import { useCart } from "@/lib/cart-context";
 
 interface Product {
   id: string;
@@ -62,9 +63,9 @@ export default function ProductDetailsPage() {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeImage, setActiveImage] = useState(0);
-  const [reserving, setReserving] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [chatLoading, setChatLoading] = useState(false);
+  const { addToCart } = useCart();
 
   // Review form
   const [reviewRating, setReviewRating] = useState(5);
@@ -98,37 +99,18 @@ export default function ProductDetailsPage() {
     fetchData();
   }, [id]);
 
-  const handleReserve = async () => {
-    if (!session) {
-      toast.error("Please login to reserve items");
-      router.push("/auth?mode=signin");
-      return;
-    }
-
-    setReserving(true);
-    try {
-        const res = await fetch('/api/orders', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                productId: id,
-                quantity: quantity
-            })
-        });
-
-        if (res.ok) {
-            toast.success("Product reserved successfully! Pay at salon.");
-            router.push('/app/bookings?tab=Orders');
-        } else {
-            const error = await res.json();
-            toast.error(error.error || "Failed to reserve product");
-        }
-    } catch (error) {
-        console.error("Reservation error:", error);
-        toast.error("Something went wrong");
-    } finally {
-        setReserving(false);
-    }
+  const handleAddToCart = () => {
+    if (!product) return;
+    addToCart({
+        productId: product.id,
+        name: product.name,
+        price: product.price,
+        image: product.images?.[0] || "",
+        quantity: quantity,
+        salonId: product.salon?.id,
+        salonName: product.salon?.name,
+        brand: product.brand || undefined
+    });
   };
 
   const handleChat = async () => {
@@ -334,15 +316,15 @@ export default function ProductDetailsPage() {
              </div>
 
             <button
-                onClick={handleReserve}
-                disabled={product.stock === 0 || reserving}
+                onClick={handleAddToCart}
+                disabled={product.stock === 0}
                 className="w-full h-16 rounded-2xl bg-foreground text-background font-bold text-lg hover:bg-foreground/90 transition-all shadow-xl shadow-foreground/10 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
-                {reserving ? <Loader2 className="w-5 h-5 animate-spin" /> : <ShoppingBag className="w-5 h-5" />}
-                {reserving ? "Reserving..." : "Reserve for Pickup"}
+                <ShoppingBag className="w-5 h-5" />
+                Add to Bag
             </button>
             <p className="text-center text-xs text-muted-foreground">
-                Reserve online, pay when you collect at <strong>{product.salon?.name || "the salon"}</strong>.
+                Add to bag and checkout to reserve your items.
             </p>
 
             <button
