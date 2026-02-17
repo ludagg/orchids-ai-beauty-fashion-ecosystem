@@ -4,6 +4,8 @@ import { Users, Heart, Share2, X, Play, Pause, Volume2, VolumeX, CheckCircle2, S
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { useParams } from "next/navigation";
+import { useSession } from "@/lib/auth-client";
+import { toast } from "sonner";
 
 export default function VideoDetailPage() {
   const { id } = useParams();
@@ -12,8 +14,10 @@ export default function VideoDetailPage() {
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(false);
   const [liked, setLiked] = useState(false);
+  const [likesCount, setLikesCount] = useState(0);
   const [isFollowing, setIsFollowing] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const { data: session } = useSession();
 
   useEffect(() => {
     async function fetchVideo() {
@@ -22,7 +26,12 @@ export default function VideoDetailPage() {
             if (res.ok) {
                 const data = await res.json();
                 setVideo(data);
-                setLiked(false); // Mock initial state
+                setLiked(data.isLiked);
+                setLikesCount(data.likes);
+                setIsFollowing(data.isFollowing);
+
+                // Increment view
+                await fetch(`/api/videos/${id}/view`, { method: 'POST' });
             }
         } catch (error) {
             console.error("Error fetching video:", error);
@@ -30,7 +39,7 @@ export default function VideoDetailPage() {
             setLoading(false);
         }
     }
-    fetchVideo();
+    if (id) fetchVideo();
   }, [id]);
 
   useEffect(() => {
@@ -39,6 +48,62 @@ export default function VideoDetailPage() {
         else videoRef.current.pause();
     }
   }, [isPlaying, video]);
+
+  const handleLike = async () => {
+    if (!session) {
+        toast.error("Please login to like");
+        return;
+    }
+    // Optimistic update
+    const previousLiked = liked;
+    const previousCount = likesCount;
+    setLiked(!liked);
+    setLikesCount(liked ? likesCount - 1 : likesCount + 1);
+
+    try {
+        const res = await fetch(`/api/videos/${id}/like`, { method: 'POST' });
+        if (res.ok) {
+            const data = await res.json();
+            setLiked(data.liked);
+            setLikesCount(data.likes);
+        } else {
+            // Revert
+            setLiked(previousLiked);
+            setLikesCount(previousCount);
+            toast.error("Failed to like video");
+        }
+    } catch (error) {
+        setLiked(previousLiked);
+        setLikesCount(previousCount);
+        console.error("Error liking video:", error);
+    }
+  };
+
+  const handleFollow = async () => {
+    if (!session) {
+        toast.error("Please login to follow");
+        return;
+    }
+    // Optimistic update
+    const previousFollowing = isFollowing;
+    setIsFollowing(!isFollowing);
+
+    try {
+        const res = await fetch(`/api/users/${video.userId}/follow`, { method: 'POST' });
+        if (res.ok) {
+            const data = await res.json();
+            setIsFollowing(data.following);
+            if (data.following) toast.success(`You are now following ${video.user?.name || "Creator"}`);
+            else toast.success(`Unfollowed ${video.user?.name || "Creator"}`);
+        } else {
+            setIsFollowing(previousFollowing);
+            toast.error("Failed to follow user");
+        }
+    } catch (error) {
+         setIsFollowing(previousFollowing);
+         console.error("Error following user:", error);
+    }
+  };
 
   if (loading) {
       return <div className="min-h-screen flex items-center justify-center"><Loader2 className="w-10 h-10 animate-spin text-primary" /></div>;
@@ -137,7 +202,7 @@ export default function VideoDetailPage() {
                                 {video.salon && <CheckCircle2 className="w-4 h-4 text-blue-500 fill-blue-500/20" />}
                             </h3>
                             <button
-                                onClick={() => setIsFollowing(!isFollowing)}
+                                onClick={handleFollow}
                                 className="text-xs font-bold text-primary hover:underline"
                             >
                                 {isFollowing ? "Following" : "Follow"}
@@ -147,7 +212,7 @@ export default function VideoDetailPage() {
 
                      <div className="flex items-center gap-3">
                         <button
-                            onClick={() => setLiked(!liked)}
+                            onClick={handleLike}
                             className={`flex items-center gap-2 px-4 py-2 rounded-full font-bold transition-all border ${
                             liked
                                 ? "bg-rose-50 text-rose-600 border-rose-200"
@@ -155,7 +220,7 @@ export default function VideoDetailPage() {
                             }`}
                         >
                             <Heart className={`w-5 h-5 ${liked ? "fill-current" : ""}`} />
-                            <span>{liked ? (video.likes + 1) : video.likes}</span>
+                            <span>{likesCount}</span>
                         </button>
                     </div>
                 </div>

@@ -1,4 +1,5 @@
-import { pgTable, text, timestamp, boolean, pgEnum } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, boolean, pgEnum, uniqueIndex } from 'drizzle-orm/pg-core';
+import { relations } from 'drizzle-orm';
 
 export const userRoleEnum = pgEnum('user_role', ['user', 'salon_owner', 'admin']);
 
@@ -44,3 +45,30 @@ export const verifications = pgTable('verifications', {
   expiresAt: timestamp('expires_at').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
+
+export const follows = pgTable('follows', {
+  id: text('id').primaryKey(),
+  followerId: text('follower_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  followingId: text('following_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+}, (t) => ({
+  followerFollowingIdx: uniqueIndex('follower_following_idx').on(t.followerId, t.followingId),
+}));
+
+export const followsRelations = relations(follows, ({ one }) => ({
+  follower: one(users, {
+    fields: [follows.followerId],
+    references: [users.id],
+    relationName: 'following'
+  }),
+  following: one(users, {
+    fields: [follows.followingId],
+    references: [users.id],
+    relationName: 'followers'
+  }),
+}));
+
+export const usersRelations = relations(users, ({ many }) => ({
+  followers: many(follows, { relationName: 'followers' }),
+  following: many(follows, { relationName: 'following' }),
+}));
