@@ -1,6 +1,7 @@
 import { pgTable, text, timestamp, integer, boolean, uniqueIndex, pgEnum } from 'drizzle-orm/pg-core';
 import { users } from './auth';
 import { salons } from './salons';
+import { products } from './commerce';
 import { relations } from 'drizzle-orm';
 
 export const videoStatusEnum = pgEnum('video_status', ['published', 'draft', 'private']);
@@ -30,6 +31,15 @@ export const videoLikes = pgTable('video_likes', {
   userVideoIdx: uniqueIndex('user_video_like_idx').on(t.userId, t.videoId),
 }));
 
+export const videoProducts = pgTable('video_products', {
+  id: text('id').primaryKey(),
+  videoId: text('video_id').notNull().references(() => videos.id, { onDelete: 'cascade' }),
+  productId: text('product_id').notNull().references(() => products.id, { onDelete: 'cascade' }),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+}, (t) => ({
+  videoProductIdx: uniqueIndex('video_product_idx').on(t.videoId, t.productId),
+}));
+
 export const videosRelations = relations(videos, ({ one, many }) => ({
   user: one(users, {
     fields: [videos.userId],
@@ -40,6 +50,7 @@ export const videosRelations = relations(videos, ({ one, many }) => ({
     references: [salons.id],
   }),
   likes: many(videoLikes),
+  products: many(videoProducts),
 }));
 
 export const videoLikesRelations = relations(videoLikes, ({ one }) => ({
@@ -50,5 +61,16 @@ export const videoLikesRelations = relations(videoLikes, ({ one }) => ({
   video: one(videos, {
     fields: [videoLikes.videoId],
     references: [videos.id],
+  }),
+}));
+
+export const videoProductsRelations = relations(videoProducts, ({ one }) => ({
+  video: one(videos, {
+    fields: [videoProducts.videoId],
+    references: [videos.id],
+  }),
+  product: one(products, {
+    fields: [videoProducts.productId],
+    references: [products.id],
   }),
 }));

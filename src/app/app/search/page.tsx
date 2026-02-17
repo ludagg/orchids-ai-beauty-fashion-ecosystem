@@ -3,7 +3,7 @@
 import { useSearchParams, useRouter } from "next/navigation";
 import { useState, useEffect, Suspense } from "react";
 import { motion } from "framer-motion";
-import { Search, MapPin, Star, ShoppingBag, Video, Scissors, Sparkles, Users, Filter, X, Loader2 } from "lucide-react";
+import { Search, MapPin, Star, ShoppingBag, Video, Scissors, Sparkles, Users, Filter, X, Loader2, Play } from "lucide-react";
 import Link from "next/link";
 
 const TABS = [

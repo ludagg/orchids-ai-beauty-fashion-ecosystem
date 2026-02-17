@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { videos } from "@/db/schema/content";
+import { videos, videoProducts } from "@/db/schema/content";
 import { headers } from "next/headers";
 import { eq, desc, and } from "drizzle-orm";
 import { nanoid } from "nanoid";
@@ -32,12 +32,23 @@ export async function GET(req: NextRequest) {
             with: {
                 user: true,
                 salon: true,
+                products: {
+                    with: {
+                        product: true
+                    }
+                }
             },
             orderBy: orderByClause,
             limit: limit
         });
 
-        return NextResponse.json(videosList);
+        // Flatten products
+        const formatted = videosList.map(v => ({
+            ...v,
+            products: v.products.map((vp: any) => vp.product)
+        }));
+
+        return NextResponse.json(formatted);
 
     } catch (error) {
         console.error("Error fetching videos:", error);
@@ -56,7 +67,7 @@ export async function POST(req: NextRequest) {
         }
 
         const body = await req.json();
-        const { title, videoUrl, thumbnailUrl, category, description, salonId, isLive, status } = body;
+        const { title, videoUrl, thumbnailUrl, category, description, salonId, isLive, status, productIds } = body;
 
         if (!title || !videoUrl) {
             return NextResponse.json({ error: "Title and Video URL are required" }, { status: 400 });
@@ -64,19 +75,31 @@ export async function POST(req: NextRequest) {
 
         const id = nanoid();
 
-        await db.insert(videos).values({
-            id,
-            userId: session.user.id,
-            salonId: salonId || null,
-            title,
-            description,
-            videoUrl,
-            thumbnailUrl: thumbnailUrl || videoUrl, // Fallback if no thumb
-            category,
-            status: status || 'published',
-            views: 0,
-            likes: 0,
-            isLive: isLive || false,
+        await db.transaction(async (tx) => {
+            await tx.insert(videos).values({
+                id,
+                userId: session.user.id,
+                salonId: salonId || null,
+                title,
+                description,
+                videoUrl,
+                thumbnailUrl: thumbnailUrl || videoUrl,
+                category,
+                status: status || 'published',
+                views: 0,
+                likes: 0,
+                isLive: isLive || false,
+            });
+
+            if (productIds && Array.isArray(productIds) && productIds.length > 0) {
+                for (const productId of productIds) {
+                    await tx.insert(videoProducts).values({
+                        id: nanoid(),
+                        videoId: id,
+                        productId
+                    });
+                }
+            }
         });
 
         return NextResponse.json({ success: true, id }, { status: 201 });
