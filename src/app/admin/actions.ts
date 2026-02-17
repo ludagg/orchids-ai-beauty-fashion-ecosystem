@@ -5,6 +5,7 @@ import { users, salons, orders } from "@/db/schema";
 import { eq, desc, count, sum, and, or, ilike, inArray } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { revalidatePath } from "next/cache";
 
 async function checkAdmin() {
   const session = await auth.api.getSession({
@@ -176,4 +177,17 @@ export async function getOrders(page = 1, status = "") {
         total: totalResult.value,
         totalPages: Math.ceil(totalResult.value / limit)
     };
+}
+
+export async function updateOrderStatus(orderId: string, status: string) {
+    await checkAdmin();
+
+    await db.update(orders)
+        .set({ status: status as any })
+        .where(eq(orders.id, orderId));
+
+    revalidatePath('/admin/marketplace');
+    revalidatePath('/admin/payments');
+
+    return { success: true };
 }
