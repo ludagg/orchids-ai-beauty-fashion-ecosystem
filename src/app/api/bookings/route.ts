@@ -8,6 +8,7 @@ import { headers } from "next/headers";
 import { getDay } from 'date-fns';
 import { sendEmail } from "@/lib/email";
 import { EmailTemplates } from "@/lib/email-templates";
+import { createNotification } from "@/lib/notifications";
 
 export async function POST(req: NextRequest) {
     try {
@@ -120,16 +121,30 @@ export async function POST(req: NextRequest) {
                         }
                     });
 
-                    if (bookingDetails && session.user?.email) {
-                        const html = EmailTemplates.bookingConfirmation(bookingDetails, session.user);
-                        await sendEmail({
-                            to: session.user.email,
-                            subject: `Booking Confirmed at ${bookingDetails.salon.name}`,
-                            html
-                        });
+                    if (bookingDetails) {
+                        // Notify Salon Owner
+                        if (bookingDetails.salon.ownerId) {
+                            await createNotification({
+                                userId: bookingDetails.salon.ownerId,
+                                type: 'booking',
+                                title: 'New Booking Request',
+                                message: `New booking for ${bookingDetails.service.name} by ${session.user.name || 'a user'}`,
+                                link: `/partner-dashboard/bookings`,
+                                metadata: { bookingId: newBookingId }
+                            });
+                        }
+
+                        if (session.user?.email) {
+                            const html = EmailTemplates.bookingConfirmation(bookingDetails, session.user);
+                            await sendEmail({
+                                to: session.user.email,
+                                subject: `Booking Confirmed at ${bookingDetails.salon.name}`,
+                                html
+                            });
+                        }
                     }
                 } catch (emailError) {
-                    console.error("Failed to send confirmation email", emailError);
+                    console.error("Failed to send confirmation email or notification", emailError);
                 }
             })();
 
