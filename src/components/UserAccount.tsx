@@ -82,8 +82,12 @@ export default function UserAccount({ showLabel = true }: { showLabel?: boolean 
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button className="flex items-center gap-2 p-1.5 pr-3 rounded-full hover:bg-secondary transition-colors border border-transparent hover:border-border outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 group">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-violet-500 to-rose-500 flex items-center justify-center text-white font-medium text-xs shadow-sm group-hover:shadow-md transition-shadow">
-            {initials}
+          <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-violet-500 to-rose-500 flex items-center justify-center text-white font-medium text-xs shadow-sm group-hover:shadow-md transition-shadow overflow-hidden">
+            {user?.image ? (
+                <img src={user.image} alt={user.name || "User"} className="w-full h-full object-cover" />
+            ) : (
+                initials
+            )}
           </div>
           {showLabel && (
             <span className="text-sm font-medium hidden sm:inline text-foreground">
