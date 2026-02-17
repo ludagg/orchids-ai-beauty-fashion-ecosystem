@@ -133,6 +133,9 @@ export default function AppLayout({
           </Link>
           <div className="flex items-center gap-1">
             <ThemeSwitcher />
+          <Link href="/app/wishlist" className="p-2 relative">
+             <Heart className={`w-6 h-6 ${pathname === '/app/wishlist' ? 'text-rose-500 fill-rose-500' : ''}`} />
+          </Link>
             <NotificationBell />
             <UserAccount showLabel={false} />
             <button onClick={() => setMobileMenuOpen(true)} className="p-2 ml-1">
