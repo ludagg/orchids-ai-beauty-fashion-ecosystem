@@ -2,43 +2,23 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Search,
-  MapPin,
-  Star,
-  Heart,
   Sparkles,
   ArrowRight,
-  Filter,
   ShoppingBag,
   Scissors,
-  Video,
   Play,
   Calendar,
-  Clock,
-  TrendingUp,
-  Zap,
   Loader2,
-  User
+  User,
+  Heart,
+  MapPin,
+  Star,
+  Zap
 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
 
 // Mock Data for unimplemented sections
-const CATEGORIES = [
-  { id: "all", label: "For You", icon: Sparkles },
-  { id: "salons", label: "Salons", icon: Scissors },
-  { id: "styles", label: "Styles", icon: TrendingUp },
-  { id: "shop", label: "Shop", icon: ShoppingBag },
-  { id: "videos", label: "Videos", icon: Video },
-];
-
 const HERO_SLIDES = [
   {
     id: 1,
@@ -63,6 +43,41 @@ const HERO_SLIDES = [
     cta: "Try AI Stylist",
     image: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=1200&h=600&fit=crop",
     color: "from-emerald-500 to-teal-500"
+  }
+];
+
+const QUICK_ACTIONS = [
+  {
+    label: "AI Stylist",
+    href: "/app/ai-stylist",
+    icon: Sparkles,
+    gradient: "from-violet-500 to-fuchsia-500",
+    shadow: "shadow-violet-500/20",
+    description: "Get personalized looks"
+  },
+  {
+    label: "My Bookings",
+    href: "/app/bookings",
+    icon: Calendar,
+    gradient: "from-emerald-500 to-teal-500",
+    shadow: "shadow-emerald-500/20",
+    description: "Manage appointments"
+  },
+  {
+    label: "Wishlist",
+    href: "/app/wishlist",
+    icon: Heart,
+    gradient: "from-rose-500 to-pink-500",
+    shadow: "shadow-rose-500/20",
+    description: "Saved items & styles"
+  },
+  {
+    label: "My Profile",
+    href: "/app/profile",
+    icon: User,
+    gradient: "from-blue-500 to-cyan-500",
+    shadow: "shadow-blue-500/20",
+    description: "View stats & settings"
   }
 ];
 
@@ -158,67 +173,18 @@ export default function DiscoverPage() {
             <HeroCarousel slides={HERO_SLIDES} />
 
             <div className="py-2">
-              <h2 className="text-2xl font-bold text-center mb-6 font-display">All you need</h2>
-              <Carousel
-                opts={{
-                  align: "start",
-                }}
-                className="w-full"
-              >
-                <CarouselContent className="-ml-2 md:-ml-4">
-                  {[
-                    {
-                      label: "AI Stylist",
-                      href: "/app/ai-stylist",
-                      icon: Sparkles,
-                      bg: "bg-gradient-to-br from-violet-500/10 to-fuchsia-500/10",
-                      border: "border-violet-200/20 hover:border-violet-500/30",
-                      iconBg: "bg-violet-100 dark:bg-violet-900/30",
-                      iconColor: "text-violet-600 dark:text-violet-400"
-                    },
-                    {
-                      label: "My Bookings",
-                      href: "/app/bookings",
-                      icon: Calendar,
-                      bg: "bg-gradient-to-br from-emerald-500/10 to-teal-500/10",
-                      border: "border-emerald-200/20 hover:border-emerald-500/30",
-                      iconBg: "bg-emerald-100 dark:bg-emerald-900/30",
-                      iconColor: "text-emerald-600 dark:text-emerald-400"
-                    },
-                    {
-                      label: "Wishlist",
-                      href: "/app/wishlist",
-                      icon: Heart,
-                      bg: "bg-gradient-to-br from-rose-500/10 to-pink-500/10",
-                      border: "border-rose-200/20 hover:border-rose-500/30",
-                      iconBg: "bg-rose-100 dark:bg-rose-900/30",
-                      iconColor: "text-rose-600 dark:text-rose-400"
-                    },
-                    {
-                      label: "My Profile",
-                      href: "/app/profile",
-                      icon: User,
-                      bg: "bg-gradient-to-br from-blue-500/10 to-cyan-500/10",
-                      border: "border-blue-200/20 hover:border-blue-500/30",
-                      iconBg: "bg-blue-100 dark:bg-blue-900/30",
-                      iconColor: "text-blue-600 dark:text-blue-400"
-                    }
-                  ].map((item, index) => (
-                    <CarouselItem key={index} className="pl-2 md:pl-4 basis-1/2 md:basis-1/3 lg:basis-1/4">
-                      <Link href={item.href} className={`flex flex-col items-center justify-center p-4 rounded-2xl border transition-all group h-full ${item.bg} ${item.border}`}>
-                        <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform ${item.iconBg}`}>
-                          <item.icon className={`w-6 h-6 ${item.iconColor}`} />
-                        </div>
-                        <span className="font-semibold text-sm text-foreground">{item.label}</span>
-                      </Link>
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-                <div className="hidden md:block">
-                  <CarouselPrevious className="-left-4" />
-                  <CarouselNext className="-right-4" />
-                </div>
-              </Carousel>
+              <div className="flex items-center justify-between mb-6 px-1">
+                <h2 className="text-2xl font-bold font-display flex items-center gap-2">
+                  <Zap className="w-6 h-6 text-primary fill-primary/20" />
+                  Quick Actions
+                </h2>
+              </div>
+
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                {QUICK_ACTIONS.map((action, index) => (
+                  <QuickActionCard key={index} action={action} index={index} />
+                ))}
+              </div>
             </div>
 
             <SectionHeader title="Trending Styles" icon={Sparkles} href="/app/styles" />
@@ -272,6 +238,32 @@ export default function DiscoverPage() {
 }
 
 // Sub-components for cleaner code
+
+function QuickActionCard({ action, index }: { action: any, index: number }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.1 }}
+      className="h-full"
+    >
+      <Link href={action.href} className="group relative block h-full">
+        <div className={`absolute inset-0 bg-gradient-to-br ${action.gradient} opacity-[0.03] dark:opacity-[0.08] rounded-3xl transition-opacity group-hover:opacity-10`} />
+        <div className="relative p-5 h-full border border-border/60 rounded-3xl bg-card/40 backdrop-blur-sm transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-lg group-hover:shadow-black/5 hover:border-border/80 dark:bg-card/20">
+            <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${action.gradient} flex items-center justify-center mb-4 text-white shadow-lg ${action.shadow} group-hover:scale-110 transition-transform duration-300`}>
+                <action.icon className="w-6 h-6" />
+            </div>
+            <h3 className="font-bold text-lg mb-1">{action.label}</h3>
+            <p className="text-xs text-muted-foreground font-medium">{action.description}</p>
+
+            <div className="absolute top-5 right-5 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                <ArrowRight className="w-4 h-4 text-muted-foreground" />
+            </div>
+        </div>
+      </Link>
+    </motion.div>
+  )
+}
 
 function HeroCarousel({ slides }: { slides: typeof HERO_SLIDES }) {
   const [current, setCurrent] = useState(0);
