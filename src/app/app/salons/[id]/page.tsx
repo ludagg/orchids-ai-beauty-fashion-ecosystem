@@ -26,6 +26,12 @@ import { addDays, format, parse } from "date-fns";
 import { toast } from "sonner";
 import { useSession } from "@/lib/auth-client";
 import { Textarea } from "@/components/ui/textarea";
+import dynamic from "next/dynamic";
+
+const Map = dynamic(() => import("@/components/ui/Map"), {
+  ssr: false,
+  loading: () => <div className="h-[300px] w-full rounded-2xl bg-muted animate-pulse flex items-center justify-center text-muted-foreground">Loading Map...</div>
+});
 
 interface Salon {
   id: string;
@@ -41,6 +47,8 @@ interface Salon {
   type: "SALON" | "BOUTIQUE" | "BOTH";
   images: { id: string; url: string; caption: string | null }[];
   openingHours: { dayOfWeek: number; openTime: string; closeTime: string; isClosed: boolean }[];
+  latitude?: string | number | null;
+  longitude?: string | number | null;
 }
 
 interface Service {
@@ -92,6 +100,32 @@ export default function SalonDetailsPage() {
   const [reviewRating, setReviewRating] = useState(5);
   const [reviewComment, setReviewComment] = useState("");
   const [submittingReview, setSubmittingReview] = useState(false);
+  const [coordinates, setCoordinates] = useState<{ lat: number; lng: number } | null>(null);
+
+  useEffect(() => {
+    if (salon) {
+      if (salon.latitude && salon.longitude) {
+        setCoordinates({
+          lat: Number(salon.latitude),
+          lng: Number(salon.longitude)
+        });
+      } else if (salon.address && salon.city) {
+        // Fallback geocoding
+        const query = encodeURIComponent(`${salon.address}, ${salon.city}`);
+        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}`)
+          .then(res => res.json())
+          .then(data => {
+            if (data && data.length > 0) {
+              setCoordinates({
+                lat: Number(data[0].lat),
+                lng: Number(data[0].lon)
+              });
+            }
+          })
+          .catch(err => console.error("Geocoding error:", err));
+      }
+    }
+  }, [salon]);
 
   useEffect(() => {
     async function fetchData() {
@@ -444,6 +478,16 @@ export default function SalonDetailsPage() {
                     ))}
                   </div>
                 </div>
+            )}
+
+            {/* Map Section */}
+            {coordinates && (
+               <div className="py-4 space-y-3">
+                 <h4 className="text-sm font-bold text-muted-foreground uppercase tracking-widest">Location</h4>
+                 <div className="h-[300px] w-full rounded-2xl overflow-hidden border border-border z-0 relative">
+                    <Map key={`${coordinates.lat}-${coordinates.lng}`} lat={coordinates.lat} lng={coordinates.lng} popupText={salon.name} />
+                 </div>
+               </div>
             )}
 
             <div className="space-y-4">
