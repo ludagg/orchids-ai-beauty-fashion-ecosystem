@@ -14,48 +14,19 @@ import {
   RotateCcw
 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
-
-const initialCartItems = [
-  {
-    id: 1,
-    title: "Summer Minimalist Dress",
-    designer: "Studio Épure",
-    price: 4999,
-    image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=500&fit=crop",
-    size: "M",
-    color: "Cream",
-    quantity: 1
-  },
-  {
-    id: 2,
-    title: "Eco-Linen Summer Set",
-    designer: "Studio Épure",
-    price: 3499,
-    image: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=400&h=500&fit=crop",
-    size: "S",
-    color: "Olive",
-    quantity: 1
-  }
-];
+import { useCart } from "@/lib/cart-context";
 
 export default function CartPage() {
-  const [items, setItems] = useState(initialCartItems);
+  const { items, updateQuantity, removeFromCart, cartTotal } = useCart();
 
-  const updateQuantity = (id: number, delta: number) => {
-    setItems(items.map(item =>
-      item.id === id ? { ...item, quantity: Math.max(1, item.quantity + delta) } : item
-    ));
-  };
-
-  const removeItem = (id: number) => {
-    setItems(items.filter(item => item.id !== id));
-  };
-
-  const subtotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
-  const shipping = subtotal > 5000 ? 0 : 150;
+  const subtotal = cartTotal;
+  const shipping = items.length > 0 && subtotal < 500000 ? 15000 : 0; // 150.00 Rs shipping if < 5000 Rs
   const tax = Math.round(subtotal * 0.18);
   const total = subtotal + shipping + tax;
+
+  const formatPrice = (cents: number) => {
+    return (cents / 100).toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
+  };
 
   return (
     <div className="flex-1 p-4 sm:p-6 lg:p-8 max-w-[1400px] mx-auto w-full">
@@ -77,7 +48,7 @@ export default function CartPage() {
             <AnimatePresence mode="popLayout">
               {items.map((item) => (
                 <motion.div
-                  key={item.id}
+                  key={item.productId}
                   layout
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -85,32 +56,32 @@ export default function CartPage() {
                   className="flex gap-6 p-6 rounded-[32px] bg-card border border-border hover:border-foreground transition-all group"
                 >
                   <div className="w-24 sm:w-32 aspect-[3/4] rounded-2xl overflow-hidden bg-muted shadow-inner">
-                    <img src={item.image} alt={item.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                    <img src={item.image} alt={item.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                   </div>
                   <div className="flex-1 flex flex-col justify-between py-1">
                     <div className="flex items-start justify-between gap-4">
                       <div>
-                        <h3 className="font-bold text-foreground text-lg">{item.title}</h3>
-                        <p className="text-sm text-rose-600 font-bold uppercase tracking-widest">{item.designer}</p>
+                        <h3 className="font-bold text-foreground text-lg">{item.name}</h3>
+                        <p className="text-sm text-rose-600 font-bold uppercase tracking-widest">{item.brand || item.salonName || "Generic"}</p>
                         <div className="flex gap-4 mt-2">
-                          <p className="text-xs text-muted-foreground font-medium">Size: <span className="text-foreground font-bold">{item.size}</span></p>
-                          <p className="text-xs text-muted-foreground font-medium">Color: <span className="text-foreground font-bold">{item.color}</span></p>
+                            {item.size && <p className="text-xs text-muted-foreground font-medium">Size: <span className="text-foreground font-bold">{item.size}</span></p>}
+                            {item.color && <p className="text-xs text-muted-foreground font-medium">Color: <span className="text-foreground font-bold">{item.color}</span></p>}
                         </div>
                       </div>
-                      <p className="font-bold text-lg text-foreground">₹{item.price.toLocaleString()}</p>
+                      <p className="font-bold text-lg text-foreground">{formatPrice(item.price)}</p>
                     </div>
 
                     <div className="flex items-center justify-between mt-4">
                       <div className="flex items-center h-10 rounded-xl border border-border bg-muted/30 overflow-hidden">
                         <button
-                          onClick={() => updateQuantity(item.id, -1)}
+                          onClick={() => updateQuantity(item.productId, item.quantity - 1)}
                           className="w-10 h-full flex items-center justify-center hover:bg-card transition-colors"
                         >
                           <Minus className="w-4 h-4" />
                         </button>
                         <span className="w-10 text-center font-bold text-sm">{item.quantity}</span>
                         <button
-                          onClick={() => updateQuantity(item.id, 1)}
+                          onClick={() => updateQuantity(item.productId, item.quantity + 1)}
                           className="w-10 h-full flex items-center justify-center hover:bg-card transition-colors"
                         >
                           <Plus className="w-4 h-4" />
@@ -121,7 +92,7 @@ export default function CartPage() {
                           <Heart className="w-5 h-5" />
                         </button>
                         <button
-                          onClick={() => removeItem(item.id)}
+                          onClick={() => removeFromCart(item.productId)}
                           className="p-2 text-muted-foreground/50 hover:text-rose-500 transition-colors"
                         >
                           <Trash2 className="w-5 h-5" />
@@ -161,22 +132,22 @@ export default function CartPage() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground font-medium">Subtotal</span>
-                  <span className="text-foreground font-bold">₹{subtotal.toLocaleString()}</span>
+                  <span className="text-foreground font-bold">{formatPrice(subtotal)}</span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground font-medium">Shipping</span>
                   <span className={`font-bold ${shipping === 0 ? "text-emerald-600" : "text-foreground"}`}>
-                    {shipping === 0 ? "FREE" : `₹${shipping}`}
+                    {shipping === 0 ? "FREE" : formatPrice(shipping)}
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground font-medium">Estimated Tax (18%)</span>
-                  <span className="text-foreground font-bold">₹{tax.toLocaleString()}</span>
+                  <span className="text-foreground font-bold">{formatPrice(tax)}</span>
                 </div>
                 <div className="h-px bg-border my-2" />
                 <div className="flex items-center justify-between text-lg">
                   <span className="text-foreground font-bold">Total</span>
-                  <span className="text-foreground font-bold">₹{total.toLocaleString()}</span>
+                  <span className="text-foreground font-bold">{formatPrice(total)}</span>
                 </div>
               </div>
 

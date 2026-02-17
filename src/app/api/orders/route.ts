@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { orders, orderItems, products } from "@/db/schema/commerce";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, inArray, sql } from "drizzle-orm";
 import { nanoid } from "nanoid";
 import { headers } from "next/headers";
 import { sendEmail } from "@/lib/email";
@@ -53,31 +53,61 @@ export async function POST(req: NextRequest) {
         }
 
         const body = await req.json();
-        const { productId, quantity = 1 } = body;
+        let itemsToProcess: { productId: string, quantity: number }[] = [];
 
-        if (!productId) {
-            return NextResponse.json({ error: "Product ID is required" }, { status: 400 });
+        if (body.items && Array.isArray(body.items)) {
+            itemsToProcess = body.items;
+        } else if (body.productId) {
+            itemsToProcess = [{ productId: body.productId, quantity: body.quantity || 1 }];
+        } else {
+            return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
         }
 
-        // 1. Fetch Product to check stock and price
-        const product = await db.query.products.findFirst({
-            where: eq(products.id, productId)
+        if (itemsToProcess.length === 0) {
+            return NextResponse.json({ error: "No items to order" }, { status: 400 });
+        }
+
+        // Aggregate items by productId to handle duplicates correctly
+        const aggregatedItems = new Map<string, number>();
+        for (const item of itemsToProcess) {
+            const current = aggregatedItems.get(item.productId) || 0;
+            aggregatedItems.set(item.productId, current + item.quantity);
+        }
+
+        const uniqueProductIds = Array.from(aggregatedItems.keys());
+
+        const productsFound = await db.query.products.findMany({
+            where: inArray(products.id, uniqueProductIds)
         });
 
-        if (!product) {
-            return NextResponse.json({ error: "Product not found" }, { status: 404 });
+        const productMap = new Map(productsFound.map(p => [p.id, p]));
+
+        let totalAmount = 0;
+        const finalOrderItems = [];
+
+        for (const [productId, quantity] of aggregatedItems.entries()) {
+            const product = productMap.get(productId);
+
+            if (!product) {
+                return NextResponse.json({ error: `Product not found: ${productId}` }, { status: 404 });
+            }
+
+            if (product.stock < quantity) {
+                return NextResponse.json({ error: `Insufficient stock for ${product.name}` }, { status: 400 });
+            }
+
+            totalAmount += product.price * quantity;
+            finalOrderItems.push({
+                productId: productId,
+                quantity: quantity,
+                priceAtPurchase: product.price,
+                currentStock: product.stock
+            });
         }
 
-        if (product.stock < quantity) {
-            return NextResponse.json({ error: "Insufficient stock" }, { status: 400 });
-        }
-
-        // 2. Create Order
+        // Create Order
         const orderId = nanoid();
-        const totalAmount = product.price * quantity;
 
-        // Start transaction (implicitly handled if single operations, but better safe)
-        // Drizzle transaction:
         await db.transaction(async (tx) => {
              // Create Order
             await tx.insert(orders).values({
@@ -85,23 +115,23 @@ export async function POST(req: NextRequest) {
                 userId: session.user.id,
                 status: 'reserved', // Default for pickup
                 totalAmount: totalAmount,
-                // shippingAddress is nullable now
             });
 
-            // Create Order Item
-            await tx.insert(orderItems).values({
-                id: nanoid(),
-                orderId: orderId,
-                productId: productId,
-                quantity: quantity,
-                priceAtPurchase: product.price
-            });
+            // Create Order Items and Update Stock
+            for (const item of finalOrderItems) {
+                await tx.insert(orderItems).values({
+                    id: nanoid(),
+                    orderId: orderId,
+                    productId: item.productId,
+                    quantity: item.quantity,
+                    priceAtPurchase: item.priceAtPurchase
+                });
 
-            // Update Stock (Optional: Reserve stock)
-            // For now, let's just decrement
-            await tx.update(products)
-                .set({ stock: product.stock - quantity })
-                .where(eq(products.id, productId));
+                // Calculate new stock based on the aggregated quantity
+                await tx.update(products)
+                    .set({ stock: sql`${products.stock} - ${item.quantity}` })
+                    .where(eq(products.id, item.productId));
+            }
         });
 
         // Send Order Confirmation Email
