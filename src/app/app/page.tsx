@@ -7,13 +7,10 @@ import {
   ShoppingBag,
   Scissors,
   Play,
-  Calendar,
   Loader2,
-  User,
   Heart,
   MapPin,
-  Star,
-  Zap
+  Star
 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
@@ -43,41 +40,6 @@ const HERO_SLIDES = [
     cta: "Try AI Stylist",
     image: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=1200&h=600&fit=crop",
     color: "from-emerald-500 to-teal-500"
-  }
-];
-
-const QUICK_ACTIONS = [
-  {
-    label: "AI Stylist",
-    href: "/app/ai-stylist",
-    icon: Sparkles,
-    gradient: "from-violet-500 to-fuchsia-500",
-    shadow: "shadow-violet-500/20",
-    description: "Get personalized looks"
-  },
-  {
-    label: "My Bookings",
-    href: "/app/bookings",
-    icon: Calendar,
-    gradient: "from-emerald-500 to-teal-500",
-    shadow: "shadow-emerald-500/20",
-    description: "Manage appointments"
-  },
-  {
-    label: "Wishlist",
-    href: "/app/wishlist",
-    icon: Heart,
-    gradient: "from-rose-500 to-pink-500",
-    shadow: "shadow-rose-500/20",
-    description: "Saved items & styles"
-  },
-  {
-    label: "My Profile",
-    href: "/app/profile",
-    icon: User,
-    gradient: "from-blue-500 to-cyan-500",
-    shadow: "shadow-blue-500/20",
-    description: "View stats & settings"
   }
 ];
 
@@ -173,18 +135,7 @@ export default function DiscoverPage() {
             <HeroCarousel slides={HERO_SLIDES} />
 
             <div className="py-2">
-              <div className="flex items-center justify-between mb-6 px-1">
-                <h2 className="text-2xl font-bold font-display flex items-center gap-2">
-                  <Zap className="w-6 h-6 text-primary fill-primary/20" />
-                  Quick Actions
-                </h2>
-              </div>
-
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                {QUICK_ACTIONS.map((action, index) => (
-                  <QuickActionCard key={index} action={action} index={index} />
-                ))}
-              </div>
+              <LocationPreview />
             </div>
 
             <SectionHeader title="Trending Styles" icon={Sparkles} href="/app/styles" />
@@ -239,29 +190,56 @@ export default function DiscoverPage() {
 
 // Sub-components for cleaner code
 
-function QuickActionCard({ action, index }: { action: any, index: number }) {
+function LocationPreview() {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.1 }}
-      className="h-full"
-    >
-      <Link href={action.href} className="group relative block h-full">
-        <div className={`absolute inset-0 bg-gradient-to-br ${action.gradient} opacity-[0.03] dark:opacity-[0.08] rounded-3xl transition-opacity group-hover:opacity-10`} />
-        <div className="relative p-5 h-full border border-border/60 rounded-3xl bg-card/40 backdrop-blur-sm transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-lg group-hover:shadow-black/5 hover:border-border/80 dark:bg-card/20">
-            <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${action.gradient} flex items-center justify-center mb-4 text-white shadow-lg ${action.shadow} group-hover:scale-110 transition-transform duration-300`}>
-                <action.icon className="w-6 h-6" />
-            </div>
-            <h3 className="font-bold text-lg mb-1">{action.label}</h3>
-            <p className="text-xs text-muted-foreground font-medium">{action.description}</p>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      {/* Map Preview */}
+      <div className="md:col-span-2 relative rounded-[32px] overflow-hidden min-h-[250px] shadow-lg shadow-black/5 group cursor-pointer border border-border">
+        <img
+          src="https://images.unsplash.com/photo-1524661135-423995f22d0b?w=1000&h=600&fit=crop"
+          alt="Map Location"
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
 
-            <div className="absolute top-5 right-5 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
-                <ArrowRight className="w-4 h-4 text-muted-foreground" />
+        {/* User Pin */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+            <div className="relative">
+                <div className="absolute -inset-4 bg-primary/30 rounded-full animate-ping" />
+                <div className="relative bg-white p-3 rounded-full shadow-xl text-primary">
+                    <MapPin className="w-8 h-8 fill-current" />
+                </div>
+            </div>
+            <div className="mt-4 bg-white/90 backdrop-blur px-4 py-2 rounded-xl shadow-lg border border-white/50">
+                <p className="font-bold text-sm text-center text-black">You are here</p>
+                <p className="text-xs text-muted-foreground text-center">Tap to see salons</p>
+            </div>
+        </div>
+      </div>
+
+      {/* Explore Action */}
+      <Link
+        href="/app/search?tab=salons"
+        className="md:col-span-1 bg-gradient-to-br from-violet-500 to-fuchsia-600 rounded-[32px] p-8 flex flex-col justify-between text-white shadow-lg shadow-violet-500/20 group hover:shadow-xl hover:shadow-violet-500/30 transition-all hover:-translate-y-1 relative overflow-hidden"
+      >
+        <div className="absolute top-0 right-0 p-32 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+
+        <div className="relative z-10">
+            <div className="w-14 h-14 bg-white/20 backdrop-blur rounded-2xl flex items-center justify-center mb-6 text-white shadow-inner border border-white/20">
+                <MapPin className="w-7 h-7" />
+            </div>
+            <h3 className="text-2xl font-bold mb-2 font-display">Explore Nearby</h3>
+            <p className="text-white/80 leading-relaxed text-sm">Discover top-rated salons and stylists in your area.</p>
+        </div>
+
+        <div className="relative z-10 mt-8 flex items-center justify-between bg-white/10 backdrop-blur border border-white/20 rounded-2xl p-4 group-hover:bg-white/20 transition-colors cursor-pointer">
+            <span className="font-bold text-sm">Find Salons</span>
+            <div className="w-8 h-8 rounded-full bg-white text-violet-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-md">
+                <ArrowRight className="w-4 h-4" />
             </div>
         </div>
       </Link>
-    </motion.div>
+    </div>
   )
 }
 
