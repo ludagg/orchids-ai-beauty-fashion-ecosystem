@@ -20,6 +20,7 @@ import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useSession } from "@/lib/auth-client";
+import { useCart } from "@/lib/cart-context";
 import { Textarea } from "@/components/ui/textarea";
 import { format } from "date-fns";
 
@@ -57,6 +58,7 @@ export default function ProductDetailsPage() {
   const { id } = useParams();
   const router = useRouter();
   const { data: session } = useSession();
+  const { addItem } = useCart();
 
   const [product, setProduct] = useState<Product | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -126,37 +128,24 @@ export default function ProductDetailsPage() {
     }
   };
 
-  const handleReserve = async () => {
-    if (!session) {
-      toast.error("Please login to reserve items");
-      router.push("/auth?mode=signin");
-      return;
-    }
+  const handleAddToBag = () => {
+    if (!product) return;
 
-    setReserving(true);
-    try {
-        const res = await fetch('/api/orders', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                productId: id,
-                quantity: quantity
-            })
-        });
+    addItem({
+        id: product.id,
+        title: product.name,
+        price: product.price,
+        image: product.images?.[0] || "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&h=800&fit=crop",
+        quantity: quantity,
+        salonId: product.salon?.id,
+        salonName: product.salon?.name,
+        brand: product.brand || undefined,
+    });
+  };
 
-        if (res.ok) {
-            toast.success("Product reserved successfully! Pay at salon.");
-            router.push('/app/bookings?tab=Orders');
-        } else {
-            const error = await res.json();
-            toast.error(error.error || "Failed to reserve product");
-        }
-    } catch (error) {
-        console.error("Reservation error:", error);
-        toast.error("Something went wrong");
-    } finally {
-        setReserving(false);
-    }
+  const handleBuyNow = () => {
+    handleAddToBag();
+    router.push('/app/checkout');
   };
 
   const handleChat = async () => {
@@ -363,12 +352,19 @@ export default function ProductDetailsPage() {
 
             <div className="flex gap-3">
                 <button
-                    onClick={handleReserve}
-                    disabled={product.stock === 0 || reserving}
+                    onClick={handleAddToBag}
+                    disabled={product.stock === 0}
+                    className="flex-1 h-16 rounded-2xl bg-secondary text-foreground font-bold text-lg hover:bg-secondary/80 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                    <ShoppingBag className="w-5 h-5" />
+                    Add to Bag
+                </button>
+                <button
+                    onClick={handleBuyNow}
+                    disabled={product.stock === 0}
                     className="flex-1 h-16 rounded-2xl bg-foreground text-background font-bold text-lg hover:bg-foreground/90 transition-all shadow-xl shadow-foreground/10 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
-                    {reserving ? <Loader2 className="w-5 h-5 animate-spin" /> : <ShoppingBag className="w-5 h-5" />}
-                    {reserving ? "Reserving..." : "Reserve for Pickup"}
+                    Buy Now
                 </button>
                 <button
                     onClick={handleWishlist}
@@ -379,7 +375,7 @@ export default function ProductDetailsPage() {
                 </button>
             </div>
             <p className="text-center text-xs text-muted-foreground">
-                Reserve online, pay when you collect at <strong>{product.salon?.name || "the salon"}</strong>.
+                Free shipping on orders over ₹5000. Easy returns.
             </p>
 
             <button
