@@ -17,6 +17,8 @@ import {
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { updateOrderStatus } from "../actions";
+import { toast } from "sonner";
 
 interface Order {
     id: string;
@@ -49,6 +51,7 @@ export default function AdminMarketplaceClient({ data }: AdminMarketplaceClientP
   const router = useRouter();
   const searchParams = useSearchParams();
   const [statusFilter, setStatusFilter] = useState(searchParams.get("status") || "All Status");
+  const [updatingId, setUpdatingId] = useState<string | null>(null);
 
   useEffect(() => {
     setStatusFilter(searchParams.get("status") || "All Status");
@@ -67,6 +70,18 @@ export default function AdminMarketplaceClient({ data }: AdminMarketplaceClientP
     const newStatus = e.target.value;
     setStatusFilter(newStatus);
     updateFilters(newStatus);
+  };
+
+  const handleUpdateStatus = async (orderId: string, newStatus: string) => {
+      setUpdatingId(orderId);
+      try {
+          await updateOrderStatus(orderId, newStatus);
+          toast.success("Order status updated");
+      } catch (error) {
+          toast.error("Failed to update status");
+      } finally {
+          setUpdatingId(null);
+      }
   };
 
   return (
@@ -145,13 +160,20 @@ export default function AdminMarketplaceClient({ data }: AdminMarketplaceClientP
                         ₹{(order.totalAmount / 100).toFixed(2)}
                     </td>
                     <td className="px-6 py-4">
-                        <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                        order.status === 'paid' || order.status === 'delivered' ? 'bg-emerald-50 text-emerald-700' :
-                        order.status === 'pending' ? 'bg-amber-50 text-amber-700' :
-                        'bg-slate-50 text-slate-700'
-                        }`}>
-                        {order.status}
-                        </span>
+                        <select
+                            disabled={updatingId === order.id}
+                            value={order.status}
+                            onChange={(e) => handleUpdateStatus(order.id, e.target.value)}
+                            className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border-none outline-none cursor-pointer disabled:opacity-50 ${
+                                order.status === 'paid' || order.status === 'delivered' ? 'bg-emerald-50 text-emerald-700' :
+                                order.status === 'pending' ? 'bg-amber-50 text-amber-700' :
+                                'bg-slate-50 text-slate-700'
+                            }`}
+                        >
+                            {['pending', 'reserved', 'paid', 'processing', 'ready_for_pickup', 'shipped', 'delivered', 'cancelled', 'completed'].map(s => (
+                                <option key={s} value={s}>{s}</option>
+                            ))}
+                        </select>
                     </td>
                     <td className="px-6 py-4 text-sm text-muted-foreground">
                         {new Date(order.createdAt).toLocaleDateString()}
