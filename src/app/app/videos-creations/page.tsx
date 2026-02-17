@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import LiveHero from "@/components/videos-creations/LiveHero";
 import CategoryPills from "@/components/videos-creations/CategoryPills";
@@ -12,7 +12,7 @@ import { useSession } from "@/lib/auth-client";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { useInView } from "react-intersection-observer";
 
 const categories = [
   "All",
@@ -25,10 +25,16 @@ const categories = [
   "Minimalist",
 ];
 
+const LIMIT = 20;
+
 export default function VideosCreationsPage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [videos, setVideos] = useState<VideoCardProps[]>([]);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const { ref, inView } = useInView();
+
   const { data: session } = useSession();
   const [creators, setCreators] = useState<any[]>([]);
 
@@ -76,13 +82,27 @@ export default function VideosCreationsPage() {
     return () => clearTimeout(delayDebounceFn);
   }, [productSearch]);
 
-  const fetchVideos = async () => {
+  // Reset feed when category changes
+  useEffect(() => {
+      setVideos([]);
+      setPage(1);
+      setHasMore(true);
+      setLoading(true); // Trigger loading state for new category
+  }, [selectedCategory]);
+
+  const fetchVideos = useCallback(async () => {
+    // If we have no more videos, don't fetch, unless it's page 1 (initial load/reset)
+    if (!hasMore && page > 1) return;
+
     setLoading(true);
     try {
         const params = new URLSearchParams();
-        if (selectedCategory && selectedCategory !== "All" && selectedCategory !== "Live Now") {
+        if (selectedCategory && selectedCategory !== "All") {
             params.append("category", selectedCategory);
         }
+        params.append("page", page.toString());
+        params.append("limit", LIMIT.toString());
+
         const res = await fetch(`/api/videos?${params.toString()}`);
         if (res.ok) {
             const data = await res.json();
@@ -103,10 +123,15 @@ export default function VideosCreationsPage() {
                 isLiked: v.isLiked
             }));
 
-            if (selectedCategory === "Live Now") {
-                 setVideos(transformed.filter((v: any) => v.isLive));
+            if (page === 1) {
+                setVideos(transformed);
             } else {
-                 setVideos(transformed);
+                setVideos(prev => [...prev, ...transformed]);
+            }
+
+            // Check if we reached the end
+            if (transformed.length < LIMIT) {
+                setHasMore(false);
             }
         }
     } catch (error) {
@@ -114,11 +139,20 @@ export default function VideosCreationsPage() {
     } finally {
         setLoading(false);
     }
-  };
+  }, [selectedCategory, page, hasMore]);
 
+  // Trigger fetch when page or category (via reset) changes
+  // We use a separate effect for fetching to avoid race conditions with state resets
   useEffect(() => {
-    fetchVideos();
-  }, [selectedCategory]);
+      fetchVideos();
+  }, [page, fetchVideos]);
+
+  // Infinite Scroll Trigger
+  useEffect(() => {
+      if (inView && hasMore && !loading && videos.length > 0) {
+          setPage(prev => prev + 1);
+      }
+  }, [inView, hasMore, loading, videos.length]);
 
   const handleUpload = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -149,7 +183,12 @@ export default function VideosCreationsPage() {
             setUploadUrl("");
             setSelectedProducts([]);
             setProductSearch("");
-            fetchVideos(); // Refresh list
+            // Reset to page 1 to see new video
+            setVideos([]);
+            setPage(1);
+            setHasMore(true);
+            setLoading(true);
+            fetchVideos();
         } else {
             toast.error("Failed to upload video");
         }
@@ -287,33 +326,44 @@ export default function VideosCreationsPage() {
       />
 
       {/* Video Grid */}
-      {loading ? (
+      <motion.div
+        layout
+        className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6"
+      >
+        {videos.map((video) => (
+          <VideoCard key={video.id} video={video} />
+        ))}
+      </motion.div>
+
+      {/* Loading State & Sentinel */}
+      {loading && videos.length === 0 ? (
            <div className="flex justify-center py-20">
                <Loader2 className="w-10 h-10 animate-spin text-primary" />
            </div>
       ) : (
-        <motion.div
-            layout
-            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6"
-        >
-            {videos.map((video) => (
-            <VideoCard key={video.id} video={video} />
-            ))}
-        </motion.div>
+          <>
+            {/* Sentinel for Infinite Scroll - only show if we have content and more to load */}
+            {hasMore && videos.length > 0 && (
+                <div ref={ref} className="flex justify-center py-8 w-full">
+                    <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+                </div>
+            )}
+
+            {videos.length === 0 && !loading && (
+                <div className="text-center py-20 bg-muted/30 rounded-[40px] border border-dashed border-border">
+                    <VideoIcon className="w-12 h-12 text-muted-foreground mx-auto mb-4 opacity-50" />
+                    <p className="text-muted-foreground font-bold">No videos found for this category.</p>
+                    <button
+                        onClick={() => setSelectedCategory("All")}
+                        className="mt-4 px-6 py-2 rounded-full bg-foreground text-white font-bold text-sm"
+                    >
+                        Clear Filters
+                    </button>
+                </div>
+            )}
+          </>
       )}
 
-        {videos.length === 0 && !loading && (
-            <div className="text-center py-20 bg-muted/30 rounded-[40px] border border-dashed border-border">
-                <VideoIcon className="w-12 h-12 text-muted-foreground mx-auto mb-4 opacity-50" />
-                <p className="text-muted-foreground font-bold">No videos found for this category.</p>
-                <button
-                    onClick={() => setSelectedCategory("All")}
-                    className="mt-4 px-6 py-2 rounded-full bg-foreground text-white font-bold text-sm"
-                >
-                    Clear Filters
-                </button>
-            </div>
-        )}
     </div>
   );
 }
