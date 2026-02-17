@@ -28,7 +28,7 @@ export async function middleware(request: NextRequest) {
     request.cookies.has("__Secure-better-auth.session_token");
 
   if (!hasSessionCookie) {
-    return NextResponse.redirect(new URL("/auth", request.url));
+    return NextResponse.redirect(new URL("/auth/sign-in", request.url));
   }
 
   return NextResponse.next();
