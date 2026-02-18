@@ -34,9 +34,10 @@ interface MapProps {
     lng: number;
     popupText?: string;
     className?: string;
+    style?: React.CSSProperties;
 }
 
-export default function Map({ lat, lng, popupText, className }: MapProps) {
+export default function Map({ lat, lng, popupText, className, style }: MapProps) {
     useEffect(() => {
         // Ensure icon is set on mount just in case
         if (DefaultIcon) {
@@ -50,7 +51,7 @@ export default function Map({ lat, lng, popupText, className }: MapProps) {
             zoom={15}
             scrollWheelZoom={false}
             className={`h-full w-full z-0 ${className || ''}`}
-            style={{ minHeight: '300px', width: '100%', borderRadius: '1rem' }}
+            style={{ minHeight: '300px', width: '100%', borderRadius: '1rem', ...style }}
         >
             <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

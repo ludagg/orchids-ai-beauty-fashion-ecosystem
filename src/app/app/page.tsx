@@ -14,6 +14,13 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
+import { Button } from "@/components/ui/button";
+
+const Map = dynamic(() => import('@/components/ui/Map'), {
+  ssr: false,
+  loading: () => <div className="w-full h-full bg-secondary/50 animate-pulse rounded-[32px] flex items-center justify-center text-muted-foreground"><Loader2 className="animate-spin mr-2" /> Loading map...</div>
+});
 
 // Mock Data for unimplemented sections
 const HERO_SLIDES = [
@@ -191,54 +198,72 @@ export default function DiscoverPage() {
 // Sub-components for cleaner code
 
 function LocationPreview() {
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+
+  useEffect(() => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          });
+        },
+        (error) => {
+          console.error("Error getting location:", error);
+        }
+      );
+    }
+  }, []);
+
+  // Default to Paris if location not available
+  const displayLocation = userLocation || { lat: 48.8566, lng: 2.3522 };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
       {/* Map Preview */}
-      <div className="md:col-span-2 relative rounded-[32px] overflow-hidden min-h-[250px] shadow-lg shadow-black/5 group cursor-pointer border border-border">
-        <img
-          src="https://images.unsplash.com/photo-1524661135-423995f22d0b?w=1000&h=600&fit=crop"
-          alt="Map Location"
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100"
+      <div className="md:col-span-2 relative rounded-[32px] overflow-hidden shadow-lg shadow-black/5 border border-border bg-secondary h-[280px]">
+        <Map
+            lat={displayLocation.lat}
+            lng={displayLocation.lng}
+            popupText={userLocation ? "You are here" : "Paris, France"}
+            className="z-0"
+            style={{ minHeight: '100%', height: '100%' }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
 
-        {/* User Pin */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
-            <div className="relative">
-                <div className="absolute -inset-4 bg-primary/30 rounded-full animate-ping" />
-                <div className="relative bg-white p-3 rounded-full shadow-xl text-primary">
-                    <MapPin className="w-8 h-8 fill-current" />
-                </div>
+        {userLocation && (
+            <div className="absolute top-4 left-4 z-[1000] bg-white/90 backdrop-blur px-3 py-1.5 rounded-full shadow-md border border-white/50 flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-xs font-bold text-black">Your Location</span>
             </div>
-            <div className="mt-4 bg-white/90 backdrop-blur px-4 py-2 rounded-xl shadow-lg border border-white/50">
-                <p className="font-bold text-sm text-center text-black">You are here</p>
-                <p className="text-xs text-muted-foreground text-center">Tap to see salons</p>
-            </div>
-        </div>
+        )}
       </div>
 
       {/* Explore Action */}
-      <Link
-        href="/app/search?tab=salons"
-        className="md:col-span-1 bg-gradient-to-br from-violet-500 to-fuchsia-600 rounded-[32px] p-8 flex flex-col justify-between text-white shadow-lg shadow-violet-500/20 group hover:shadow-xl hover:shadow-violet-500/30 transition-all hover:-translate-y-1 relative overflow-hidden"
-      >
-        <div className="absolute top-0 right-0 p-32 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-
-        <div className="relative z-10">
-            <div className="w-14 h-14 bg-white/20 backdrop-blur rounded-2xl flex items-center justify-center mb-6 text-white shadow-inner border border-white/20">
-                <MapPin className="w-7 h-7" />
+      <div className="md:col-span-1 bg-card rounded-[32px] p-6 flex flex-col justify-between border border-border shadow-sm h-[280px]">
+        <div>
+            <div className="w-12 h-12 bg-secondary rounded-2xl flex items-center justify-center mb-4 text-primary shadow-sm border border-border">
+                <MapPin className="w-6 h-6" />
             </div>
-            <h3 className="text-2xl font-bold mb-2 font-display">Explore Nearby</h3>
-            <p className="text-white/80 leading-relaxed text-sm">Discover top-rated salons and stylists in your area.</p>
+            <h3 className="text-xl font-bold mb-2 font-display">Explore Nearby</h3>
+            <p className="text-muted-foreground text-sm leading-relaxed">Discover top-rated salons and stylists in your area.</p>
         </div>
 
-        <div className="relative z-10 mt-8 flex items-center justify-between bg-white/10 backdrop-blur border border-white/20 rounded-2xl p-4 group-hover:bg-white/20 transition-colors cursor-pointer">
-            <span className="font-bold text-sm">Find Salons</span>
-            <div className="w-8 h-8 rounded-full bg-white text-violet-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-md">
-                <ArrowRight className="w-4 h-4" />
-            </div>
+        <div className="flex flex-col gap-3 mt-4">
+            <Link href="/app/search?tab=salons" className="w-full">
+                <Button className="w-full rounded-xl py-6 text-base font-semibold shadow-md group">
+                    Explore Nearby
+                    <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                </Button>
+            </Link>
+            <Link href="/app/search?tab=marketplace" className="w-full">
+                 <Button variant="outline" className="w-full rounded-xl py-6 text-base font-semibold border-primary/10 hover:bg-secondary group">
+                    Shop Now
+                    <ShoppingBag className="w-4 h-4 ml-2 group-hover:scale-110 transition-transform" />
+                </Button>
+            </Link>
         </div>
-      </Link>
+      </div>
     </div>
   )
 }
