@@ -24,6 +24,12 @@ export async function GET(req: NextRequest) {
                     }
                 },
                 salon: true,
+                video: {
+                    with: {
+                        salon: true,
+                        user: true
+                    }
+                }
             },
             orderBy: [desc(favorites.createdAt)]
         });
@@ -47,10 +53,10 @@ export async function POST(req: NextRequest) {
         }
 
         const body = await req.json();
-        const { productId, salonId } = body;
+        const { productId, salonId, videoId } = body;
 
-        if (!productId && !salonId) {
-            return NextResponse.json({ error: "Product ID or Salon ID is required" }, { status: 400 });
+        if (!productId && !salonId && !videoId) {
+            return NextResponse.json({ error: "Product ID, Salon ID, or Video ID is required" }, { status: 400 });
         }
 
         const id = crypto.randomUUID();
@@ -60,6 +66,7 @@ export async function POST(req: NextRequest) {
             userId: session.user.id,
             productId: productId || null,
             salonId: salonId || null,
+            videoId: videoId || null,
         }).onConflictDoNothing(); // Prevent duplicates gracefully
 
         return NextResponse.json({ success: true, id }, { status: 201 });
@@ -84,8 +91,9 @@ export async function DELETE(req: NextRequest) {
         const favoriteId = searchParams.get('id');
         const productId = searchParams.get('productId');
         const salonId = searchParams.get('salonId');
+        const videoId = searchParams.get('videoId');
 
-        // Allow deletion by ID OR by target (product/salon)
+        // Allow deletion by ID OR by target (product/salon/video)
         if (favoriteId) {
              await db.delete(favorites).where(
                 eq(favorites.id, favoriteId)
@@ -98,8 +106,12 @@ export async function DELETE(req: NextRequest) {
              await db.delete(favorites).where(
                 eq(favorites.salonId, salonId)
             );
+        } else if (videoId) {
+             await db.delete(favorites).where(
+                eq(favorites.videoId, videoId)
+            );
         } else {
-             return NextResponse.json({ error: "ID, productId or salonId required" }, { status: 400 });
+             return NextResponse.json({ error: "ID, productId, salonId or videoId required" }, { status: 400 });
         }
 
         return NextResponse.json({ success: true });
