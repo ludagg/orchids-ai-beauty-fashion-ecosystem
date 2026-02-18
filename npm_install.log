@@ -1,0 +1,19 @@
+npm warn deprecated @types/prettier@3.0.0: This is a stub types definition. prettier provides its own type definitions, so you do not need this installed.
+npm warn deprecated @esbuild-kit/core-utils@3.3.2: Merged into tsx: https://tsx.is
+npm warn deprecated @esbuild-kit/esm-loader@2.6.5: Merged into tsx: https://tsx.is
+npm warn deprecated node-domexception@1.0.0: Use your platform's native DOMException instead
+
+added 852 packages, and audited 853 packages in 1m
+
+225 packages are looking for funding
+  run `npm fund` for details
+
+17 moderate severity vulnerabilities
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.

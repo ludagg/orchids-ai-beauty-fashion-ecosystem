@@ -7,6 +7,7 @@ export async function middleware(request: NextRequest) {
   const isPublicPath =
     pathname === "/" ||
     pathname.startsWith("/auth") || // Public auth pages (login/signup)
+    pathname.startsWith("/business/auth") || // Business auth pages
     pathname.startsWith("/api") || // API endpoints are public (auth handled in route handlers)
     pathname.startsWith("/_next") || // Next.js internals
     pathname.match(/\.(ico|png|jpg|jpeg|svg|css|js)$/) || // Static files
@@ -28,6 +29,9 @@ export async function middleware(request: NextRequest) {
     request.cookies.has("__Secure-better-auth.session_token");
 
   if (!hasSessionCookie) {
+    if (pathname.startsWith("/business")) {
+      return NextResponse.redirect(new URL("/business/auth/login", request.url));
+    }
     return NextResponse.redirect(new URL("/auth/sign-in", request.url));
   }
 
