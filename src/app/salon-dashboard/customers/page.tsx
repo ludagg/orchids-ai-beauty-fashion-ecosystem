@@ -5,7 +5,11 @@ import {
   Users,
   Search,
   Filter,
+  MoreVertical,
+  Mail,
+  Phone,
   MessageCircle,
+  Calendar,
   History,
   Star,
   ChevronRight,
@@ -77,7 +81,7 @@ export default function CustomersPage() {
           <button className="px-6 py-3 border border-border bg-card text-foreground rounded-xl text-sm font-bold hover:bg-muted transition-all flex items-center gap-2">
             Export CRM
           </button>
-          <button className="px-6 py-3 bg-foreground text-background rounded-xl text-sm font-bold hover:opacity-90 transition-all shadow-lg shadow-foreground/20 flex items-center gap-2">
+          <button className="px-6 py-3 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/20 flex items-center gap-2">
             <Users className="w-4 h-4" />
             Add Customer
           </button>
@@ -87,9 +91,9 @@ export default function CustomersPage() {
       {/* Stats Summary */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
         {[
-          { label: "Total Customers", value: "842", change: "+12%", icon: Users },
-          { label: "VIP Members", value: "48", change: "+5", icon: Star },
-          { label: "Customer Growth", value: "24%", change: "+4%", icon: TrendingUp },
+          { label: "Total Customers", value: "842", change: "+12%", icon: Users, color: "text-blue-600", bg: "bg-blue-500/10" },
+          { label: "VIP Members", value: "48", change: "+5", icon: Star, color: "text-amber-600", bg: "bg-amber-500/10" },
+          { label: "Customer Growth", value: "24%", change: "+4%", icon: TrendingUp, color: "text-emerald-600", bg: "bg-emerald-500/10" },
         ].map((s, i) => (
           <motion.div
             key={s.label}
@@ -98,7 +102,7 @@ export default function CustomersPage() {
             transition={{ delay: i * 0.1 }}
             className="p-6 bg-card rounded-3xl border border-border flex items-center gap-6 shadow-sm"
           >
-            <div className="w-14 h-14 rounded-2xl bg-muted text-foreground flex items-center justify-center">
+            <div className={`w-14 h-14 rounded-2xl ${s.bg} ${s.color} flex items-center justify-center`}>
               <s.icon className="w-7 h-7" />
             </div>
             <div>
@@ -121,7 +125,7 @@ export default function CustomersPage() {
           <input
             type="text"
             placeholder="Search by name, email or phone..."
-            className="w-full pl-10 pr-4 py-3 rounded-2xl bg-card border border-border focus:border-foreground outline-none text-sm transition-all shadow-sm text-foreground placeholder:text-muted-foreground/50"
+            className="w-full pl-10 pr-4 py-3 rounded-2xl bg-card border border-border focus:border-blue-500 outline-none text-sm transition-all shadow-sm text-foreground placeholder:text-muted-foreground/50"
           />
         </div>
         <div className="flex items-center gap-3 w-full sm:w-auto">
@@ -129,7 +133,7 @@ export default function CustomersPage() {
             <Filter className="w-4 h-4" />
             Filter
           </button>
-          <button className="flex-1 sm:flex-none px-5 py-3 rounded-2xl bg-foreground text-background text-sm font-bold flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-lg shadow-foreground/10">
+          <button className="flex-1 sm:flex-none px-5 py-3 rounded-2xl bg-foreground text-white text-sm font-bold flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-lg shadow-foreground/10">
             Apply Marketing
           </button>
         </div>
@@ -186,7 +190,7 @@ export default function CustomersPage() {
                   </td>
                   <td className="px-8 py-5 text-right">
                     <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <button className="p-2.5 rounded-xl bg-muted text-foreground hover:bg-muted/80 transition-all border border-border">
+                      <button className="p-2.5 rounded-xl bg-blue-500/10 text-blue-600 hover:bg-blue-500/20 transition-all">
                         <MessageCircle className="w-4 h-4" />
                       </button>
                       <button className="p-2.5 rounded-xl bg-muted text-foreground hover:bg-muted/80 transition-all border border-border">

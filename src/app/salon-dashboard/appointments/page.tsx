@@ -83,7 +83,7 @@ export default function AppointmentsPage() {
           <h1 className="text-2xl font-bold text-foreground">Appointments</h1>
           <p className="text-muted-foreground mt-1">Manage your schedule and customer bookings.</p>
         </div>
-        <button className="px-6 py-3 bg-foreground text-background rounded-xl text-sm font-bold hover:opacity-90 transition-all shadow-lg shadow-foreground/20 flex items-center gap-2 w-fit">
+        <button className="px-6 py-3 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/20 flex items-center gap-2 w-fit">
           <Calendar className="w-4 h-4" />
           Add Booking
         </button>
@@ -92,12 +92,12 @@ export default function AppointmentsPage() {
       {/* Stats Mini Grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          { label: "Today", value: "8", color: "text-foreground", bg: "bg-muted" },
+          { label: "Today", value: "8", color: "text-blue-600", bg: "bg-blue-500/10" },
           { label: "Pending", value: "3", color: "text-amber-600", bg: "bg-amber-500/10" },
           { label: "Confirmed", value: "12", color: "text-emerald-600", bg: "bg-emerald-500/10" },
-          { label: "Revenue Today", value: "₹8.4k", color: "text-foreground", bg: "bg-muted" },
+          { label: "Revenue Today", value: "₹8.4k", color: "text-indigo-600", bg: "bg-indigo-500/10" },
         ].map((s) => (
-          <div key={s.label} className={`p-4 rounded-2xl ${s.bg} border border-transparent transition-all`}>
+          <div key={s.label} className={`p-4 rounded-2xl ${s.bg} border border-transparent hover:border-blue-500/30 transition-all`}>
             <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{s.label}</p>
             <p className={`text-xl font-bold ${s.color} mt-1`}>{s.value}</p>
           </div>
@@ -112,7 +112,7 @@ export default function AppointmentsPage() {
               key={tab}
               onClick={() => setActiveTab(tab)}
               className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${
-                activeTab === tab ? "bg-foreground text-background shadow-md" : "text-muted-foreground hover:text-foreground"
+                activeTab === tab ? "bg-foreground text-white shadow-md" : "text-muted-foreground hover:text-foreground"
               }`}
             >
               {tab}
@@ -125,7 +125,7 @@ export default function AppointmentsPage() {
             <input
               type="text"
               placeholder="Search customer..."
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-card border border-border focus:border-foreground outline-none text-sm transition-all text-foreground placeholder:text-muted-foreground/50"
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-card border border-border focus:border-blue-500 outline-none text-sm transition-all text-foreground placeholder:text-muted-foreground/50"
             />
           </div>
           <button className="p-2.5 rounded-xl bg-card border border-border text-muted-foreground hover:text-foreground transition-all">
@@ -142,7 +142,7 @@ export default function AppointmentsPage() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.05 }}
-            className="group flex flex-col md:flex-row md:items-center gap-6 p-6 bg-card border border-border rounded-[32px] hover:border-foreground/20 hover:shadow-xl hover:shadow-foreground/5 transition-all"
+            className="group flex flex-col md:flex-row md:items-center gap-6 p-6 bg-card border border-border rounded-[32px] hover:border-blue-500/30 hover:shadow-xl hover:shadow-blue-500/5 transition-all"
           >
             <div className="flex items-center gap-4 flex-1">
               <div className="w-16 h-16 rounded-2xl overflow-hidden bg-muted flex-shrink-0">
@@ -161,7 +161,7 @@ export default function AppointmentsPage() {
                 </div>
                 <p className="text-sm text-muted-foreground font-medium mt-0.5">{app.service}</p>
                 <div className="flex items-center gap-3 mt-2">
-                  <div className="flex items-center gap-1.5 text-xs text-foreground font-bold">
+                  <div className="flex items-center gap-1.5 text-xs text-blue-500 font-bold">
                     <Clock className="w-3.5 h-3.5" />
                     {app.time}
                   </div>
@@ -213,22 +213,23 @@ export default function AppointmentsPage() {
       </div>
 
       {/* Calendar Preview Mini Card */}
-      <div className="p-8 rounded-[40px] bg-card border border-border relative overflow-hidden group shadow-xl">
+      <div className="p-8 rounded-[40px] bg-foreground text-white relative overflow-hidden group shadow-xl">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 blur-[60px] rounded-full -mr-32 -mt-32" />
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-8">
           <div className="space-y-4">
-            <h3 className="text-2xl font-bold font-display text-foreground">Weekly Overview</h3>
-            <p className="text-muted-foreground max-w-sm">
+            <h3 className="text-2xl font-bold font-display">Weekly Overview</h3>
+            <p className="text-white/60 max-w-sm">
               You have 24 appointments scheduled for this week. Your busiest day will be Saturday.
             </p>
             <div className="flex gap-2">
               {[1,2,3,4,5,6,7].map(d => (
-                <div key={d} className={`flex-1 h-12 w-8 rounded-lg flex items-center justify-center font-bold text-xs ${d === 6 ? 'bg-foreground text-background' : 'bg-muted text-muted-foreground'}`}>
+                <div key={d} className={`flex-1 h-12 w-8 rounded-lg flex items-center justify-center font-bold text-xs ${d === 6 ? 'bg-primary text-primary-foreground' : 'bg-background/10'}`}>
                   {['M','T','W','T','F','S','S'][d-1]}
                 </div>
               ))}
             </div>
           </div>
-          <button className="px-8 py-4 rounded-2xl bg-foreground text-background font-bold hover:opacity-90 transition-all active:scale-95 shadow-xl">
+          <button className="px-8 py-4 rounded-2xl bg-background text-foreground font-bold hover:opacity-90 transition-all active:scale-95 shadow-xl">
             View Full Calendar
           </button>
         </div>

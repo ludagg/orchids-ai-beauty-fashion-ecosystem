@@ -6,18 +6,18 @@ import {
   Users,
   Scissors,
   IndianRupee,
+  ArrowUpRight,
   Clock,
   ChevronRight,
   Star,
   Settings
 } from "lucide-react";
-import Link from "next/link";
 
 const stats = [
-  { label: "Today's Bookings", value: "12", change: "+4", icon: Calendar },
-  { label: "Total Customers", value: "842", change: "+24", icon: Users },
-  { label: "Monthly Revenue", value: "₹1.4M", change: "+15%", icon: IndianRupee },
-  { label: "Avg. Rating", value: "4.9", change: "0.1", icon: Star },
+  { label: "Today's Bookings", value: "12", change: "+4", icon: Calendar, color: "text-blue-600", bg: "bg-blue-500/10" },
+  { label: "Total Customers", value: "842", change: "+24", icon: Users, color: "text-indigo-600", bg: "bg-indigo-500/10" },
+  { label: "Monthly Revenue", value: "₹1.4M", change: "+15%", icon: IndianRupee, color: "text-emerald-600", bg: "bg-emerald-500/10" },
+  { label: "Avg. Rating", value: "4.9", change: "0.1", icon: Star, color: "text-amber-600", bg: "bg-amber-500/10" },
 ];
 
 export default function SalonDashboard() {
@@ -47,7 +47,7 @@ export default function SalonDashboard() {
             className="p-6 bg-card rounded-2xl border border-border shadow-sm hover:shadow-md transition-shadow"
           >
             <div className="flex items-start justify-between">
-              <div className="p-3 rounded-xl bg-muted text-foreground">
+              <div className={`p-3 rounded-xl ${stat.bg} ${stat.color}`}>
                 <stat.icon className="w-6 h-6" />
               </div>
               <div className="text-[10px] font-bold text-emerald-600 bg-emerald-500/10 dark:text-emerald-400 px-2 py-1 rounded-lg">
@@ -67,7 +67,7 @@ export default function SalonDashboard() {
         <div className="lg:col-span-2 space-y-6">
           <div className="flex items-center justify-between">
             <h3 className="font-bold text-foreground text-lg">Upcoming Appointments</h3>
-            <Link href="/business/appointments" className="text-sm font-bold text-primary hover:underline">View Calendar</Link>
+            <button className="text-sm font-bold text-primary hover:underline">View Calendar</button>
           </div>
 
           <div className="space-y-4">
@@ -114,32 +114,31 @@ export default function SalonDashboard() {
             <h3 className="font-bold text-lg">Quick Actions</h3>
             <div className="grid grid-cols-2 gap-3">
               {[
-                { label: "Add Service", icon: Scissors, href: "/business/services" },
-                { label: "New Offer", icon: Star, href: "/business/services" },
-                { label: "Customers", icon: Users, href: "/business/customers" },
-                { label: "Settings", icon: Settings, href: "/business/settings" },
+                { label: "Add Service", icon: Scissors },
+                { label: "New Offer", icon: Star },
+                { label: "Customers", icon: Users },
+                { label: "Settings", icon: Settings },
               ].map((action) => (
-                <Link
-                  href={action.href}
+                <button
                   key={action.label}
                   className="p-4 rounded-2xl bg-muted hover:bg-muted/80 transition-all flex flex-col items-center gap-2 text-center"
                 >
                   <action.icon className="w-5 h-5 text-primary" />
                   <span className="text-[10px] font-bold uppercase tracking-wider">{action.label}</span>
-                </Link>
+                </button>
               ))}
             </div>
           </div>
 
-          <div className="p-6 rounded-3xl bg-card border border-border space-y-4">
-            <div className="flex items-center gap-2 text-foreground">
+          <div className="p-6 rounded-3xl bg-blue-500/5 dark:bg-blue-500/10 border border-blue-500/10 dark:border-blue-500/20 space-y-4">
+            <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400">
               <Star className="w-5 h-5 fill-current" />
               <h3 className="font-bold">Partner Tip</h3>
             </div>
-            <p className="text-sm text-muted-foreground leading-relaxed">
+            <p className="text-sm text-blue-900/80 dark:text-blue-100/80 leading-relaxed">
               Adding real photos of your latest work can increase booking rates by up to 40%. Try updating your gallery today!
             </p>
-            <button className="w-full py-3 rounded-xl bg-foreground text-background text-sm font-bold hover:opacity-90 transition-all shadow-lg shadow-foreground/10">
+            <button className="w-full py-3 rounded-xl bg-blue-600 text-white text-sm font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/10">
               Update Gallery
             </button>
           </div>
