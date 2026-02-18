@@ -75,7 +75,7 @@ export default function ServicesPage() {
           <h1 className="text-2xl font-bold text-foreground">My Services</h1>
           <p className="text-muted-foreground mt-1">Manage your service menu and pricing.</p>
         </div>
-        <button className="px-6 py-3 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/20 flex items-center gap-2 w-fit">
+        <button className="px-6 py-3 bg-foreground text-background rounded-xl text-sm font-bold hover:opacity-90 transition-all shadow-lg shadow-foreground/20 flex items-center gap-2 w-fit">
           <Plus className="w-4 h-4" />
           Add New Service
         </button>
@@ -90,7 +90,7 @@ export default function ServicesPage() {
               onClick={() => setSelectedCategory(cat)}
               className={`px-5 py-2 rounded-xl text-sm font-bold transition-all border whitespace-nowrap ${
                 selectedCategory === cat
-                  ? "bg-foreground text-white border-foreground"
+                  ? "bg-foreground text-background border-foreground"
                   : "bg-card text-muted-foreground border-border hover:border-foreground hover:text-foreground"
               }`}
             >
@@ -103,7 +103,7 @@ export default function ServicesPage() {
           <input
             type="text"
             placeholder="Search services..."
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-card border border-border focus:border-blue-500 outline-none text-sm transition-all text-foreground placeholder:text-muted-foreground/50"
+            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-card border border-border focus:border-foreground outline-none text-sm transition-all text-foreground placeholder:text-muted-foreground/50"
           />
         </div>
       </div>
@@ -116,7 +116,7 @@ export default function ServicesPage() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: i * 0.1 }}
-            className="group p-6 bg-card border border-border rounded-[32px] hover:border-blue-500/30 hover:shadow-xl hover:shadow-blue-500/5 transition-all shadow-sm"
+            className="group p-6 bg-card border border-border rounded-[32px] hover:border-foreground/20 hover:shadow-xl hover:shadow-foreground/5 transition-all shadow-sm"
           >
             <div className="flex gap-6">
               <div className="w-24 h-24 rounded-[20px] overflow-hidden bg-muted flex-shrink-0 shadow-inner">
@@ -133,7 +133,7 @@ export default function ServicesPage() {
                         {service.status}
                       </span>
                     </div>
-                    <p className="text-sm text-blue-500 font-bold uppercase tracking-widest mt-0.5">{service.category}</p>
+                    <p className="text-sm text-foreground/70 font-bold uppercase tracking-widest mt-0.5">{service.category}</p>
                   </div>
                   <button className="p-2 rounded-xl hover:bg-muted text-muted-foreground/50 transition-colors">
                     <MoreVertical className="w-5 h-5" />
@@ -160,13 +160,13 @@ export default function ServicesPage() {
                 <p className="text-2xl font-bold text-foreground mt-1">{service.price}</p>
               </div>
               <div className="flex items-center gap-2">
-                <button className="p-3 rounded-2xl bg-muted text-foreground hover:bg-blue-600 hover:text-white transition-all group/btn">
+                <button className="p-3 rounded-2xl bg-muted text-foreground hover:bg-foreground hover:text-background transition-all group/btn">
                   <Edit2 className="w-4 h-4" />
                 </button>
                 <button className="p-3 rounded-2xl bg-muted text-foreground hover:bg-rose-600 hover:text-white transition-all group/btn">
                   <Trash2 className="w-4 h-4" />
                 </button>
-                <button className="px-6 py-3 rounded-2xl bg-foreground text-white text-sm font-bold hover:opacity-90 transition-all flex items-center gap-2 shadow-lg shadow-foreground/5">
+                <button className="px-6 py-3 rounded-2xl bg-foreground text-background text-sm font-bold hover:opacity-90 transition-all flex items-center gap-2 shadow-lg shadow-foreground/5">
                   View Stats
                 </button>
               </div>
@@ -179,10 +179,10 @@ export default function ServicesPage() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.4 }}
-          className="p-8 rounded-[32px] border-2 border-dashed border-border hover:border-blue-500/50 hover:bg-blue-500/5 transition-all flex flex-col items-center justify-center gap-4 group shadow-sm"
+          className="p-8 rounded-[32px] border-2 border-dashed border-border hover:border-foreground/50 hover:bg-muted/30 transition-all flex flex-col items-center justify-center gap-4 group shadow-sm"
         >
-          <div className="w-16 h-16 rounded-full bg-muted group-hover:bg-blue-500/20 flex items-center justify-center transition-colors">
-            <Plus className="w-8 h-8 text-muted-foreground group-hover:text-blue-600" />
+          <div className="w-16 h-16 rounded-full bg-muted group-hover:bg-foreground/10 flex items-center justify-center transition-colors">
+            <Plus className="w-8 h-8 text-muted-foreground group-hover:text-foreground" />
           </div>
           <div className="text-center">
             <h3 className="font-bold text-foreground">Add New Service</h3>
@@ -192,19 +192,18 @@ export default function ServicesPage() {
       </div>
 
       {/* Pro Tip */}
-      <div className="p-8 rounded-[40px] bg-gradient-to-br from-blue-600 to-indigo-700 text-white relative overflow-hidden shadow-xl">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-card/10 blur-[60px] rounded-full -mr-32 -mt-32" />
+      <div className="p-8 rounded-[40px] bg-card border border-border text-foreground relative overflow-hidden shadow-sm">
         <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
-          <div className="w-20 h-20 rounded-3xl bg-card/20 backdrop-blur-md flex items-center justify-center flex-shrink-0">
+          <div className="w-20 h-20 rounded-3xl bg-muted flex items-center justify-center flex-shrink-0">
             <Settings className="w-10 h-10" />
           </div>
           <div>
             <h3 className="text-2xl font-bold font-display">Service Optimization</h3>
-            <p className="text-white/70 mt-2 max-w-xl leading-relaxed">
+            <p className="text-muted-foreground mt-2 max-w-xl leading-relaxed">
               Based on your analytics, your "Hydra Facial" is most popular on weekends. Consider adding a "Weekend Glow Package" to increase revenue.
             </p>
           </div>
-          <button className="px-8 py-4 rounded-2xl bg-card text-indigo-700 font-bold hover:bg-indigo-50 transition-all active:scale-95 shadow-xl whitespace-nowrap">
+          <button className="px-8 py-4 rounded-2xl bg-foreground text-background font-bold hover:opacity-90 transition-all active:scale-95 shadow-xl whitespace-nowrap">
             View Analytics
           </button>
         </div>
