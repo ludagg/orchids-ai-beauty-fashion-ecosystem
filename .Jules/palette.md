@@ -12,3 +12,7 @@
 ## 2025-05-14 - Dark Mode Implementation with next-themes
 **Learning:** When implementing dark mode in Next.js with `next-themes`, use `resolvedTheme` instead of `theme` to account for system settings. Ensure hydration safety by checking a `mounted` state. Refactor hardcoded hex colors to semantic CSS variables early to ensure global consistency.
 **Action:** Always prefer `resolvedTheme` for icon logic and toggle states. Use semantic classes like `bg-background` and `text-foreground` in new components from the start.
+
+## 2026-02-18 - Global Search Interaction & Accessibility
+**Learning:** Adding a global keyboard shortcut (`/`) and a "Clear" button to the search bar significantly improves the "native" feel and usability of the application. Using ARIA labels on icon-only buttons (like sidebar toggles and mobile menus) is essential for screen reader users and should be part of the standard component kit.
+**Action:** Always include `aria-label` for icon-only buttons. Use a global keydown listener for the `/` shortcut but ensure it filters for visible inputs using `offsetParent !== null` to handle multiple instances of the search bar in responsive layouts.
