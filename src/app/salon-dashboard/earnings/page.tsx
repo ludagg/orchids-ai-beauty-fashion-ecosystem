@@ -61,7 +61,7 @@ export default function EarningsPage() {
             <Download className="w-4 h-4" />
             Report
           </button>
-          <button className="px-6 py-3 bg-foreground text-background rounded-xl text-sm font-bold hover:opacity-90 transition-all shadow-lg shadow-foreground/10">
+          <button className="px-6 py-3 bg-foreground text-white rounded-xl text-sm font-bold hover:opacity-90 transition-all shadow-lg shadow-foreground/10">
             Withdraw Funds
           </button>
         </div>
@@ -69,17 +69,17 @@ export default function EarningsPage() {
 
       {/* Hero Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="md:col-span-2 p-8 rounded-[40px] bg-foreground text-background relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-background/20 blur-[60px] rounded-full -mr-32 -mt-32" />
+        <div className="md:col-span-2 p-8 rounded-[40px] bg-foreground text-white relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 blur-[60px] rounded-full -mr-32 -mt-32" />
           <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 gap-12">
             <div className="space-y-6">
               <div>
-                <p className="text-background/60 text-xs font-bold uppercase tracking-[0.2em] mb-2">Total Balance</p>
-                <p className="text-5xl font-bold font-display tracking-tight text-background">₹1,24,500</p>
+                <p className="text-white/60 text-xs font-bold uppercase tracking-[0.2em] mb-2">Total Balance</p>
+                <p className="text-5xl font-bold font-display tracking-tight">₹1,24,500</p>
               </div>
               <div className="flex items-center gap-6">
                 <div>
-                  <p className="text-background/40 text-[10px] font-bold uppercase tracking-widest mb-1">Last 30 Days</p>
+                  <p className="text-white/40 text-[10px] font-bold uppercase tracking-widest mb-1">Last 30 Days</p>
                   <p className="text-lg font-bold flex items-center gap-1.5 text-emerald-400">
                     <ArrowUpRight className="w-4 h-4" />
                     +18.4%
@@ -87,8 +87,8 @@ export default function EarningsPage() {
                 </div>
                 <div className="w-px h-10 bg-background/10" />
                 <div>
-                  <p className="text-background/40 text-[10px] font-bold uppercase tracking-widest mb-1">Bookings</p>
-                  <p className="text-lg font-bold text-background">482</p>
+                  <p className="text-white/40 text-[10px] font-bold uppercase tracking-widest mb-1">Bookings</p>
+                  <p className="text-lg font-bold">482</p>
                 </div>
               </div>
             </div>
@@ -113,7 +113,7 @@ export default function EarningsPage() {
         <div className="p-8 rounded-[40px] bg-card border border-border flex flex-col justify-between shadow-sm">
           <div className="space-y-6">
             <div className="flex items-center justify-between">
-              <div className="w-12 h-12 rounded-2xl bg-muted text-foreground flex items-center justify-center">
+              <div className="w-12 h-12 rounded-2xl bg-blue-500/10 text-blue-500 flex items-center justify-center">
                 <IndianRupee className="w-6 h-6" />
               </div>
               <button className="text-[10px] font-bold text-muted-foreground/50 uppercase tracking-widest hover:text-foreground">Details</button>
@@ -136,7 +136,7 @@ export default function EarningsPage() {
         <div className="lg:col-span-2 p-8 bg-card border border-border rounded-[40px] shadow-sm">
           <div className="flex items-center justify-between mb-8">
             <h3 className="font-bold text-foreground text-lg flex items-center gap-2">
-              <BarChart3 className="w-5 h-5 text-foreground" />
+              <BarChart3 className="w-5 h-5 text-blue-500" />
               Revenue Insights
             </h3>
             <div className="flex bg-muted p-1 rounded-xl border border-border">
@@ -199,7 +199,7 @@ export default function EarningsPage() {
               </div>
             ))}
           </div>
-          <button className="p-6 text-center text-sm font-bold text-foreground hover:bg-muted transition-all border-t border-muted">
+          <button className="p-6 text-center text-sm font-bold text-blue-500 hover:bg-blue-500/10 transition-all border-t border-muted">
             View All Transactions
           </button>
         </div>
