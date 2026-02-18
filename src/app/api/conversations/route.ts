@@ -5,6 +5,7 @@ import { conversations, salons, users, messages } from "@/db/schema";
 import { eq, or, inArray, desc, and } from "drizzle-orm";
 import { nanoid } from "nanoid";
 import { headers } from "next/headers";
+import { createNotification } from "@/lib/notifications";
 
 export async function GET(req: NextRequest) {
     try {
@@ -159,8 +160,9 @@ export async function POST(req: NextRequest) {
         }
 
         if (initialMessage && typeof initialMessage === 'string' && initialMessage.trim().length > 0) {
+            const messageId = nanoid();
             await db.insert(messages).values({
-                id: nanoid(),
+                id: messageId,
                 conversationId: conversationId,
                 senderId: session.user.id,
                 content: initialMessage,
@@ -171,6 +173,23 @@ export async function POST(req: NextRequest) {
             await db.update(conversations)
                 .set({ lastMessageAt: new Date() })
                 .where(eq(conversations.id, conversationId));
+
+            // Notify Salon Owner
+            const salon = await db.query.salons.findFirst({
+                where: eq(salons.id, salonId),
+                columns: { ownerId: true }
+            });
+
+            if (salon && salon.ownerId) {
+                await createNotification({
+                    userId: salon.ownerId,
+                    type: 'message',
+                    title: 'New Conversation Request',
+                    message: `New inquiry from ${session.user.name || 'User'}`,
+                    link: `/conversations/${conversationId}`,
+                    metadata: { conversationId, messageId }
+                });
+            }
         }
 
         return NextResponse.json({ id: conversationId }, { status: 201 });
