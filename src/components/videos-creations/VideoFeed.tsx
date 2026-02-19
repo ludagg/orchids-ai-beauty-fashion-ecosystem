@@ -8,7 +8,7 @@ import {
   type CarouselApi,
 } from "@/components/ui/carousel";
 import FullPageVideo from "./FullPageVideo";
-import { Loader2, ShoppingBag, ChevronUp, ChevronDown } from "lucide-react";
+import { Loader2, ShoppingBag } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { CommentSection } from "@/components/videos-creations/CommentSection";
@@ -137,14 +137,6 @@ export default function VideoFeed({ initialVideos = [], initialCategory = "All" 
       toast.success("Added to cart");
   };
 
-  const scrollPrev = () => {
-    if (api) api.scrollPrev();
-  };
-
-  const scrollNext = () => {
-    if (api) api.scrollNext();
-  };
-
   // Helper component for responsive overlay
   const ResponsiveOverlay = ({ open, onOpenChange, title, children, icon: Icon }: any) => {
       if (isDesktop) {
@@ -183,7 +175,7 @@ export default function VideoFeed({ initialVideos = [], initialCategory = "All" 
   };
 
   return (
-    <div className="relative w-full h-full bg-black overflow-hidden group/feed">
+    <div className="relative w-full h-full bg-black overflow-hidden">
       <Carousel
         setApi={setApi}
         orientation="vertical"
@@ -226,23 +218,6 @@ export default function VideoFeed({ initialVideos = [], initialCategory = "All" 
           )}
         </CarouselContent>
       </Carousel>
-
-      {/* Explicit Scroll Navigation Buttons */}
-      <div className="absolute right-4 top-1/2 -translate-y-1/2 z-30 flex flex-col gap-4 opacity-0 group-hover/feed:opacity-100 transition-opacity duration-300 pointer-events-none">
-          <button
-              onClick={scrollPrev}
-              disabled={currentInfo.index === 0}
-              className="pointer-events-auto p-3 rounded-full bg-black/20 backdrop-blur-md hover:bg-black/40 text-white transition-all disabled:opacity-30 disabled:cursor-not-allowed hover:scale-110 active:scale-95 border border-white/10"
-          >
-              <ChevronUp className="w-6 h-6" />
-          </button>
-          <button
-              onClick={scrollNext}
-              className="pointer-events-auto p-3 rounded-full bg-black/20 backdrop-blur-md hover:bg-black/40 text-white transition-all hover:scale-110 active:scale-95 border border-white/10"
-          >
-              <ChevronDown className="w-6 h-6" />
-          </button>
-      </div>
 
       {/* Responsive Comments Overlay */}
       <ResponsiveOverlay
