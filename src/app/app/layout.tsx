@@ -36,7 +36,7 @@ const sidebarItems = [
   { icon: Compass, label: "Discover", href: "/app" },
   { icon: LayoutDashboard, label: "Creator Studio", href: "/app/creator-studio" },
   { icon: ShoppingBag, label: "Marketplace", href: "/app/marketplace" },
-  { icon: Sparkles, label: "AI Stylist", href: "/app/ai-stylist" },
+  //{ icon: Sparkles, label: "AI Stylist", href: "/app/ai-stylist" },
   { icon: Scissors, label: "Salons", href: "/app/salons" },
   { icon: Video, label: "Videos & Creations", href: "/app/videos-creations" },
   { icon: MessageSquare, label: "Conversations", href: "/app/conversations" },
@@ -102,19 +102,7 @@ export default function AppLayout({
           })}
         </nav>
 
-        {!isCollapsed && (
-          <div className="p-4 mt-auto">
-            <div className="p-4 rounded-2xl bg-gradient-to-br from-rose-500/10 to-violet-500/10 border border-rose-200/20">
-              <p className="text-xs font-semibold text-rose-600 mb-1 uppercase tracking-wider">AI Insight</p>
-              <p className="text-sm text-foreground font-medium leading-relaxed">
-                Your style profile is 85% complete. Finish it to unlock personal picks.
-              </p>
-              <button className="mt-3 text-xs font-bold flex items-center gap-1 hover:gap-2 transition-all">
-                Complete Profile <ArrowRight className="w-3 h-3" />
-              </button>
-            </div>
-          </div>
-        )}
+        
 
         <div className={`p-4 border-t border-border ${isCollapsed ? "flex justify-center" : ""}`}>
           <Link
