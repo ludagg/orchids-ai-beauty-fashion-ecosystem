@@ -13,7 +13,7 @@ const salonSchema = z.object({
   address: z.string().min(5),
   city: z.string().min(2),
   zipCode: z.string().min(3),
-  type: z.enum(["SALON", "BOUTIQUE", "BOTH"]),
+  type: z.enum(["SALON", "SHOP"]),
   image: z.string().optional(),
 });
 
@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const query = searchParams.get("search") || searchParams.get("query"); // Accept both
     const city = searchParams.get("city");
-    const type = searchParams.get("type"); // SALON, BOUTIQUE, BOTH
+    const type = searchParams.get("type"); // SALON, SHOP
     const minPrice = searchParams.get("minPrice");
     const maxPrice = searchParams.get("maxPrice");
     const lat = searchParams.get("lat");
@@ -73,13 +73,9 @@ export async function GET(req: NextRequest) {
     // Filter by type
     if (type) {
         if (type === 'SALON') {
-             // Show salons that provide SALON services or both
-             conditions.push(or(eq(salons.type, 'SALON'), eq(salons.type, 'BOTH')));
-        } else if (type === 'BOUTIQUE') {
-             // Show salons that provide BOUTIQUE services or both
-             conditions.push(or(eq(salons.type, 'BOUTIQUE'), eq(salons.type, 'BOTH')));
-        } else if (type === 'BOTH') {
-             conditions.push(eq(salons.type, 'BOTH'));
+             conditions.push(eq(salons.type, 'SALON'));
+        } else if (type === 'SHOP') {
+             conditions.push(eq(salons.type, 'SHOP'));
         }
     }
 

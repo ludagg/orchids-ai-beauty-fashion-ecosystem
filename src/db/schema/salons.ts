@@ -3,7 +3,7 @@ import { relations } from 'drizzle-orm';
 import { users } from './auth';
 
 export const salonStatusEnum = pgEnum('salon_status', ['pending', 'active', 'suspended']);
-export const partnerTypeEnum = pgEnum('partner_type', ['SALON', 'BOUTIQUE', 'BOTH']);
+export const partnerTypeEnum = pgEnum('partner_type', ['SALON', 'SHOP']);
 
 export const salons = pgTable('salons', {
   id: text('id').primaryKey(),
