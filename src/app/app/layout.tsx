@@ -148,8 +148,9 @@ export default function AppLayout({
             </button>
           </div>
         </div>
-        <div className="px-4 pb-3">
-          <SearchBar value={searchQuery} onChange={setSearchQuery} onSubmit={handleSearch} />
+        <div className="px-4 pb-3 flex items-center gap-2">
+          <SearchBar value={searchQuery} onChange={setSearchQuery} onSubmit={handleSearch} className="flex-1" />
+          <AIStylistSheet />
         </div>
       </header>
 
@@ -203,7 +204,7 @@ export default function AppLayout({
       <div className="flex-1 min-w-0 flex flex-col relative overflow-x-hidden">
         {/* Header - Desktop Search */}
         <header className="hidden lg:flex h-16 border-b border-border bg-card/80 backdrop-blur-md sticky top-0 z-30 px-6 items-center justify-between">
-          <div className="flex-1 max-w-xl flex items-center">
+          <div className="flex-1 max-w-xl flex items-center gap-2">
             <SearchBar value={searchQuery} onChange={setSearchQuery} onSubmit={handleSearch} className="flex-1" />
             <AIStylistSheet />
           </div>
