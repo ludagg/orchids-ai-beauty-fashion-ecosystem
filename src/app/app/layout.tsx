@@ -42,6 +42,7 @@ const sidebarItems = [
   { icon: Scissors, label: "Salons", href: "/app/salons" },
   { icon: Video, label: "Videos & Creations", href: "/app/videos-creations" },
   { icon: MessageSquare, label: "Conversations", href: "/app/conversations" },
+  { icon: Bell, label: "Notifications", href: "/app/notifications" },
   { icon: Calendar, label: "My Bookings", href: "/app/bookings" },
 ];
 

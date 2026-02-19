@@ -7,6 +7,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { formatDistanceToNow } from "date-fns";
 
@@ -162,6 +163,15 @@ export default function NotificationBell() {
               );
             })
           )}
+        </div>
+        <div className="p-2 border-t border-border bg-card">
+          <Link
+            href="/app/notifications"
+            onClick={() => setIsOpen(false)}
+            className="block w-full text-center text-xs font-medium text-muted-foreground hover:text-primary py-2 transition-colors"
+          >
+            View all notifications
+          </Link>
         </div>
       </PopoverContent>
     </Popover>
