@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { bookings } from "@/db/schema/bookings"; // Import bookings schema
-import { eq } from "drizzle-orm";
+import { bookings, cancellationPolicies, clientProfiles } from "@/db/schema";
+import { eq, and } from "drizzle-orm";
 import { headers } from "next/headers";
 import { sendEmail } from "@/lib/email";
 import { EmailTemplates } from "@/lib/email-templates";
+import { differenceInHours } from "date-fns";
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
@@ -19,18 +20,22 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
         }
 
         const body = await req.json();
-        const { status } = body;
-
-        if (!['confirmed', 'cancelled', 'completed'].includes(status)) {
-            return NextResponse.json({ error: "Invalid status" }, { status: 400 });
-        }
+        const {
+            status,
+            cancellationReason,
+            internalNotes,
+            checkIn,
+            complete
+        } = body;
 
         // Fetch Booking to check permissions
         const booking = await db.query.bookings.findFirst({
             where: eq(bookings.id, id),
             with: {
                 salon: true,
-                user: true // Need user info for email
+                user: true,
+                staff: true,
+                service: true
             }
         });
 
@@ -46,71 +51,148 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
              return NextResponse.json({ error: "Forbidden" }, { status: 403 });
         }
 
-        // Logic
-        if (isOwner) {
-             // Owners can change status freely (but not revert from cancelled/completed usually)
-             if (booking.status === 'cancelled' || booking.status === 'completed') {
-                 // For simplicity, allow re-opening or just block? Let's block for now to keep it sane.
-                 return NextResponse.json({ error: "Booking is already finalized" }, { status: 400 });
-             }
-        } else if (isUser) {
-             // Users can only cancel
-             if (status !== 'cancelled') {
-                 return NextResponse.json({ error: "Users can only cancel bookings" }, { status: 403 });
-             }
-             // Users can only cancel pending or confirmed
-             if (!['pending', 'confirmed'].includes(booking.status)) {
-                 return NextResponse.json({ error: "Cannot cancel this booking" }, { status: 400 });
-             }
+        const updateData: any = {
+            updatedAt: new Date()
+        };
+
+        // Handle status updates
+        if (status) {
+            if (!['confirmed', 'cancelled', 'completed', 'no_show'].includes(status)) {
+                return NextResponse.json({ error: "Invalid status" }, { status: 400 });
+            }
+
+            // Logic based on user type
+            if (isOwner) {
+                 // Owners can change status freely (but not revert from cancelled/completed usually)
+                 if (booking.status === 'cancelled' || booking.status === 'completed') {
+                     return NextResponse.json({ error: "Booking is already finalized" }, { status: 400 });
+                 }
+            } else if (isUser) {
+                 // Users can only cancel
+                 if (status !== 'cancelled') {
+                     return NextResponse.json({ error: "Users can only cancel bookings" }, { status: 403 });
+                 }
+                 // Users can only cancel pending or confirmed
+                 if (!['pending', 'confirmed'].includes(booking.status)) {
+                     return NextResponse.json({ error: "Cannot cancel this booking" }, { status: 400 });
+                 }
+
+                 // Check cancellation policy
+                 const policy = await db.query.cancellationPolicies.findFirst({
+                     where: eq(cancellationPolicies.salonId, booking.salonId)
+                 });
+
+                 if (policy) {
+                     const hoursUntilBooking = differenceInHours(new Date(booking.startTime), new Date());
+                     if (hoursUntilBooking < policy.freeCancellationHours) {
+                         // Could charge cancellation fee here
+                         console.log(`Late cancellation: ${hoursUntilBooking}h before booking, policy requires ${policy.freeCancellationHours}h`);
+                     }
+                 }
+            }
+
+            updateData.status = status;
+
+            // Track cancellation
+            if (status === 'cancelled') {
+                updateData.cancelledAt = new Date();
+                updateData.cancelledBy = session.user.id;
+                updateData.cancellationReason = cancellationReason;
+            }
+
+            // Track completion
+            if (status === 'completed') {
+                updateData.completedAt = new Date();
+            }
+
+            // Send Email Notification if Cancelled
+            if (status === 'cancelled') {
+                (async () => {
+                    try {
+                         if (booking.user?.email) {
+                            const html = EmailTemplates.bookingCancellation(booking, booking.user);
+                            await sendEmail({
+                                to: booking.user.email,
+                                subject: `Booking Cancelled - ${booking.salon.name}`,
+                                html
+                            });
+                        }
+                    } catch (emailError) {
+                        console.error("Failed to send cancellation email", emailError);
+                    }
+                })();
+            }
+
+            // Send confirmation email if confirmed by owner
+            if (status === 'confirmed' && booking.status === 'pending' && isOwner) {
+                 (async () => {
+                    try {
+                         if (booking.user?.email) {
+                            const html = EmailTemplates.bookingConfirmation(booking, booking.user);
+                            await sendEmail({
+                                to: booking.user.email,
+                                subject: `Booking Confirmed - ${booking.salon.name}`,
+                                html
+                            });
+                        }
+                    } catch (emailError) {
+                        console.error("Failed to send confirmation email", emailError);
+                    }
+                })();
+            }
         }
 
-        // Update
+        // Handle check-in (owner only)
+        if (checkIn && isOwner) {
+            updateData.checkedInAt = new Date();
+            updateData.checkedInBy = session.user.id;
+        }
+
+        // Handle completion (owner only)
+        if (complete && isOwner) {
+            updateData.status = 'completed';
+            updateData.completedAt = new Date();
+
+            // Update client total spent
+            const clientProfile = await db.query.clientProfiles.findFirst({
+                where: and(
+                    eq(clientProfiles.salonId, booking.salonId),
+                    eq(clientProfiles.userId, booking.userId)
+                )
+            });
+
+            if (clientProfile) {
+                await db.update(clientProfiles)
+                    .set({
+                        totalSpent: clientProfile.totalSpent + booking.totalPrice,
+                        updatedAt: new Date()
+                    })
+                    .where(eq(clientProfiles.id, clientProfile.id));
+            }
+        }
+
+        // Handle internal notes (owner only)
+        if (internalNotes !== undefined && isOwner) {
+            updateData.internalNotes = internalNotes;
+        }
+
+        // Update booking
         await db.update(bookings)
-            .set({
-                status: status as any,
-                updatedAt: new Date()
-            })
+            .set(updateData)
             .where(eq(bookings.id, id));
 
-        // Send Email Notification if Cancelled
-        if (status === 'cancelled') {
-            (async () => {
-                try {
-                     if (booking.user?.email) {
-                        const html = EmailTemplates.bookingCancellation(booking, booking.user);
-                        await sendEmail({
-                            to: booking.user.email,
-                            subject: `Booking Cancelled - ${booking.salon.name}`,
-                            html
-                        });
-                    }
-                } catch (emailError) {
-                    console.error("Failed to send cancellation email", emailError);
-                }
-            })();
-        }
+        // Return updated booking
+        const updatedBooking = await db.query.bookings.findFirst({
+            where: eq(bookings.id, id),
+            with: {
+                salon: true,
+                user: true,
+                staff: true,
+                service: true
+            }
+        });
 
-        // If Confirmed (by owner), send confirmation email again?
-        // Maybe, but usually handled on creation or separate trigger.
-        // Let's send one just in case it was pending -> confirmed.
-        if (status === 'confirmed' && booking.status === 'pending') {
-             (async () => {
-                try {
-                     if (booking.user?.email) {
-                        const html = EmailTemplates.bookingConfirmation(booking, booking.user);
-                        await sendEmail({
-                            to: booking.user.email,
-                            subject: `Booking Confirmed - ${booking.salon.name}`,
-                            html
-                        });
-                    }
-                } catch (emailError) {
-                    console.error("Failed to send confirmation email", emailError);
-                }
-            })();
-        }
-
-        return NextResponse.json({ success: true, status });
+        return NextResponse.json({ success: true, booking: updatedBooking });
 
     } catch (error) {
         console.error("Error updating booking:", error);
