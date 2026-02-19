@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, boolean, pgEnum, uniqueIndex, integer } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, boolean, pgEnum, uniqueIndex, integer, date } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
 export const userRoleEnum = pgEnum('user_role', ['user', 'salon_owner', 'admin']);
@@ -12,6 +12,16 @@ export const users = pgTable('users', {
   role: userRoleEnum('role').default('user').notNull(),
   isSuspended: boolean('is_suspended').default(false).notNull(),
   loyaltyPoints: integer('loyalty_points').default(0).notNull(),
+  dateOfBirth: date('date_of_birth'),
+  gender: text('gender'),
+  location: text('location'),
+  interests: text('interests').array(),
+  style: text('style').array(),
+  budget: text('budget'),
+  height: integer('height'),
+  weight: text('weight'),
+  bodyType: text('body_type'),
+  onboardingCompleted: boolean('onboarding_completed').default(false).notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
