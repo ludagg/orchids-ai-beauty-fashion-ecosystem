@@ -1,0 +1,85 @@
+
+> app@0.1.0 dev
+> next dev --turbopack
+
+▲ Next.js 16.1.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.2:3000
+
+✓ Starting...
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
+
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+✓ Ready in 1638ms
+○ Compiling /app/marketplace ...
+ GET /app/marketplace 200 in 9.5s (compile: 7.9s, proxy.ts: 101ms, render: 1489ms)
+○ Compiling /api/auth/[...all] ...
+Error fetching products: Error: Failed query: select "products"."id", "products"."salon_id", "products"."name", "products"."description", "products"."price", "products"."stock", "products"."has_variants", "products"."images", "products"."is_active", "products"."category", "products"."brand", "products"."rating", "products"."review_count", "products"."created_at", "products"."updated_at", "products_salon"."data" as "salon" from "products" "products" left join lateral (select json_build_array("products_salon"."name", "products_salon"."id", "products_salon"."slug") as "data" from (select * from "salons" "products_salon" where "products_salon"."id" = "products"."salon_id" limit $1) "products_salon") "products_salon" on true where "products"."is_active" = $2 order by "products"."created_at" desc limit $3
+params: 1,true,50
+    at async GET (src/app/api/products/route.ts:79:18)
+  77 |     }
+  78 |
+> 79 |     const data = await db.query.products.findMany({
+     |                  ^
+  80 |       where: and(...conditions),
+  81 |       limit: limit,
+  82 |       with: { {
+  query: 'select "products"."id", "products"."salon_id", "products"."name", "products"."description", "products"."price", "products"."stock", "products"."has_variants", "products"."images", "products"."is_active", "products"."category", "products"."brand", "products"."rating", "products"."review_count", "products"."created_at", "products"."updated_at", "products_salon"."data" as "salon" from "products" "products" left join lateral (select json_build_array("products_salon"."name", "products_salon"."id", "products_salon"."slug") as "data" from (select * from "salons" "products_salon" where "products_salon"."id" = "products"."salon_id" limit $1) "products_salon") "products_salon" on true where "products"."is_active" = $2 order by "products"."created_at" desc limit $3',
+  params: [Array],
+  [cause]: AggregateError:
+      at async GET (src/app/api/products/route.ts:79:18)
+    77 |     }
+    78 |
+  > 79 |     const data = await db.query.products.findMany({
+       |                  ^
+    80 |       where: and(...conditions),
+    81 |       limit: limit,
+    82 |       with: { {
+    code: 'ECONNREFUSED'
+  }
+}
+ GET /api/products? 500 in 5.6s (compile: 4.8s, proxy.ts: 16ms, render: 774ms)
+[2m2026-02-19T10:30:07.515Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
+[2m2026-02-19T10:30:07.519Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
+[2m2026-02-19T10:30:07.520Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
+ GET /api/notifications 401 in 7.0s (compile: 6.8s, proxy.ts: 10ms, render: 178ms)
+ GET /api/notifications 401 in 22ms (compile: 9ms, proxy.ts: 6ms, render: 7ms)
+[2m2026-02-19T10:30:09.209Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
+[2m2026-02-19T10:30:09.214Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
+[2m2026-02-19T10:30:09.214Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
+ GET /api/auth/get-session 200 in 8.6s (compile: 8.6s, proxy.ts: 22ms, render: 18ms)
+ GET /app/marketplace 200 in 301ms (compile: 61ms, proxy.ts: 8ms, render: 233ms)
+ GET /api/auth/get-session 200 in 60ms (compile: 47ms, proxy.ts: 4ms, render: 8ms)
+ GET /api/notifications 401 in 15ms (compile: 4ms, proxy.ts: 5ms, render: 7ms)
+ GET /api/notifications 401 in 21ms (compile: 5ms, proxy.ts: 9ms, render: 7ms)
+Error fetching products: Error: Failed query: select "products"."id", "products"."salon_id", "products"."name", "products"."description", "products"."price", "products"."stock", "products"."has_variants", "products"."images", "products"."is_active", "products"."category", "products"."brand", "products"."rating", "products"."review_count", "products"."created_at", "products"."updated_at", "products_salon"."data" as "salon" from "products" "products" left join lateral (select json_build_array("products_salon"."name", "products_salon"."id", "products_salon"."slug") as "data" from (select * from "salons" "products_salon" where "products_salon"."id" = "products"."salon_id" limit $1) "products_salon") "products_salon" on true where "products"."is_active" = $2 order by "products"."created_at" desc limit $3
+params: 1,true,50
+    at async GET (src/app/api/products/route.ts:79:18)
+  77 |     }
+  78 |
+> 79 |     const data = await db.query.products.findMany({
+     |                  ^
+  80 |       where: and(...conditions),
+  81 |       limit: limit,
+  82 |       with: { {
+  query: 'select "products"."id", "products"."salon_id", "products"."name", "products"."description", "products"."price", "products"."stock", "products"."has_variants", "products"."images", "products"."is_active", "products"."category", "products"."brand", "products"."rating", "products"."review_count", "products"."created_at", "products"."updated_at", "products_salon"."data" as "salon" from "products" "products" left join lateral (select json_build_array("products_salon"."name", "products_salon"."id", "products_salon"."slug") as "data" from (select * from "salons" "products_salon" where "products_salon"."id" = "products"."salon_id" limit $1) "products_salon") "products_salon" on true where "products"."is_active" = $2 order by "products"."created_at" desc limit $3',
+  params: [Array],
+  [cause]: AggregateError:
+      at async GET (src/app/api/products/route.ts:79:18)
+    77 |     }
+    78 |
+  > 79 |     const data = await db.query.products.findMany({
+       |                  ^
+    80 |       where: and(...conditions),
+    81 |       limit: limit,
+    82 |       with: { {
+    code: 'ECONNREFUSED'
+  }
+}
+ GET /api/products? 500 in 273ms (compile: 4ms, proxy.ts: 5ms, render: 264ms)
+[2m2026-02-19T10:30:12.070Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
+[2m2026-02-19T10:30:12.075Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
+[2m2026-02-19T10:30:12.075Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret

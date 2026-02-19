@@ -93,7 +93,7 @@ export default function AIStylistSheet() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <button className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 ml-2 group">
+        <button className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 group">
             <Sparkles className="w-5 h-5 group-hover:animate-pulse" />
         </button>
       </SheetTrigger>
