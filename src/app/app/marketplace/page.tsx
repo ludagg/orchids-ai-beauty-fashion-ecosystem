@@ -32,6 +32,27 @@ interface Product {
   } | null;
 }
 
+const ProductImage = ({ src, alt, className }: { src?: string | null, alt: string, className?: string }) => {
+  const [imgSrc, setImgSrc] = useState(src || "/images/product-placeholder.png");
+
+  useEffect(() => {
+    setImgSrc(src || "/images/product-placeholder.png");
+  }, [src]);
+
+  return (
+    <img
+      src={imgSrc}
+      alt={alt}
+      className={className}
+      onError={() => {
+        if (imgSrc !== "/images/product-placeholder.png") {
+          setImgSrc("/images/product-placeholder.png");
+        }
+      }}
+    />
+  );
+};
+
 export default function MarketplacePage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [products, setProducts] = useState<Product[]>([]);
@@ -138,10 +159,10 @@ export default function MarketplacePage() {
             >
                 <Link href={`/app/marketplace/${product.id}`} className="block h-full flex flex-col">
                 <div className="relative aspect-[4/5] rounded-[24px] sm:rounded-[32px] overflow-hidden mb-3 sm:mb-4 shadow-sm border border-border bg-secondary">
-                    <img
-                    src={product.images && product.images.length > 0 ? product.images[0] : "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=500&fit=crop"}
-                    alt={product.name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                    <ProductImage
+                      src={product.images && product.images.length > 0 ? product.images[0] : null}
+                      alt={product.name}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                     />
                     <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity" />
 
