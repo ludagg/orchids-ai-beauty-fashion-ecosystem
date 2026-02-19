@@ -2,11 +2,10 @@
 
 import { motion } from "framer-motion";
 import {
-  Scissors,
+  Package,
   Plus,
   Search,
   MoreVertical,
-  Clock,
   IndianRupee,
   Star,
   CheckCircle2,
@@ -14,7 +13,8 @@ import {
   Edit2,
   Trash2,
   Settings,
-  Loader2
+  Loader2,
+  Box
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useBusiness } from "@/hooks/use-business";
@@ -32,123 +32,131 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-type Service = {
+type Product = {
   id: string;
   name: string;
   category: string;
-  duration: number; // minutes
   price: number; // cents
+  stock: number;
   rating: number | null;
   reviews: number | null;
   isActive: boolean;
-  image: string | null;
+  images: string[] | null;
+  brand?: string;
   description?: string;
 };
 
-export default function ServicesPage() {
+export default function ProductsPage() {
   const { salon } = useBusiness();
-  const [services, setServices] = useState<Service[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("All");
 
   // Add Modal State
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [newService, setNewService] = useState({
+  const [newProduct, setNewProduct] = useState({
     name: "",
     category: "General",
-    duration: 60,
+    brand: "",
     price: 0,
+    stock: 1,
     description: "",
     image: "",
   });
 
-  const fetchServices = async () => {
+  const fetchProducts = async () => {
     if (!salon?.id) return;
     try {
       setLoading(true);
-      const res = await fetch(`/api/services?salonId=${salon.id}&includeInactive=true`);
-      if (!res.ok) throw new Error("Failed to fetch services");
+      const res = await fetch(`/api/products?salonId=${salon.id}&includeInactive=true`);
+      if (!res.ok) throw new Error("Failed to fetch products");
       const data = await res.json();
-      setServices(data);
+      setProducts(data);
     } catch (error) {
       console.error(error);
-      toast.error("Failed to load services");
+      toast.error("Failed to load products");
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchServices();
+    fetchProducts();
   }, [salon?.id]);
 
-  const handleAddService = async (e: React.FormEvent) => {
+  const handleAddProduct = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!salon?.id) return;
 
     try {
       setIsSubmitting(true);
-      const priceInCents = Math.round(newService.price * 100);
+      const priceInCents = Math.round(newProduct.price * 100);
 
-      const res = await fetch("/api/services", {
+      const res = await fetch("/api/products", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          ...newService,
+          salonId: salon.id,
+          name: newProduct.name,
+          category: newProduct.category,
+          brand: newProduct.brand,
           price: priceInCents,
-          salonId: salon.id
+          stock: newProduct.stock,
+          description: newProduct.description,
+          images: newProduct.image ? [newProduct.image] : [],
         })
       });
 
       if (!res.ok) {
         const err = await res.json();
-        throw new Error(err.error || "Failed to add service");
+        throw new Error(err.error || "Failed to add product");
       }
 
-      toast.success("Service added successfully");
+      toast.success("Product added successfully");
       setIsAddOpen(false);
-      setNewService({
+      setNewProduct({
         name: "",
         category: "General",
-        duration: 60,
+        brand: "",
         price: 0,
+        stock: 1,
         description: "",
         image: "",
       });
-      fetchServices();
+      fetchProducts();
     } catch (error) {
       console.error(error);
-      toast.error(error instanceof Error ? error.message : "Failed to add service");
+      toast.error(error instanceof Error ? error.message : "Failed to add product");
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleDeleteService = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this service?")) return;
+  const handleDeleteProduct = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this product?")) return;
 
     try {
-      const res = await fetch(`/api/services/${id}`, {
+      const res = await fetch(`/api/products/${id}`, {
         method: "DELETE"
       });
 
-      if (!res.ok) throw new Error("Failed to delete service");
+      if (!res.ok) throw new Error("Failed to delete product");
 
-      toast.success("Service deleted");
-      fetchServices();
+      toast.success("Product deleted");
+      fetchProducts();
     } catch (error) {
       console.error(error);
-      toast.error("Failed to delete service");
+      toast.error("Failed to delete product");
     }
   };
 
-  const filteredServices = selectedCategory === "All"
-    ? services
-    : services.filter(s => s.category === selectedCategory);
+  const filteredProducts = selectedCategory === "All"
+    ? products
+    : products.filter(p => p.category === selectedCategory);
 
   // Get unique categories
-  const categories = ["All", ...Array.from(new Set(services.map(s => s.category).filter(Boolean)))];
+  const categories = ["All", ...Array.from(new Set(products.map(p => p.category).filter(Boolean)))];
 
   const formatPrice = (cents: number) => {
     return new Intl.NumberFormat('en-IN', {
@@ -170,43 +178,43 @@ export default function ServicesPage() {
     <div className="space-y-8 bg-background">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">My Services</h1>
-          <p className="text-muted-foreground mt-1">Manage your service menu and pricing.</p>
+          <h1 className="text-2xl font-bold text-foreground">My Products</h1>
+          <p className="text-muted-foreground mt-1">Manage your boutique inventory.</p>
         </div>
 
         <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
           <DialogTrigger asChild>
             <button className="px-6 py-3 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/20 flex items-center gap-2 w-fit">
               <Plus className="w-4 h-4" />
-              Add New Service
+              Add New Product
             </button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[500px]">
             <DialogHeader>
-              <DialogTitle>Add New Service</DialogTitle>
+              <DialogTitle>Add New Product</DialogTitle>
               <DialogDescription>
-                Create a new service offering for your salon.
+                Add a new item to your boutique inventory.
               </DialogDescription>
             </DialogHeader>
-            <form onSubmit={handleAddService} className="space-y-4 py-4">
+            <form onSubmit={handleAddProduct} className="space-y-4 py-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="name">Service Name</Label>
+                  <Label htmlFor="name">Product Name</Label>
                   <Input
                     id="name"
-                    value={newService.name}
-                    onChange={(e) => setNewService({...newService, name: e.target.value})}
-                    placeholder="e.g. Haircut"
+                    value={newProduct.name}
+                    onChange={(e) => setNewProduct({...newProduct, name: e.target.value})}
+                    placeholder="e.g. Luxury Shampoo"
                     required
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="category">Category</Label>
+                  <Label htmlFor="brand">Brand</Label>
                   <Input
-                    id="category"
-                    value={newService.category}
-                    onChange={(e) => setNewService({...newService, category: e.target.value})}
-                    placeholder="e.g. Hair"
+                    id="brand"
+                    value={newProduct.brand}
+                    onChange={(e) => setNewProduct({...newProduct, brand: e.target.value})}
+                    placeholder="e.g. L'Oreal"
                   />
                 </div>
               </div>
@@ -218,49 +226,60 @@ export default function ServicesPage() {
                     id="price"
                     type="number"
                     min="0"
-                    value={newService.price}
-                    onChange={(e) => setNewService({...newService, price: parseFloat(e.target.value)})}
+                    value={newProduct.price}
+                    onChange={(e) => setNewProduct({...newProduct, price: parseFloat(e.target.value)})}
                     required
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="duration">Duration (min)</Label>
+                  <Label htmlFor="stock">Stock</Label>
                   <Input
-                    id="duration"
+                    id="stock"
                     type="number"
-                    min="5"
-                    step="5"
-                    value={newService.duration}
-                    onChange={(e) => setNewService({...newService, duration: parseInt(e.target.value)})}
+                    min="0"
+                    step="1"
+                    value={newProduct.stock}
+                    onChange={(e) => setNewProduct({...newProduct, stock: parseInt(e.target.value)})}
                     required
                   />
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="image">Image URL</Label>
-                <Input
-                  id="image"
-                  value={newService.image}
-                  onChange={(e) => setNewService({...newService, image: e.target.value})}
-                  placeholder="https://..."
-                />
+              <div className="grid grid-cols-2 gap-4">
+                 <div className="space-y-2">
+                  <Label htmlFor="category">Category</Label>
+                  <Input
+                    id="category"
+                    value={newProduct.category}
+                    onChange={(e) => setNewProduct({...newProduct, category: e.target.value})}
+                    placeholder="e.g. Hair Care"
+                  />
+                </div>
+                <div className="space-y-2">
+                   <Label htmlFor="image">Image URL</Label>
+                    <Input
+                    id="image"
+                    value={newProduct.image}
+                    onChange={(e) => setNewProduct({...newProduct, image: e.target.value})}
+                    placeholder="https://..."
+                    />
+                </div>
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="description">Description (Optional)</Label>
                 <Input
                   id="description"
-                  value={newService.description}
-                  onChange={(e) => setNewService({...newService, description: e.target.value})}
-                  placeholder="Service details..."
+                  value={newProduct.description}
+                  onChange={(e) => setNewProduct({...newProduct, description: e.target.value})}
+                  placeholder="Product details..."
                 />
               </div>
 
               <DialogFooter>
                 <Button type="button" variant="outline" onClick={() => setIsAddOpen(false)}>Cancel</Button>
                 <Button type="submit" disabled={isSubmitting}>
-                  {isSubmitting ? "Adding..." : "Add Service"}
+                  {isSubmitting ? "Adding..." : "Add Product"}
                 </Button>
               </DialogFooter>
             </form>
@@ -289,17 +308,17 @@ export default function ServicesPage() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/50" />
           <input
             type="text"
-            placeholder="Search services..."
+            placeholder="Search products..."
             className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-card border border-border focus:border-blue-500 outline-none text-sm transition-all text-foreground placeholder:text-muted-foreground/50"
           />
         </div>
       </div>
 
-      {/* Services Grid */}
+      {/* Products Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {filteredServices.map((service, i) => (
+        {filteredProducts.map((product, i) => (
           <motion.div
-            key={service.id}
+            key={product.id}
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: i * 0.1 }}
@@ -307,11 +326,11 @@ export default function ServicesPage() {
           >
             <div className="flex gap-6">
               <div className="w-24 h-24 rounded-[20px] overflow-hidden bg-muted flex-shrink-0 shadow-inner">
-                {service.image ? (
-                  <img src={service.image} alt={service.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                {product.images && product.images[0] ? (
+                  <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-muted text-muted-foreground">
-                    <Scissors className="w-8 h-8" />
+                    <Package className="w-8 h-8" />
                   </div>
                 )}
               </div>
@@ -319,14 +338,14 @@ export default function ServicesPage() {
                 <div className="flex items-start justify-between">
                   <div>
                     <div className="flex items-center gap-2">
-                      <h3 className="font-bold text-foreground text-lg truncate">{service.name}</h3>
+                      <h3 className="font-bold text-foreground text-lg truncate">{product.name}</h3>
                       <span className={`px-2 py-0.5 rounded-full text-[8px] font-bold uppercase tracking-widest ${
-                        service.isActive ? 'bg-emerald-500/10 text-emerald-600' : 'bg-muted text-muted-foreground/50'
+                        product.isActive ? 'bg-emerald-500/10 text-emerald-600' : 'bg-muted text-muted-foreground/50'
                       }`}>
-                        {service.isActive ? "Active" : "Inactive"}
+                        {product.stock > 0 ? "In Stock" : "Out of Stock"}
                       </span>
                     </div>
-                    <p className="text-sm text-blue-500 font-bold uppercase tracking-widest mt-0.5">{service.category || "General"}</p>
+                    <p className="text-sm text-blue-500 font-bold uppercase tracking-widest mt-0.5">{product.brand || product.category || "General"}</p>
                   </div>
                   <button className="p-2 rounded-xl hover:bg-muted text-muted-foreground/50 transition-colors">
                     <MoreVertical className="w-5 h-5" />
@@ -335,15 +354,15 @@ export default function ServicesPage() {
 
                 <div className="flex items-center gap-4 mt-4">
                   <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-bold">
-                    <Clock className="w-3.5 h-3.5" />
-                    {service.duration} min
+                    <Box className="w-3.5 h-3.5" />
+                    {product.stock} units
                   </div>
-                  {service.rating && (
+                  {product.rating && (
                     <>
                       <div className="w-1 h-1 rounded-full bg-border" />
                       <div className="flex items-center gap-1.5 text-amber-500 font-bold">
                         <Star className="w-3.5 h-3.5 fill-current" />
-                        <span className="text-xs">{service.rating}</span>
+                        <span className="text-xs">{product.rating}</span>
                       </div>
                     </>
                   )}
@@ -354,14 +373,14 @@ export default function ServicesPage() {
             <div className="mt-6 pt-6 border-t border-muted flex items-center justify-between">
               <div>
                 <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Price</p>
-                <p className="text-2xl font-bold text-foreground mt-1">{formatPrice(service.price)}</p>
+                <p className="text-2xl font-bold text-foreground mt-1">{formatPrice(product.price)}</p>
               </div>
               <div className="flex items-center gap-2">
                 <button className="p-3 rounded-2xl bg-muted text-foreground hover:bg-blue-600 hover:text-white transition-all group/btn">
                   <Edit2 className="w-4 h-4" />
                 </button>
                 <button
-                  onClick={() => handleDeleteService(service.id)}
+                  onClick={() => handleDeleteProduct(product.id)}
                   className="p-3 rounded-2xl bg-muted text-foreground hover:bg-rose-600 hover:text-white transition-all group/btn"
                 >
                   <Trash2 className="w-4 h-4" />
@@ -386,8 +405,8 @@ export default function ServicesPage() {
             <Plus className="w-8 h-8 text-muted-foreground group-hover:text-blue-600" />
           </div>
           <div className="text-center">
-            <h3 className="font-bold text-foreground">Add New Service</h3>
-            <p className="text-sm text-muted-foreground mt-1">Add a new treatment or package</p>
+            <h3 className="font-bold text-foreground">Add New Product</h3>
+            <p className="text-sm text-muted-foreground mt-1">Add a new item to inventory</p>
           </div>
         </motion.button>
       </div>
@@ -400,9 +419,9 @@ export default function ServicesPage() {
             <Settings className="w-10 h-10" />
           </div>
           <div>
-            <h3 className="text-2xl font-bold font-display">Service Optimization</h3>
+            <h3 className="text-2xl font-bold font-display">Inventory Optimization</h3>
             <p className="text-white/70 mt-2 max-w-xl leading-relaxed">
-              Based on your analytics, your "Hydra Facial" is most popular on weekends. Consider adding a "Weekend Glow Package" to increase revenue.
+              Track low stock items automatically. Set reorder points to never miss a sale.
             </p>
           </div>
           <button className="px-8 py-4 rounded-2xl bg-card text-indigo-700 font-bold hover:bg-indigo-50 transition-all active:scale-95 shadow-xl whitespace-nowrap">

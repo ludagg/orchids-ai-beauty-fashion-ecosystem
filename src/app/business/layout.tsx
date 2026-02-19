@@ -11,7 +11,9 @@ import {
   X,
   ChevronLeft,
   ChevronRight,
-  LogOut
+  LogOut,
+  Package,
+  Loader2
 } from "lucide-react";
 import Link from "next/link";
 import BusinessBottomNav from "@/components/BusinessBottomNav";
@@ -21,26 +23,28 @@ import UserAccount from "@/components/UserAccount";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import { BusinessProvider, useBusiness } from "@/hooks/use-business";
 
-const sidebarItems = [
-  { icon: LayoutDashboard, label: "Dashboard", href: "/business" },
-  { icon: Calendar, label: "Appointments", href: "/business/appointments" },
-  { icon: Scissors, label: "Services", href: "/business/services" },
-  { icon: Users, label: "Customers", href: "/business/customers" },
-  { icon: IndianRupee, label: "Earnings", href: "/business/earnings" },
-  { icon: Settings, label: "Settings", href: "/business/settings" },
-];
-
-export default function BusinessLayout({
+function BusinessLayoutInner({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
   const router = useRouter();
+  const { salon, loading } = useBusiness();
   const [searchQuery, setSearchQuery] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
+
+  // Redirect logic
+  useEffect(() => {
+    if (!loading) {
+      if (!salon && pathname !== "/business/register") {
+        router.push("/business/register");
+      }
+    }
+  }, [salon, loading, pathname, router]);
 
   // Close mobile menu on route change
   useEffect(() => {
@@ -50,6 +54,40 @@ export default function BusinessLayout({
   const handleSearch = (query: string) => {
     console.log("Searching in business:", query);
   };
+
+  // If loading, show spinner
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  // If on register page, show clean layout
+  if (pathname === "/business/register") {
+    return (
+      <div className="min-h-screen bg-background text-foreground">
+        {children}
+      </div>
+    );
+  }
+
+  // If no salon (and not loading, and not on register), we are redirecting...
+  // But return null to avoid flash
+  if (!salon) return null;
+
+  // Define sidebar items based on salon type
+  const sidebarItems = [
+    { icon: LayoutDashboard, label: "Dashboard", href: "/business" },
+    { icon: Calendar, label: "Appointments", href: "/business/appointments" },
+    ...(salon.type === "BOUTIQUE"
+      ? [{ icon: Package, label: "Products", href: "/business/products" }]
+      : [{ icon: Scissors, label: "Services", href: "/business/services" }]),
+    { icon: Users, label: "Customers", href: "/business/customers" },
+    { icon: IndianRupee, label: "Earnings", href: "/business/earnings" },
+    { icon: Settings, label: "Settings", href: "/business/settings" },
+  ];
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col lg:flex-row">
@@ -189,5 +227,17 @@ export default function BusinessLayout({
         <BusinessBottomNav />
       </div>
     </div>
+  );
+}
+
+export default function BusinessLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <BusinessProvider>
+      <BusinessLayoutInner>{children}</BusinessLayoutInner>
+    </BusinessProvider>
   );
 }
