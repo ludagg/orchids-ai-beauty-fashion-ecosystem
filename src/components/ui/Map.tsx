@@ -35,9 +35,10 @@ interface MapProps {
     popupText?: string;
     className?: string;
     style?: React.CSSProperties;
+    interactive?: boolean;
 }
 
-export default function Map({ lat, lng, popupText, className, style }: MapProps) {
+export default function Map({ lat, lng, popupText, className, style, interactive = true }: MapProps) {
     useEffect(() => {
         // Ensure icon is set on mount just in case
         if (DefaultIcon) {
@@ -50,6 +51,12 @@ export default function Map({ lat, lng, popupText, className, style }: MapProps)
             center={[lat, lng]}
             zoom={15}
             scrollWheelZoom={false}
+            dragging={interactive}
+            zoomControl={interactive}
+            doubleClickZoom={interactive}
+            touchZoom={interactive}
+            boxZoom={interactive}
+            keyboard={interactive}
             className={`h-full w-full z-0 ${className || ''}`}
             style={{ minHeight: '300px', width: '100%', borderRadius: '1rem', ...style }}
         >
