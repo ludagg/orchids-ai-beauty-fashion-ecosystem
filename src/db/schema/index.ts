@@ -7,3 +7,6 @@ export * from './messaging';
 export * from './favorites';
 export * from './content';
 export * from './notifications';
+export * from './staff';
+export * from './booking-policies';
+export * from './crm';
