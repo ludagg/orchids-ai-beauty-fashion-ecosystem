@@ -3,6 +3,7 @@ import { z } from "zod";
 import { auth } from "@/lib/auth"; // We'll use getSession
 import { db } from "@/lib/db";
 import { salons, services } from "@/db/schema/salons";
+import { users } from "@/db/schema/auth";
 import { nanoid } from "nanoid";
 import { headers } from "next/headers";
 import { and, or, ilike, eq, desc, gte, lte, exists, sql, getTableColumns } from "drizzle-orm";
@@ -204,6 +205,11 @@ export async function POST(req: NextRequest) {
         // createdAt and updatedAt default to now()
       })
       .returning();
+
+    // Update user role to salon_owner
+    await db.update(users)
+      .set({ role: 'salon_owner' })
+      .where(eq(users.id, session.user.id));
 
     return NextResponse.json(newSalon[0], { status: 201 });
   } catch (error) {
