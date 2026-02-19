@@ -160,7 +160,7 @@ export default function FullPageVideo({ video, isActive, onOpenComments, onOpenP
       <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 via-black/40 to-transparent pointer-events-none z-0" />
 
       {/* Right Sidebar Actions */}
-      <div className="absolute right-2 bottom-28 z-20 flex flex-col items-center gap-6 pb-4 md:right-4 md:bottom-12">
+      <div className="absolute right-2 bottom-20 z-20 flex flex-col items-center gap-6 pb-4 md:right-4 md:bottom-12">
         {/* Creator Avatar */}
         <div className="relative group">
           <Link href={`/app/videos-creations/creator/${video.user.id}`}>
@@ -255,7 +255,7 @@ export default function FullPageVideo({ video, isActive, onOpenComments, onOpenP
       </div>
 
       {/* Bottom Info Overlay */}
-      <div className="absolute bottom-0 left-0 right-16 p-4 pb-24 md:pb-6 z-10 flex flex-col justify-end pointer-events-none">
+      <div className="absolute bottom-0 left-0 right-16 p-4 md:p-6 z-10 flex flex-col justify-end pointer-events-none">
         <div className="pointer-events-auto space-y-3">
             {/* Shop Product Pill - Anchored Bottom Left */}
             {video.products && video.products.length > 0 && (
