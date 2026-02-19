@@ -21,6 +21,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { cn } from "@/lib/utils";
 
 interface Message {
     id: number;
@@ -44,6 +46,7 @@ export default function AIStylistSheet() {
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -97,7 +100,13 @@ export default function AIStylistSheet() {
             <Sparkles className="w-5 h-5 group-hover:animate-pulse" />
         </button>
       </SheetTrigger>
-      <SheetContent side="right" className="w-full sm:max-w-md md:max-w-lg p-0 border-l border-border bg-background flex flex-col h-full">
+      <SheetContent
+        side={isMobile ? "bottom" : "right"}
+        className={cn(
+          "w-full sm:max-w-md md:max-w-lg p-0 border-l border-border bg-background flex flex-col h-full",
+          isMobile && "h-[85vh] rounded-t-[20px] border-t border-l-0"
+        )}
+      >
         <SheetHeader className="p-4 border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-10">
             <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center text-violet-600 dark:text-violet-400">

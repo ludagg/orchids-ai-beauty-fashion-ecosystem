@@ -165,7 +165,7 @@ export default function AppLayout({
               </button>
             </div>
             <nav className="flex-1 px-6 py-8 space-y-2">
-              {sidebarItems.map((item) => {
+              {sidebarItems.filter(item => item.label !== "AI Stylist").map((item) => {
                 const isActive = pathname === item.href;
                 return (
                   <Link
