@@ -18,7 +18,8 @@ import {
   X,
   Heart,
   MessageSquare,
-  Calendar
+  Calendar,
+  Store
 } from "lucide-react";
 import Link from "next/link";
 import BottomNav from "@/components/BottomNav";
@@ -31,6 +32,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { CartProvider } from "@/lib/cart-context";
 import AIStylistSheet from "@/components/ai-stylist/AIStylistSheet";
+import { useSession } from "@/lib/auth-client";
 
 const sidebarItems = [
   { icon: Compass, label: "Discover", href: "/app" },
@@ -53,6 +55,7 @@ export default function AppLayout({
   const [searchQuery, setSearchQuery] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const { data: session } = useSession();
 
   // Close mobile menu on route change
   useEffect(() => {
@@ -153,6 +156,18 @@ export default function AppLayout({
               </button>
             </div>
             <nav className="flex-1 px-6 py-8 space-y-2">
+              {session?.user?.role === "salon_owner" && (
+                <Link
+                  href="/salon-dashboard"
+                  className="w-full flex items-center justify-between py-4 text-xl font-medium border-b border-border text-muted-foreground hover:text-foreground"
+                >
+                  <span className="flex items-center gap-4">
+                    <Store className="w-6 h-6" />
+                    My Business
+                  </span>
+                  <ChevronRight className="w-5 h-5" />
+                </Link>
+              )}
               {sidebarItems.filter(item => item.label !== "AI Stylist").map((item) => {
                 const isActive = pathname === item.href;
                 return (
@@ -198,6 +213,11 @@ export default function AppLayout({
           </div>
 
           <div className="flex items-center gap-4 ml-4">
+            {session?.user?.role === "salon_owner" && (
+              <Link href="/salon-dashboard" className="text-sm font-medium hover:text-primary transition-colors mr-4">
+                My Business
+              </Link>
+            )}
             <ThemeSwitcher />
             <Link href="/app/wishlist" className="p-2 rounded-full hover:bg-secondary transition-colors relative">
               <Heart className={`w-5 h-5 ${pathname === '/app/wishlist' ? 'text-rose-500 fill-rose-500' : 'text-muted-foreground'}`} />

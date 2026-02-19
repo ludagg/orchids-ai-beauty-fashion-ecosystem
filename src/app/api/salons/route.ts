@@ -166,6 +166,8 @@ export async function POST(req: NextRequest) {
 
     const { name, description, address, city, zipCode, type, image } = result.data;
 
+    const finalImage = (image && image.trim() !== "") ? image : "/images/partner-placeholder.png";
+
     // 3. Generate Slug (basic implementation)
     // In production, you might want to check for collisions or use a library like slugify
     const slugBase = name
@@ -196,7 +198,7 @@ export async function POST(req: NextRequest) {
         city: city,
         zipCode: zipCode,
         type: type,
-        image: image,
+        image: finalImage,
         status: "pending",
         // isVerified defaults to false
         // createdAt and updatedAt default to now()
