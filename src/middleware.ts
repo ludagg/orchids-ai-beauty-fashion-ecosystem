@@ -7,6 +7,7 @@ export async function middleware(request: NextRequest) {
   const isPublicPath =
     pathname === "/" ||
     pathname.startsWith("/auth") || // Public auth pages (login/signup)
+    pathname.startsWith("/business") || // Business landing pages
     pathname.startsWith("/api") || // API endpoints are public (auth handled in route handlers)
     pathname.startsWith("/_next") || // Next.js internals
     pathname.match(/\.(ico|png|jpg|jpeg|svg|css|js)$/) || // Static files

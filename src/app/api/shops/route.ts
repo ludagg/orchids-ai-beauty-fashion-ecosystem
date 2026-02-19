@@ -2,12 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { salons, services } from "@/db/schema/salons";
+import { shops } from "@/db/schema/shops";
 import { nanoid } from "nanoid";
 import { headers } from "next/headers";
-import { and, or, ilike, eq, desc, gte, lte, exists, sql, getTableColumns } from "drizzle-orm";
+import { and, or, ilike, eq, desc, sql, getTableColumns } from "drizzle-orm";
 
-const salonSchema = z.object({
+const shopSchema = z.object({
   name: z.string().min(2),
   description: z.string().min(10),
   address: z.string().min(5),
@@ -21,14 +21,12 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const query = searchParams.get("search") || searchParams.get("query");
     const city = searchParams.get("city");
-    const minPrice = searchParams.get("minPrice");
-    const maxPrice = searchParams.get("maxPrice");
     const lat = searchParams.get("lat");
     const lng = searchParams.get("lng");
     const radius = parseFloat(searchParams.get("radius") || "50"); // km
     const limit = parseInt(searchParams.get("limit") || "50");
 
-    const conditions = [eq(salons.status, 'active')]; // Only active salons
+    const conditions = [eq(shops.status, 'active')];
 
     // Filter by Location (Haversine)
     let distanceField = sql<number>`0`;
@@ -42,8 +40,8 @@ export async function GET(req: NextRequest) {
             locationProvided = true;
             distanceField = sql<number>`(
                 6371 * acos(
-                    cos(radians(${userLat})) * cos(radians(${salons.latitude})) * cos(radians(${salons.longitude}) - radians(${userLng})) +
-                    sin(radians(${userLat})) * sin(radians(${salons.latitude}))
+                    cos(radians(${userLat})) * cos(radians(${shops.latitude})) * cos(radians(${shops.longitude}) - radians(${userLng})) +
+                    sin(radians(${userLat})) * sin(radians(${shops.latitude}))
                 )
             )`;
 
@@ -54,55 +52,36 @@ export async function GET(req: NextRequest) {
     if (query) {
       conditions.push(
         or(
-          ilike(salons.name, `%${query}%`),
-          ilike(salons.description, `%${query}%`)
+          ilike(shops.name, `%${query}%`),
+          ilike(shops.description, `%${query}%`)
         )
       );
     }
 
     if (city) {
-      conditions.push(ilike(salons.city, `%${city}%`));
-    }
-
-    if (minPrice || maxPrice) {
-        const min = minPrice ? parseInt(minPrice) * 100 : 0;
-        const max = maxPrice ? parseInt(maxPrice) * 100 : 10000000;
-
-        conditions.push(
-            exists(
-                db.select()
-                    .from(services)
-                    .where(
-                        and(
-                            eq(services.salonId, salons.id),
-                            gte(services.price, min),
-                            lte(services.price, max)
-                        )
-                    )
-            )
-        );
+      conditions.push(ilike(shops.city, `%${city}%`));
     }
 
     let queryBuilder = db
       .select({
-          ...getTableColumns(salons),
+          ...getTableColumns(shops),
           distance: distanceField
       })
-      .from(salons)
+      .from(shops)
       .where(and(...conditions))
       .limit(limit);
 
     if (locationProvided) {
         queryBuilder.orderBy(sql`${distanceField} ASC`);
     } else {
-        queryBuilder.orderBy(desc(salons.createdAt));
+        queryBuilder.orderBy(desc(shops.createdAt));
     }
 
     const results = await queryBuilder;
 
     return NextResponse.json(results);
   } catch (error) {
-    console.error("Error fetching salons:", error);
+    console.error("Error fetching shops:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }
@@ -127,7 +106,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
     }
 
-    const result = salonSchema.safeParse(body);
+    const result = shopSchema.safeParse(body);
 
     if (!result.success) {
       return NextResponse.json(
@@ -143,14 +122,12 @@ export async function POST(req: NextRequest) {
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/(^-|-$)+/g, "");
     const slug = `${slugBase}-${nanoid(6)}`;
-    const salonId = nanoid();
+    const shopId = nanoid();
 
-    // Check if user already has a salon? Maybe allow multiple for now.
-
-    const newSalon = await db
-      .insert(salons)
+    const newShop = await db
+      .insert(shops)
       .values({
-        id: salonId,
+        id: shopId,
         ownerId: session.user.id,
         name: name,
         slug: slug,
@@ -163,9 +140,9 @@ export async function POST(req: NextRequest) {
       })
       .returning();
 
-    return NextResponse.json(newSalon[0], { status: 201 });
+    return NextResponse.json(newShop[0], { status: 201 });
   } catch (error) {
-    console.error("Error creating salon:", error);
+    console.error("Error creating shop:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }

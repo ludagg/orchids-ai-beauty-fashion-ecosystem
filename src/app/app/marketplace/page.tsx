@@ -27,7 +27,7 @@ interface Product {
   reviewCount: number;
   images: string[] | null;
   category: string | null;
-  salon: {
+  shop: {
     name: string;
   } | null;
 }
@@ -187,7 +187,7 @@ export default function MarketplacePage() {
                         </div>
                     )}
                     </div>
-                    <p className="text-xs sm:text-sm text-muted-foreground mb-1 sm:mb-2 truncate">{product.brand || product.salon?.name}</p>
+                    <p className="text-xs sm:text-sm text-muted-foreground mb-1 sm:mb-2 truncate">{product.brand || product.shop?.name}</p>
                     <div className="mt-auto flex items-center justify-between">
                     <p className="font-bold text-base sm:text-lg text-rose-600">{formatPrice(product.price)}</p>
                     {product.reviewCount > 0 && (

@@ -2,7 +2,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
-import { salons } from "@/db/schema";
+import { salons, shops } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { Suspense } from "react";
 import CreatorStudioClient from "./CreatorStudioClient";
@@ -16,9 +16,10 @@ export default async function CreatorStudioPage() {
     redirect("/auth");
   }
 
-  // Fetch the salon for the current user
+  // Fetch the salon or shop for the current user
   let initialSalon = null;
   try {
+    // Check Salons first
     const userSalons = await db
       .select()
       .from(salons)
@@ -26,11 +27,21 @@ export default async function CreatorStudioPage() {
       .limit(1);
 
     if (userSalons.length > 0) {
-      initialSalon = userSalons[0];
+      initialSalon = { ...userSalons[0], type: "SALON" as const };
+    } else {
+        // Check Shops
+        const userShops = await db
+            .select()
+            .from(shops)
+            .where(eq(shops.ownerId, session.user.id))
+            .limit(1);
+
+        if (userShops.length > 0) {
+            initialSalon = { ...userShops[0], type: "BOUTIQUE" as const };
+        }
     }
   } catch (error) {
-    console.error("Error fetching user salon:", error);
-    // initialSalon remains null, allowing the page to render in "Become a Partner" mode
+    console.error("Error fetching user business:", error);
   }
 
   return (

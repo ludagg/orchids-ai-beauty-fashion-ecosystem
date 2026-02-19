@@ -218,14 +218,7 @@ export default function CreatorStudioClient({ user, initialSalon }: CreatorStudi
                 <Button className="flex-1 md:flex-none min-w-[120px]" size="default">
                     Edit Profile
                 </Button>
-                {!isPartner ? (
-                    <Button
-                        className="flex-1 md:flex-none min-w-[120px] bg-gradient-to-r from-purple-500 to-pink-600 text-white hover:from-purple-600 hover:to-pink-700 border-0"
-                        onClick={() => setIsPartnerModalOpen(true)}
-                    >
-                        Become a Partner
-                    </Button>
-                ) : (
+                {isPartner && (
                     <Link
                     href={`/app/creator-studio/partner-dashboard?type=${partnerData?.type || 'SALON'}&businessName=${encodeURIComponent(partnerData?.businessName || '')}&salonId=${salonId || ''}`}
                     passHref

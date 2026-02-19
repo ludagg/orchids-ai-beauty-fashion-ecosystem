@@ -1,5 +1,6 @@
 export * from './auth';
 export * from './salons';
+export * from './shops';
 export * from './bookings';
 export * from './commerce';
 export * from './reviews';
