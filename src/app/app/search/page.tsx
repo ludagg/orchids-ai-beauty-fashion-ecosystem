@@ -8,8 +8,8 @@ import Link from "next/link";
 
 const TABS = [
   { id: "all", label: "All Results" },
-  { id: "salons", label: "Salons", icon: Scissors },
-  { id: "marketplace", label: "Marketplace", icon: ShoppingBag },
+  { id: "salons", label: "Salons & Shops", icon: Scissors },
+  { id: "marketplace", label: "Products", icon: ShoppingBag },
   { id: "videos", label: "Videos", icon: Video },
 ];
 
@@ -28,7 +28,7 @@ function SearchContent() {
   // Initial state from URL
   const [query, setQuery] = useState(searchParams.get("q") || "");
   const [city, setCity] = useState(searchParams.get("city") || "");
-  const [type, setType] = useState(searchParams.get("type") || ""); // SALON, BOUTIQUE, BOTH
+  const [type, setType] = useState(searchParams.get("type") || ""); // SALON, SHOP
   const [minPrice, setMinPrice] = useState(searchParams.get("minPrice") || "");
   const [maxPrice, setMaxPrice] = useState(searchParams.get("maxPrice") || "");
   const [activeTab, setActiveTab] = useState(searchParams.get("tab") || "all");
@@ -221,8 +221,7 @@ function SearchContent() {
                             >
                                 <option value="">All Types</option>
                                 <option value="SALON">Salons Only</option>
-                                <option value="BOUTIQUE">Boutiques Only</option>
-                                <option value="BOTH">Full Service (Both)</option>
+                                <option value="SHOP">Shops Only</option>
                             </select>
                         </div>
                         <div>
@@ -307,7 +306,7 @@ function SearchContent() {
                          {activeTab === "all" && (
                             <div className="flex items-center justify-between mb-6">
                                 <h2 className="text-xl font-bold flex items-center gap-2">
-                                    <Scissors className="w-5 h-5 text-rose-500" /> Salons
+                                    <Scissors className="w-5 h-5 text-rose-500" /> Salons & Shops
                                 </h2>
                                 <button onClick={() => setActiveTab('salons')} className="text-sm font-semibold text-primary hover:underline">View All</button>
                             </div>
@@ -366,7 +365,7 @@ function SearchContent() {
                         {activeTab === "all" && (
                             <div className="flex items-center justify-between mb-6">
                                 <h2 className="text-xl font-bold flex items-center gap-2">
-                                    <ShoppingBag className="w-5 h-5 text-blue-500" /> Marketplace
+                                    <ShoppingBag className="w-5 h-5 text-blue-500" /> Products
                                 </h2>
                                 <button onClick={() => setActiveTab('marketplace')} className="text-sm font-semibold text-primary hover:underline">View All</button>
                             </div>

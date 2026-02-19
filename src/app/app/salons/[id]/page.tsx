@@ -44,7 +44,7 @@ interface Salon {
   website: string | null;
   image: string | null;
   isVerified: boolean;
-  type: "SALON" | "BOUTIQUE" | "BOTH";
+  type: "SALON" | "SHOP";
   images: { id: string; url: string; caption: string | null }[];
   openingHours: { dayOfWeek: number; openTime: string; closeTime: string; isClosed: boolean }[];
   latitude?: string | number | null;

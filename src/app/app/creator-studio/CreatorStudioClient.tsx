@@ -35,7 +35,7 @@ interface SalonData {
     name: string;
     slug: string;
     description: string | null;
-    type: "SALON" | "BOUTIQUE" | "BOTH";
+    type: "SALON" | "SHOP";
 }
 
 interface VideoData {

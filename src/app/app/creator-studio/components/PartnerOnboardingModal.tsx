@@ -16,7 +16,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from "sonner"
 
-export type PartnerType = "SALON" | "BOUTIQUE" | "BOTH"
+export type PartnerType = "SALON" | "SHOP"
 
 export interface PartnerData {
   businessName: string
@@ -196,34 +196,27 @@ export function PartnerOnboardingModal({
               onValueChange={(val) =>
                 setFormData({ ...formData, type: val as PartnerType })
               }
-              className="grid grid-cols-3 gap-4"
+              className="grid grid-cols-2 gap-4"
               disabled={loading}
             >
               <div>
                 <RadioGroupItem value="SALON" id="salon" className="peer sr-only" />
                 <Label
                   htmlFor="salon"
-                  className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary cursor-pointer text-center"
+                  className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary cursor-pointer text-center h-full"
                 >
                   <span className="text-sm font-semibold">Salon</span>
+                  <span className="text-xs text-muted-foreground mt-1">Services, Beauty & Spa</span>
                 </Label>
               </div>
               <div>
-                <RadioGroupItem value="BOUTIQUE" id="boutique" className="peer sr-only" />
+                <RadioGroupItem value="SHOP" id="shop" className="peer sr-only" />
                 <Label
-                  htmlFor="boutique"
-                  className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary cursor-pointer text-center"
+                  htmlFor="shop"
+                  className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary cursor-pointer text-center h-full"
                 >
-                  <span className="text-sm font-semibold">Boutique</span>
-                </Label>
-              </div>
-              <div>
-                <RadioGroupItem value="BOTH" id="both" className="peer sr-only" />
-                <Label
-                  htmlFor="both"
-                  className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary cursor-pointer text-center"
-                >
-                  <span className="text-sm font-semibold">Both</span>
+                  <span className="text-sm font-semibold">Shop</span>
+                  <span className="text-xs text-muted-foreground mt-1">Retail, Brands & Products</span>
                 </Label>
               </div>
             </RadioGroup>
