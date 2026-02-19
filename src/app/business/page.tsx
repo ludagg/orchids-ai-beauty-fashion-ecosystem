@@ -16,7 +16,8 @@ import {
   CheckCircle2,
   TrendingUp,
   Globe,
-  CalendarCheck
+  CalendarCheck,
+  Star
 } from "lucide-react";
 import LandingNavbar from "@/components/landing/LandingNavbar";
 import LandingFooter from "@/components/landing/LandingFooter";
