@@ -6,9 +6,9 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Checkbox } from '@/components/ui/checkbox'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Mail, Lock, User, Eye, EyeOff, Chrome, Github, Phone, MapPin, Globe } from 'lucide-react'
+import { Mail, Lock, User, Eye, EyeOff, Chrome, Github } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { authClient } from '@/lib/auth-client'
 import { toast } from 'sonner'
@@ -24,13 +24,10 @@ export default function SignUpPage() {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
-    sex: '',
-    country: '',
-    city: '',
-    phone: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    termsAccepted: false
   })
 
   const [errors, setErrors] = useState<Record<string, string>>({})
@@ -40,10 +37,6 @@ export default function SignUpPage() {
 
     if (!formData.firstName) newErrors.firstName = 'First name is required'
     if (!formData.lastName) newErrors.lastName = 'Last name is required'
-    if (!formData.sex) newErrors.sex = 'Sex is required'
-    if (!formData.country) newErrors.country = 'Country is required'
-    if (!formData.city) newErrors.city = 'City is required'
-    if (!formData.phone) newErrors.phone = 'Phone number is required'
 
     if (!formData.email) {
       newErrors.email = 'Email is required'
@@ -59,6 +52,10 @@ export default function SignUpPage() {
 
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match'
+    }
+
+    if (!formData.termsAccepted) {
+      newErrors.termsAccepted = 'You must accept the terms and conditions'
     }
 
     setErrors(newErrors)
@@ -78,9 +75,6 @@ export default function SignUpPage() {
         email: formData.email,
         password: formData.password,
         name: `${formData.firstName} ${formData.lastName}`,
-        // Note: Extra fields (sex, phone, etc.) are captured in UI but might need schema update to be stored.
-        // Assuming the backend handles them or we just send name/email/pass for now.
-        // If better-auth supports extra fields in metadata or similar, they should be passed here.
       })
 
       if (error) {
@@ -93,7 +87,7 @@ export default function SignUpPage() {
       setIsSuccess(true)
       toast.success("Account created successfully!")
       setTimeout(() => {
-        router.push('/app')
+        router.push('/onboarding')
       }, 1000)
 
     } catch (err) {
@@ -111,10 +105,10 @@ export default function SignUpPage() {
     }
   }
 
-  const handleSelectChange = (value: string) => {
-    setFormData(prev => ({ ...prev, sex: value }))
-    if (errors.sex) {
-      setErrors(prev => ({ ...prev, sex: '' }))
+  const handleCheckboxChange = (checked: boolean) => {
+    setFormData(prev => ({ ...prev, termsAccepted: checked }))
+    if (errors.termsAccepted) {
+      setErrors(prev => ({ ...prev, termsAccepted: '' }))
     }
   }
 
@@ -123,7 +117,7 @@ export default function SignUpPage() {
       setIsLoading(true)
       const { data, error } = await authClient.signIn.social({
         provider: provider,
-        callbackURL: '/app'
+        callbackURL: '/app' // Will be intercepted by layout check if onboarding incomplete
       })
 
       if (error) {
@@ -204,78 +198,6 @@ export default function SignUpPage() {
               </div>
             </div>
 
-            {/* Contact & Details */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="sex">Sex</Label>
-                <Select onValueChange={handleSelectChange} value={formData.sex} disabled={isLoading}>
-                  <SelectTrigger className={errors.sex ? 'border-red-500 focus:ring-red-500' : ''}>
-                    <SelectValue placeholder="Select" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="male">Male</SelectItem>
-                    <SelectItem value="female">Female</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
-                  </SelectContent>
-                </Select>
-                {errors.sex && <p className="text-xs text-red-500">{errors.sex}</p>}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="phone">Phone</Label>
-                <div className="relative group">
-                  <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
-                  <Input
-                    id="phone"
-                    name="phone"
-                    type="tel"
-                    placeholder="+1 (555)..."
-                    value={formData.phone}
-                    onChange={handleChange}
-                    className={`pl-10 ${errors.phone ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
-                    disabled={isLoading}
-                  />
-                </div>
-                {errors.phone && <p className="text-xs text-red-500">{errors.phone}</p>}
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="country">Country</Label>
-                <div className="relative group">
-                  <Globe className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
-                  <Input
-                    id="country"
-                    name="country"
-                    placeholder="USA"
-                    value={formData.country}
-                    onChange={handleChange}
-                    className={`pl-10 ${errors.country ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
-                    disabled={isLoading}
-                  />
-                </div>
-                {errors.country && <p className="text-xs text-red-500">{errors.country}</p>}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="city">City</Label>
-                <div className="relative group">
-                  <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
-                  <Input
-                    id="city"
-                    name="city"
-                    placeholder="NY"
-                    value={formData.city}
-                    onChange={handleChange}
-                    className={`pl-10 ${errors.city ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
-                    disabled={isLoading}
-                  />
-                </div>
-                {errors.city && <p className="text-xs text-red-500">{errors.city}</p>}
-              </div>
-            </div>
-
             {/* Email */}
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
@@ -349,6 +271,20 @@ export default function SignUpPage() {
                 {errors.confirmPassword && <p className="text-xs text-red-500">{errors.confirmPassword}</p>}
               </div>
             </div>
+
+            {/* Terms and Conditions */}
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="terms"
+                checked={formData.termsAccepted}
+                onCheckedChange={handleCheckboxChange}
+                className={errors.termsAccepted ? "border-red-500" : ""}
+              />
+              <Label htmlFor="terms" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                I accept the <Link href="/terms" className="underline hover:text-primary">Terms and Conditions</Link> and <Link href="/privacy" className="underline hover:text-primary">Privacy Policy</Link>
+              </Label>
+            </div>
+            {errors.termsAccepted && <p className="text-xs text-red-500">{errors.termsAccepted}</p>}
 
             <Button type="submit" className="w-full h-11 text-base mt-2" disabled={isLoading}>
               {isLoading ? (
