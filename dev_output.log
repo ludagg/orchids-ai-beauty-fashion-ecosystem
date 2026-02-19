@@ -1,0 +1,48 @@
+
+> app@0.1.0 dev
+> next dev --turbopack
+
+▲ Next.js 16.1.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.2:3000
+
+✓ Starting...
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
+
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+✓ Ready in 1518ms
+○ Compiling /auth/sign-up ...
+ GET /auth/sign-up 200 in 7.5s (compile: 6.5s, proxy.ts: 97ms, render: 908ms)
+○ Compiling /api/auth/[...all] ...
+[2m2026-02-19T09:11:37.481Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
+[2m2026-02-19T09:11:37.485Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
+[2m2026-02-19T09:11:37.486Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
+[2m2026-02-19T09:11:38.542Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
+[2m2026-02-19T09:11:38.546Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
+[2m2026-02-19T09:11:38.546Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
+[2m2026-02-19T09:11:38.607Z[0m [31mERROR[0m [1m[Better Auth]:[0m Error Error: Failed query: select "id", "name", "email", "email_verified", "image", "role", "is_suspended", "loyalty_points", "onboarding_completed", "created_at", "updated_at" from "users" where "users"."email" = $1
+params: user1771492292@example.com
+    at ignore-listed frames {
+  query: 'select "id", "name", "email", "email_verified", "image", "role", "is_suspended", "loyalty_points", "onboarding_completed", "created_at", "updated_at" from "users" where "users"."email" = $1',
+  params: [Array],
+  [cause]: AggregateError:
+      at ignore-listed frames {
+    code: 'ECONNREFUSED'
+  }
+}
+# SERVER_ERROR:  Error: Failed query: select "id", "name", "email", "email_verified", "image", "role", "is_suspended", "loyalty_points", "onboarding_completed", "created_at", "updated_at" from "users" where "users"."email" = $1
+params: user1771492292@example.com
+    at ignore-listed frames {
+  query: 'select "id", "name", "email", "email_verified", "image", "role", "is_suspended", "loyalty_points", "onboarding_completed", "created_at", "updated_at" from "users" where "users"."email" = $1',
+  params: [Array],
+  [cause]: AggregateError:
+      at ignore-listed frames {
+    code: 'ECONNREFUSED'
+  }
+}
+ POST /api/auth/sign-up/email 500 in 6.6s (compile: 5.8s, proxy.ts: 17ms, render: 731ms)
+  Reload env: .env
+[?25h

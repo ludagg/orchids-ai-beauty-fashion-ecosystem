@@ -7,3 +7,4 @@ export * from './messaging';
 export * from './favorites';
 export * from './content';
 export * from './notifications';
+export * from './preferences';
