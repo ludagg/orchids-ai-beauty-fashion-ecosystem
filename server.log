@@ -7,52 +7,15 @@
 - Network:       http://192.168.0.2:3000
 
 ✓ Starting...
-Attention: Next.js now collects completely anonymous telemetry regarding usage.
-This information is used to shape Next.js' roadmap and prioritize features.
-You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
-https://nextjs.org/telemetry
-
 ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
-✓ Ready in 1822ms
-○ Compiling /business ...
- GET /business 200 in 8.1s (compile: 7.2s, proxy.ts: 105ms, render: 793ms)
+✓ Ready in 1286ms
+○ Compiling /app/notifications ...
+ GET /app/notifications 200 in 8.7s (compile: 7.5s, proxy.ts: 107ms, render: 1111ms)
 ○ Compiling /api/auth/[...all] ...
-[2m2026-02-19T19:26:54.925Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
-[2m2026-02-19T19:26:54.930Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
-[2m2026-02-19T19:26:54.930Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
- GET /api/notifications 401 in 3.8s (compile: 3.7s, proxy.ts: 6ms, render: 124ms)
- GET /api/notifications 401 in 16ms (compile: 4ms, proxy.ts: 5ms, render: 7ms)
-[2m2026-02-19T19:26:56.084Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
-[2m2026-02-19T19:26:56.088Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
-[2m2026-02-19T19:26:56.088Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
- GET /api/auth/get-session 200 in 5.0s (compile: 4.9s, proxy.ts: 38ms, render: 16ms)
- GET /business 200 in 207ms (compile: 11ms, proxy.ts: 8ms, render: 188ms)
- GET /api/auth/get-session 200 in 88ms (compile: 63ms, proxy.ts: 7ms, render: 18ms)
- GET /api/notifications 401 in 46ms (compile: 26ms, proxy.ts: 11ms, render: 8ms)
- GET /api/notifications 401 in 26ms (compile: 6ms, proxy.ts: 10ms, render: 10ms)
- GET /auth 200 in 1757ms (compile: 1564ms, proxy.ts: 8ms, render: 185ms)
- GET /auth 200 in 444ms (compile: 292ms, proxy.ts: 20ms, render: 133ms)
- GET /auth 200 in 102ms (compile: 14ms, proxy.ts: 5ms, render: 83ms)
- GET /auth 200 in 98ms (compile: 42ms, proxy.ts: 5ms, render: 51ms)
-[2m2026-02-19T19:26:58.708Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
-[2m2026-02-19T19:26:58.712Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
-[2m2026-02-19T19:26:58.713Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
- GET /auth/sign-in 200 in 1277ms (compile: 1127ms, proxy.ts: 5ms, render: 146ms)
- GET /auth/sign-in 200 in 1239ms (compile: 1115ms, proxy.ts: 4ms, render: 120ms)
- GET /auth/sign-in 200 in 115ms (compile: 14ms, proxy.ts: 4ms, render: 97ms)
- GET /auth/sign-in 200 in 120ms (compile: 37ms, proxy.ts: 4ms, render: 80ms)
- GET /business 200 in 535ms (compile: 83ms, proxy.ts: 5ms, render: 447ms)
- GET /api/auth/get-session 200 in 76ms (compile: 58ms, proxy.ts: 4ms, render: 14ms)
- GET /api/notifications 401 in 15ms (compile: 3ms, proxy.ts: 4ms, render: 7ms)
- GET /api/notifications 401 in 17ms (compile: 3ms, proxy.ts: 3ms, render: 11ms)
-[2m2026-02-19T19:27:43.742Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
-[2m2026-02-19T19:27:43.746Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
-[2m2026-02-19T19:27:43.746Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
- GET /business 200 in 152ms (compile: 5ms, proxy.ts: 4ms, render: 143ms)
- GET /api/auth/get-session 200 in 81ms (compile: 65ms, proxy.ts: 3ms, render: 12ms)
- GET /api/notifications 401 in 22ms (compile: 6ms, proxy.ts: 9ms, render: 8ms)
- GET /api/notifications 401 in 13ms (compile: 5ms, proxy.ts: 3ms, render: 6ms)
-[2m2026-02-19T19:27:49.686Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
-[2m2026-02-19T19:27:49.689Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
-[2m2026-02-19T19:27:49.690Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
-✓ Compiled in 131ms
+[2m2026-02-19T21:42:56.394Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
+[2m2026-02-19T21:42:56.399Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
+[2m2026-02-19T21:42:56.400Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
+[2m2026-02-19T21:42:57.971Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
+[2m2026-02-19T21:42:57.977Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
+[2m2026-02-19T21:42:57.978Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
+✓ Compiled in 197ms
