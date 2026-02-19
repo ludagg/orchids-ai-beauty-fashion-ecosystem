@@ -3,7 +3,7 @@ import { relations } from 'drizzle-orm';
 import { users } from './auth';
 
 export const salonStatusEnum = pgEnum('salon_status', ['pending', 'active', 'suspended']);
-export const partnerTypeEnum = pgEnum('partner_type', ['SALON', 'BOUTIQUE', 'BOTH']);
+export const partnerTypeEnum = pgEnum('partner_type', ['SALON', 'BOUTIQUE']);
 
 export const salons = pgTable('salons', {
   id: text('id').primaryKey(),
@@ -11,6 +11,7 @@ export const salons = pgTable('salons', {
   name: text('name').notNull(),
   slug: text('slug').notNull().unique(),
   description: text('description'),
+  siret: text('siret'),
   address: text('address').notNull(),
   city: text('city').notNull(),
   zipCode: text('zip_code').notNull(),
@@ -58,6 +59,17 @@ export const services = pgTable('services', {
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
+export const staff = pgTable('staff', {
+  id: text('id').primaryKey(),
+  salonId: text('salon_id').notNull().references(() => salons.id, { onDelete: 'cascade' }),
+  name: text('name').notNull(),
+  role: text('role').notNull(), // e.g. "Senior Stylist", "Colorist"
+  image: text('image'),
+  isActive: boolean('is_active').default(true).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
 export const salonsRelations = relations(salons, ({ one, many }) => ({
   owner: one(users, {
     fields: [salons.ownerId],
@@ -66,6 +78,7 @@ export const salonsRelations = relations(salons, ({ one, many }) => ({
   images: many(salonImages),
   openingHours: many(openingHours),
   services: many(services),
+  staff: many(staff),
 }));
 
 export const salonImagesRelations = relations(salonImages, ({ one }) => ({
@@ -85,6 +98,13 @@ export const openingHoursRelations = relations(openingHours, ({ one }) => ({
 export const servicesRelations = relations(services, ({ one }) => ({
   salon: one(salons, {
     fields: [services.salonId],
+    references: [salons.id],
+  }),
+}));
+
+export const staffRelations = relations(staff, ({ one }) => ({
+  salon: one(salons, {
+    fields: [staff.salonId],
     references: [salons.id],
   }),
 }));
