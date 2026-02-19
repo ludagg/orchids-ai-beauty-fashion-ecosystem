@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Loader2, Send, MessageSquare } from "lucide-react";
 import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";
+import { cn } from "@/lib/utils";
 
 interface Comment {
   id: string;
@@ -23,9 +24,11 @@ interface Comment {
 interface CommentSectionProps {
   videoId: string;
   initialCommentsCount?: number;
+  hideHeader?: boolean;
+  className?: string;
 }
 
-export function CommentSection({ videoId, initialCommentsCount = 0 }: CommentSectionProps) {
+export function CommentSection({ videoId, initialCommentsCount = 0, hideHeader = false, className }: CommentSectionProps) {
   const { data: session } = useSession();
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
@@ -82,11 +85,13 @@ export function CommentSection({ videoId, initialCommentsCount = 0 }: CommentSec
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-2 mb-4 pt-8 border-t border-border">
-        <MessageSquare className="w-5 h-5" />
-        <h3 className="font-bold text-lg">Comments ({count})</h3>
-      </div>
+    <div className={cn("space-y-6", className)}>
+      {!hideHeader && (
+        <div className="flex items-center gap-2 mb-4 pt-8 border-t border-border">
+          <MessageSquare className="w-5 h-5" />
+          <h3 className="font-bold text-lg">Comments ({count})</h3>
+        </div>
+      )}
 
       {/* Comment Form */}
       {session ? (
