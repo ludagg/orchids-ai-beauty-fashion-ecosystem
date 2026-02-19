@@ -30,6 +30,7 @@ import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { CartProvider } from "@/lib/cart-context";
+import AIStylistSheet from "@/components/ai-stylist/AIStylistSheet";
 
 const sidebarItems = [
   { icon: Compass, label: "Discover", href: "/app" },
@@ -202,8 +203,9 @@ export default function AppLayout({
       <div className="flex-1 min-w-0 flex flex-col relative overflow-x-hidden">
         {/* Header - Desktop Search */}
         <header className="hidden lg:flex h-16 border-b border-border bg-card/80 backdrop-blur-md sticky top-0 z-30 px-6 items-center justify-between">
-          <div className="flex-1 max-w-xl">
-            <SearchBar value={searchQuery} onChange={setSearchQuery} onSubmit={handleSearch} />
+          <div className="flex-1 max-w-xl flex items-center">
+            <SearchBar value={searchQuery} onChange={setSearchQuery} onSubmit={handleSearch} className="flex-1" />
+            <AIStylistSheet />
           </div>
 
           <div className="flex items-center gap-4 ml-4">
