@@ -30,7 +30,6 @@ import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { CartProvider } from "@/lib/cart-context";
-import { useSession } from "@/lib/auth-client";
 
 const sidebarItems = [
   { icon: Compass, label: "Discover", href: "/app" },
@@ -53,19 +52,11 @@ export default function AppLayout({
   const [searchQuery, setSearchQuery] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const { data: sessionData, isPending } = useSession();
 
   // Close mobile menu on route change
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [pathname]);
-
-  // Redirect to onboarding if not completed
-  useEffect(() => {
-    if (!isPending && sessionData?.user && !(sessionData.user as any).onboardingCompleted) {
-      router.push("/onboarding");
-    }
-  }, [sessionData, isPending, router]);
 
   const handleSearch = (query: string) => {
     router.push(`/app/search?q=${encodeURIComponent(query)}`);

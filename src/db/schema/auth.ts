@@ -12,7 +12,6 @@ export const users = pgTable('users', {
   role: userRoleEnum('role').default('user').notNull(),
   isSuspended: boolean('is_suspended').default(false).notNull(),
   loyaltyPoints: integer('loyalty_points').default(0).notNull(),
-  onboardingCompleted: boolean('onboarding_completed').default(false).notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
