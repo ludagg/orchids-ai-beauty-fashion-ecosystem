@@ -13,7 +13,7 @@ const salonSchema = z.object({
   address: z.string().min(5),
   city: z.string().min(2),
   zipCode: z.string().min(3),
-  type: z.enum(["SALON", "BOUTIQUE", "BOTH"]),
+  type: z.enum(["SALON", "BOUTIQUE"]),
   image: z.string().optional(),
 });
 

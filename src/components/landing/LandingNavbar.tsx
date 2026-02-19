@@ -70,6 +70,9 @@ export default function LandingNavbar() {
             </div>
 
             <div className="flex items-center gap-4">
+              <Link href={isHome ? "/business" : "/"} className="hidden sm:block text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+                {isHome ? "For Business" : "For Shoppers"}
+              </Link>
               <ThemeSwitcher />
               <Link href="/auth">
                 <motion.button

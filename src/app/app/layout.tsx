@@ -18,7 +18,8 @@ import {
   X,
   Heart,
   MessageSquare,
-  Calendar
+  Calendar,
+  Store
 } from "lucide-react";
 import Link from "next/link";
 import BottomNav from "@/components/BottomNav";
@@ -104,7 +105,14 @@ export default function AppLayout({
 
         
 
-        <div className={`p-4 border-t border-border ${isCollapsed ? "flex justify-center" : ""}`}>
+        <div className={`p-4 border-t border-border space-y-1 ${isCollapsed ? "flex flex-col items-center" : ""}`}>
+          <Link
+            href="/business"
+            className={`w-full flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors text-muted-foreground hover:text-foreground ${isCollapsed ? "justify-center" : ""}`}
+          >
+            <Store className="w-5 h-5 flex-shrink-0" />
+            {!isCollapsed && <span>For Partners</span>}
+          </Link>
           <Link
             href="/app/settings"
             className={`w-full flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors ${
