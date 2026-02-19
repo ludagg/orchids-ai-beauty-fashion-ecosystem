@@ -18,18 +18,8 @@ import { Badge } from "@/components/ui/badge";
 import { useState, useEffect, Suspense, useCallback } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import { PartnerOnboardingModal, PartnerData, PartnerType } from "./components/PartnerOnboardingModal";
 import { VideoUploadModal } from "./components/VideoUploadModal";
-
-export type PartnerType = "SALON" | "BOUTIQUE" | "BOTH";
-
-export interface PartnerData {
-  businessName: string;
-  description: string;
-  address: string;
-  city: string;
-  zipCode: string;
-  type: PartnerType;
-}
 
 // Interface for User Data
 interface UserData {
@@ -79,6 +69,7 @@ export default function CreatorStudioClient({ user, initialSalon }: CreatorStudi
   } : null);
   const [salonId, setSalonId] = useState<string | null>(initialSalon?.id || null);
 
+  const [isPartnerModalOpen, setIsPartnerModalOpen] = useState(false);
   const [isVideoUploadModalOpen, setIsVideoUploadModalOpen] = useState(false);
 
   const [videos, setVideos] = useState<VideoData[]>([]);
@@ -133,6 +124,14 @@ export default function CreatorStudioClient({ user, initialSalon }: CreatorStudi
   }, [searchParams, initialSalon]);
 
   const publishedVideos = videos.filter(v => v.status === 'published');
+
+  const handlePartnerComplete = (data: PartnerData & { id?: string }) => {
+    setPartnerData(data);
+    if (data.id) setSalonId(data.id);
+    setIsPartner(true);
+    // Refresh to update server components
+    router.refresh();
+  };
 
   // Determine what to display in header
   const displayName = isPartner && partnerData ? partnerData.businessName : user.name;
@@ -220,13 +219,12 @@ export default function CreatorStudioClient({ user, initialSalon }: CreatorStudi
                     Edit Profile
                 </Button>
                 {!isPartner ? (
-                    <Link href="/business/register" className="flex-1 md:flex-none min-w-[120px]">
-                        <Button
-                            className="w-full bg-gradient-to-r from-purple-500 to-pink-600 text-white hover:from-purple-600 hover:to-pink-700 border-0"
-                        >
-                            Become a Partner
-                        </Button>
-                    </Link>
+                    <Button
+                        className="flex-1 md:flex-none min-w-[120px] bg-gradient-to-r from-purple-500 to-pink-600 text-white hover:from-purple-600 hover:to-pink-700 border-0"
+                        onClick={() => setIsPartnerModalOpen(true)}
+                    >
+                        Become a Partner
+                    </Button>
                 ) : (
                     <Link
                     href={`/app/creator-studio/partner-dashboard?type=${partnerData?.type || 'SALON'}&businessName=${encodeURIComponent(partnerData?.businessName || '')}&salonId=${salonId || ''}`}
@@ -306,6 +304,12 @@ export default function CreatorStudioClient({ user, initialSalon }: CreatorStudi
              </>
          )}
       </div>
+
+      <PartnerOnboardingModal
+        isOpen={isPartnerModalOpen}
+        onOpenChange={setIsPartnerModalOpen}
+        onComplete={handlePartnerComplete}
+      />
 
       <VideoUploadModal
         isOpen={isVideoUploadModalOpen}
