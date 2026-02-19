@@ -53,8 +53,6 @@ export default function AppLayout({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
-  const isVideoPage = pathname?.startsWith("/app/videos-creations");
-
   // Close mobile menu on route change
   useEffect(() => {
     setMobileMenuOpen(false);
@@ -131,30 +129,28 @@ export default function AppLayout({
       </aside>
 
       {/* Mobile Nav */}
-      {!isVideoPage && (
-        <header className="lg:hidden bg-card/80 backdrop-blur-md sticky top-0 z-40 border-b border-border">
-          <div className="h-16 px-4 flex items-center justify-between">
-            <Link href="/" className="text-2xl font-script text-black dark:text-white">
-              Rare
-            </Link>
-            <div className="flex items-center gap-1">
-              <ThemeSwitcher />
-              <Link href="/app/wishlist" className="p-2 relative">
-                <Heart className={`w-6 h-6 ${pathname === "/app/wishlist" ? "text-rose-500 fill-rose-500" : ""}`} />
-              </Link>
-              <CartIcon />
-              <NotificationBell />
-              <UserAccount showLabel={false} />
-              <button onClick={() => setMobileMenuOpen(true)} className="p-2 ml-1">
-                <Menu className="w-6 h-6" />
-              </button>
-            </div>
+      <header className="lg:hidden bg-card/80 backdrop-blur-md sticky top-0 z-40 border-b border-border">
+        <div className="h-16 px-4 flex items-center justify-between">
+          <Link href="/" className="text-2xl font-script text-black dark:text-white">
+            Rare
+          </Link>
+          <div className="flex items-center gap-1">
+            <ThemeSwitcher />
+          <Link href="/app/wishlist" className="p-2 relative">
+             <Heart className={`w-6 h-6 ${pathname === '/app/wishlist' ? 'text-rose-500 fill-rose-500' : ''}`} />
+          </Link>
+            <CartIcon />
+            <NotificationBell />
+            <UserAccount showLabel={false} />
+            <button onClick={() => setMobileMenuOpen(true)} className="p-2 ml-1">
+              <Menu className="w-6 h-6" />
+            </button>
           </div>
-          <div className="px-4 pb-3">
-            <SearchBar value={searchQuery} onChange={setSearchQuery} onSubmit={handleSearch} />
-          </div>
-        </header>
-      )}
+        </div>
+        <div className="px-4 pb-3">
+          <SearchBar value={searchQuery} onChange={setSearchQuery} onSubmit={handleSearch} />
+        </div>
+      </header>
 
       {/* Mobile Menu Overlay */}
       {mobileMenuOpen && (
@@ -205,31 +201,23 @@ export default function AppLayout({
       {/* Main Content */}
       <div className="flex-1 min-w-0 flex flex-col relative overflow-x-hidden">
         {/* Header - Desktop Search */}
-        {!isVideoPage && (
-          <header className="hidden lg:flex h-16 border-b border-border bg-card/80 backdrop-blur-md sticky top-0 z-30 px-6 items-center justify-between">
-            <div className="flex-1 max-w-xl">
-              <SearchBar value={searchQuery} onChange={setSearchQuery} onSubmit={handleSearch} />
-            </div>
+        <header className="hidden lg:flex h-16 border-b border-border bg-card/80 backdrop-blur-md sticky top-0 z-30 px-6 items-center justify-between">
+          <div className="flex-1 max-w-xl">
+            <SearchBar value={searchQuery} onChange={setSearchQuery} onSubmit={handleSearch} />
+          </div>
 
-            <div className="flex items-center gap-4 ml-4">
-              <ThemeSwitcher />
-              <Link href="/app/wishlist" className="p-2 rounded-full hover:bg-secondary transition-colors relative">
-                <Heart className={`w-5 h-5 ${pathname === "/app/wishlist" ? "text-rose-500 fill-rose-500" : "text-muted-foreground"}`} />
-              </Link>
-              <CartIcon />
-              <NotificationBell />
-              <UserAccount />
-            </div>
-          </header>
-        )}
+          <div className="flex items-center gap-4 ml-4">
+            <ThemeSwitcher />
+            <Link href="/app/wishlist" className="p-2 rounded-full hover:bg-secondary transition-colors relative">
+              <Heart className={`w-5 h-5 ${pathname === '/app/wishlist' ? 'text-rose-500 fill-rose-500' : 'text-muted-foreground'}`} />
+            </Link>
+            <CartIcon />
+            <NotificationBell />
+            <UserAccount />
+          </div>
+        </header>
 
-        <main
-          className={`flex-1 min-h-0 ${
-            isVideoPage
-              ? "h-[100dvh] overflow-hidden p-0 relative"
-              : "overflow-y-auto pb-20 lg:pb-0"
-          }`}
-        >
+        <main className="flex-1 min-h-0 overflow-y-auto pb-20 lg:pb-0">
           {children}
         </main>
 
