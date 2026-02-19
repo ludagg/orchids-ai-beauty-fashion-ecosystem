@@ -25,9 +25,9 @@ function PartnerDashboardContent() {
     return "bookings"; // Default to bookings for quick access
   });
 
-  const showServices = type === "SALON" || type === "BOTH";
-  const showProducts = type === "BOUTIQUE" || type === "BOTH";
-  const showBookings = type === "SALON" || type === "BOTH"; // Only salons receive bookings for now
+  const showServices = type === "SALON";
+  const showProducts = type === "BOUTIQUE";
+  const showBookings = type === "SALON"; // Only salons receive bookings for now
 
   // Handle back navigation to preserve partner state via query params
   const handleBack = () => {
@@ -48,7 +48,7 @@ function PartnerDashboardContent() {
             Partner Dashboard
           </h1>
           <p className="text-muted-foreground">
-            Manage your {type === "BOTH" ? "Salon & Boutique" : type === "SALON" ? "Salon" : "Boutique"} offerings for {businessName}.
+            Manage your {type === "SALON" ? "Salon" : "Boutique"} offerings for {businessName}.
           </p>
         </div>
 

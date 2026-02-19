@@ -7,186 +7,24 @@
 - Network:       http://192.168.0.2:3000
 
 ✓ Starting...
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
+
 ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
-✓ Ready in 1600ms
+✓ Ready in 1647ms
 ○ Compiling /auth/sign-in ...
- GET /auth/sign-in 200 in 6.4s (compile: 5.8s, proxy.ts: 6ms, render: 590ms)
- GET /app/ai-stylist 200 in 3.0s (compile: 2.5s, proxy.ts: 9ms, render: 454ms)
+ GET /auth/sign-in 200 in 8.3s (compile: 7.0s, proxy.ts: 6ms, render: 1311ms)
+✓ Compiled in 168ms
+ GET /business 200 in 1560ms (compile: 1243ms, proxy.ts: 45ms, render: 273ms)
+○ Compiling /business/onboarding ...
+ GET /business/onboarding?type=SALON 200 in 4.5s (compile: 4.4s, proxy.ts: 9ms, render: 41ms)
 ○ Compiling /api/auth/[...all] ...
-[2m2026-02-19T10:08:24.014Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
-[2m2026-02-19T10:08:24.019Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
-[2m2026-02-19T10:08:24.019Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
- GET /api/notifications 401 in 4.8s (compile: 4.7s, proxy.ts: 15ms, render: 42ms)
- GET /api/notifications 401 in 77ms (compile: 26ms, proxy.ts: 21ms, render: 30ms)
-[2m2026-02-19T10:08:25.884Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
-[2m2026-02-19T10:08:25.889Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
-[2m2026-02-19T10:08:25.890Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
- GET /api/auth/get-session 200 in 6.5s (compile: 6.5s, proxy.ts: 6ms, render: 17ms)
- GET /app/ai-stylist 200 in 233ms (compile: 8ms, proxy.ts: 7ms, render: 218ms)
- GET /api/auth/get-session 200 in 80ms (compile: 64ms, proxy.ts: 7ms, render: 10ms)
- GET /api/notifications 401 in 60ms (compile: 26ms, proxy.ts: 17ms, render: 17ms)
- GET /api/notifications 401 in 23ms (compile: 7ms, proxy.ts: 6ms, render: 10ms)
-[2m2026-02-19T10:09:16.643Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
-[2m2026-02-19T10:09:16.647Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
-[2m2026-02-19T10:09:16.647Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
- GET /app/search 200 in 1625ms (compile: 1302ms, proxy.ts: 5ms, render: 319ms)
- GET /api/auth/get-session 200 in 81ms (compile: 61ms, proxy.ts: 7ms, render: 13ms)
- GET /api/notifications 401 in 17ms (compile: 5ms, proxy.ts: 5ms, render: 7ms)
- GET /api/notifications 401 in 21ms (compile: 4ms, proxy.ts: 5ms, render: 12ms)
-[2m2026-02-19T10:09:55.132Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
-[2m2026-02-19T10:09:55.135Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
-[2m2026-02-19T10:09:55.136Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
-Error fetching products: Error: Failed query: select "products"."id", "products"."salon_id", "products"."name", "products"."description", "products"."price", "products"."stock", "products"."has_variants", "products"."images", "products"."is_active", "products"."category", "products"."brand", "products"."rating", "products"."review_count", "products"."created_at", "products"."updated_at", "products_salon"."data" as "salon" from "products" "products" left join lateral (select json_build_array("products_salon"."name", "products_salon"."id", "products_salon"."slug") as "data" from (select * from "salons" "products_salon" where "products_salon"."id" = "products"."salon_id" limit $1) "products_salon") "products_salon" on true where "products"."is_active" = $2 order by "products"."created_at" desc limit $3
-params: 1,true,8
-    at async GET (src/app/api/products/route.ts:79:18)
-  77 |     }
-  78 |
-> 79 |     const data = await db.query.products.findMany({
-     |                  ^
-  80 |       where: and(...conditions),
-  81 |       limit: limit,
-  82 |       with: { {
-  query: 'select "products"."id", "products"."salon_id", "products"."name", "products"."description", "products"."price", "products"."stock", "products"."has_variants", "products"."images", "products"."is_active", "products"."category", "products"."brand", "products"."rating", "products"."review_count", "products"."created_at", "products"."updated_at", "products_salon"."data" as "salon" from "products" "products" left join lateral (select json_build_array("products_salon"."name", "products_salon"."id", "products_salon"."slug") as "data" from (select * from "salons" "products_salon" where "products_salon"."id" = "products"."salon_id" limit $1) "products_salon") "products_salon" on true where "products"."is_active" = $2 order by "products"."created_at" desc limit $3',
-  params: [Array],
-  [cause]: AggregateError:
-      at async GET (src/app/api/products/route.ts:79:18)
-    77 |     }
-    78 |
-  > 79 |     const data = await db.query.products.findMany({
-       |                  ^
-    80 |       where: and(...conditions),
-    81 |       limit: limit,
-    82 |       with: { {
-    code: 'ECONNREFUSED'
-  }
-}
-Error fetching salons: Error: Failed query: select "id", "owner_id", "name", "slug", "description", "address", "city", "zip_code", "latitude", "longitude", "phone", "email", "website", "image", "status", "is_verified", "type", "created_at", "updated_at", 0 from "salons" order by "salons"."created_at" desc limit $1
-params: 6
-    at async GET (src/app/api/salons/route.ts:122:21)
-  120 |     }
-  121 |
-> 122 |     const results = await queryBuilder;
-      |                     ^
-  123 |
-  124 |     return NextResponse.json(results);
-  125 |   } catch (error) { {
-  query: 'select "id", "owner_id", "name", "slug", "description", "address", "city", "zip_code", "latitude", "longitude", "phone", "email", "website", "image", "status", "is_verified", "type", "created_at", "updated_at", 0 from "salons" order by "salons"."created_at" desc limit $1',
-  params: [Array],
-  [cause]: AggregateError:
-      at async GET (src/app/api/salons/route.ts:122:21)
-    120 |     }
-    121 |
-  > 122 |     const results = await queryBuilder;
-        |                     ^
-    123 |
-    124 |     return NextResponse.json(results);
-    125 |   } catch (error) { {
-    code: 'ECONNREFUSED'
-  }
-}
-Error fetching videos: Error: Failed query: select "videos"."id", "videos"."user_id", "videos"."salon_id", "videos"."title", "videos"."description", "videos"."video_url", "videos"."thumbnail_url", "videos"."category", "videos"."status", "videos"."views", "videos"."likes", "videos"."is_live", "videos"."created_at", "videos_user"."data" as "user", "videos_salon"."data" as "salon", "videos_products"."data" as "products" from "videos" "videos" left join lateral (select json_build_array("videos_user"."id", "videos_user"."name", "videos_user"."email", "videos_user"."email_verified", "videos_user"."image", "videos_user"."role", "videos_user"."is_suspended", "videos_user"."loyalty_points", "videos_user"."created_at", "videos_user"."updated_at") as "data" from (select * from "users" "videos_user" where "videos_user"."id" = "videos"."user_id" limit $1) "videos_user") "videos_user" on true left join lateral (select json_build_array("videos_salon"."id", "videos_salon"."owner_id", "videos_salon"."name", "videos_salon"."slug", "videos_salon"."description", "videos_salon"."address", "videos_salon"."city", "videos_salon"."zip_code", "videos_salon"."latitude", "videos_salon"."longitude", "videos_salon"."phone", "videos_salon"."email", "videos_salon"."website", "videos_salon"."image", "videos_salon"."status", "videos_salon"."is_verified", "videos_salon"."type", "videos_salon"."created_at", "videos_salon"."updated_at") as "data" from (select * from "salons" "videos_salon" where "videos_salon"."id" = "videos"."salon_id" limit $2) "videos_salon") "videos_salon" on true left join lateral (select coalesce(json_agg(json_build_array("videos_products"."id", "videos_products"."video_id", "videos_products"."product_id", "videos_products"."created_at", "videos_products_product"."data")), '[]'::json) as "data" from "video_products" "videos_products" left join lateral (select json_build_array("videos_products_product"."id", "videos_products_product"."salon_id", "videos_products_product"."name", "videos_products_product"."description", "videos_products_product"."price", "videos_products_product"."stock", "videos_products_product"."has_variants", "videos_products_product"."images", "videos_products_product"."is_active", "videos_products_product"."category", "videos_products_product"."brand", "videos_products_product"."rating", "videos_products_product"."review_count", "videos_products_product"."created_at", "videos_products_product"."updated_at") as "data" from (select * from "products" "videos_products_product" where "videos_products_product"."id" = "videos_products"."product_id" limit $3) "videos_products_product") "videos_products_product" on true where "videos_products"."video_id" = "videos"."id") "videos_products" on true order by "videos"."created_at" desc limit $4
-params: 1,1,1,8
-    at async GET (src/app/api/videos/route.ts:77:28)
-  75 |
-  76 |         // Single Query with Pagination
-> 77 |         const videosList = await db.query.videos.findMany({
-     |                            ^
-  78 |             where: conditions.length > 0 ? and(...conditions) : undefined,
-  79 |             with: {
-  80 |                 user: true, {
-  query: `select "videos"."id", "videos"."user_id", "videos"."salon_id", "videos"."title", "videos"."description", "videos"."video_url", "videos"."thumbnail_url", "videos"."category", "videos"."status", "videos"."views", "videos"."likes", "videos"."is_live", "videos"."created_at", "videos_user"."data" as "user", "videos_salon"."data" as "salon", "videos_products"."data" as "products" from "videos" "videos" left join lateral (select json_build_array("videos_user"."id", "videos_user"."name", "videos_user"."email", "videos_user"."email_verified", "videos_user"."image", "videos_user"."role", "videos_user"."is_suspended", "videos_user"."loyalty_points", "videos_user"."created_at", "videos_user"."updated_at") as "data" from (select * from "users" "videos_user" where "videos_user"."id" = "videos"."user_id" limit $1) "videos_user") "videos_user" on true left join lateral (select json_build_array("videos_salon"."id", "videos_salon"."owner_id", "videos_salon"."name", "videos_salon"."slug", "videos_salon"."description", "videos_salon"."address", "videos_salon"."city", "videos_salon"."zip_code", "videos_salon"."latitude", "videos_salon"."longitude", "videos_salon"."phone", "videos_salon"."email", "videos_salon"."website", "videos_salon"."image", "videos_salon"."status", "videos_salon"."is_verified", "videos_salon"."type", "videos_salon"."created_at", "videos_salon"."updated_at") as "data" from (select * from "salons" "videos_salon" where "videos_salon"."id" = "videos"."salon_id" limit $2) "videos_salon") "videos_salon" on true left join lateral (select coalesce(json_agg(json_build_array("videos_products"."id", "videos_products"."video_id", "videos_products"."product_id", "videos_products"."created_at", "videos_products_product"."data")), '[]'::json) as "data" from "video_products" "videos_products" left join lateral (select json_build_array("videos_products_product"."id", "videos_products_product"."salon_id", "videos_products_product"."name", "videos_products_product"."description", "videos_products_product"."price", "videos_products_product"."stock", "videos_products_product"."has_variants", "videos_products_product"."images", "videos_products_product"."is_active", "videos_products_product"."category", "videos_products_product"."brand", "videos_products_product"."rating", "videos_products_product"."review_count", "videos_products_product"."created_at", "videos_products_product"."updated_at") as "data" from (select * from "products" "videos_products_product" where "videos_products_product"."id" = "videos_products"."product_id" limit $3) "videos_products_product") "videos_products_product" on true where "videos_products"."video_id" = "videos"."id") "videos_products" on true order by "videos"."created_at" desc limit $4`,
-  params: [Array],
-  [cause]: AggregateError:
-      at async GET (src/app/api/videos/route.ts:77:28)
-    75 |
-    76 |         // Single Query with Pagination
-  > 77 |         const videosList = await db.query.videos.findMany({
-       |                            ^
-    78 |             where: conditions.length > 0 ? and(...conditions) : undefined,
-    79 |             with: {
-    80 |                 user: true, {
-    code: 'ECONNREFUSED'
-  }
-}
- GET /app/search 200 in 300ms (compile: 12ms, proxy.ts: 9ms, render: 280ms)
- GET /api/auth/get-session 200 in 87ms (compile: 64ms, proxy.ts: 4ms, render: 19ms)
- GET /api/notifications 401 in 67ms (compile: 32ms, proxy.ts: 5ms, render: 31ms)
- GET /api/notifications 401 in 14ms (compile: 3ms, proxy.ts: 4ms, render: 7ms)
-Error fetching salons: Error: Failed query: select "id", "owner_id", "name", "slug", "description", "address", "city", "zip_code", "latitude", "longitude", "phone", "email", "website", "image", "status", "is_verified", "type", "created_at", "updated_at", 0 from "salons" order by "salons"."created_at" desc limit $1
-params: 6
-    at async GET (src/app/api/salons/route.ts:122:21)
-  120 |     }
-  121 |
-> 122 |     const results = await queryBuilder;
-      |                     ^
-  123 |
-  124 |     return NextResponse.json(results);
-  125 |   } catch (error) { {
-  query: 'select "id", "owner_id", "name", "slug", "description", "address", "city", "zip_code", "latitude", "longitude", "phone", "email", "website", "image", "status", "is_verified", "type", "created_at", "updated_at", 0 from "salons" order by "salons"."created_at" desc limit $1',
-  params: [Array],
-  [cause]: AggregateError:
-      at async GET (src/app/api/salons/route.ts:122:21)
-    120 |     }
-    121 |
-  > 122 |     const results = await queryBuilder;
-        |                     ^
-    123 |
-    124 |     return NextResponse.json(results);
-    125 |   } catch (error) { {
-    code: 'ECONNREFUSED'
-  }
-}
- GET /api/salons?limit=6 500 in 555ms (compile: 24ms, proxy.ts: 19ms, render: 512ms)
-Error fetching products: Error: Failed query: select "products"."id", "products"."salon_id", "products"."name", "products"."description", "products"."price", "products"."stock", "products"."has_variants", "products"."images", "products"."is_active", "products"."category", "products"."brand", "products"."rating", "products"."review_count", "products"."created_at", "products"."updated_at", "products_salon"."data" as "salon" from "products" "products" left join lateral (select json_build_array("products_salon"."name", "products_salon"."id", "products_salon"."slug") as "data" from (select * from "salons" "products_salon" where "products_salon"."id" = "products"."salon_id" limit $1) "products_salon") "products_salon" on true where "products"."is_active" = $2 order by "products"."created_at" desc limit $3
-params: 1,true,8
-    at async GET (src/app/api/products/route.ts:79:18)
-  77 |     }
-  78 |
-> 79 |     const data = await db.query.products.findMany({
-     |                  ^
-  80 |       where: and(...conditions),
-  81 |       limit: limit,
-  82 |       with: { {
-  query: 'select "products"."id", "products"."salon_id", "products"."name", "products"."description", "products"."price", "products"."stock", "products"."has_variants", "products"."images", "products"."is_active", "products"."category", "products"."brand", "products"."rating", "products"."review_count", "products"."created_at", "products"."updated_at", "products_salon"."data" as "salon" from "products" "products" left join lateral (select json_build_array("products_salon"."name", "products_salon"."id", "products_salon"."slug") as "data" from (select * from "salons" "products_salon" where "products_salon"."id" = "products"."salon_id" limit $1) "products_salon") "products_salon" on true where "products"."is_active" = $2 order by "products"."created_at" desc limit $3',
-  params: [Array],
-  [cause]: AggregateError:
-      at async GET (src/app/api/products/route.ts:79:18)
-    77 |     }
-    78 |
-  > 79 |     const data = await db.query.products.findMany({
-       |                  ^
-    80 |       where: and(...conditions),
-    81 |       limit: limit,
-    82 |       with: { {
-    code: 'ECONNREFUSED'
-  }
-}
- GET /api/products?limit=8 500 in 1020ms (compile: 29ms, proxy.ts: 15ms, render: 976ms)
-Error fetching videos: Error: Failed query: select "videos"."id", "videos"."user_id", "videos"."salon_id", "videos"."title", "videos"."description", "videos"."video_url", "videos"."thumbnail_url", "videos"."category", "videos"."status", "videos"."views", "videos"."likes", "videos"."is_live", "videos"."created_at", "videos_user"."data" as "user", "videos_salon"."data" as "salon", "videos_products"."data" as "products" from "videos" "videos" left join lateral (select json_build_array("videos_user"."id", "videos_user"."name", "videos_user"."email", "videos_user"."email_verified", "videos_user"."image", "videos_user"."role", "videos_user"."is_suspended", "videos_user"."loyalty_points", "videos_user"."created_at", "videos_user"."updated_at") as "data" from (select * from "users" "videos_user" where "videos_user"."id" = "videos"."user_id" limit $1) "videos_user") "videos_user" on true left join lateral (select json_build_array("videos_salon"."id", "videos_salon"."owner_id", "videos_salon"."name", "videos_salon"."slug", "videos_salon"."description", "videos_salon"."address", "videos_salon"."city", "videos_salon"."zip_code", "videos_salon"."latitude", "videos_salon"."longitude", "videos_salon"."phone", "videos_salon"."email", "videos_salon"."website", "videos_salon"."image", "videos_salon"."status", "videos_salon"."is_verified", "videos_salon"."type", "videos_salon"."created_at", "videos_salon"."updated_at") as "data" from (select * from "salons" "videos_salon" where "videos_salon"."id" = "videos"."salon_id" limit $2) "videos_salon") "videos_salon" on true left join lateral (select coalesce(json_agg(json_build_array("videos_products"."id", "videos_products"."video_id", "videos_products"."product_id", "videos_products"."created_at", "videos_products_product"."data")), '[]'::json) as "data" from "video_products" "videos_products" left join lateral (select json_build_array("videos_products_product"."id", "videos_products_product"."salon_id", "videos_products_product"."name", "videos_products_product"."description", "videos_products_product"."price", "videos_products_product"."stock", "videos_products_product"."has_variants", "videos_products_product"."images", "videos_products_product"."is_active", "videos_products_product"."category", "videos_products_product"."brand", "videos_products_product"."rating", "videos_products_product"."review_count", "videos_products_product"."created_at", "videos_products_product"."updated_at") as "data" from (select * from "products" "videos_products_product" where "videos_products_product"."id" = "videos_products"."product_id" limit $3) "videos_products_product") "videos_products_product" on true where "videos_products"."video_id" = "videos"."id") "videos_products" on true order by "videos"."created_at" desc limit $4
-params: 1,1,1,8
-    at async GET (src/app/api/videos/route.ts:77:28)
-  75 |
-  76 |         // Single Query with Pagination
-> 77 |         const videosList = await db.query.videos.findMany({
-     |                            ^
-  78 |             where: conditions.length > 0 ? and(...conditions) : undefined,
-  79 |             with: {
-  80 |                 user: true, {
-  query: `select "videos"."id", "videos"."user_id", "videos"."salon_id", "videos"."title", "videos"."description", "videos"."video_url", "videos"."thumbnail_url", "videos"."category", "videos"."status", "videos"."views", "videos"."likes", "videos"."is_live", "videos"."created_at", "videos_user"."data" as "user", "videos_salon"."data" as "salon", "videos_products"."data" as "products" from "videos" "videos" left join lateral (select json_build_array("videos_user"."id", "videos_user"."name", "videos_user"."email", "videos_user"."email_verified", "videos_user"."image", "videos_user"."role", "videos_user"."is_suspended", "videos_user"."loyalty_points", "videos_user"."created_at", "videos_user"."updated_at") as "data" from (select * from "users" "videos_user" where "videos_user"."id" = "videos"."user_id" limit $1) "videos_user") "videos_user" on true left join lateral (select json_build_array("videos_salon"."id", "videos_salon"."owner_id", "videos_salon"."name", "videos_salon"."slug", "videos_salon"."description", "videos_salon"."address", "videos_salon"."city", "videos_salon"."zip_code", "videos_salon"."latitude", "videos_salon"."longitude", "videos_salon"."phone", "videos_salon"."email", "videos_salon"."website", "videos_salon"."image", "videos_salon"."status", "videos_salon"."is_verified", "videos_salon"."type", "videos_salon"."created_at", "videos_salon"."updated_at") as "data" from (select * from "salons" "videos_salon" where "videos_salon"."id" = "videos"."salon_id" limit $2) "videos_salon") "videos_salon" on true left join lateral (select coalesce(json_agg(json_build_array("videos_products"."id", "videos_products"."video_id", "videos_products"."product_id", "videos_products"."created_at", "videos_products_product"."data")), '[]'::json) as "data" from "video_products" "videos_products" left join lateral (select json_build_array("videos_products_product"."id", "videos_products_product"."salon_id", "videos_products_product"."name", "videos_products_product"."description", "videos_products_product"."price", "videos_products_product"."stock", "videos_products_product"."has_variants", "videos_products_product"."images", "videos_products_product"."is_active", "videos_products_product"."category", "videos_products_product"."brand", "videos_products_product"."rating", "videos_products_product"."review_count", "videos_products_product"."created_at", "videos_products_product"."updated_at") as "data" from (select * from "products" "videos_products_product" where "videos_products_product"."id" = "videos_products"."product_id" limit $3) "videos_products_product") "videos_products_product" on true where "videos_products"."video_id" = "videos"."id") "videos_products" on true order by "videos"."created_at" desc limit $4`,
-  params: [Array],
-  [cause]: AggregateError:
-      at async GET (src/app/api/videos/route.ts:77:28)
-    75 |
-    76 |         // Single Query with Pagination
-  > 77 |         const videosList = await db.query.videos.findMany({
-       |                            ^
-    78 |             where: conditions.length > 0 ? and(...conditions) : undefined,
-    79 |             with: {
-    80 |                 user: true, {
-    code: 'ETIMEDOUT'
-  }
-}
- GET /api/videos?limit=8 500 in 1372ms (compile: 27ms, proxy.ts: 15ms, render: 1330ms)
-[2m2026-02-19T10:10:37.284Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
-[2m2026-02-19T10:10:37.289Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
-[2m2026-02-19T10:10:37.289Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
+[2m2026-02-19T15:43:05.525Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
+[2m2026-02-19T15:43:05.530Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
+[2m2026-02-19T15:43:05.530Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
+[2m2026-02-19T15:43:07.307Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
+[2m2026-02-19T15:43:07.313Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
+[2m2026-02-19T15:43:07.314Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
+ GET /api/auth/get-session 200 in 5.6s (compile: 5.5s, proxy.ts: 6ms, render: 51ms)

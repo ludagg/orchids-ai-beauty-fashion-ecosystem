@@ -28,7 +28,7 @@ function SearchContent() {
   // Initial state from URL
   const [query, setQuery] = useState(searchParams.get("q") || "");
   const [city, setCity] = useState(searchParams.get("city") || "");
-  const [type, setType] = useState(searchParams.get("type") || ""); // SALON, BOUTIQUE, BOTH
+  const [type, setType] = useState(searchParams.get("type") || ""); // SALON, BOUTIQUE
   const [minPrice, setMinPrice] = useState(searchParams.get("minPrice") || "");
   const [maxPrice, setMaxPrice] = useState(searchParams.get("maxPrice") || "");
   const [activeTab, setActiveTab] = useState(searchParams.get("tab") || "all");
@@ -222,7 +222,6 @@ function SearchContent() {
                                 <option value="">All Types</option>
                                 <option value="SALON">Salons Only</option>
                                 <option value="BOUTIQUE">Boutiques Only</option>
-                                <option value="BOTH">Full Service (Both)</option>
                             </select>
                         </div>
                         <div>
