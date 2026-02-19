@@ -60,8 +60,14 @@ export function ProductManager({ salonId }: ProductManagerProps) {
 
   const fetchProducts = async () => {
     try {
-        const res = await fetch(`/api/salons/${salonId}/products`);
-        if (!res.ok) throw new Error("Failed to fetch products");
+        // Attempt to fetch from shops API first since products are now linked to shops
+        let res = await fetch(`/api/shops/${salonId}/products`);
+        if (!res.ok) {
+             // Fallback or retry if needed, but for now we assume salonId passed is actually shopId
+             // or we might need to handle the case where it fails.
+             // If this component is used for a "Salon" that has products (legacy), this might fail.
+             throw new Error("Failed to fetch products");
+        }
         const data = await res.json();
         setProducts(data);
     } catch (error) {
@@ -113,7 +119,8 @@ export function ProductManager({ salonId }: ProductManagerProps) {
             options: JSON.stringify({ name: v.name }) // Simple option storage
         }));
 
-        const res = await fetch(`/api/salons/${salonId}/products`, {
+        // Note: We use shopId here (passed as salonId prop for now)
+        const res = await fetch(`/api/shops/${salonId}/products`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({

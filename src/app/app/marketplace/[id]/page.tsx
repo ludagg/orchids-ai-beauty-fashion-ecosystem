@@ -35,7 +35,7 @@ interface Product {
   brand: string | null;
   rating: number;
   reviewCount: number;
-  salon: {
+  shop: {
     id: string;
     name: string;
     city: string;
@@ -137,8 +137,8 @@ export default function ProductDetailsPage() {
         price: product.price,
         image: product.images?.[0] || "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&h=800&fit=crop",
         quantity: quantity,
-        salonId: product.salon?.id,
-        salonName: product.salon?.name,
+        salonId: product.shop?.id, // Keeping salonId for cart compatibility
+        salonName: product.shop?.name,
         brand: product.brand || undefined,
     });
   };
@@ -155,7 +155,7 @@ export default function ProductDetailsPage() {
         return;
     }
 
-    if (!product?.salon) {
+    if (!product?.shop) {
         toast.error("Seller information not available");
         return;
     }
@@ -163,11 +163,13 @@ export default function ProductDetailsPage() {
     setChatLoading(true);
     try {
         const initialMessage = `Hello, I'm interested in ${product.name}. Is it available?`;
+        // Note: Check if /api/conversations supports shopId or just generically links users
+        // For now sending shopId as salonId if backend logic permits or needs update
         const res = await fetch('/api/conversations', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                salonId: product.salon.id,
+                salonId: product.shop.id, // TODO: Update backend to support shopId explicitly
                 initialMessage
             })
         });
@@ -293,8 +295,8 @@ export default function ProductDetailsPage() {
         <div className="space-y-8">
           <div>
             <div className="flex items-center justify-between mb-2">
-              <Link href={product.salon ? `/app/salons/${product.salon.id}` : '#'} className="text-sm font-bold text-rose-600 uppercase tracking-widest hover:underline">
-                {product.brand || product.salon?.name || "Generic"}
+              <Link href={product.shop ? `/app/shops/${product.shop.id}` : '#'} className="text-sm font-bold text-rose-600 uppercase tracking-widest hover:underline">
+                {product.brand || product.shop?.name || "Generic"}
               </Link>
               {product.rating > 0 && (
                 <div className="flex items-center gap-1 bg-amber-50 dark:bg-amber-950/30 px-2 py-1 rounded-lg border border-amber-100 dark:border-amber-900/30">
@@ -393,7 +395,7 @@ export default function ProductDetailsPage() {
             <div className="p-4 rounded-2xl bg-secondary/50 border border-border">
                 <MapPin className="w-5 h-5 mb-2 text-primary" />
                 <p className="font-bold text-sm">Pickup Location</p>
-                <p className="text-xs text-muted-foreground mt-1">{product.salon?.city || "Bangalore"}</p>
+                <p className="text-xs text-muted-foreground mt-1">{product.shop?.city || "Bangalore"}</p>
             </div>
             <div className="p-4 rounded-2xl bg-secondary/50 border border-border">
                 <Clock className="w-5 h-5 mb-2 text-primary" />

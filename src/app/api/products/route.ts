@@ -1,19 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { products } from "@/db/schema/commerce";
-import { salons } from "@/db/schema/salons";
 import { eq, and, ilike, desc, asc, gt, gte, lte } from "drizzle-orm";
 
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const category = searchParams.get("category");
-    const salonId = searchParams.get("salonId");
+    const shopId = searchParams.get("shopId");
     const featured = searchParams.get("featured") === "true";
     const limit = parseInt(searchParams.get("limit") || "50");
     const search = searchParams.get("search");
 
-    // New filters
     const minPriceRaw = searchParams.get("minPrice");
     const maxPriceRaw = searchParams.get("maxPrice");
     const minRatingRaw = searchParams.get("minRating");
@@ -25,8 +23,8 @@ export async function GET(req: NextRequest) {
       conditions.push(eq(products.category, category));
     }
 
-    if (salonId) {
-      conditions.push(eq(products.salonId, salonId));
+    if (shopId) {
+      conditions.push(eq(products.shopId, shopId));
     }
 
     if (search) {
@@ -34,7 +32,6 @@ export async function GET(req: NextRequest) {
     }
 
     if (featured) {
-        // Simple featured logic: high rating or new
         conditions.push(gt(products.rating, 4.0));
     }
 
@@ -80,7 +77,7 @@ export async function GET(req: NextRequest) {
       where: and(...conditions),
       limit: limit,
       with: {
-        salon: {
+        shop: {
             columns: {
                 name: true,
                 id: true,
