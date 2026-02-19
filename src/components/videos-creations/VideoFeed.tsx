@@ -175,7 +175,7 @@ export default function VideoFeed({ initialVideos = [], initialCategory = "All" 
   };
 
   return (
-    <div className="relative w-full h-[calc(100vh-64px)] bg-black overflow-hidden">
+    <div className="relative w-full h-full bg-black overflow-hidden">
       <Carousel
         setApi={setApi}
         orientation="vertical"

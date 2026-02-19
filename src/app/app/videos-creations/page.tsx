@@ -26,9 +26,9 @@ export default function VideosCreationsPage() {
   };
 
   return (
-    <div className="relative h-[calc(100vh-64px)] w-full bg-black overflow-hidden">
+    <div className="absolute inset-0 h-full w-full bg-black overflow-hidden">
       {/* Top Overlay Header */}
-      <div className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between p-4 bg-gradient-to-b from-black/60 to-transparent pointer-events-none">
+      <div className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between px-4 pt-14 pb-4 bg-gradient-to-b from-black/60 to-transparent pointer-events-none">
          {/* Left: Branding or Title (Optional, maybe hidden for cleanliness) */}
          <div className="flex items-center gap-2 pointer-events-auto">
              <div className="flex gap-4 text-white font-bold text-lg drop-shadow-md">
