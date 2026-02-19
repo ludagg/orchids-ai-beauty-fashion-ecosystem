@@ -220,15 +220,16 @@ function LocationPreview() {
   const displayLocation = userLocation || { lat: 48.8566, lng: 2.3522 };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <div className="relative grid grid-cols-1 md:grid-cols-3 md:gap-6 mb-8 h-[350px] md:h-auto rounded-[32px] md:rounded-none overflow-hidden md:overflow-visible">
       {/* Map Preview */}
-      <div className="md:col-span-2 relative rounded-[32px] overflow-hidden shadow-lg shadow-black/5 border border-border bg-secondary h-[280px]">
+      <div className="absolute inset-0 md:relative md:inset-auto md:col-span-2 md:rounded-[32px] md:overflow-hidden shadow-none md:shadow-lg md:shadow-black/5 border-none md:border md:border-border bg-secondary h-full md:h-[280px] z-0">
         <Map
             lat={displayLocation.lat}
             lng={displayLocation.lng}
             popupText={userLocation ? "You are here" : "Paris, France"}
             className="z-0"
             style={{ minHeight: '100%', height: '100%' }}
+            interactive={false}
         />
 
         {userLocation && (
@@ -240,9 +241,9 @@ function LocationPreview() {
       </div>
 
       {/* Explore Action */}
-      <div className="md:col-span-1 bg-card rounded-[32px] p-6 flex flex-col justify-between border border-border shadow-sm h-[280px]">
+      <div className="relative z-10 h-full md:h-[280px] md:col-span-1 bg-gradient-to-t from-background/95 via-background/60 to-background/10 backdrop-blur-[2px] md:bg-card md:backdrop-blur-none rounded-none md:rounded-[32px] p-6 flex flex-col justify-end md:justify-between border-none md:border md:border-border shadow-none md:shadow-sm">
         <div>
-            <div className="w-12 h-12 bg-secondary rounded-2xl flex items-center justify-center mb-4 text-primary shadow-sm border border-border">
+            <div className="w-12 h-12 bg-secondary/80 md:bg-secondary rounded-2xl flex items-center justify-center mb-4 text-primary shadow-sm border border-border">
                 <MapPin className="w-6 h-6" />
             </div>
             <h3 className="text-xl font-bold mb-2 font-display">Explore Nearby</h3>
@@ -257,7 +258,7 @@ function LocationPreview() {
                 </Button>
             </Link>
             <Link href="/app/search?tab=marketplace" className="w-full">
-                 <Button variant="outline" className="w-full rounded-xl py-6 text-base font-semibold border-primary/10 hover:bg-secondary group">
+                 <Button variant="outline" className="w-full rounded-xl py-6 text-base font-semibold border-primary/10 hover:bg-secondary group bg-background/50 md:bg-background">
                     Shop Now
                     <ShoppingBag className="w-4 h-4 ml-2 group-hover:scale-110 transition-transform" />
                 </Button>
