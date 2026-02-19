@@ -33,14 +33,16 @@ interface Product {
   image?: string
   images?: string[]
   category?: string
-  salonId: string
+  salonId?: string
+  shopId?: string
 }
 
 interface ProductManagerProps {
-    salonId: string;
+    salonId?: string;
+    shopId?: string;
 }
 
-export function ProductManager({ salonId }: ProductManagerProps) {
+export function ProductManager({ salonId, shopId }: ProductManagerProps) {
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const [isAddOpen, setIsAddOpen] = useState(false)
@@ -53,14 +55,18 @@ export function ProductManager({ salonId }: ProductManagerProps) {
   const [currentVariant, setCurrentVariant] = useState<Variant>({ name: "", price: "", stock: "" })
 
   useEffect(() => {
-    if (salonId) {
+    if (salonId || shopId) {
         fetchProducts();
     }
-  }, [salonId]);
+  }, [salonId, shopId]);
 
   const fetchProducts = async () => {
     try {
-        const res = await fetch(`/api/salons/${salonId}/products`);
+        const url = shopId
+            ? `/api/shops/${shopId}/products`
+            : `/api/salons/${salonId}/products`;
+
+        const res = await fetch(url);
         if (!res.ok) throw new Error("Failed to fetch products");
         const data = await res.json();
         setProducts(data);
@@ -113,7 +119,11 @@ export function ProductManager({ salonId }: ProductManagerProps) {
             options: JSON.stringify({ name: v.name }) // Simple option storage
         }));
 
-        const res = await fetch(`/api/salons/${salonId}/products`, {
+        const url = shopId
+            ? `/api/shops/${shopId}/products`
+            : `/api/salons/${salonId}/products`;
+
+        const res = await fetch(url, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({

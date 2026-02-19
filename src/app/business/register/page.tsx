@@ -41,7 +41,9 @@ export default function BusinessRegisterPage() {
     setLoading(true);
 
     try {
-      const res = await fetch("/api/salons", {
+      const endpoint = selectedType === "BOUTIQUE" ? "/api/shops" : "/api/salons";
+
+      const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -50,7 +52,6 @@ export default function BusinessRegisterPage() {
           address: formData.address,
           city: formData.city,
           zipCode: formData.zipCode,
-          type: selectedType, // Strict type
           // phone and website might need schema update or ignored for now
         }),
       });
@@ -69,8 +70,14 @@ export default function BusinessRegisterPage() {
       toast.success("Business registered successfully!");
 
       // Redirect to the dashboard
-      // Note: Dashboard URL needs to handle the new business ID or just redirect to general dashboard
-      router.push(`/app/creator-studio/partner-dashboard?type=${selectedType}&businessName=${encodeURIComponent(formData.businessName)}&salonId=${data.id}`);
+      let redirectUrl = `/app/creator-studio/partner-dashboard?type=${selectedType}&businessName=${encodeURIComponent(formData.businessName)}`;
+      if (selectedType === "SALON") {
+          redirectUrl += `&salonId=${data.id}`;
+      } else {
+          redirectUrl += `&shopId=${data.id}`;
+      }
+
+      router.push(redirectUrl);
 
     } catch (error: any) {
       console.error(error);

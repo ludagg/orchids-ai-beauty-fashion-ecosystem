@@ -13,7 +13,6 @@ const salonSchema = z.object({
   address: z.string().min(5),
   city: z.string().min(2),
   zipCode: z.string().min(3),
-  type: z.enum(["SALON", "BOUTIQUE"]),
   image: z.string().optional(),
 });
 
@@ -70,17 +69,14 @@ export async function GET(req: NextRequest) {
       conditions.push(ilike(salons.city, `%${city}%`));
     }
 
-    // Filter by type
+    // Filter by type (Legacy support or force strict SALON)
+    // We assume salons are now strictly SALON type in new records,
+    // but might want to filter existing ones if 'type' is passed.
+    // For now, let's just default to showing all Salons (which might include legacy types)
+    // or strictly filter.
     if (type) {
-        if (type === 'SALON') {
-             // Show salons that provide SALON services or both
-             conditions.push(or(eq(salons.type, 'SALON'), eq(salons.type, 'BOTH')));
-        } else if (type === 'BOUTIQUE') {
-             // Show salons that provide BOUTIQUE services or both
-             conditions.push(or(eq(salons.type, 'BOUTIQUE'), eq(salons.type, 'BOTH')));
-        } else if (type === 'BOTH') {
-             conditions.push(eq(salons.type, 'BOTH'));
-        }
+         // Optionally handle legacy filtering if needed, but for now we ignore strict type filtering
+         // or assume the frontend asks for salons.
     }
 
     // Filter by Price Range (using services)
@@ -151,7 +147,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Validate required fields explicitly first
-    if (!body.name || !body.description || !body.address || !body.city || !body.zipCode || !body.type) {
+    if (!body.name || !body.description || !body.address || !body.city || !body.zipCode) {
          return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
@@ -164,7 +160,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { name, description, address, city, zipCode, type, image } = result.data;
+    const { name, description, address, city, zipCode, image } = result.data;
 
     // 3. Generate Slug (basic implementation)
     // In production, you might want to check for collisions or use a library like slugify
@@ -195,7 +191,7 @@ export async function POST(req: NextRequest) {
         address: address,
         city: city,
         zipCode: zipCode,
-        type: type,
+        type: 'SALON', // Enforce SALON type
         image: image,
         status: "pending",
         // isVerified defaults to false

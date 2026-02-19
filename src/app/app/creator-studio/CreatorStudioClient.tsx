@@ -48,6 +48,14 @@ interface SalonData {
     type: "SALON" | "BOUTIQUE" | "BOTH";
 }
 
+// Interface for Shop Data
+interface ShopData {
+    id: string;
+    name: string;
+    slug: string;
+    description: string | null;
+}
+
 interface VideoData {
     id: string;
     title: string;
@@ -62,22 +70,37 @@ interface VideoData {
 interface CreatorStudioClientProps {
     user: UserData;
     initialSalon: SalonData | null;
+    initialShop: ShopData | null;
 }
 
-export default function CreatorStudioClient({ user, initialSalon }: CreatorStudioClientProps) {
+export default function CreatorStudioClient({ user, initialSalon, initialShop }: CreatorStudioClientProps) {
   const router = useRouter();
 
   // Initialize state based on server data
-  const [isPartner, setIsPartner] = useState(!!initialSalon);
-  const [partnerData, setPartnerData] = useState<PartnerData | null>(initialSalon ? {
-        businessName: initialSalon.name,
-        description: initialSalon.description || "",
-        address: "", // Not fetched yet, but not critical for display
-        city: "",
-        zipCode: "",
-        type: initialSalon.type
-  } : null);
+  const initialPartnerData = initialSalon
+      ? {
+          businessName: initialSalon.name,
+          description: initialSalon.description || "",
+          address: "",
+          city: "",
+          zipCode: "",
+          type: initialSalon.type
+        } as PartnerData
+      : initialShop
+      ? {
+          businessName: initialShop.name,
+          description: initialShop.description || "",
+          address: "",
+          city: "",
+          zipCode: "",
+          type: "BOUTIQUE"
+      } as PartnerData
+      : null;
+
+  const [isPartner, setIsPartner] = useState(!!initialSalon || !!initialShop);
+  const [partnerData, setPartnerData] = useState<PartnerData | null>(initialPartnerData);
   const [salonId, setSalonId] = useState<string | null>(initialSalon?.id || null);
+  const [shopId, setShopId] = useState<string | null>(initialShop?.id || null);
 
   const [isVideoUploadModalOpen, setIsVideoUploadModalOpen] = useState(false);
 
@@ -111,11 +134,12 @@ export default function CreatorStudioClient({ user, initialSalon }: CreatorStudi
 
   useEffect(() => {
     // Keep search params logic as a fallback or for deep links, but prioritize props
-    if (!initialSalon) {
+    if (!initialSalon && !initialShop) {
         const isPartnerParam = searchParams.get("partner") === "true";
         const typeParam = searchParams.get("type");
         const businessNameParam = searchParams.get("businessName");
         const salonIdParam = searchParams.get("salonId");
+        const shopIdParam = searchParams.get("shopId");
 
         if (isPartnerParam) {
             setIsPartner(true);
@@ -124,19 +148,19 @@ export default function CreatorStudioClient({ user, initialSalon }: CreatorStudi
                 businessName: businessNameParam || "My Business",
                 description: "",
                 address: ""
-            } as PartnerData); // Cast because we are missing fields but it's mock
+            } as PartnerData);
             if (salonIdParam) setSalonId(salonIdParam);
+            if (shopIdParam) setShopId(shopIdParam);
         }
-    } else {
-        setSalonId(initialSalon.id);
     }
-  }, [searchParams, initialSalon]);
+  }, [searchParams, initialSalon, initialShop]);
 
   const publishedVideos = videos.filter(v => v.status === 'published');
 
   // Determine what to display in header
   const displayName = isPartner && partnerData ? partnerData.businessName : user.name;
-  const displayHandle = isPartner && initialSalon ? `@${initialSalon.slug}` : (user.email ? `@${user.email.split('@')[0]}` : "@creator");
+  const slug = initialSalon?.slug || initialShop?.slug || (user.email ? user.email.split('@')[0] : "creator");
+  const displayHandle = `@${slug}`;
   const displayAvatar = user.image || "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop";
   const displayBio = isPartner && partnerData ? partnerData.description : "Fashion enthusiast & style curator. Bringing you the latest trends.";
 
@@ -219,17 +243,9 @@ export default function CreatorStudioClient({ user, initialSalon }: CreatorStudi
                 <Button className="flex-1 md:flex-none min-w-[120px]" size="default">
                     Edit Profile
                 </Button>
-                {!isPartner ? (
-                    <Link href="/business/register" className="flex-1 md:flex-none min-w-[120px]">
-                        <Button
-                            className="w-full bg-gradient-to-r from-purple-500 to-pink-600 text-white hover:from-purple-600 hover:to-pink-700 border-0"
-                        >
-                            Become a Partner
-                        </Button>
-                    </Link>
-                ) : (
+                {isPartner && (
                     <Link
-                    href={`/app/creator-studio/partner-dashboard?type=${partnerData?.type || 'SALON'}&businessName=${encodeURIComponent(partnerData?.businessName || '')}&salonId=${salonId || ''}`}
+                    href={`/app/creator-studio/partner-dashboard?type=${partnerData?.type || 'SALON'}&businessName=${encodeURIComponent(partnerData?.businessName || '')}${salonId ? `&salonId=${salonId}` : ''}${shopId ? `&shopId=${shopId}` : ''}`}
                     passHref
                     className="flex-1 md:flex-none min-w-[120px]"
                     >

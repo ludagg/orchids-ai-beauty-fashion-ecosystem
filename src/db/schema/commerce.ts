@@ -1,11 +1,13 @@
 import { pgTable, text, timestamp, integer, boolean, pgEnum, real } from 'drizzle-orm/pg-core';
 import { users } from './auth';
 import { salons } from './salons';
+import { shops } from './shops';
 import { relations } from 'drizzle-orm';
 
 export const products = pgTable('products', {
   id: text('id').primaryKey(),
   salonId: text('salon_id').references(() => salons.id), // Optional: can be platform-owned
+  shopId: text('shop_id').references(() => shops.id),
   name: text('name').notNull(),
   description: text('description'),
   price: integer('price').notNull(), // In cents
@@ -61,6 +63,10 @@ export const productsRelations = relations(products, ({ one, many }) => ({
   salon: one(salons, {
     fields: [products.salonId],
     references: [salons.id],
+  }),
+  shop: one(shops, {
+    fields: [products.shopId],
+    references: [shops.id],
   }),
   variants: many(productVariants),
 }));

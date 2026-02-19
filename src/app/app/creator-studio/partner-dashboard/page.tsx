@@ -18,6 +18,7 @@ function PartnerDashboardContent() {
   const type = searchParams.get("type") || "SALON";
   const businessName = searchParams.get("businessName") || "My Business";
   const salonId = searchParams.get("salonId");
+  const shopId = searchParams.get("shopId");
 
   // Determine initial active tab based on type
   const [activeTab, setActiveTab] = useState(() => {
@@ -145,11 +146,11 @@ function PartnerDashboardContent() {
 
         {showProducts && (
           <TabsContent value="products" className="mt-0 focus-visible:outline-none focus-visible:ring-0">
-             {salonId ? (
-                <ProductManager salonId={salonId} />
+             {(salonId || shopId) ? (
+                <ProductManager salonId={salonId || undefined} shopId={shopId || undefined} />
              ) : (
                 <div className="p-8 text-center text-muted-foreground border rounded-md">
-                    <p>Salon ID is missing. Please return to the studio and try again.</p>
+                    <p>Business ID is missing. Please return to the studio and try again.</p>
                 </div>
              )}
           </TabsContent>
