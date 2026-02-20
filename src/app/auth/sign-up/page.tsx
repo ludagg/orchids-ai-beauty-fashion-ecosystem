@@ -308,17 +308,20 @@ export default function SignUpPage() {
                     placeholder="••••••••"
                     value={formData.password}
                     onChange={handleChange}
-                    className={`pl-10 pr-10 ${errors.password ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                    className={`pl-10 pr-14 ${errors.password ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                     disabled={isLoading}
                   />
-                  <button
+                  <Button
                     type="button"
+                    variant="ghost"
+                    size="icon"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                     disabled={isLoading}
+                    aria-label={showPassword ? "Hide password" : "Show password"}
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                  </button>
+                  </Button>
                 </div>
                 {errors.password && <p className="text-xs text-red-500">{errors.password}</p>}
               </div>
@@ -334,17 +337,20 @@ export default function SignUpPage() {
                     placeholder="••••••••"
                     value={formData.confirmPassword}
                     onChange={handleChange}
-                    className={`pl-10 pr-10 ${errors.confirmPassword ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                    className={`pl-10 pr-14 ${errors.confirmPassword ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                     disabled={isLoading}
                   />
-                  <button
+                  <Button
                     type="button"
+                    variant="ghost"
+                    size="icon"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                     disabled={isLoading}
+                    aria-label={showConfirmPassword ? "Hide password" : "Show password"}
                   >
                     {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                  </button>
+                  </Button>
                 </div>
                 {errors.confirmPassword && <p className="text-xs text-red-500">{errors.confirmPassword}</p>}
               </div>
