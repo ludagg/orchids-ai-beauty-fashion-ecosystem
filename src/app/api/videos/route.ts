@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { videos, videoProducts, videoLikes } from "@/db/schema/content";
+import { follows } from "@/db/schema/auth";
 import { headers } from "next/headers";
 import { eq, desc, asc, and, inArray, notInArray, sql } from "drizzle-orm";
 import { nanoid } from "nanoid";
@@ -16,12 +17,38 @@ export async function GET(req: NextRequest) {
         const category = searchParams.get('category');
         const userId = searchParams.get('userId');
         const sortBy = searchParams.get('sortBy'); // 'newest' | 'popular'
+        const following = searchParams.get('following'); // 'true' | undefined
         const limit = parseInt(searchParams.get('limit') || '20');
         const page = parseInt(searchParams.get('page') || '1');
         const offset = (page - 1) * limit;
 
         // Base Conditions
         const conditions = [];
+
+        // Handle "Following" filter first as it's a primary mode
+        if (following === 'true') {
+            if (!session?.user) {
+                // If not logged in but requested following feed, return unauthorized or empty
+                return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+            }
+
+            // Get list of users the current user follows
+            const followedUsers = await db.query.follows.findMany({
+                where: eq(follows.followerId, session.user.id),
+                columns: {
+                    followingId: true
+                }
+            });
+
+            const followedIds = followedUsers.map(f => f.followingId);
+
+            if (followedIds.length === 0) {
+                // User follows no one, return empty list immediately
+                return NextResponse.json([]);
+            }
+
+            conditions.push(inArray(videos.userId, followedIds));
+        }
 
         // Handle "Live Now" special category or standard category filter
         if (category === 'Live Now') {
@@ -36,7 +63,8 @@ export async function GET(req: NextRequest) {
 
         // Determine if we should apply personalization (User logged in, main feed, default sort)
         // If sorting by 'popular' explicitly, we skip personalization sort.
-        const isPersonalized = session?.user && !category && !userId && !sortBy;
+        // Also skip if 'following' mode is active (usually chronological)
+        const isPersonalized = session?.user && !category && !userId && !sortBy && !following;
 
         let orderByClause: any[] = [desc(videos.createdAt)];
 

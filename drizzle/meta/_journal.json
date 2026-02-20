@@ -71,6 +71,13 @@
       "when": 1771168188510,
       "tag": "0009_bumpy_barracuda",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1771603751001,
+      "tag": "0010_sloppy_anthem",
+      "breakpoints": true
     }
   ]
 }
