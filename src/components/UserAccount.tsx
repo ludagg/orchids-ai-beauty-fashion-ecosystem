@@ -16,6 +16,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { authClient } from "@/lib/auth-client";
 import { useEffect } from "react";
 
@@ -70,23 +75,33 @@ export default function UserAccount({ showLabel = true }: { showLabel?: boolean 
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <button className="flex items-center gap-2 p-1.5 pr-3 rounded-full hover:bg-secondary transition-colors border border-transparent hover:border-border outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 group">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-violet-500 to-rose-500 flex items-center justify-center text-white font-medium text-xs shadow-sm group-hover:shadow-md transition-shadow overflow-hidden">
-            {user?.image ? (
-                <img src={user.image} alt={user.name || "User"} className="w-full h-full object-cover" />
-            ) : (
-                initials
-            )}
-          </div>
-          {showLabel && (
-            <span className="text-sm font-medium hidden sm:inline text-foreground">
-              {user?.name || "User"}
-            </span>
-          )}
-          <ChevronDown className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors hidden sm:inline" />
-        </button>
-      </DropdownMenuTrigger>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <DropdownMenuTrigger asChild>
+            <button
+              className="flex items-center gap-2 p-1.5 pr-3 rounded-full hover:bg-secondary transition-colors border border-transparent hover:border-border outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 group"
+              aria-label="Account Menu"
+            >
+              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-violet-500 to-rose-500 flex items-center justify-center text-white font-medium text-xs shadow-sm group-hover:shadow-md transition-shadow overflow-hidden">
+                {user?.image ? (
+                    <img src={user.image} alt={user.name || "User"} className="w-full h-full object-cover" />
+                ) : (
+                    initials
+                )}
+              </div>
+              {showLabel && (
+                <span className="text-sm font-medium hidden sm:inline text-foreground">
+                  {user?.name || "User"}
+                </span>
+              )}
+              <ChevronDown className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors hidden sm:inline" />
+            </button>
+          </DropdownMenuTrigger>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>Account Menu</p>
+        </TooltipContent>
+      </Tooltip>
       <DropdownMenuContent className="w-auto p-2" align="end" sideOffset={8}>
         <div className="grid grid-cols-4 gap-2 min-w-[340px]">
           <DropdownMenuItem asChild className="focus:bg-transparent p-0">
