@@ -23,6 +23,8 @@ export const salons = pgTable('salons', {
   status: salonStatusEnum('status').default('pending').notNull(),
   isVerified: boolean('is_verified').default(false).notNull(),
   type: partnerTypeEnum('type').default('SALON').notNull(),
+  averageRating: decimal('average_rating', { precision: 3, scale: 2 }).default('0').notNull(),
+  totalReviews: integer('total_reviews').default(0).notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });

@@ -1,8 +1,8 @@
 import { db } from "@/lib/db";
-import { notifications } from "@/db/schema";
+import { notifications } from "@/db/schema/notifications"; // Fix import path to specific file to avoid circular deps if any
 import { nanoid } from "nanoid";
 
-type NotificationType = "booking" | "message" | "system" | "order" | "promotion";
+type NotificationType = "booking" | "message" | "system" | "order" | "promotion" | "review";
 
 interface CreateNotificationParams {
   userId: string;
@@ -32,8 +32,6 @@ export async function createNotification(params: CreateNotificationParams) {
     return notificationId;
   } catch (error) {
     console.error("Failed to create notification:", error);
-    // Depending on requirements, we might want to throw or just log.
-    // For now, logging is safer to not break the main flow (e.g. booking creation).
     return null;
   }
 }
