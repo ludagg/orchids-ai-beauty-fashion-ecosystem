@@ -93,9 +93,11 @@ export function EditProfileModal({ isOpen, onOpenChange, user, onSave }: EditPro
 
           <TabsContent value="personal" className="space-y-6">
             <div className="flex flex-col items-center gap-4">
-                <div
-                    className="relative group cursor-pointer"
+                <button
+                    type="button"
+                    className="relative group cursor-pointer rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                     onClick={handleImageClick}
+                    aria-label="Change profile picture"
                   >
                     <Avatar className="w-24 h-24 border-2 border-background shadow-md">
                       <AvatarImage src={image || "/placeholder-avatar.jpg"} alt="Profile" className="object-cover" />
@@ -103,17 +105,17 @@ export function EditProfileModal({ isOpen, onOpenChange, user, onSave }: EditPro
                         {name ? name.substring(0, 2).toUpperCase() : "JD"}
                       </AvatarFallback>
                     </Avatar>
-                    <div className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity">
                       <Camera className="w-6 h-6 text-white" />
                     </div>
-                    <input
-                      type="file"
-                      ref={fileInputRef}
-                      className="hidden"
-                      accept="image/*"
-                      onChange={handleImageUpload}
-                    />
-                  </div>
+                  </button>
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    className="hidden"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                  />
                   <div className="w-full space-y-4">
                      <div className="space-y-2">
                         <Label htmlFor="name">Full Name</Label>
