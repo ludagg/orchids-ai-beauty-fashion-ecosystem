@@ -25,6 +25,3 @@
 **Learning:** Wrapping a decorative avatar component in a semantic `<button>` instead of a `div` instantly makes it accessible to keyboard and screen reader users, transforming a static image into a functional "Change Profile Picture" control without complex custom event handlers.
 **Action:** Always check if "clickable" divs (like avatars, cards) should be semantic `<button>` elements to get native focus and keyboard support for free.
 
-## 2026-02-23 - Link Wrapping for Accessible Cards
-**Learning:** Developers often apply `cursor-pointer` to `div`s for card components, creating inaccessible "fake links". Wrapping the entire card content in a semantic `Link` (or anchor) creates a single, large, keyboard-accessible touch target that behaves correctly with assistive technology and navigation.
-**Action:** Always audit card components (especially in grids) to ensure they are wrapped in `Link` components rather than relying on `onClick` handlers or CSS cursor styles.
