@@ -16,3 +16,7 @@
 ## 2026-02-20 - Semantic HTML for Interactive Lists
 **Learning:** Using `div` with `onClick` for interactive list items (like notifications or dropdown options) completely breaks keyboard accessibility and screen reader interaction. Converting these to semantic `<button>` elements with `type="button"` instantly fixes focus management and key handling without complex JavaScript.
 **Action:** Always verify interactive list items are buttons or links. Use `w-full text-left` utility classes to maintain the visual appearance of a list item while gaining native button behavior.
+
+## 2026-02-21 - Accessible Dynamic Forms
+**Learning:** Dynamic form fields (like variants) often lack associated labels, making them invisible to screen readers. Adding `aria-label` to these inputs and icon-only buttons is a critical micro-UX fix that instantly improves accessibility without changing the visual design.
+**Action:** Always check dynamic inputs for visible labels; if missing, add descriptive `aria-label` attributes. Wrap icon-only delete actions in Tooltips for clarity.

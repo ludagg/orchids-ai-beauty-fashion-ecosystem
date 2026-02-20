@@ -14,6 +14,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 import { toast } from "sonner"
 import { Card, CardContent } from "@/components/ui/card"
 
@@ -189,8 +194,9 @@ export function ProductManager({ salonId }: ProductManagerProps) {
             </DialogHeader>
             <div className="grid gap-4 py-4 max-h-[60vh] overflow-y-auto px-1">
               <div className="grid gap-2">
-                <Label>Product Name</Label>
+                <Label htmlFor="product-name">Product Name</Label>
                 <Input
+                  id="product-name"
                   value={newProduct.name}
                   onChange={e => setNewProduct({...newProduct, name: e.target.value})}
                   placeholder="e.g. Silk Serum"
@@ -199,8 +205,9 @@ export function ProductManager({ salonId }: ProductManagerProps) {
               </div>
 
               <div className="grid gap-2">
-                <Label>Description</Label>
+                <Label htmlFor="product-description">Description</Label>
                 <Input
+                  id="product-description"
                   value={newProduct.description}
                   onChange={e => setNewProduct({...newProduct, description: e.target.value})}
                   placeholder="Product description"
@@ -210,8 +217,9 @@ export function ProductManager({ salonId }: ProductManagerProps) {
 
               <div className="grid grid-cols-2 gap-4">
                  <div className="grid gap-2">
-                    <Label>Category</Label>
+                    <Label htmlFor="product-category">Category</Label>
                     <Input
+                      id="product-category"
                       value={newProduct.category}
                       onChange={e => setNewProduct({...newProduct, category: e.target.value})}
                       placeholder="e.g. Hair Care"
@@ -219,8 +227,9 @@ export function ProductManager({ salonId }: ProductManagerProps) {
                     />
                   </div>
                   <div className="grid gap-2">
-                    <Label>Brand</Label>
+                    <Label htmlFor="product-brand">Brand</Label>
                     <Input
+                      id="product-brand"
                       value={newProduct.brand}
                       onChange={e => setNewProduct({...newProduct, brand: e.target.value})}
                       placeholder="e.g. Luxe"
@@ -230,8 +239,9 @@ export function ProductManager({ salonId }: ProductManagerProps) {
               </div>
 
               <div className="grid gap-2">
-                <Label>Image URL</Label>
+                <Label htmlFor="product-image">Image URL</Label>
                 <Input
+                  id="product-image"
                   value={newProduct.image}
                   onChange={e => setNewProduct({...newProduct, image: e.target.value})}
                   placeholder="https://..."
@@ -247,8 +257,9 @@ export function ProductManager({ salonId }: ProductManagerProps) {
               {!hasVariants ? (
                   <div className="grid grid-cols-2 gap-4">
                     <div className="grid gap-2">
-                      <Label>Price ($)</Label>
+                      <Label htmlFor="product-price">Price ($)</Label>
                       <Input
+                        id="product-price"
                         value={newProduct.price}
                         onChange={e => setNewProduct({...newProduct, price: e.target.value})}
                         type="number"
@@ -258,8 +269,9 @@ export function ProductManager({ salonId }: ProductManagerProps) {
                       />
                     </div>
                     <div className="grid gap-2">
-                      <Label>Stock</Label>
+                      <Label htmlFor="product-stock">Stock</Label>
                       <Input
+                        id="product-stock"
                         value={newProduct.stock}
                         onChange={e => setNewProduct({...newProduct, stock: e.target.value})}
                         type="number"
@@ -274,11 +286,13 @@ export function ProductManager({ salonId }: ProductManagerProps) {
                       <div className="text-sm font-medium">Variants</div>
                       <div className="grid grid-cols-3 gap-2">
                           <Input
+                              aria-label="Variant Name"
                               placeholder="Name (e.g. Red / S)"
                               value={currentVariant.name}
                               onChange={e => setCurrentVariant({...currentVariant, name: e.target.value})}
                           />
                           <Input
+                              aria-label="Variant Price"
                               placeholder="Price"
                               type="number"
                               value={currentVariant.price}
@@ -286,12 +300,15 @@ export function ProductManager({ salonId }: ProductManagerProps) {
                           />
                           <div className="flex gap-2">
                               <Input
+                                  aria-label="Variant Stock"
                                   placeholder="Stock"
                                   type="number"
                                   value={currentVariant.stock}
                                   onChange={e => setCurrentVariant({...currentVariant, stock: e.target.value})}
                               />
-                              <Button type="button" size="icon" onClick={addVariant}><Plus className="w-4 h-4"/></Button>
+                              <Button type="button" size="icon" onClick={addVariant} aria-label="Add variant">
+                                  <Plus className="w-4 h-4"/>
+                              </Button>
                           </div>
                       </div>
 
@@ -302,7 +319,7 @@ export function ProductManager({ salonId }: ProductManagerProps) {
                                   <div className="flex items-center gap-3">
                                       <span>${v.price}</span>
                                       <span className="text-muted-foreground">Qty: {v.stock}</span>
-                                      <Button type="button" variant="ghost" size="icon" className="h-6 w-6" onClick={() => removeVariant(i)}>
+                                      <Button type="button" variant="ghost" size="icon" className="h-6 w-6" onClick={() => removeVariant(i)} aria-label="Remove variant">
                                           <X className="w-3 h-3" />
                                       </Button>
                                   </div>
@@ -341,14 +358,20 @@ export function ProductManager({ salonId }: ProductManagerProps) {
                         {product.category}
                     </span>
                 )}
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8 text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 transition-opacity absolute top-2 right-2 bg-background/80 backdrop-blur-sm"
-                    onClick={() => handleDelete(product.id)}
-                >
-                    <Trash2 className="w-4 h-4" />
-                </Button>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 transition-opacity absolute top-2 right-2 bg-background/80 backdrop-blur-sm"
+                            onClick={() => handleDelete(product.id)}
+                            aria-label="Delete product"
+                        >
+                            <Trash2 className="w-4 h-4" />
+                        </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>Delete product</TooltipContent>
+                </Tooltip>
               </div>
               <h4 className="font-semibold truncate">{product.name}</h4>
               <div className="flex items-center justify-between mt-2 text-sm text-muted-foreground">
