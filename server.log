@@ -7,69 +7,47 @@
 - Network:       http://192.168.0.2:3000
 
 ✓ Starting...
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
+
 ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
-✓ Ready in 1298ms
- GET /app/conversations 200 in 1417ms (compile: 489ms, proxy.ts: 100ms, render: 829ms)
-[2m2026-02-20T00:51:58.584Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
-[2m2026-02-20T00:51:58.588Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
-[2m2026-02-20T00:51:58.589Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
- GET /api/notifications 401 in 590ms (compile: 549ms, proxy.ts: 11ms, render: 30ms)
- GET /api/notifications 401 in 28ms (compile: 15ms, proxy.ts: 5ms, render: 8ms)
- GET /api/conversations 401 in 104ms (compile: 81ms, proxy.ts: 16ms, render: 8ms)
-[2m2026-02-20T00:51:59.644Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
-[2m2026-02-20T00:51:59.647Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
-[2m2026-02-20T00:51:59.648Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
- GET /api/auth/get-session 200 in 1657ms (compile: 1625ms, proxy.ts: 16ms, render: 16ms)
- GET /auth 200 in 141ms (compile: 41ms, proxy.ts: 7ms, render: 93ms)
- GET /auth 200 in 44ms (compile: 6ms, proxy.ts: 5ms, render: 33ms)
- GET /auth/sign-in 200 in 123ms (compile: 42ms, proxy.ts: 4ms, render: 77ms)
- GET /auth/sign-in 200 in 43ms (compile: 9ms, proxy.ts: 6ms, render: 29ms)
- GET /app/conversations/123 200 in 776ms (compile: 580ms, proxy.ts: 5ms, render: 192ms)
- GET /api/auth/get-session 200 in 42ms (compile: 30ms, proxy.ts: 4ms, render: 8ms)
- GET /api/notifications 401 in 15ms (compile: 4ms, proxy.ts: 5ms, render: 7ms)
- GET /api/notifications 401 in 14ms (compile: 3ms, proxy.ts: 5ms, render: 7ms)
- GET /api/conversations 401 in 60ms (compile: 8ms, proxy.ts: 7ms, render: 44ms)
- GET /api/conversations 401 in 17ms (compile: 5ms, proxy.ts: 4ms, render: 8ms)
- GET /auth 200 in 125ms (compile: 10ms, proxy.ts: 5ms, render: 110ms)
- GET /auth 200 in 82ms (compile: 14ms, proxy.ts: 6ms, render: 61ms)
- GET /auth/sign-in 200 in 68ms (compile: 5ms, proxy.ts: 3ms, render: 59ms)
- GET /auth/sign-in 200 in 41ms (compile: 7ms, proxy.ts: 3ms, render: 30ms)
-[2m2026-02-20T00:52:02.922Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
-[2m2026-02-20T00:52:02.926Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
-[2m2026-02-20T00:52:02.926Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
- GET /app/conversations 200 in 544ms (compile: 108ms, proxy.ts: 5ms, render: 431ms)
- GET /api/auth/get-session 200 in 92ms (compile: 70ms, proxy.ts: 4ms, render: 18ms)
- GET /api/notifications 401 in 32ms (compile: 16ms, proxy.ts: 8ms, render: 8ms)
- GET /api/notifications 401 in 24ms (compile: 5ms, proxy.ts: 8ms, render: 10ms)
- GET /api/conversations 401 in 12ms (compile: 3ms, proxy.ts: 3ms, render: 6ms)
-[2m2026-02-20T00:52:30.026Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
-[2m2026-02-20T00:52:30.030Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
-[2m2026-02-20T00:52:30.030Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
- GET /app/conversations/123 200 in 451ms (compile: 109ms, proxy.ts: 4ms, render: 338ms)
- GET /api/auth/get-session 200 in 43ms (compile: 32ms, proxy.ts: 3ms, render: 7ms)
- GET /api/notifications 401 in 14ms (compile: 3ms, proxy.ts: 4ms, render: 7ms)
- GET /api/notifications 401 in 12ms (compile: 3ms, proxy.ts: 3ms, render: 6ms)
- GET /api/conversations 401 in 13ms (compile: 4ms, proxy.ts: 3ms, render: 6ms)
- GET /api/conversations 401 in 12ms (compile: 3ms, proxy.ts: 3ms, render: 7ms)
-[2m2026-02-20T00:52:31.911Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
-[2m2026-02-20T00:52:31.915Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
-[2m2026-02-20T00:52:31.915Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
- GET /app/conversations 200 in 235ms (compile: 21ms, proxy.ts: 6ms, render: 209ms)
- GET /api/auth/get-session 200 in 55ms (compile: 40ms, proxy.ts: 5ms, render: 10ms)
- GET /api/notifications 401 in 21ms (compile: 8ms, proxy.ts: 6ms, render: 7ms)
- GET /api/notifications 401 in 14ms (compile: 5ms, proxy.ts: 3ms, render: 5ms)
- GET /api/conversations 401 in 16ms (compile: 5ms, proxy.ts: 4ms, render: 8ms)
-[2m2026-02-20T00:53:08.645Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
-[2m2026-02-20T00:53:08.649Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
-[2m2026-02-20T00:53:08.649Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
- GET /app/conversations/123 200 in 600ms (compile: 127ms, proxy.ts: 3ms, render: 470ms)
- GET /api/auth/get-session 200 in 50ms (compile: 36ms, proxy.ts: 4ms, render: 10ms)
- GET /api/notifications 401 in 13ms (compile: 3ms, proxy.ts: 3ms, render: 6ms)
- GET /api/notifications 401 in 14ms (compile: 3ms, proxy.ts: 6ms, render: 5ms)
- GET /api/conversations 401 in 18ms (compile: 4ms, proxy.ts: 4ms, render: 9ms)
- GET /api/conversations 401 in 17ms (compile: 4ms, proxy.ts: 3ms, render: 9ms)
-[2m2026-02-20T00:53:10.682Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
-[2m2026-02-20T00:53:10.686Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
-[2m2026-02-20T00:53:10.687Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
-✓ Compiled in 143ms
-[?25h
+✓ Ready in 1501ms
+○ Compiling /auth ...
+ GET /auth 307 in 5.2s (compile: 4.6s, proxy.ts: 100ms, render: 537ms)
+ GET /auth/sign-in 200 in 2.1s (compile: 1842ms, proxy.ts: 10ms, render: 270ms)
+ GET /app/marketplace 200 in 2.4s (compile: 1678ms, proxy.ts: 7ms, render: 675ms)
+○ Compiling /api/auth/[...all] ...
+Error fetching products: Error: Failed query: select "products"."id", "products"."salon_id", "products"."name", "products"."description", "products"."price", "products"."stock", "products"."has_variants", "products"."images", "products"."is_active", "products"."category", "products"."brand", "products"."rating", "products"."review_count", "products"."created_at", "products"."updated_at", "products_salon"."data" as "salon" from "products" "products" left join lateral (select json_build_array("products_salon"."name", "products_salon"."id", "products_salon"."slug") as "data" from (select * from "salons" "products_salon" where "products_salon"."id" = "products"."salon_id" limit $1) "products_salon") "products_salon" on true where "products"."is_active" = $2 order by "products"."created_at" desc limit $3
+params: 1,true,50
+    at async GET (src/app/api/products/route.ts:79:18)
+  77 |     }
+  78 |
+> 79 |     const data = await db.query.products.findMany({
+     |                  ^
+  80 |       where: and(...conditions),
+  81 |       limit: limit,
+  82 |       with: { {
+  query: 'select "products"."id", "products"."salon_id", "products"."name", "products"."description", "products"."price", "products"."stock", "products"."has_variants", "products"."images", "products"."is_active", "products"."category", "products"."brand", "products"."rating", "products"."review_count", "products"."created_at", "products"."updated_at", "products_salon"."data" as "salon" from "products" "products" left join lateral (select json_build_array("products_salon"."name", "products_salon"."id", "products_salon"."slug") as "data" from (select * from "salons" "products_salon" where "products_salon"."id" = "products"."salon_id" limit $1) "products_salon") "products_salon" on true where "products"."is_active" = $2 order by "products"."created_at" desc limit $3',
+  params: [Array],
+  [cause]: AggregateError:
+      at async GET (src/app/api/products/route.ts:79:18)
+    77 |     }
+    78 |
+  > 79 |     const data = await db.query.products.findMany({
+       |                  ^
+    80 |       where: and(...conditions),
+    81 |       limit: limit,
+    82 |       with: { {
+    code: 'ECONNREFUSED'
+  }
+}
+ GET /api/products? 500 in 3.2s (compile: 2.5s, proxy.ts: 24ms, render: 686ms)
+[2m2026-02-20T15:42:48.728Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
+[2m2026-02-20T15:42:48.732Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
+[2m2026-02-20T15:42:48.733Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
+[2m2026-02-20T15:42:50.325Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
+[2m2026-02-20T15:42:50.329Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
+[2m2026-02-20T15:42:50.330Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
+ GET /api/auth/get-session 200 in 5.7s (compile: 5.7s, proxy.ts: 10ms, render: 20ms)

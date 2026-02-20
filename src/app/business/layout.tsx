@@ -16,7 +16,6 @@ import {
 import Link from "next/link";
 import BusinessBottomNav from "@/components/BusinessBottomNav";
 import SearchBar from "@/components/SearchBar";
-import NotificationBell from "@/components/NotificationBell";
 import UserAccount from "@/components/UserAccount";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import { usePathname, useRouter } from "next/navigation";
@@ -107,7 +106,6 @@ export default function BusinessLayout({
           </Link>
           <div className="flex items-center gap-1">
             <ThemeSwitcher />
-            <NotificationBell />
             <UserAccount showLabel={false} />
             <button onClick={() => setMobileMenuOpen(true)} className="p-2 ml-1">
               <Menu className="w-6 h-6" />
@@ -177,7 +175,6 @@ export default function BusinessLayout({
                 Back to App
             </Link>
             <ThemeSwitcher />
-            <NotificationBell />
             <UserAccount />
           </div>
         </header>

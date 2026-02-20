@@ -25,7 +25,6 @@ import {
 import Link from "next/link";
 import BottomNav from "@/components/BottomNav";
 import SearchBar from "@/components/SearchBar";
-import NotificationBell from "@/components/NotificationBell";
 import CartIcon from "@/components/CartIcon";
 import UserAccount from "@/components/UserAccount";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
@@ -139,11 +138,7 @@ export default function AppLayout({
           </Link>
           <div className="flex items-center gap-1">
             <ThemeSwitcher />
-          <Link href="/app/wishlist" className="p-2 relative">
-             <Heart className={`w-6 h-6 ${pathname === '/app/wishlist' ? 'text-rose-500 fill-rose-500' : ''}`} />
-          </Link>
             <CartIcon />
-            <NotificationBell />
             <UserAccount showLabel={false} />
             <button onClick={() => setMobileMenuOpen(true)} className="p-2 ml-1">
               <Menu className="w-6 h-6" />
@@ -230,11 +225,7 @@ export default function AppLayout({
               </Link>
             )}
             <ThemeSwitcher />
-            <Link href="/app/wishlist" className="p-2 rounded-full hover:bg-secondary transition-colors relative">
-              <Heart className={`w-5 h-5 ${pathname === '/app/wishlist' ? 'text-rose-500 fill-rose-500' : 'text-muted-foreground'}`} />
-            </Link>
             <CartIcon />
-            <NotificationBell />
             <UserAccount />
           </div>
         </header>
