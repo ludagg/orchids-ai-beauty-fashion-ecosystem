@@ -21,6 +21,9 @@ import {
 } from "lucide-react";
 import LandingNavbar from "@/components/landing/LandingNavbar";
 import LandingFooter from "@/components/landing/LandingFooter";
+import BusinessSection from "@/components/landing/BusinessSection";
+import MobileAppSection from "@/components/landing/MobileAppSection";
+import FAQSection from "@/components/landing/FAQSection";
 
 const features = [
   {
@@ -795,6 +798,10 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <BusinessSection />
+      <MobileAppSection />
+      <FAQSection />
 
       <section className="py-24 md:py-32 bg-card relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--secondary)_1px,transparent_1px)] bg-[size:24px_24px] opacity-50" />

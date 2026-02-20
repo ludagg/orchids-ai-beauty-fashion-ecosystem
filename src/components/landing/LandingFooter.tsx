@@ -4,7 +4,7 @@ export default function LandingFooter() {
   return (
     <footer className="py-16 bg-background border-t border-border">
       <div className="max-w-[1100px] mx-auto px-6">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-8 mb-12">
           <div className="col-span-2 md:col-span-1">
             <p className="text-3xl mb-4 font-script text-black dark:text-white">Rare</p>
             <p className="text-sm text-muted-foreground leading-relaxed">
@@ -19,6 +19,14 @@ export default function LandingFooter() {
                 { label: "Salons", href: "/app/salons" },
                 { label: "Video", href: "/app/videos-creations" },
                 { label: "AI Stylist", href: "/app/ai-stylist" }
+              ]
+            },
+            {
+              title: "Business",
+              links: [
+                { label: "Partner with us", href: "/business" },
+                { label: "Salon Dashboard", href: "/salon-dashboard" },
+                { label: "Creator Studio", href: "/app/profile" },
               ]
             },
             {

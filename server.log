@@ -13,41 +13,17 @@ You can learn more, including how to opt-out if you'd not like to participate in
 https://nextjs.org/telemetry
 
 ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
-✓ Ready in 1501ms
-○ Compiling /auth ...
- GET /auth 307 in 5.2s (compile: 4.6s, proxy.ts: 100ms, render: 537ms)
- GET /auth/sign-in 200 in 2.1s (compile: 1842ms, proxy.ts: 10ms, render: 270ms)
- GET /app/marketplace 200 in 2.4s (compile: 1678ms, proxy.ts: 7ms, render: 675ms)
-○ Compiling /api/auth/[...all] ...
-Error fetching products: Error: Failed query: select "products"."id", "products"."salon_id", "products"."name", "products"."description", "products"."price", "products"."stock", "products"."has_variants", "products"."images", "products"."is_active", "products"."category", "products"."brand", "products"."rating", "products"."review_count", "products"."created_at", "products"."updated_at", "products_salon"."data" as "salon" from "products" "products" left join lateral (select json_build_array("products_salon"."name", "products_salon"."id", "products_salon"."slug") as "data" from (select * from "salons" "products_salon" where "products_salon"."id" = "products"."salon_id" limit $1) "products_salon") "products_salon" on true where "products"."is_active" = $2 order by "products"."created_at" desc limit $3
-params: 1,true,50
-    at async GET (src/app/api/products/route.ts:79:18)
-  77 |     }
-  78 |
-> 79 |     const data = await db.query.products.findMany({
-     |                  ^
-  80 |       where: and(...conditions),
-  81 |       limit: limit,
-  82 |       with: { {
-  query: 'select "products"."id", "products"."salon_id", "products"."name", "products"."description", "products"."price", "products"."stock", "products"."has_variants", "products"."images", "products"."is_active", "products"."category", "products"."brand", "products"."rating", "products"."review_count", "products"."created_at", "products"."updated_at", "products_salon"."data" as "salon" from "products" "products" left join lateral (select json_build_array("products_salon"."name", "products_salon"."id", "products_salon"."slug") as "data" from (select * from "salons" "products_salon" where "products_salon"."id" = "products"."salon_id" limit $1) "products_salon") "products_salon" on true where "products"."is_active" = $2 order by "products"."created_at" desc limit $3',
-  params: [Array],
-  [cause]: AggregateError:
-      at async GET (src/app/api/products/route.ts:79:18)
-    77 |     }
-    78 |
-  > 79 |     const data = await db.query.products.findMany({
-       |                  ^
-    80 |       where: and(...conditions),
-    81 |       limit: limit,
-    82 |       with: { {
-    code: 'ECONNREFUSED'
-  }
-}
- GET /api/products? 500 in 3.2s (compile: 2.5s, proxy.ts: 24ms, render: 686ms)
-[2m2026-02-20T15:42:48.728Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
-[2m2026-02-20T15:42:48.732Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
-[2m2026-02-20T15:42:48.733Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
-[2m2026-02-20T15:42:50.325Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
-[2m2026-02-20T15:42:50.329Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
-[2m2026-02-20T15:42:50.330Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
- GET /api/auth/get-session 200 in 5.7s (compile: 5.7s, proxy.ts: 10ms, render: 20ms)
+✓ Ready in 1722ms
+○ Compiling / ...
+`legacyBehavior` is deprecated and will be removed in a future release. A codemod is available to upgrade your components:
+
+npx @next/codemod@latest new-link .
+
+Learn more: https://nextjs.org/docs/app/building-your-application/upgrading/codemods#remove-a-tags-from-link-components
+ GET / 200 in 6.5s (compile: 5.7s, proxy.ts: 106ms, render: 640ms)
+`legacyBehavior` is deprecated and will be removed in a future release. A codemod is available to upgrade your components:
+
+npx @next/codemod@latest new-link .
+
+Learn more: https://nextjs.org/docs/app/building-your-application/upgrading/codemods#remove-a-tags-from-link-components
+ GET / 200 in 476ms (compile: 82ms, proxy.ts: 8ms, render: 386ms)
