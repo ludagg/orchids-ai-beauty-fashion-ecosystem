@@ -21,11 +21,14 @@ export default function CartIcon() {
         <Link
           href="/app/cart"
           className="p-2 relative rounded-full hover:bg-secondary transition-colors"
-          aria-label="Shopping Cart"
+          aria-label={itemCount > 0 ? `Shopping Cart, ${itemCount} items` : "Shopping Cart"}
         >
           <ShoppingBag className={`w-5 h-5 ${isActive ? 'text-rose-500 fill-rose-500' : 'text-muted-foreground'}`} />
           {itemCount > 0 && (
-            <span className="absolute top-0 right-0 w-4 h-4 bg-rose-600 text-white text-[10px] font-bold flex items-center justify-center rounded-full border border-background">
+            <span
+              className="absolute top-0 right-0 w-4 h-4 bg-rose-600 text-white text-[10px] font-bold flex items-center justify-center rounded-full border border-background"
+              aria-hidden="true"
+            >
               {itemCount}
             </span>
           )}

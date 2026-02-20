@@ -24,3 +24,7 @@
 ## 2026-02-22 - Semantic Buttons for Interactive Avatars
 **Learning:** Wrapping a decorative avatar component in a semantic `<button>` instead of a `div` instantly makes it accessible to keyboard and screen reader users, transforming a static image into a functional "Change Profile Picture" control without complex custom event handlers.
 **Action:** Always check if "clickable" divs (like avatars, cards) should be semantic `<button>` elements to get native focus and keyboard support for free.
+
+## 2026-02-23 - Accessible Dynamic Badges
+**Learning:** Screen readers often miss visual notification badges (like cart counts) unless they are explicitly part of the parent button's accessible name. A visual badge alone is not enough.
+**Action:** Dynamically update `aria-label` on parent buttons to include state information (e.g., "Shopping Cart, 3 items") and hide the visual badge from assistive technology using `aria-hidden="true"`.
