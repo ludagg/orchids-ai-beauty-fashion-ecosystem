@@ -2,9 +2,10 @@
 
 import { useSearchParams, useRouter } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, LayoutDashboard, Scissors, ShoppingBag, Calendar, Image as ImageIcon, Clock, Star, MessageCircle } from "lucide-react";
+import { ArrowLeft, LayoutDashboard, Scissors, ShoppingBag, Calendar, Image as ImageIcon, Clock, Star, MessageCircle, Users } from "lucide-react";
 import Link from "next/link";
 import { ServiceManager } from "@/components/partner-dashboard/ServiceManager";
+import { StaffManager } from "@/components/partner-dashboard/StaffManager";
 import { ProductManager } from "@/components/partner-dashboard/ProductManager";
 import { BookingManager } from "@/components/partner-dashboard/BookingManager";
 import { SalonImageManager } from "@/components/partner-dashboard/SalonImageManager";
@@ -84,6 +85,16 @@ function PartnerDashboardContent() {
             </TabsTrigger>
           )}
 
+          {showServices && (
+            <TabsTrigger
+              value="staff"
+              className="flex-1 md:flex-none min-w-[120px] h-full rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground data-[state=active]:text-foreground font-medium transition-all"
+            >
+              <Users className="w-4 h-4 mr-2" />
+              Staff
+            </TabsTrigger>
+          )}
+
           {showProducts && (
             <TabsTrigger
               value="products"
@@ -135,6 +146,18 @@ function PartnerDashboardContent() {
           <TabsContent value="services" className="mt-0 focus-visible:outline-none focus-visible:ring-0">
              {salonId ? (
                 <ServiceManager salonId={salonId} />
+             ) : (
+                <div className="p-8 text-center text-muted-foreground border rounded-md">
+                    <p>Salon ID is missing. Please return to the studio and try again.</p>
+                </div>
+             )}
+          </TabsContent>
+        )}
+
+        {showServices && (
+          <TabsContent value="staff" className="mt-0 focus-visible:outline-none focus-visible:ring-0">
+             {salonId ? (
+                <StaffManager salonId={salonId} />
              ) : (
                 <div className="p-8 text-center text-muted-foreground border rounded-md">
                     <p>Salon ID is missing. Please return to the studio and try again.</p>

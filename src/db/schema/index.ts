@@ -8,3 +8,4 @@ export * from './favorites';
 export * from './content';
 export * from './notifications';
 export * from './stories';
+export * from './staff';
