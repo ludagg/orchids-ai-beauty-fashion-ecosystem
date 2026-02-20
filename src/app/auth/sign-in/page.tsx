@@ -171,17 +171,20 @@ export default function SignInPage() {
                   placeholder="••••••••"
                   value={formData.password}
                   onChange={handleChange}
-                  className={`pl-10 pr-10 h-11 ${errors.password ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                  className={`pl-10 pr-14 h-11 ${errors.password ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                   disabled={isLoading}
                 />
-                <button
+                <Button
                   type="button"
+                  variant="ghost"
+                  size="icon"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                   disabled={isLoading}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
                 >
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
+                </Button>
               </div>
               {errors.password && (
                 <p className="text-sm text-red-500 mt-1">{errors.password}</p>
