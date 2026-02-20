@@ -8,7 +8,7 @@ export default function ConversationDetailPage({ params }: { params: Promise<{ i
   const { id } = use(params);
 
   return (
-    <div className="h-[calc(100vh-64px)] lg:h-[calc(100vh-64px)] bg-background flex overflow-hidden">
+    <div className="fixed inset-0 z-[60] h-[100dvh] lg:static lg:z-auto lg:h-[calc(100vh-64px)] bg-background flex overflow-hidden">
       {/* Chats Sidebar - Hidden on mobile in this route, visible on desktop */}
       <aside className="hidden lg:flex w-96 border-r border-border flex-col bg-card">
         <ChatSidebar selectedId={id} />
