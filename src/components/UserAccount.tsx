@@ -117,12 +117,6 @@ export default function UserAccount({ showLabel = true }: { showLabel?: boolean 
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild className="cursor-pointer">
-            <Link href="/app/creator-studio" className="flex items-center w-full">
-              <LayoutDashboard className="mr-2 h-4 w-4" />
-              <span>Creator Studio</span>
-            </Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem asChild className="cursor-pointer">
             <Link href="/app/billing" className="flex items-center w-full">
               <CreditCard className="mr-2 h-4 w-4" />
               <span>Billing</span>

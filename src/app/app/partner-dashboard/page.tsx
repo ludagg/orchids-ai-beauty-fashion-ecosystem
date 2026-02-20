@@ -4,12 +4,12 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft, LayoutDashboard, Scissors, ShoppingBag, Calendar, Image as ImageIcon, Clock, Star, MessageCircle } from "lucide-react";
 import Link from "next/link";
-import { ServiceManager } from "../components/ServiceManager";
-import { ProductManager } from "../components/ProductManager";
-import { BookingManager } from "../components/BookingManager";
-import { SalonImageManager } from "../components/SalonImageManager";
-import { SalonHoursManager } from "../components/SalonHoursManager";
-import { SalonReviewsManager } from "../components/SalonReviewsManager";
+import { ServiceManager } from "@/components/partner-dashboard/ServiceManager";
+import { ProductManager } from "@/components/partner-dashboard/ProductManager";
+import { BookingManager } from "@/components/partner-dashboard/BookingManager";
+import { SalonImageManager } from "@/components/partner-dashboard/SalonImageManager";
+import { SalonHoursManager } from "@/components/partner-dashboard/SalonHoursManager";
+import { SalonReviewsManager } from "@/components/partner-dashboard/SalonReviewsManager";
 import { Suspense, useState } from "react";
 
 function PartnerDashboardContent() {
@@ -31,7 +31,7 @@ function PartnerDashboardContent() {
 
   // Handle back navigation to preserve partner state via query params
   const handleBack = () => {
-    router.push(`/app/creator-studio?partner=true&type=${type}&businessName=${encodeURIComponent(businessName)}`);
+    router.push(`/app/profile`);
   };
 
   return (
@@ -41,7 +41,7 @@ function PartnerDashboardContent() {
         <div className="space-y-1">
           <div className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors cursor-pointer mb-2" onClick={handleBack}>
             <ArrowLeft className="w-4 h-4" />
-            <span className="text-sm font-medium">Back to Studio</span>
+            <span className="text-sm font-medium">Back to Profile</span>
           </div>
           <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
             <LayoutDashboard className="w-8 h-8" />
