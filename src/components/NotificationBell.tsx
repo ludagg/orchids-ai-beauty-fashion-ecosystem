@@ -98,12 +98,14 @@ export default function NotificationBell() {
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
-        <button className="p-2 rounded-full hover:bg-secondary transition-colors relative outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+        <button
+          className="p-2 rounded-full hover:bg-secondary transition-colors relative outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          aria-label={`Notifications${unreadCount > 0 ? `, ${unreadCount} unread` : ""}`}
+        >
           <Bell className="w-5 h-5 text-muted-foreground" />
           {unreadCount > 0 && (
             <span className="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full border-2 border-card"></span>
           )}
-          <span className="sr-only">Notifications</span>
         </button>
       </PopoverTrigger>
       <PopoverContent className="w-80 p-0 overflow-hidden" align="end">
@@ -113,6 +115,7 @@ export default function NotificationBell() {
             <button
               onClick={markAllAsRead}
               className="text-xs text-primary font-medium hover:underline"
+              aria-label="Mark all notifications as read"
             >
               Mark all as read
             </button>
@@ -120,48 +123,52 @@ export default function NotificationBell() {
         </div>
         <div className="max-h-[400px] overflow-y-auto">
           {loading ? (
-            <div className="p-4 text-center text-sm text-muted-foreground">
+            <div className="p-4 text-center text-sm text-muted-foreground" role="status">
               Loading...
             </div>
           ) : notifications.length === 0 ? (
-            <div className="p-4 text-center text-sm text-muted-foreground">
+            <div className="p-4 text-center text-sm text-muted-foreground" role="status">
               No notifications
             </div>
           ) : (
-            notifications.map((notification) => {
-              const style = getIcon(notification.type);
-              return (
-                <div
-                  key={notification.id}
-                  onClick={() => handleNotificationClick(notification)}
-                  className={`p-4 flex gap-3 hover:bg-secondary transition-colors cursor-pointer border-b border-border last:border-0 ${
-                    !notification.isRead ? "bg-secondary/30" : ""
-                  }`}
-                >
-                  <div
-                    className={`w-10 h-10 rounded-full ${style.bg} dark:bg-primary/10 flex items-center justify-center flex-shrink-0`}
-                  >
-                    <style.icon className={`w-5 h-5 ${style.color}`} />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className={`text-sm text-foreground leading-snug ${!notification.isRead ? 'font-semibold' : 'font-medium'}`}>
-                      {notification.title}
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
-                      {notification.message}
-                    </p>
-                    <p className="text-[10px] text-muted-foreground opacity-70 mt-1 uppercase font-semibold tracking-wider">
-                      {formatDistanceToNow(new Date(notification.createdAt), { addSuffix: true })}
-                    </p>
-                  </div>
-                  {!notification.isRead && (
-                     <div className="flex items-center justify-center">
-                        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                     </div>
-                  )}
-                </div>
-              );
-            })
+            <ul role="list" className="m-0 p-0 list-none">
+              {notifications.map((notification) => {
+                const style = getIcon(notification.type);
+                return (
+                  <li key={notification.id}>
+                    <button
+                      type="button"
+                      onClick={() => handleNotificationClick(notification)}
+                      className={`w-full text-left p-4 flex gap-3 hover:bg-secondary transition-colors cursor-pointer border-b border-border last:border-0 ${
+                        !notification.isRead ? "bg-secondary/30" : ""
+                      }`}
+                    >
+                      <div
+                        className={`w-10 h-10 rounded-full ${style.bg} dark:bg-primary/10 flex items-center justify-center flex-shrink-0`}
+                      >
+                        <style.icon className={`w-5 h-5 ${style.color}`} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className={`text-sm text-foreground leading-snug ${!notification.isRead ? 'font-semibold' : 'font-medium'}`}>
+                          {notification.title}
+                        </p>
+                        <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
+                          {notification.message}
+                        </p>
+                        <p className="text-[10px] text-muted-foreground opacity-70 mt-1 uppercase font-semibold tracking-wider">
+                          {formatDistanceToNow(new Date(notification.createdAt), { addSuffix: true })}
+                        </p>
+                      </div>
+                      {!notification.isRead && (
+                        <div className="flex items-center justify-center">
+                          <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                        </div>
+                      )}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
           )}
         </div>
         <div className="p-2 border-t border-border bg-card">

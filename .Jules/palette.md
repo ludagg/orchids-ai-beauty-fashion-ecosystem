@@ -12,3 +12,7 @@
 ## 2025-05-14 - Dark Mode Implementation with next-themes
 **Learning:** When implementing dark mode in Next.js with `next-themes`, use `resolvedTheme` instead of `theme` to account for system settings. Ensure hydration safety by checking a `mounted` state. Refactor hardcoded hex colors to semantic CSS variables early to ensure global consistency.
 **Action:** Always prefer `resolvedTheme` for icon logic and toggle states. Use semantic classes like `bg-background` and `text-foreground` in new components from the start.
+
+## 2026-02-20 - Semantic HTML for Interactive Lists
+**Learning:** Using `div` with `onClick` for interactive list items (like notifications or dropdown options) completely breaks keyboard accessibility and screen reader interaction. Converting these to semantic `<button>` elements with `type="button"` instantly fixes focus management and key handling without complex JavaScript.
+**Action:** Always verify interactive list items are buttons or links. Use `w-full text-left` utility classes to maintain the visual appearance of a list item while gaining native button behavior.
