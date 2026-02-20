@@ -3,24 +3,17 @@
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import {
-  User,
-  Settings,
-  LogOut,
-  CreditCard,
   UserCircle,
   ChevronDown,
-  LayoutDashboard,
   LogIn,
   Heart,
-  Bell
+  Bell,
+  Settings
 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { authClient } from "@/lib/auth-client";
@@ -75,11 +68,6 @@ export default function UserAccount({ showLabel = true }: { showLabel?: boolean 
         .slice(0, 2)
     : "U";
 
-  const handleSignOut = async () => {
-    await authClient.signOut();
-    router.push("/");
-  };
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -99,58 +87,36 @@ export default function UserAccount({ showLabel = true }: { showLabel?: boolean 
           <ChevronDown className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors hidden sm:inline" />
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="end" sideOffset={8}>
-        <DropdownMenuLabel className="font-normal">
-          <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none text-foreground">
-              {user?.name || "User"}
-            </p>
-            <p className="text-xs leading-none text-muted-foreground">
-              {user?.email}
-            </p>
-          </div>
-        </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem asChild className="cursor-pointer">
-            <Link href="/app/profile" className="flex items-center w-full">
-              <UserCircle className="mr-2 h-4 w-4" />
-              <span>Profile</span>
-            </Link>
+      <DropdownMenuContent className="w-auto p-2" align="end" sideOffset={8}>
+        <div className="grid grid-cols-4 gap-2 min-w-[340px]">
+          <DropdownMenuItem asChild className="focus:bg-transparent p-0">
+             <Link href="/app/profile" className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-lg hover:bg-accent focus:bg-accent transition-colors text-center w-full h-20 group">
+                <UserCircle className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                <span className="text-[10px] font-medium text-foreground">Profile</span>
+             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem asChild className="cursor-pointer">
-            <Link href="/app/wishlist" className="flex items-center w-full">
-              <Heart className="mr-2 h-4 w-4" />
-              <span>Wishlist</span>
-            </Link>
+
+          <DropdownMenuItem asChild className="focus:bg-transparent p-0">
+             <Link href="/app/notifications" className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-lg hover:bg-accent focus:bg-accent transition-colors text-center w-full h-20 group">
+                <Bell className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                <span className="text-[10px] font-medium text-foreground">Notifications</span>
+             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem asChild className="cursor-pointer">
-            <Link href="/app/notifications" className="flex items-center w-full">
-              <Bell className="mr-2 h-4 w-4" />
-              <span>Notifications</span>
-            </Link>
+
+          <DropdownMenuItem asChild className="focus:bg-transparent p-0">
+             <Link href="/app/wishlist" className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-lg hover:bg-accent focus:bg-accent transition-colors text-center w-full h-20 group">
+                <Heart className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                <span className="text-[10px] font-medium text-foreground">Wishlist</span>
+             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem asChild className="cursor-pointer">
-            <Link href="/app/billing" className="flex items-center w-full">
-              <CreditCard className="mr-2 h-4 w-4" />
-              <span>Billing</span>
-            </Link>
+
+          <DropdownMenuItem asChild className="focus:bg-transparent p-0">
+             <Link href="/app/settings" className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-lg hover:bg-accent focus:bg-accent transition-colors text-center w-full h-20 group">
+                <Settings className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                <span className="text-[10px] font-medium text-foreground">Settings</span>
+             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem asChild className="cursor-pointer">
-            <Link href="/app/settings" className="flex items-center w-full">
-              <Settings className="mr-2 h-4 w-4" />
-              <span>Settings</span>
-            </Link>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          className="text-rose-600 focus:text-rose-600 focus:bg-rose-50 cursor-pointer"
-          onClick={handleSignOut}
-        >
-          <LogOut className="mr-2 h-4 w-4" />
-          <span>Sign out</span>
-        </DropdownMenuItem>
+        </div>
       </DropdownMenuContent>
     </DropdownMenu>
   );
