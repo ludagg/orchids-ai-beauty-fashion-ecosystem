@@ -10,7 +10,9 @@ import {
   UserCircle,
   ChevronDown,
   LayoutDashboard,
-  LogIn
+  LogIn,
+  Heart,
+  Bell
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -114,6 +116,18 @@ export default function UserAccount({ showLabel = true }: { showLabel?: boolean 
             <Link href="/app/profile" className="flex items-center w-full">
               <UserCircle className="mr-2 h-4 w-4" />
               <span>Profile</span>
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild className="cursor-pointer">
+            <Link href="/app/wishlist" className="flex items-center w-full">
+              <Heart className="mr-2 h-4 w-4" />
+              <span>Wishlist</span>
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild className="cursor-pointer">
+            <Link href="/app/notifications" className="flex items-center w-full">
+              <Bell className="mr-2 h-4 w-4" />
+              <span>Notifications</span>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild className="cursor-pointer">
