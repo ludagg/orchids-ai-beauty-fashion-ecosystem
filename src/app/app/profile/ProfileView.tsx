@@ -37,6 +37,11 @@ import { VideoUploadModal } from "@/components/profile/VideoUploadModal";
 import { EditProfileModal } from "@/components/profile/EditProfileModal";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 // Interface for User Data
 interface UserData {
@@ -199,14 +204,22 @@ export default function ProfileView({ user, initialSalon }: ProfileViewProps) {
               <div className="absolute bottom-2 right-2 w-5 h-5 bg-emerald-500 rounded-full border-4 border-background shadow-sm" />
 
               {/* Edit Avatar Button */}
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                className="absolute -bottom-1 -right-1 bg-background border border-border rounded-full p-2 shadow-md hover:shadow-lg transition-all opacity-0 group-hover:opacity-100 focus:opacity-100"
-                onClick={() => setIsEditProfileModalOpen(true)}
-              >
-                <Edit className="w-4 h-4 text-muted-foreground" />
-              </motion.button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="absolute -bottom-1 -right-1 bg-background border border-border rounded-full p-2 shadow-md hover:shadow-lg transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 outline-none focus:ring-2 focus:ring-ring"
+                    onClick={() => setIsEditProfileModalOpen(true)}
+                    aria-label="Edit avatar"
+                  >
+                    <Edit className="w-4 h-4 text-muted-foreground" />
+                  </motion.button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Edit avatar</p>
+                </TooltipContent>
+              </Tooltip>
             </div>
 
             {/* Profile Info */}
@@ -286,12 +299,36 @@ export default function ProfileView({ user, initialSalon }: ProfileViewProps) {
                 )}
 
                 <div className="flex items-center gap-2 w-full sm:w-auto justify-center sm:justify-start">
-                    <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full border border-border/50">
-                    <Share2 className="w-4 h-4 text-muted-foreground" />
-                    </Button>
-                    <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full border border-border/50">
-                    <Settings className="w-4 h-4 text-muted-foreground" />
-                    </Button>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-10 w-10 rounded-full border border-border/50"
+                        aria-label="Share profile"
+                      >
+                        <Share2 className="w-4 h-4 text-muted-foreground" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Share profile</p>
+                    </TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-10 w-10 rounded-full border border-border/50"
+                        aria-label="Profile settings"
+                      >
+                        <Settings className="w-4 h-4 text-muted-foreground" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Profile settings</p>
+                    </TooltipContent>
+                  </Tooltip>
                 </div>
               </div>
             </div>
@@ -373,13 +410,21 @@ export default function ProfileView({ user, initialSalon }: ProfileViewProps) {
         transition={{ delay: 0.5, duration: 0.3 }}
         className="fixed bottom-24 lg:bottom-12 right-4 lg:right-8 z-40"
       >
-        <Button
-          size="lg"
-          onClick={() => setIsVideoUploadModalOpen(true)}
-          className="rounded-full w-14 h-14 shadow-lg p-0 flex items-center justify-center"
-        >
-          <Upload className="w-6 h-6" />
-        </Button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              size="lg"
+              onClick={() => setIsVideoUploadModalOpen(true)}
+              className="rounded-full w-14 h-14 shadow-lg p-0 flex items-center justify-center"
+              aria-label="Upload new video"
+            >
+              <Upload className="w-6 h-6" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent side="left">
+            <p>Upload new video</p>
+          </TooltipContent>
+        </Tooltip>
       </motion.div>
 
       <PartnerOnboardingModal
@@ -430,6 +475,8 @@ function VideoCard({ video, index }: { video: VideoData, index: number }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05, duration: 0.3 }}
       className="group relative aspect-[9/16] rounded-xl overflow-hidden bg-muted shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer border border-border/20"
+      role="article"
+      aria-label={`Video: ${video.title}`}
     >
       {video.thumbnailUrl ? (
         <img
@@ -727,6 +774,7 @@ function AboutSection({ user }: { user: UserData }) {
                 key={i}
                 whileHover={{ x: 4 }}
                 className="w-full flex items-center justify-between p-3 rounded-lg border hover:border-primary/50 transition-colors bg-card hover:bg-accent/50"
+                aria-label={`Connect on ${social.platform}`}
               >
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-md bg-muted flex items-center justify-center">
