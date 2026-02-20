@@ -12,3 +12,7 @@
 ## 2025-05-14 - Dark Mode Implementation with next-themes
 **Learning:** When implementing dark mode in Next.js with `next-themes`, use `resolvedTheme` instead of `theme` to account for system settings. Ensure hydration safety by checking a `mounted` state. Refactor hardcoded hex colors to semantic CSS variables early to ensure global consistency.
 **Action:** Always prefer `resolvedTheme` for icon logic and toggle states. Use semantic classes like `bg-background` and `text-foreground` in new components from the start.
+
+## 2025-02-20 - Global Search Shortcut Pattern
+**Learning:** Implementing a global keyboard shortcut (like '/') for search improves UX for power users but requires careful filtering to ensure it doesn't interrupt typing in other editable fields (using `isContentEditable` and `INPUT/TEXTAREA` checks). Providing a visual hint (kbd) that only appears on desktop and when empty helps discoverability without cluttering the UI.
+**Action:** Use a global 'keydown' listener with visibility and focus checks (`offsetParent !== null`) to target the correct search instance in responsive layouts.

@@ -81,6 +81,8 @@ export default function AppLayout({
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
             className="p-1 rounded-full hover:bg-secondary text-muted-foreground transition-colors"
+            aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+            aria-expanded={!isCollapsed}
           >
             {isCollapsed ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5" />}
           </button>
