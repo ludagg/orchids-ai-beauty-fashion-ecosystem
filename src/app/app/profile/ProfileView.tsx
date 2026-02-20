@@ -10,16 +10,20 @@ import {
   Share2,
   Lock,
   LayoutDashboard,
-  Loader2
+  Loader2,
+  Gift
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { useState, useEffect, Suspense, useCallback } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { PartnerOnboardingModal, PartnerData, PartnerType } from "./components/PartnerOnboardingModal";
-import { VideoUploadModal } from "./components/VideoUploadModal";
+import { PartnerOnboardingModal, PartnerData } from "@/components/profile/PartnerOnboardingModal";
+import { VideoUploadModal } from "@/components/profile/VideoUploadModal";
+import { EditProfileModal } from "@/components/profile/EditProfileModal";
 
 // Interface for User Data
 interface UserData {
@@ -27,9 +31,11 @@ interface UserData {
     image: string | null;
     email: string;
     id: string;
+    loyaltyPoints?: number;
+    createdAt?: Date;
 }
 
-// Interface for Salon Data (matching DB or similar)
+// Interface for Salon Data
 interface SalonData {
     id: string;
     name: string;
@@ -49,20 +55,20 @@ interface VideoData {
     status: 'published' | 'draft' | 'private';
 }
 
-interface CreatorStudioClientProps {
+interface ProfileViewProps {
     user: UserData;
     initialSalon: SalonData | null;
 }
 
-export default function CreatorStudioClient({ user, initialSalon }: CreatorStudioClientProps) {
+export default function ProfileView({ user, initialSalon }: ProfileViewProps) {
   const router = useRouter();
 
-  // Initialize state based on server data
+  // State
   const [isPartner, setIsPartner] = useState(!!initialSalon);
   const [partnerData, setPartnerData] = useState<PartnerData | null>(initialSalon ? {
         businessName: initialSalon.name,
         description: initialSalon.description || "",
-        address: "", // Not fetched yet, but not critical for display
+        address: "",
         city: "",
         zipCode: "",
         type: initialSalon.type
@@ -71,22 +77,21 @@ export default function CreatorStudioClient({ user, initialSalon }: CreatorStudi
 
   const [isPartnerModalOpen, setIsPartnerModalOpen] = useState(false);
   const [isVideoUploadModalOpen, setIsVideoUploadModalOpen] = useState(false);
+  const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false);
 
   const [videos, setVideos] = useState<VideoData[]>([]);
   const [isLoadingVideos, setIsLoadingVideos] = useState(true);
 
-  const searchParams = useSearchParams();
-
+  // Fetch Videos
   const fetchVideos = useCallback(async () => {
     try {
         const res = await fetch(`/api/videos?userId=${user.id}`, { cache: 'no-store' });
         if (res.ok) {
             const data = await res.json();
-            // Transform data if needed, assuming API returns array matching VideoData mostly
             setVideos(data.map((v: any) => ({
                 ...v,
-                status: v.status || 'published', // Default to published if missing
-                thumbnailUrl: v.thumbnailUrl || v.videoUrl // Fallback
+                status: v.status || 'published',
+                thumbnailUrl: v.thumbnailUrl || v.videoUrl
             })));
         }
     } catch (error) {
@@ -100,46 +105,22 @@ export default function CreatorStudioClient({ user, initialSalon }: CreatorStudi
     fetchVideos();
   }, [fetchVideos]);
 
-  useEffect(() => {
-    // Keep search params logic as a fallback or for deep links, but prioritize props
-    if (!initialSalon) {
-        const isPartnerParam = searchParams.get("partner") === "true";
-        const typeParam = searchParams.get("type");
-        const businessNameParam = searchParams.get("businessName");
-        const salonIdParam = searchParams.get("salonId");
-
-        if (isPartnerParam) {
-            setIsPartner(true);
-            setPartnerData({
-                type: (typeParam as PartnerType) || "SALON",
-                businessName: businessNameParam || "My Business",
-                description: "",
-                address: ""
-            } as PartnerData); // Cast because we are missing fields but it's mock
-            if (salonIdParam) setSalonId(salonIdParam);
-        }
-    } else {
-        setSalonId(initialSalon.id);
-    }
-  }, [searchParams, initialSalon]);
-
   const publishedVideos = videos.filter(v => v.status === 'published');
 
   const handlePartnerComplete = (data: PartnerData & { id?: string }) => {
     setPartnerData(data);
     if (data.id) setSalonId(data.id);
     setIsPartner(true);
-    // Refresh to update server components
     router.refresh();
   };
 
-  // Determine what to display in header
+  // Display Logic
   const displayName = isPartner && partnerData ? partnerData.businessName : user.name;
   const displayHandle = isPartner && initialSalon ? `@${initialSalon.slug}` : (user.email ? `@${user.email.split('@')[0]}` : "@creator");
   const displayAvatar = user.image || "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop";
   const displayBio = isPartner && partnerData ? partnerData.description : "Fashion enthusiast & style curator. Bringing you the latest trends.";
 
-  // Mock stats - in real app, fetch these too
+  // Mock stats
   const stats = {
     followers: "12.5K",
     likes: "45.2K",
@@ -153,23 +134,26 @@ export default function CreatorStudioClient({ user, initialSalon }: CreatorStudi
       {/* Profile Header */}
       <div className="flex flex-col md:flex-row items-center md:items-start text-center md:text-left gap-6 md:gap-10 mb-8 max-w-5xl mx-auto">
 
-        {/* Avatar - Left Column on Desktop */}
+        {/* Avatar */}
         <div className="relative group shrink-0">
            <div className="w-24 h-24 md:w-40 md:h-40 rounded-full border-4 border-background shadow-xl overflow-hidden">
                 <Avatar className="w-full h-full">
                     <AvatarImage src={displayAvatar} className="object-cover" />
-                    <AvatarFallback>{displayName.substring(0, 2).toUpperCase()}</AvatarFallback>
+                    <AvatarFallback>{displayName ? displayName.substring(0, 2).toUpperCase() : "US"}</AvatarFallback>
                 </Avatar>
             </div>
-            <div className="absolute bottom-0 right-0 bg-primary text-primary-foreground rounded-full p-2 border-2 border-background cursor-pointer hover:scale-110 transition-transform">
+            <div
+                className="absolute bottom-0 right-0 bg-primary text-primary-foreground rounded-full p-2 border-2 border-background cursor-pointer hover:scale-110 transition-transform"
+                onClick={() => setIsEditProfileModalOpen(true)}
+            >
                 <Edit className="w-4 h-4 md:w-5 md:h-5" />
             </div>
         </div>
 
-        {/* Info - Right Column on Desktop */}
+        {/* Info */}
         <div className="flex-1 min-w-0 space-y-5 w-full">
 
-            {/* Top Row: Name & Handle & Badges & Settings */}
+            {/* Top Row */}
             <div className="flex flex-col md:flex-row items-center md:items-center justify-between gap-4">
                 <div className="space-y-1">
                     <h1 className="text-2xl md:text-3xl font-bold tracking-tight font-display flex items-center justify-center md:justify-start gap-2 flex-wrap">
@@ -187,7 +171,7 @@ export default function CreatorStudioClient({ user, initialSalon }: CreatorStudi
                 </div>
             </div>
 
-            {/* Stats Row */}
+            {/* Stats */}
              <div className="flex items-center justify-center md:justify-start gap-6 md:gap-10">
                 <div className="flex flex-col items-center md:items-start">
                     <span className="text-lg font-bold">{stats.followers}</span>
@@ -213,9 +197,9 @@ export default function CreatorStudioClient({ user, initialSalon }: CreatorStudi
                 <a href="#" className="text-primary hover:underline font-medium">linktr.ee/janedoe_style</a>
             </p>
 
-            {/* Action Buttons Row */}
+            {/* Action Buttons */}
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 w-full pt-1">
-                <Button className="flex-1 md:flex-none min-w-[120px]" size="default">
+                <Button className="flex-1 md:flex-none min-w-[120px]" size="default" onClick={() => setIsEditProfileModalOpen(true)}>
                     Edit Profile
                 </Button>
                 {!isPartner ? (
@@ -227,7 +211,7 @@ export default function CreatorStudioClient({ user, initialSalon }: CreatorStudi
                     </Button>
                 ) : (
                     <Link
-                    href={`/app/creator-studio/partner-dashboard?type=${partnerData?.type || 'SALON'}&businessName=${encodeURIComponent(partnerData?.businessName || '')}&salonId=${salonId || ''}`}
+                    href={`/app/partner-dashboard?type=${partnerData?.type || 'SALON'}&businessName=${encodeURIComponent(partnerData?.businessName || '')}&salonId=${salonId || ''}`}
                     passHref
                     className="flex-1 md:flex-none min-w-[120px]"
                     >
@@ -240,7 +224,7 @@ export default function CreatorStudioClient({ user, initialSalon }: CreatorStudi
                     </Link>
                 )}
 
-                 {/* Secondary Actions (Share/Settings) */}
+                 {/* Secondary Actions */}
                  <div className="flex gap-2">
                      <Button variant="outline" size="icon" className="h-10 w-10">
                         <Share2 className="w-4 h-4" />
@@ -282,28 +266,93 @@ export default function CreatorStudioClient({ user, initialSalon }: CreatorStudi
                     Upload
                 </Button>
             </div>
-
         </div>
-
       </div>
 
-      {/* Video Grid */}
-      <div className="w-full">
-         {isLoadingVideos ? (
-             <div className="flex justify-center py-20">
-                 <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
-             </div>
-         ) : (
-             <>
-                <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-1">
-                    {publishedVideos.map((video) => (
-                        <VideoCard key={video.id} video={video} />
-                    ))}
+      {/* Tabs: Videos & Rewards */}
+      <Tabs defaultValue="videos" className="w-full">
+          <TabsList className="grid w-full grid-cols-2 mb-8">
+            <TabsTrigger value="videos" className="flex items-center gap-2">
+                <Video className="w-4 h-4" />
+                Videos
+            </TabsTrigger>
+            <TabsTrigger value="rewards" className="flex items-center gap-2">
+                <Gift className="w-4 h-4" />
+                Rewards
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="videos" className="w-full">
+            {isLoadingVideos ? (
+                <div className="flex justify-center py-20">
+                    <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
                 </div>
-                {publishedVideos.length === 0 && <EmptyState type="videos" onUpload={() => setIsVideoUploadModalOpen(true)} />}
-             </>
-         )}
-      </div>
+            ) : (
+                <>
+                    <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-1">
+                        {publishedVideos.map((video) => (
+                            <VideoCard key={video.id} video={video} />
+                        ))}
+                    </div>
+                    {publishedVideos.length === 0 && <EmptyState type="videos" onUpload={() => setIsVideoUploadModalOpen(true)} />}
+                </>
+            )}
+          </TabsContent>
+
+          <TabsContent value="rewards">
+            <div className="space-y-6">
+                <div className="grid md:grid-cols-3 gap-6">
+                    <Card className="md:col-span-2 bg-gradient-to-br from-indigo-500 to-purple-600 text-white border-none shadow-xl relative overflow-hidden">
+                        <div className="absolute top-0 right-0 p-8 opacity-10">
+                            <Gift className="w-48 h-48 transform rotate-12" />
+                        </div>
+                        <CardHeader>
+                            <CardTitle className="text-2xl flex items-center gap-2">
+                                My Loyalty Points
+                            </CardTitle>
+                            <CardDescription className="text-indigo-100">Earn points with every booking and purchase.</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="flex items-end gap-2">
+                                <span className="text-6xl font-bold font-display">{user.loyaltyPoints || 0}</span>
+                                <span className="text-xl font-medium mb-4 opacity-80">points</span>
+                            </div>
+                            <p className="mt-4 text-sm text-indigo-100 bg-white/10 p-3 rounded-lg inline-block border border-white/10 backdrop-blur-sm">
+                                100 points = $1.00 discount (Redemption Coming Soon)
+                            </p>
+                        </CardContent>
+                    </Card>
+
+                    <Card className="md:col-span-1">
+                        <CardHeader>
+                            <CardTitle>Level</CardTitle>
+                            <CardDescription>Your current tier</CardDescription>
+                        </CardHeader>
+                        <CardContent className="flex flex-col items-center justify-center pt-2">
+                            <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-yellow-300 to-yellow-500 flex items-center justify-center shadow-lg mb-4">
+                                <span className="text-3xl">🌟</span>
+                            </div>
+                            <h3 className="text-xl font-bold text-yellow-600">Gold Member</h3>
+                            <p className="text-xs text-muted-foreground mt-1">Top 10% of users</p>
+                        </CardContent>
+                    </Card>
+                </div>
+
+                <Card>
+                    <CardHeader>
+                        <CardTitle>History</CardTitle>
+                        <CardDescription>Recent point activity.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="text-center py-10 text-muted-foreground flex flex-col items-center">
+                            <Gift className="w-8 h-8 opacity-20 mb-2" />
+                            <p>No recent activity.</p>
+                        </div>
+                    </CardContent>
+                </Card>
+            </div>
+          </TabsContent>
+      </Tabs>
 
       <PartnerOnboardingModal
         isOpen={isPartnerModalOpen}
@@ -315,6 +364,13 @@ export default function CreatorStudioClient({ user, initialSalon }: CreatorStudi
         isOpen={isVideoUploadModalOpen}
         onOpenChange={setIsVideoUploadModalOpen}
         onSuccess={fetchVideos}
+      />
+
+      <EditProfileModal
+        isOpen={isEditProfileModalOpen}
+        onOpenChange={setIsEditProfileModalOpen}
+        user={user}
+        onSave={() => window.location.reload()}
       />
     </div>
   );

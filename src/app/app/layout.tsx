@@ -19,7 +19,8 @@ import {
   Heart,
   MessageSquare,
   Calendar,
-  Store
+  Store,
+  User
 } from "lucide-react";
 import Link from "next/link";
 import BottomNav from "@/components/BottomNav";
@@ -36,7 +37,7 @@ import { useSession } from "@/lib/auth-client";
 
 const sidebarItems = [
   { icon: Compass, label: "Discover", href: "/app" },
-  { icon: LayoutDashboard, label: "Creator Studio", href: "/app/creator-studio" },
+  { icon: User, label: "Profile", href: "/app/profile" },
   { icon: ShoppingBag, label: "Marketplace", href: "/app/marketplace" },
   //{ icon: Sparkles, label: "AI Stylist", href: "/app/ai-stylist" },
   { icon: Scissors, label: "Salons", href: "/app/salons" },
