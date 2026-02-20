@@ -90,7 +90,7 @@ const itemVariants = {
     y: 0,
     transition: {
       duration: 0.5,
-      ease: "easeOut"
+      ease: "easeOut" as const
     }
   }
 };
@@ -169,27 +169,27 @@ export default function ProfileView({ user, initialSalon }: ProfileViewProps) {
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="min-h-screen"
+      className="min-h-screen bg-background"
     >
       {/* Hero Section with Gradient Background */}
-      <motion.div variants={itemVariants} className="relative bg-gradient-to-br from-rose-50 via-purple-50 to-indigo-50 dark:from-rose-950/20 dark:via-purple-950/20 dark:to-indigo-950/20 border-b border-border/50 overflow-hidden">
+      <motion.div variants={itemVariants} className="relative bg-gradient-to-b from-rose-50/80 via-purple-50/40 to-background dark:from-rose-950/40 dark:via-purple-950/20 dark:to-background border-b border-border/50 overflow-hidden">
         {/* Decorative Elements */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-rose-400/10 to-purple-400/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-indigo-400/10 to-purple-400/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-rose-400/10 to-purple-400/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-indigo-400/10 to-purple-400/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2 pointer-events-none" />
 
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 relative z-10">
           {/* Profile Header */}
-          <div className="flex flex-col lg:flex-row items-center lg:items-start gap-8 lg:gap-12">
+          <div className="flex flex-col lg:flex-row items-center lg:items-start gap-6 lg:gap-10">
 
             {/* Avatar with enhanced styling */}
-            <div className="relative shrink-0">
+            <div className="relative shrink-0 group">
               <motion.div
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.2 }}
                 className="relative"
               >
-                <div className="w-32 h-32 md:w-40 md:h-40 rounded-full p-1 bg-gradient-to-br from-rose-500 via-purple-500 to-indigo-500 shadow-2xl">
-                  <div className="w-full h-full rounded-full overflow-hidden border-4 border-background">
+                <div className="w-28 h-28 md:w-36 md:h-36 rounded-full p-1 bg-gradient-to-br from-rose-500 via-purple-500 to-indigo-500 shadow-2xl">
+                  <div className="w-full h-full rounded-full overflow-hidden border-4 border-background bg-background">
                     <Avatar className="w-full h-full">
                       <AvatarImage src={displayAvatar} className="object-cover" alt={displayName} />
                       <AvatarFallback className="text-2xl font-semibold bg-gradient-to-br from-rose-500 to-indigo-500 text-white">
@@ -201,13 +201,13 @@ export default function ProfileView({ user, initialSalon }: ProfileViewProps) {
               </motion.div>
 
               {/* Online/Active indicator */}
-              <div className="absolute bottom-3 right-3 w-5 h-5 bg-emerald-500 rounded-full border-4 border-background shadow-lg" />
+              <div className="absolute bottom-2 right-2 w-4 h-4 md:w-5 md:h-5 bg-emerald-500 rounded-full border-4 border-background shadow-lg" />
 
               {/* Edit Avatar Button */}
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
-                className="absolute -bottom-2 -right-2 bg-background border-2 border-border rounded-full p-3 shadow-lg hover:shadow-xl transition-all"
+                className="absolute -bottom-1 -right-1 bg-background border border-border rounded-full p-2 shadow-lg hover:shadow-xl transition-all opacity-0 group-hover:opacity-100 focus:opacity-100"
                 onClick={() => setIsEditProfileModalOpen(true)}
               >
                 <Edit className="w-4 h-4 text-muted-foreground" />
@@ -215,40 +215,40 @@ export default function ProfileView({ user, initialSalon }: ProfileViewProps) {
             </div>
 
             {/* Profile Info */}
-            <div className="flex-1 min-w-0 space-y-6 text-center lg:text-left w-full">
+            <div className="flex-1 min-w-0 space-y-6 w-full text-center lg:text-left">
 
               {/* Name and Badges */}
               <div className="space-y-2">
-                <div className="flex flex-col sm:flex-row items-center sm:items-center justify-center lg:justify-start gap-3 flex-wrap">
-                  <h1 className="text-3xl md:text-4xl font-bold tracking-tight font-display text-gradient-color">
+                <div className="flex flex-col lg:flex-row items-center gap-3 justify-center lg:justify-start">
+                  <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight font-display text-foreground">
                     {displayName}
                   </h1>
 
                   {/* Badges */}
-                  <div className="flex items-center gap-2 flex-wrap justify-center sm:justify-start">
+                  <div className="flex items-center gap-2 flex-wrap justify-center lg:justify-start">
                     {isPartner && (
-                      <Badge className="bg-gradient-to-r from-amber-500 to-orange-500 text-white border-0 shadow-md">
+                      <Badge className="bg-gradient-to-r from-amber-500 to-orange-500 text-white border-0 shadow-sm text-xs px-2 py-0.5">
                         <Sparkles className="w-3 h-3 mr-1" />
                         Partner
                       </Badge>
                     )}
-                    <Badge variant="secondary" className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white border-0 shadow-md">
+                    <Badge variant="secondary" className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white border-0 shadow-sm text-xs px-2 py-0.5">
                       Pro
                     </Badge>
-                    <Badge variant="outline" className="border-rose-200 text-rose-600 dark:border-rose-900 dark:text-rose-400">
+                    <Badge variant="outline" className="border-rose-200 text-rose-600 dark:border-rose-900 dark:text-rose-400 text-xs px-2 py-0.5">
                       Verified
                     </Badge>
                   </div>
                 </div>
 
-                <p className="text-muted-foreground font-medium flex items-center justify-center lg:justify-start gap-1">
+                <p className="text-muted-foreground font-medium flex items-center justify-center lg:justify-start gap-1 text-sm md:text-base">
                   <span className="text-rose-500">@</span>
-                  {displayHandle}
+                  {displayHandle.replace('@', '')}
                 </p>
               </div>
 
               {/* Stats Grid */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-8 sm:divide-x sm:divide-border/50 py-2">
                 <StatItem value={stats.followers} label="Followers" trend="+12%" />
                 <StatItem value="482" label="Following" trend="+3%" />
                 <StatItem value={stats.likes} label="Likes" trend="+8%" />
@@ -256,16 +256,16 @@ export default function ProfileView({ user, initialSalon }: ProfileViewProps) {
               </div>
 
               {/* Bio */}
-              <p className="text-base leading-relaxed text-muted-foreground max-w-2xl mx-auto lg:mx-0">
+              <p className="text-sm md:text-base leading-relaxed text-muted-foreground max-w-2xl mx-auto lg:mx-0">
                 {displayBio}
               </p>
 
               {/* Action Buttons */}
-              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3">
+              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 w-full sm:w-auto">
                 <Button
-                  size="lg"
                   onClick={() => setIsEditProfileModalOpen(true)}
-                  className="min-w-[140px] shadow-lg shadow-primary/10"
+                  className="w-full sm:w-auto min-w-[140px] shadow-sm bg-background border border-border hover:bg-accent hover:text-accent-foreground text-foreground"
+                  variant="outline"
                 >
                   <Edit className="w-4 h-4 mr-2" />
                   Edit Profile
@@ -273,18 +273,16 @@ export default function ProfileView({ user, initialSalon }: ProfileViewProps) {
 
                 {!isPartner ? (
                   <Button
-                    size="lg"
                     onClick={() => setIsPartnerModalOpen(true)}
-                    className="min-w-[140px] bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 shadow-lg shadow-purple-500/20"
+                    className="w-full sm:w-auto min-w-[140px] bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 shadow-md shadow-purple-500/20 text-white border-0"
                   >
                     <Sparkles className="w-4 h-4 mr-2" />
                     Become Partner
                   </Button>
                 ) : (
-                  <Link href={`/app/partner-dashboard?type=${partnerData?.type || 'SALON'}&businessName=${encodeURIComponent(partnerData?.businessName || '')}&salonId=${salonId || ''}`} className="min-w-[140px]">
+                  <Link href={`/app/partner-dashboard?type=${partnerData?.type || 'SALON'}&businessName=${encodeURIComponent(partnerData?.businessName || '')}&salonId=${salonId || ''}`} className="w-full sm:w-auto min-w-[140px]">
                     <Button
-                      size="lg"
-                      className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg shadow-blue-500/20"
+                      className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-md shadow-blue-500/20 text-white border-0"
                     >
                       <LayoutDashboard className="w-4 h-4 mr-2" />
                       Dashboard
@@ -292,14 +290,14 @@ export default function ProfileView({ user, initialSalon }: ProfileViewProps) {
                   </Link>
                 )}
 
-                <Separator orientation="vertical" className="h-10 hidden sm:block" />
-
-                <Button variant="outline" size="icon" className="h-11 w-11 rounded-full">
-                  <Share2 className="w-4 h-4" />
-                </Button>
-                <Button variant="outline" size="icon" className="h-11 w-11 rounded-full">
-                  <Settings className="w-4 h-4" />
-                </Button>
+                <div className="flex items-center gap-2 w-full sm:w-auto justify-center sm:justify-start">
+                    <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full border border-border/50">
+                    <Share2 className="w-4 h-4 text-muted-foreground" />
+                    </Button>
+                    <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full border border-border/50">
+                    <Settings className="w-4 h-4 text-muted-foreground" />
+                    </Button>
+                </div>
               </div>
             </div>
           </div>
@@ -307,46 +305,51 @@ export default function ProfileView({ user, initialSalon }: ProfileViewProps) {
       </motion.div>
 
       {/* Main Content */}
-      <motion.div variants={itemVariants} className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Tabs defaultValue="videos" className="w-full">
-          <TabsList className="h-12 p-1 bg-muted/50 backdrop-blur-sm border border-border/50 shadow-sm">
-            <TabsTrigger
-              value="videos"
-              className="data-[state=active]:bg-background data-[state=active]:shadow-sm rounded-lg px-6 gap-2 font-medium"
-            >
-              <Video className="w-4 h-4" />
-              Videos
-              <Badge variant="secondary" className="ml-1 h-5 px-1.5 text-xs">
-                {publishedVideos.length}
-              </Badge>
-            </TabsTrigger>
-            <TabsTrigger
-              value="rewards"
-              className="data-[state=active]:bg-background data-[state=active]:shadow-sm rounded-lg px-6 gap-2 font-medium"
-            >
-              <Gift className="w-4 h-4" />
-              Rewards
-              <Badge variant="secondary" className="ml-1 h-5 px-1.5 text-xs">
-                {user.loyaltyPoints || 0}
-              </Badge>
-            </TabsTrigger>
-            <TabsTrigger
-              value="about"
-              className="data-[state=active]:bg-background data-[state=active]:shadow-sm rounded-lg px-6 gap-2 font-medium"
-            >
-              <Award className="w-4 h-4" />
-              About
-            </TabsTrigger>
-          </TabsList>
+      <Tabs defaultValue="videos" className="w-full">
+        {/* Sticky Tabs List */}
+        <div className="sticky top-[7.25rem] lg:top-16 z-30 bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/80 border-b border-border/50 shadow-sm w-full transition-all duration-300">
+            <div className="max-w-6xl mx-auto">
+                <TabsList className="w-full h-14 justify-start overflow-x-auto no-scrollbar px-4 sm:px-6 lg:px-8 bg-transparent border-0 gap-2 sm:gap-6">
+                    <TabsTrigger
+                    value="videos"
+                    className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:text-primary rounded-none px-2 sm:px-4 h-full gap-2 font-medium text-muted-foreground transition-all hover:text-foreground"
+                    >
+                    <Video className="w-4 h-4" />
+                    Videos
+                    <Badge variant="secondary" className="ml-1 h-5 px-1.5 text-xs bg-muted text-muted-foreground">
+                        {publishedVideos.length}
+                    </Badge>
+                    </TabsTrigger>
+                    <TabsTrigger
+                    value="rewards"
+                    className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:text-primary rounded-none px-2 sm:px-4 h-full gap-2 font-medium text-muted-foreground transition-all hover:text-foreground"
+                    >
+                    <Gift className="w-4 h-4" />
+                    Rewards
+                    <Badge variant="secondary" className="ml-1 h-5 px-1.5 text-xs bg-muted text-muted-foreground">
+                        {user.loyaltyPoints || 0}
+                    </Badge>
+                    </TabsTrigger>
+                    <TabsTrigger
+                    value="about"
+                    className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:text-primary rounded-none px-2 sm:px-4 h-full gap-2 font-medium text-muted-foreground transition-all hover:text-foreground"
+                    >
+                    <Award className="w-4 h-4" />
+                    About
+                    </TabsTrigger>
+                </TabsList>
+            </div>
+        </div>
 
-          <TabsContent value="videos" className="mt-8">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-[50vh]">
+          <TabsContent value="videos" className="mt-0 focus-visible:outline-none">
             {isLoadingVideos ? (
               <div className="flex justify-center py-20">
                 <Loader2 className="w-10 h-10 animate-spin text-muted-foreground" />
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-4">
                   {publishedVideos.map((video, index) => (
                     <VideoCard key={video.id} video={video} index={index} />
                   ))}
@@ -358,15 +361,15 @@ export default function ProfileView({ user, initialSalon }: ProfileViewProps) {
             )}
           </TabsContent>
 
-          <TabsContent value="rewards" className="mt-8">
+          <TabsContent value="rewards" className="mt-0 focus-visible:outline-none">
             <RewardsSection user={user} />
           </TabsContent>
 
-          <TabsContent value="about" className="mt-8">
+          <TabsContent value="about" className="mt-0 focus-visible:outline-none">
             <AboutSection user={user} />
           </TabsContent>
-        </Tabs>
-      </motion.div>
+        </div>
+      </Tabs>
 
       {/* Floating Action Button */}
       <motion.div
@@ -378,9 +381,9 @@ export default function ProfileView({ user, initialSalon }: ProfileViewProps) {
         <Button
           size="lg"
           onClick={() => setIsVideoUploadModalOpen(true)}
-          className="rounded-full w-14 h-14 bg-gradient-to-r from-rose-500 to-purple-600 hover:from-rose-600 hover:to-purple-700 shadow-xl shadow-rose-500/30 p-0"
+          className="rounded-full w-14 h-14 bg-gradient-to-r from-rose-500 to-purple-600 hover:from-rose-600 hover:to-purple-700 shadow-xl shadow-rose-500/30 p-0 flex items-center justify-center"
         >
-          <Upload className="w-6 h-6" />
+          <Upload className="w-6 h-6 text-white" />
         </Button>
       </motion.div>
 
@@ -409,11 +412,11 @@ export default function ProfileView({ user, initialSalon }: ProfileViewProps) {
 // Stat Item Component
 function StatItem({ value, label, trend }: { value: string | number, label: string, trend?: string }) {
   return (
-    <div className="text-center lg:text-left">
-      <div className="flex items-baseline justify-center lg:justify-start gap-2">
-        <span className="text-2xl font-bold tracking-tight text-foreground">{value}</span>
+    <div className="text-center sm:text-left flex flex-col items-center sm:items-start p-2 sm:p-0">
+      <div className="flex items-baseline gap-2">
+        <span className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">{value}</span>
         {trend && (
-          <Badge variant="secondary" className="text-xs text-emerald-600 bg-emerald-50 dark:bg-emerald-950/30">
+          <Badge variant="secondary" className="hidden sm:inline-flex text-[10px] h-5 px-1 text-emerald-600 bg-emerald-50 dark:bg-emerald-950/30 border-0">
             <TrendingUp className="w-3 h-3 mr-0.5" />
             {trend}
           </Badge>
@@ -431,7 +434,7 @@ function VideoCard({ video, index }: { video: VideoData, index: number }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05, duration: 0.3 }}
-      className="group relative aspect-[9/16] rounded-2xl overflow-hidden bg-muted shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer"
+      className="group relative aspect-[9/16] rounded-xl sm:rounded-2xl overflow-hidden bg-muted shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer border border-border/20"
     >
       {video.thumbnailUrl ? (
         <img
@@ -441,35 +444,35 @@ function VideoCard({ video, index }: { video: VideoData, index: number }) {
         />
       ) : (
         <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-muted to-muted/50">
-          <Video className="w-12 h-12 text-muted-foreground/40" />
+          <Video className="w-8 h-8 sm:w-12 sm:h-12 text-muted-foreground/40" />
         </div>
       )}
 
       {/* Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/0 to-black/0 opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
 
       {/* Play Button */}
       <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
         <motion.div
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
-          className="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/30"
+          className="w-10 h-10 sm:w-14 sm:h-14 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/30"
         >
-          <Play className="w-6 h-6 text-white fill-white" />
+          <Play className="w-5 h-5 sm:w-6 sm:h-6 text-white fill-white" />
         </motion.div>
       </div>
 
       {/* Views Counter */}
-      <div className="absolute bottom-3 left-3 flex items-center gap-1.5 text-white drop-shadow-lg">
-        <Play className="w-3 h-3 fill-white" />
-        <span className="text-xs font-semibold">
+      <div className="absolute bottom-2 left-2 sm:bottom-3 sm:left-3 flex items-center gap-1 sm:gap-1.5 text-white drop-shadow-md">
+        <Play className="w-2.5 h-2.5 sm:w-3 sm:h-3 fill-white" />
+        <span className="text-[10px] sm:text-xs font-semibold">
           {video.views >= 1000 ? `${(video.views / 1000).toFixed(1)}K` : video.views}
         </span>
       </div>
 
       {/* Video Title */}
-      <div className="absolute bottom-3 left-3 right-3 pt-8">
-        <p className="text-white text-xs font-medium line-clamp-2 drop-shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+      <div className="absolute bottom-2 left-2 right-2 sm:bottom-3 sm:left-3 sm:right-3 pt-6 sm:pt-8 hidden sm:block">
+        <p className="text-white text-[10px] sm:text-xs font-medium line-clamp-2 drop-shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           {video.title}
         </p>
       </div>
@@ -480,23 +483,23 @@ function VideoCard({ video, index }: { video: VideoData, index: number }) {
 // Empty State Component
 function EmptyState({ type, onUpload }: { type: string, onUpload?: () => void }) {
   return (
-    <div className="flex flex-col items-center justify-center py-24 text-center space-y-6">
+    <div className="flex flex-col items-center justify-center py-16 sm:py-24 text-center space-y-4 sm:space-y-6">
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         className="relative"
       >
-        <div className="w-24 h-24 rounded-full bg-gradient-to-br from-rose-100 to-purple-100 dark:from-rose-950/30 dark:to-purple-950/30 flex items-center justify-center">
-          <Video className="w-12 h-12 text-muted-foreground/50" />
+        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br from-rose-100 to-purple-100 dark:from-rose-950/30 dark:to-purple-950/30 flex items-center justify-center">
+          <Video className="w-10 h-10 sm:w-12 sm:h-12 text-muted-foreground/50" />
         </div>
-        <div className="absolute -top-1 -right-1 w-8 h-8 bg-gradient-to-br from-rose-500 to-purple-600 rounded-full flex items-center justify-center">
-          <Upload className="w-4 h-4 text-white" />
+        <div className="absolute -top-1 -right-1 w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-br from-rose-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
+          <Upload className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
         </div>
       </motion.div>
 
-      <div className="space-y-2 max-w-sm">
-        <h3 className="text-xl font-semibold">No videos yet</h3>
-        <p className="text-muted-foreground">
+      <div className="space-y-2 max-w-xs sm:max-w-sm px-4">
+        <h3 className="text-lg sm:text-xl font-semibold text-foreground">No videos yet</h3>
+        <p className="text-sm text-muted-foreground">
           Start sharing your style journey by uploading your first video.
         </p>
       </div>
@@ -504,7 +507,7 @@ function EmptyState({ type, onUpload }: { type: string, onUpload?: () => void })
       {onUpload && (
         <Button
           onClick={onUpload}
-          className="bg-gradient-to-r from-rose-500 to-purple-600 hover:from-rose-600 hover:to-purple-700"
+          className="bg-gradient-to-r from-rose-500 to-purple-600 hover:from-rose-600 hover:to-purple-700 text-white border-0 shadow-md"
         >
           <Upload className="w-4 h-4 mr-2" />
           Upload Your First Video
@@ -521,14 +524,15 @@ function RewardsSection({ user }: { user: UserData }) {
   const progress = Math.min((points / nextLevel) * 100, 100);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       {/* Main Rewards Card */}
-      <Card className="overflow-hidden border-2 border-rose-100 dark:border-rose-950/50 shadow-xl">
-        <div className="bg-gradient-to-br from-rose-500 via-purple-600 to-indigo-600 p-8 relative overflow-hidden">
+      <Card className="overflow-hidden border-0 shadow-xl bg-card">
+        <div className="bg-gradient-to-br from-rose-500 via-purple-600 to-indigo-600 p-6 sm:p-8 relative overflow-hidden">
           {/* Decorative pattern */}
           <div className="absolute inset-0 opacity-10">
             <div className="absolute top-4 right-4 w-32 h-32 border-4 border-white/30 rounded-full" />
             <div className="absolute bottom-4 left-4 w-24 h-24 border-4 border-white/30 rounded-full" />
+            <div className="absolute top-1/2 left-1/2 w-48 h-48 bg-white/20 blur-3xl rounded-full" />
           </div>
 
           <div className="relative">
@@ -537,12 +541,12 @@ function RewardsSection({ user }: { user: UserData }) {
                 <CardTitle className="text-2xl md:text-3xl font-display text-white">
                   My Loyalty Points
                 </CardTitle>
-                <CardDescription className="text-white/80 text-base">
+                <CardDescription className="text-white/80 text-sm sm:text-base">
                   Earn points with every booking and purchase
                 </CardDescription>
               </div>
               <div className="bg-white/20 backdrop-blur-sm p-3 rounded-2xl">
-                <Gift className="w-8 h-8 text-white" />
+                <Gift className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
               </div>
             </div>
 
@@ -552,12 +556,18 @@ function RewardsSection({ user }: { user: UserData }) {
                 <span className="text-xl text-white/80 font-medium">points</span>
               </div>
 
-              <Progress
-                value={progress}
-                className="h-3 bg-white/20"
-              />
+              <div className="space-y-2">
+                <Progress
+                    value={progress}
+                    className="h-3 bg-black/20"
+                />
+                <div className="flex justify-between text-xs text-white/90 font-medium">
+                    <span>{points} / {nextLevel}</span>
+                    <span>Next Reward: $10 Off</span>
+                </div>
+              </div>
 
-              <p className="text-sm text-white/80">
+              <p className="text-xs sm:text-sm text-white/80">
                 {nextLevel - points} points to next level • 100 points = $1.00 discount
               </p>
             </div>
@@ -567,22 +577,22 @@ function RewardsSection({ user }: { user: UserData }) {
 
       {/* Tier and Level Info */}
       <div className="grid md:grid-cols-2 gap-6">
-        <Card className="border-2 border-amber-100 dark:border-amber-950/50">
+        <Card className="border border-amber-100 dark:border-amber-900/50 bg-gradient-to-br from-amber-50/50 to-orange-50/50 dark:from-amber-950/10 dark:to-orange-950/10">
           <CardHeader>
             <div className="flex items-start justify-between">
               <div>
                 <CardTitle>Current Tier</CardTitle>
                 <CardDescription>Your membership level</CardDescription>
               </div>
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg">
-                <Award className="w-6 h-6 text-white" />
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg text-white">
+                <Award className="w-6 h-6" />
               </div>
             </div>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <span className="text-3xl">🌟</span>
+                <Star className="w-6 h-6 text-amber-500 fill-amber-500" />
                 <h3 className="text-2xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
                   Gold Member
                 </h3>
@@ -590,7 +600,7 @@ function RewardsSection({ user }: { user: UserData }) {
               <p className="text-sm text-muted-foreground">Top 10% of active users</p>
             </div>
 
-            <Separator />
+            <Separator className="bg-amber-200/50 dark:bg-amber-800/50" />
 
             <div className="space-y-3">
               <div className="flex items-center gap-3 text-sm">
@@ -616,7 +626,7 @@ function RewardsSection({ user }: { user: UserData }) {
                 <CardTitle>Points History</CardTitle>
                 <CardDescription>Recent activity</CardDescription>
               </div>
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
                 View All
               </Button>
             </div>
@@ -628,14 +638,14 @@ function RewardsSection({ user }: { user: UserData }) {
                 { action: 'Purchase - Summer Collection', points: '+120', date: 'Yesterday', positive: true },
                 { action: 'Reward Redemption', points: '-500', date: '3 days ago', positive: false },
               ].map((item, i) => (
-                <div key={i} className="flex items-center justify-between py-2">
+                <div key={i} className="flex items-center justify-between py-2 border-b border-border/50 last:border-0">
                   <div className="space-y-1">
                     <p className="text-sm font-medium">{item.action}</p>
                     <p className="text-xs text-muted-foreground">{item.date}</p>
                   </div>
                   <Badge
                     variant={item.positive ? "default" : "secondary"}
-                    className={cn(item.positive ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-400" : "")}
+                    className={cn(item.positive ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-400 border-0" : "")}
                   >
                     {item.points}
                   </Badge>
@@ -652,7 +662,7 @@ function RewardsSection({ user }: { user: UserData }) {
 // About Section Component
 function AboutSection({ user }: { user: UserData }) {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <Card>
         <CardHeader>
           <CardTitle>About Me</CardTitle>
@@ -693,7 +703,7 @@ function AboutSection({ user }: { user: UserData }) {
             <h4 className="font-semibold mb-3">Interests</h4>
             <div className="flex flex-wrap gap-2">
               {['Fashion', 'Beauty', 'Hairstyle', 'Skincare', 'Makeup', 'Trends', 'Lifestyle'].map((interest) => (
-                <Badge key={interest} variant="secondary" className="cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors">
+                <Badge key={interest} variant="secondary" className="cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors px-3 py-1">
                   {interest}
                 </Badge>
               ))}
@@ -721,15 +731,15 @@ function AboutSection({ user }: { user: UserData }) {
                 <div
                   key={i}
                   className={cn(
-                    "flex flex-col items-center justify-center p-4 rounded-xl border text-center",
+                    "flex flex-col items-center justify-center p-4 rounded-xl border text-center transition-all hover:scale-105",
                     achievement.unlocked
                       ? "bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/20 dark:to-orange-950/20 border-amber-200 dark:border-amber-900"
-                      : "bg-muted/50 border-border opacity-50"
+                      : "bg-muted/50 border-border opacity-50 grayscale"
                   )}
                 >
                   <span className="text-2xl mb-2">{achievement.icon}</span>
-                  <p className="text-xs font-medium">{achievement.title}</p>
-                  {achievement.unlocked && <CheckCircle2 className="w-4 h-4 text-emerald-500 mt-1" />}
+                  <p className="text-[10px] font-medium">{achievement.title}</p>
+                  {achievement.unlocked && <CheckCircle2 className="w-3 h-3 text-emerald-500 mt-1" />}
                 </div>
               ))}
             </div>
@@ -750,10 +760,10 @@ function AboutSection({ user }: { user: UserData }) {
               <motion.button
                 key={i}
                 whileHover={{ x: 4 }}
-                className="w-full flex items-center justify-between p-3 rounded-lg border hover:border-primary/50 transition-colors"
+                className="w-full flex items-center justify-between p-3 rounded-xl border hover:border-primary/50 transition-colors bg-card hover:bg-accent/50"
               >
                 <div className="flex items-center gap-3">
-                  <div className={cn("w-8 h-8 rounded-lg bg-gradient-to-br flex items-center justify-center", social.color)}>
+                  <div className={cn("w-8 h-8 rounded-lg bg-gradient-to-br flex items-center justify-center shadow-sm", social.color)}>
                     <span className="text-white text-xs font-bold">{social.platform[0]}</span>
                   </div>
                   <div className="text-left">
