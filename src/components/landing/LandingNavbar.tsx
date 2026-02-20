@@ -7,7 +7,14 @@ import { Menu, X, ChevronRight } from "lucide-react";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import { usePathname } from "next/navigation";
 
-const navItems = ["Features", "AI", "Marketplace", "Salons", "Testimonials"];
+const navItems = [
+  { label: "Features", href: "features" },
+  { label: "AI", href: "ai" },
+  { label: "Marketplace", href: "marketplace" },
+  { label: "Salons", href: "salons" },
+  { label: "Testimonials", href: "testimonials" },
+  { label: "For Business", href: "/business", external: true },
+];
 
 export default function LandingNavbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -30,8 +37,9 @@ export default function LandingNavbar() {
     return () => { document.body.style.overflow = ""; };
   }, [mobileMenuOpen]);
 
-  const getLinkHref = (item: string) => {
-    const hash = `#${item.toLowerCase()}`;
+  const getLinkHref = (item: typeof navItems[0]) => {
+    if (item.external) return item.href;
+    const hash = `#${item.href}`;
     return isHome ? hash : `/${hash}`;
   };
 
@@ -55,14 +63,16 @@ export default function LandingNavbar() {
 
             <div className="hidden md:flex items-center gap-8">
               {navItems.map((item, i) => (
-                <Link key={item} href={getLinkHref(item)} legacyBehavior passHref>
+                <Link key={item.label} href={getLinkHref(item)} legacyBehavior passHref>
                   <motion.a
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.05 }}
-                    className="relative text-sm text-muted-foreground hover:text-foreground transition-colors py-2 group cursor-pointer"
+                    className={`relative text-sm transition-colors py-2 group cursor-pointer ${
+                      item.external ? "text-primary font-medium" : "text-muted-foreground hover:text-foreground"
+                    }`}
                   >
-                    {item}
+                    {item.label}
                     <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-foreground transition-all duration-300 group-hover:w-full" />
                   </motion.a>
                 </Link>
@@ -113,13 +123,13 @@ export default function LandingNavbar() {
                 <ul className="space-y-1">
                   {navItems.map((item, i) => (
                     <motion.li
-                      key={item}
+                      key={item.label}
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: i * 0.1 }}
                     >
-                      <Link href={getLinkHref(item)} onClick={() => setMobileMenuOpen(false)} className="flex items-center justify-between py-4 text-2xl font-medium border-b border-border hover:text-muted-foreground transition-colors w-full">
-                        {item}
+                      <Link href={getLinkHref(item)} onClick={() => setMobileMenuOpen(false)} className={`flex items-center justify-between py-4 text-2xl font-medium border-b border-border hover:text-muted-foreground transition-colors w-full ${item.external ? "text-primary" : ""}`}>
+                        {item.label}
                         <ChevronRight className="w-5 h-5 text-muted-foreground" />
                       </Link>
                     </motion.li>
