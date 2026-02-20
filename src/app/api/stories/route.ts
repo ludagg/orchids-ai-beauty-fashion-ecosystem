@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { db } from "@/db";
+import { db } from "@/lib/db";
 import { stories, storyMediaType } from "@/db/schema";
 import { auth } from "@/lib/auth"; // Assuming auth helper exists
 import { headers } from "next/headers";
