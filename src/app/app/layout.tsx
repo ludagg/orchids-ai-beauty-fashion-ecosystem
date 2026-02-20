@@ -26,6 +26,7 @@ import Link from "next/link";
 import BottomNav from "@/components/BottomNav";
 import SearchBar from "@/components/SearchBar";
 import CartIcon from "@/components/CartIcon";
+import NotificationBell from "@/components/NotificationBell";
 import UserAccount from "@/components/UserAccount";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import { usePathname, useRouter } from "next/navigation";
@@ -139,6 +140,7 @@ export default function AppLayout({
           <div className="flex items-center gap-1">
             <ThemeSwitcher />
             <CartIcon />
+            <NotificationBell />
             <UserAccount showLabel={false} />
             <button onClick={() => setMobileMenuOpen(true)} className="p-2 ml-1">
               <Menu className="w-6 h-6" />
@@ -226,6 +228,7 @@ export default function AppLayout({
             )}
             <ThemeSwitcher />
             <CartIcon />
+            <NotificationBell />
             <UserAccount />
           </div>
         </header>
