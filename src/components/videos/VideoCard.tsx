@@ -70,7 +70,7 @@ export function VideoCard({ video }: VideoCardProps) {
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
     >
-        <Link href={`/video/${video.id}`} className="block relative aspect-[9/16] w-full bg-black">
+        <Link href={`/app/videos-creations/${video.id}`} className="block relative aspect-[9/16] w-full bg-black">
             {/* Thumbnail */}
             {video.thumbnailUrl ? (
                 <Image
