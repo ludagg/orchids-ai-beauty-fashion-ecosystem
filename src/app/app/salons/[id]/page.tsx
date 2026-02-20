@@ -17,7 +17,8 @@ import {
   Loader2,
   Store,
   User,
-  MessageCircle
+  MessageCircle,
+  Users
 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
@@ -26,6 +27,7 @@ import { addDays, format, parse } from "date-fns";
 import { toast } from "sonner";
 import { useSession } from "@/lib/auth-client";
 import { Textarea } from "@/components/ui/textarea";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import dynamic from "next/dynamic";
 
 const Map = dynamic(() => import("@/components/ui/Map"), {
@@ -59,6 +61,16 @@ interface Service {
   duration: number; // in minutes
 }
 
+interface StaffMember {
+  id: string;
+  name: string;
+  role: string | null;
+  image: string | null;
+  bio: string | null;
+  isActive: boolean;
+  services: { serviceId: string; service: { id: string; name: string } }[];
+}
+
 interface Review {
   id: string;
   rating: number;
@@ -86,11 +98,15 @@ export default function SalonDetailsPage() {
   const { data: session } = useSession();
   const [salon, setSalon] = useState<Salon | null>(null);
   const [services, setServices] = useState<Service[]>([]);
+  const [staffList, setStaffList] = useState<StaffMember[]>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
+
   const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
+  const [selectedStaffId, setSelectedStaffId] = useState<string | null>(null); // null means "Any"
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(null);
+
   const [availableSlots, setAvailableSlots] = useState<string[]>([]);
   const [loadingSlots, setLoadingSlots] = useState(false);
   const [bookingLoading, setBookingLoading] = useState(false);
@@ -131,10 +147,11 @@ export default function SalonDetailsPage() {
     async function fetchData() {
       if (!id) return;
       try {
-        const [salonRes, servicesRes, reviewsRes] = await Promise.all([
+        const [salonRes, servicesRes, reviewsRes, staffRes] = await Promise.all([
           fetch(`/api/salons/${id}`),
           fetch(`/api/salons/${id}/services`),
-          fetch(`/api/salons/${id}/reviews`)
+          fetch(`/api/salons/${id}/reviews`),
+          fetch(`/api/salons/${id}/staff`)
         ]);
 
         if (salonRes.ok) {
@@ -148,6 +165,11 @@ export default function SalonDetailsPage() {
           if (servicesData.length > 0) {
             setSelectedServiceId(servicesData[0].id);
           }
+        }
+
+        if (staffRes.ok) {
+            const staffData = await staffRes.json();
+            setStaffList(staffData);
         }
 
         if (reviewsRes.ok) {
@@ -165,6 +187,20 @@ export default function SalonDetailsPage() {
   }, [id]);
 
   useEffect(() => {
+    // Reset staff selection when service changes
+    // But keep "Any" if previously "Any", or reset if specific staff doesn't perform new service
+    if (selectedStaffId && selectedServiceId) {
+        const staff = staffList.find(s => s.id === selectedStaffId);
+        if (staff) {
+            const performsService = staff.services.some(s => s.serviceId === selectedServiceId);
+            if (!performsService) {
+                setSelectedStaffId(null);
+            }
+        }
+    }
+  }, [selectedServiceId]);
+
+  useEffect(() => {
     async function fetchAvailability() {
       if (!id || !selectedServiceId || !selectedDate) return;
 
@@ -174,7 +210,12 @@ export default function SalonDetailsPage() {
 
       try {
         const dateStr = format(selectedDate, 'yyyy-MM-dd');
-        const res = await fetch(`/api/bookings/availability?salonId=${id}&serviceId=${selectedServiceId}&date=${dateStr}`);
+        let url = `/api/bookings/availability?salonId=${id}&serviceId=${selectedServiceId}&date=${dateStr}`;
+        if (selectedStaffId) {
+            url += `&staffId=${selectedStaffId}`;
+        }
+
+        const res = await fetch(url);
         if (res.ok) {
           const slots = await res.json();
           setAvailableSlots(slots);
@@ -187,7 +228,7 @@ export default function SalonDetailsPage() {
     }
 
     fetchAvailability();
-  }, [id, selectedServiceId, selectedDate]);
+  }, [id, selectedServiceId, selectedDate, selectedStaffId]);
 
 
   const handleBooking = async () => {
@@ -219,6 +260,7 @@ export default function SalonDetailsPage() {
             body: JSON.stringify({
                 salonId: id,
                 serviceId: selectedServiceId,
+                staffId: selectedStaffId, // Pass null or string
                 startTime: startTime.toISOString(),
                 endTime: endTime.toISOString(),
                 notes: ''
@@ -296,10 +338,6 @@ export default function SalonDetailsPage() {
 
         if (res.ok) {
             const newReview = await res.json();
-            // Optimistically add review or refetch.
-            // Since the response structure might slightly differ (e.g. user object is not fully populated immediately if not joined),
-            // we'll manually construct it for display or just reload reviews.
-            // For now, let's just refetch reviews to be safe.
             const reviewsRes = await fetch(`/api/salons/${id}/reviews`);
             if (reviewsRes.ok) {
                 setReviews(await reviewsRes.json());
@@ -326,6 +364,9 @@ export default function SalonDetailsPage() {
   };
 
   const selectedService = services.find(s => s.id === selectedServiceId);
+  const qualifiedStaff = selectedServiceId
+    ? staffList.filter(s => s.services.some(srv => srv.serviceId === selectedServiceId))
+    : [];
 
   // Generate next 7 days
   const days = Array.from({ length: 7 }, (_, i) => addDays(new Date(), i));
@@ -656,6 +697,46 @@ export default function SalonDetailsPage() {
               <h3 className="text-2xl font-semibold font-display">Book Appointment</h3>
               <p className="text-sm text-muted-foreground">Select your preferred date and time.</p>
             </div>
+
+            {/* Staff Selection */}
+            {selectedServiceId && qualifiedStaff.length > 0 && (
+                <div className="space-y-4">
+                    <p className="text-xs font-bold text-muted-foreground/50 uppercase tracking-widest">Select Professional</p>
+                    <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
+                        <button
+                            onClick={() => setSelectedStaffId(null)}
+                            className={`flex flex-col items-center gap-2 p-3 min-w-[80px] rounded-2xl border transition-all ${
+                                selectedStaffId === null
+                                ? "border-blue-600 bg-blue-50/50"
+                                : "border-border hover:border-foreground"
+                            }`}
+                        >
+                            <div className={`w-12 h-12 rounded-full flex items-center justify-center ${selectedStaffId === null ? "bg-blue-200 text-blue-800" : "bg-secondary text-muted-foreground"}`}>
+                                <Users className="w-6 h-6" />
+                            </div>
+                            <span className="text-xs font-medium text-center line-clamp-1">Any</span>
+                        </button>
+
+                        {qualifiedStaff.map(staff => (
+                            <button
+                                key={staff.id}
+                                onClick={() => setSelectedStaffId(staff.id)}
+                                className={`flex flex-col items-center gap-2 p-3 min-w-[80px] rounded-2xl border transition-all ${
+                                    selectedStaffId === staff.id
+                                    ? "border-blue-600 bg-blue-50/50"
+                                    : "border-border hover:border-foreground"
+                                }`}
+                            >
+                                <Avatar className="w-12 h-12">
+                                    <AvatarImage src={staff.image || ""} className="object-cover" />
+                                    <AvatarFallback>{staff.name[0]}</AvatarFallback>
+                                </Avatar>
+                                <span className="text-xs font-medium text-center line-clamp-1">{staff.name}</span>
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            )}
 
             {/* Date Selection */}
             <div className="space-y-4">
