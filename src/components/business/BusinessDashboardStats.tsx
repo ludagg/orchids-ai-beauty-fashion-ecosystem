@@ -40,9 +40,10 @@ interface DashboardStatsProps {
   };
   upcomingBookings: Booking[];
   salonName: string;
+  isPending?: boolean;
 }
 
-export default function BusinessDashboardStats({ stats, upcomingBookings, salonName }: DashboardStatsProps) {
+export default function BusinessDashboardStats({ stats, upcomingBookings, salonName, isPending }: DashboardStatsProps) {
 
   const formatPrice = (cents: number) => {
     return (cents / 100).toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
@@ -81,17 +82,30 @@ export default function BusinessDashboardStats({ stats, upcomingBookings, salonN
 
   return (
     <div className="space-y-8 bg-background p-6 lg:p-8 max-w-7xl mx-auto">
+      {isPending && (
+        <div className="bg-amber-50 dark:bg-amber-900/10 border border-amber-200 dark:border-amber-900/30 p-4 rounded-xl flex items-center gap-3">
+          <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-500 flex-shrink-0" />
+          <p className="text-sm text-amber-800 dark:text-amber-200">
+            <strong>Application Under Review:</strong> Your partner account is currently pending approval.
+            You can access your dashboard, but your business is not yet visible to customers.
+            We will notify you within 24-48 hours.
+          </p>
+        </div>
+      )}
+
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-foreground">Good Morning, {salonName}</h1>
           <p className="text-muted-foreground mt-1">Here&apos;s what&apos;s happening at your business today.</p>
         </div>
-        <div className="flex items-center gap-3">
-          <div className="bg-card border border-border rounded-xl px-4 py-2 flex items-center gap-2 shadow-sm">
-            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-sm font-medium text-foreground">Accepting Bookings</span>
+        {!isPending && (
+          <div className="flex items-center gap-3">
+            <div className="bg-card border border-border rounded-xl px-4 py-2 flex items-center gap-2 shadow-sm">
+              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-sm font-medium text-foreground">Accepting Bookings</span>
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Stats Grid */}

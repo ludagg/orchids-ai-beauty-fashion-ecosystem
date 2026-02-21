@@ -72,7 +72,7 @@ export default function BusinessSection() {
               })}
             </div>
 
-            <Link href="/business">
+            <Link href="/become-partner">
               <button className="px-8 py-4 rounded-full bg-primary text-primary-foreground font-medium hover:opacity-90 transition-all hover:shadow-lg hover:shadow-primary/20 active:scale-[0.98] inline-flex items-center gap-2 group">
                 Become a Partner
                 <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />

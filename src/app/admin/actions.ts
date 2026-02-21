@@ -137,12 +137,32 @@ export async function approveSalon(salonId: string) {
   return { success: true };
 }
 
+export async function rejectSalon(salonId: string) {
+  await checkAdmin();
+  await db.update(salons)
+    .set({ status: 'rejected' as any })
+    .where(eq(salons.id, salonId));
+  return { success: true };
+}
+
 export async function suspendSalon(salonId: string) {
   await checkAdmin();
   await db.update(salons)
     .set({ status: 'suspended' })
     .where(eq(salons.id, salonId));
   return { success: true };
+}
+
+export async function getSalon(salonId: string) {
+  await checkAdmin();
+  const salon = await db.query.salons.findFirst({
+    where: eq(salons.id, salonId),
+    with: {
+      owner: true,
+      images: true,
+    }
+  });
+  return salon;
 }
 
 export async function getOrders(page = 1, status = "") {

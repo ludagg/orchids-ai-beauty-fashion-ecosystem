@@ -241,6 +241,9 @@ export default function AdminSalonsClient({ data }: AdminSalonsClientProps) {
                     >
                         {s.status === 'suspended' ? "Suspended" : "Suspend"}
                     </button>
+                    <Link href={`/admin/salons/${s.id}`} className="px-4 py-2 rounded-xl bg-blue-50 text-blue-600 text-xs font-bold hover:bg-blue-100 transition-all flex items-center gap-2">
+                        View Details
+                    </Link>
                     <Link href={`/app/salons/${s.id}`} target="_blank" className="p-2 rounded-xl bg-secondary text-muted-foreground hover:text-indigo-600 transition-all">
                         <ExternalLink className="w-4 h-4" />
                     </Link>

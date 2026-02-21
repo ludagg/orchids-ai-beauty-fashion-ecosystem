@@ -20,36 +20,43 @@ const s3Client = (R2_ACCOUNT_ID && R2_ACCESS_KEY_ID && R2_SECRET_ACCESS_KEY)
     })
     : null;
 
+interface UploadOptions {
+    folder: string;
+    allowedTypes?: string[];
+    maxSize?: number; // in bytes
+}
+
 /**
- * Uploads a review image to storage.
- *
- * NOTE: In a production environment, this function should:
- * 1. Use an S3-compatible storage service (AWS S3, Cloudflare R2).
- * 2. Optimize the image using a library like `sharp` (resize, compress, convert to WebP).
- *
- * If R2 credentials are provided, it uploads to Cloudflare R2.
- * Otherwise, it falls back to saving files to the local public directory.
+ * Generic file upload function.
  */
-export async function uploadReviewImage(file: File): Promise<string> {
-    // Input validation
-    if (!file.type.startsWith("image/")) {
-        throw new Error("Invalid file type");
+export async function uploadFile(file: File, options: UploadOptions): Promise<string> {
+    const { folder, allowedTypes, maxSize } = options;
+
+    // Validate type
+    if (allowedTypes && !allowedTypes.some(type => {
+        if (type.endsWith("/*")) {
+            const baseType = type.slice(0, -2);
+            return file.type.startsWith(baseType);
+        }
+        return file.type === type;
+    })) {
+        throw new Error(`Invalid file type: ${file.type}`);
     }
 
-    // Size limit (5MB) - enforced here as a safeguard
-    if (file.size > 5 * 1024 * 1024) {
-        throw new Error("File too large");
+    // Validate size
+    if (maxSize && file.size > maxSize) {
+        throw new Error(`File too large. Max size is ${maxSize / 1024 / 1024}MB`);
     }
 
     const buffer = Buffer.from(await file.arrayBuffer());
 
     // Generate filename
-    const extension = path.extname(file.name) || ".jpg";
+    const extension = path.extname(file.name) || (file.type === 'application/pdf' ? '.pdf' : '.jpg');
     const filename = `${nanoid()}${extension}`;
 
     if (s3Client) {
         try {
-            const key = `reviews/${filename}`;
+            const key = `${folder}/${filename}`;
 
             await s3Client.send(new PutObjectCommand({
                 Bucket: R2_BUCKET_NAME,
@@ -74,7 +81,7 @@ export async function uploadReviewImage(file: File): Promise<string> {
         }
     } else {
         // Fallback to local filesystem
-        const uploadDir = path.join(process.cwd(), "public/uploads/reviews");
+        const uploadDir = path.join(process.cwd(), "public/uploads", folder);
         await mkdir(uploadDir, { recursive: true });
 
         const filepath = path.join(uploadDir, filename);
@@ -83,6 +90,17 @@ export async function uploadReviewImage(file: File): Promise<string> {
         await writeFile(filepath, buffer);
 
         // Return public URL path
-        return `/uploads/reviews/${filename}`;
+        return `/uploads/${folder}/${filename}`;
     }
+}
+
+/**
+ * Uploads a review image to storage.
+ */
+export async function uploadReviewImage(file: File): Promise<string> {
+    return uploadFile(file, {
+        folder: "reviews",
+        allowedTypes: ["image/*"],
+        maxSize: 5 * 1024 * 1024, // 5MB
+    });
 }

@@ -110,6 +110,7 @@ export default async function BusinessDashboardPage() {
         stats={stats}
         upcomingBookings={upcomingBookings}
         salonName={salon.name}
+        isPending={salon.status === 'pending'}
     />
   );
 }

@@ -2,7 +2,7 @@ import { pgTable, text, timestamp, boolean, decimal, pgEnum, integer } from 'dri
 import { relations } from 'drizzle-orm';
 import { users } from './auth';
 
-export const salonStatusEnum = pgEnum('salon_status', ['pending', 'active', 'suspended']);
+export const salonStatusEnum = pgEnum('salon_status', ['pending', 'active', 'suspended', 'rejected']);
 export const partnerTypeEnum = pgEnum('partner_type', ['SALON', 'BOUTIQUE', 'BOTH']);
 
 export const salons = pgTable('salons', {
@@ -20,6 +20,15 @@ export const salons = pgTable('salons', {
   email: text('email'),
   website: text('website'),
   image: text('image'),
+  logo: text('logo'),
+  category: text('category'),
+  state: text('state'),
+  country: text('country'),
+  formattedAddress: text('formatted_address'),
+  registrationNumber: text('registration_number'),
+  idDocumentUrl: text('id_document_url'),
+  businessProofUrl: text('business_proof_url'),
+  galleryUrls: text('gallery_urls').array(),
   status: salonStatusEnum('status').default('pending').notNull(),
   isVerified: boolean('is_verified').default(false).notNull(),
   type: partnerTypeEnum('type').default('SALON').notNull(),
