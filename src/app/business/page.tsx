@@ -1,149 +1,115 @@
-"use client";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
+import { db } from "@/lib/db";
+import { salons } from "@/db/schema/salons";
+import { bookings } from "@/db/schema/bookings";
+import { eq, and, gte, desc, sql } from "drizzle-orm";
+import BusinessDashboardStats from "@/components/business/BusinessDashboardStats";
 
-import { motion } from "framer-motion";
-import {
-  Calendar,
-  Users,
-  Scissors,
-  IndianRupee,
-  ArrowUpRight,
-  Clock,
-  ChevronRight,
-  Star,
-  Settings
-} from "lucide-react";
+export default async function BusinessDashboardPage() {
+  const session = await auth.api.getSession({
+    headers: await headers()
+  });
 
-const stats = [
-  { label: "Today's Bookings", value: "12", change: "+4", icon: Calendar, color: "text-blue-600", bg: "bg-blue-500/10" },
-  { label: "Total Customers", value: "842", change: "+24", icon: Users, color: "text-indigo-600", bg: "bg-indigo-500/10" },
-  { label: "Monthly Revenue", value: "₹1.4M", change: "+15%", icon: IndianRupee, color: "text-emerald-600", bg: "bg-emerald-500/10" },
-  { label: "Avg. Rating", value: "4.9", change: "0.1", icon: Star, color: "text-amber-600", bg: "bg-amber-500/10" },
-];
+  if (!session?.user) {
+    redirect("/auth");
+  }
 
-export default function SalonDashboard() {
+  // Fetch User's Salon
+  const userSalons = await db
+    .select()
+    .from(salons)
+    .where(eq(salons.ownerId, session.user.id))
+    .limit(1);
+
+  if (userSalons.length === 0) {
+    redirect("/business/register");
+  }
+
+  const salon = userSalons[0];
+
+  // Fetch Stats
+  // 1. Revenue (Completed bookings)
+  const revenueResult = await db
+    .select({
+      total: sql<number>`sum(${bookings.totalPrice})`
+    })
+    .from(bookings)
+    .where(and(eq(bookings.salonId, salon.id), eq(bookings.status, 'completed')));
+
+  const revenue = revenueResult[0]?.total || 0;
+
+  // 2. Pending Requests
+  const pendingResult = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(bookings)
+    .where(and(eq(bookings.salonId, salon.id), eq(bookings.status, 'pending')));
+
+  const pending = pendingResult[0]?.count || 0;
+
+  // 3. Upcoming Confirmed
+  const upcomingResult = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(bookings)
+    .where(and(
+        eq(bookings.salonId, salon.id),
+        eq(bookings.status, 'confirmed'),
+        gte(bookings.startTime, new Date())
+    ));
+
+  const upcoming = upcomingResult[0]?.count || 0;
+
+  // 4. Total Customers (Approximate by unique bookings for now or just count all bookings? Better: distinct user_id)
+  const customersResult = await db
+    .select({ count: sql<number>`count(distinct ${bookings.userId})` })
+    .from(bookings)
+    .where(eq(bookings.salonId, salon.id));
+
+  const customers = customersResult[0]?.count || 0;
+
+  // Fetch Upcoming Bookings for List
+  const upcomingList = await db.query.bookings.findMany({
+    where: and(
+        eq(bookings.salonId, salon.id),
+        eq(bookings.status, 'confirmed'),
+        gte(bookings.startTime, new Date())
+    ),
+    limit: 5,
+    orderBy: [desc(bookings.startTime)],
+    with: {
+        user: true,
+        service: true
+    }
+  });
+
+  // Transform for component
+  const upcomingBookings = upcomingList.map(b => ({
+      id: b.id,
+      user: {
+          name: b.user.name,
+          image: b.user.image,
+          email: b.user.email
+      },
+      service: {
+          name: b.service.name
+      },
+      startTime: b.startTime,
+      status: b.status
+  }));
+
+  const stats = {
+      revenue,
+      pending,
+      upcoming,
+      customers
+  };
+
   return (
-    <div className="space-y-8 bg-background">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-foreground">Good Morning, Aura Spa</h1>
-          <p className="text-muted-foreground mt-1">Here&apos;s what&apos;s happening at your salon today.</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <div className="bg-card border border-border rounded-xl px-4 py-2 flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-sm font-medium text-foreground">Accepting Bookings</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {stats.map((stat, i) => (
-          <motion.div
-            key={stat.label}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.1 }}
-            className="p-6 bg-card rounded-2xl border border-border shadow-sm hover:shadow-md transition-shadow"
-          >
-            <div className="flex items-start justify-between">
-              <div className={`p-3 rounded-xl ${stat.bg} ${stat.color}`}>
-                <stat.icon className="w-6 h-6" />
-              </div>
-              <div className="text-[10px] font-bold text-emerald-600 bg-emerald-500/10 dark:text-emerald-400 px-2 py-1 rounded-lg">
-                {stat.change}
-              </div>
-            </div>
-            <div className="mt-4">
-              <p className="text-sm font-medium text-muted-foreground">{stat.label}</p>
-              <p className="text-2xl font-bold text-foreground mt-1">{stat.value}</p>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Upcoming Appointments */}
-        <div className="lg:col-span-2 space-y-6">
-          <div className="flex items-center justify-between">
-            <h3 className="font-bold text-foreground text-lg">Upcoming Appointments</h3>
-            <button className="text-sm font-bold text-primary hover:underline">View Calendar</button>
-          </div>
-
-          <div className="space-y-4">
-            {[
-              { customer: "Rahul Sharma", service: "Premium Haircut", time: "10:30 AM", status: "Confirmed", image: "11" },
-              { customer: "Priya Patel", service: "Hydra Facial", time: "11:15 AM", status: "Confirmed", image: "12" },
-              { customer: "Anita Desai", service: "Full Body Massage", time: "12:00 PM", status: "Waiting", image: "13" },
-              { customer: "Vikram Singh", service: "Beard Styling", time: "01:30 PM", status: "Confirmed", image: "14" },
-            ].map((app, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.4 + i * 0.1 }}
-                className="flex items-center gap-4 p-4 bg-card border border-border rounded-2xl hover:border-primary/50 transition-colors group cursor-pointer"
-              >
-                <div className="w-12 h-12 rounded-full overflow-hidden bg-muted">
-                  <img src={`https://i.pravatar.cc/100?u=${app.image}`} alt={app.customer} className="w-full h-full object-cover" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <h4 className="font-bold text-foreground truncate">{app.customer}</h4>
-                  <p className="text-sm text-muted-foreground truncate">{app.service}</p>
-                </div>
-                <div className="text-right">
-                  <div className="flex items-center gap-1.5 text-sm font-bold text-foreground">
-                    <Clock className="w-3.5 h-3.5 text-primary" />
-                    {app.time}
-                  </div>
-                  <span className={`text-[10px] font-bold uppercase tracking-wider ${
-                    app.status === "Confirmed" ? "text-emerald-600" : "text-amber-600"
-                  }`}>
-                    {app.status}
-                  </span>
-                </div>
-                <ChevronRight className="w-5 h-5 text-muted-foreground/50 group-hover:text-primary transition-colors" />
-              </motion.div>
-            ))}
-          </div>
-        </div>
-
-        {/* Quick Actions & Tips */}
-        <div className="space-y-8">
-          <div className="p-6 rounded-3xl bg-card text-foreground space-y-6 border border-border shadow-sm">
-            <h3 className="font-bold text-lg">Quick Actions</h3>
-            <div className="grid grid-cols-2 gap-3">
-              {[
-                { label: "Add Service", icon: Scissors },
-                { label: "New Offer", icon: Star },
-                { label: "Customers", icon: Users },
-                { label: "Settings", icon: Settings },
-              ].map((action) => (
-                <button
-                  key={action.label}
-                  className="p-4 rounded-2xl bg-muted hover:bg-muted/80 transition-all flex flex-col items-center gap-2 text-center"
-                >
-                  <action.icon className="w-5 h-5 text-primary" />
-                  <span className="text-[10px] font-bold uppercase tracking-wider">{action.label}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="p-6 rounded-3xl bg-blue-500/5 dark:bg-blue-500/10 border border-blue-500/10 dark:border-blue-500/20 space-y-4">
-            <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400">
-              <Star className="w-5 h-5 fill-current" />
-              <h3 className="font-bold">Partner Tip</h3>
-            </div>
-            <p className="text-sm text-blue-900/80 dark:text-blue-100/80 leading-relaxed">
-              Adding real photos of your latest work can increase booking rates by up to 40%. Try updating your gallery today!
-            </p>
-            <button className="w-full py-3 rounded-xl bg-blue-600 text-white text-sm font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/10">
-              Update Gallery
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <BusinessDashboardStats
+        stats={stats}
+        upcomingBookings={upcomingBookings}
+        salonName={salon.name}
+    />
   );
 }
