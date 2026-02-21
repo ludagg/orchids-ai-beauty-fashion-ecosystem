@@ -91,10 +91,10 @@ export default function LiveHero() {
           className="flex items-center gap-4 pt-2"
         >
           <Link href="/app/videos-creations/featured-live" className="flex-1 sm:flex-none">
-            <button className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-white text-black font-bold text-base hover:bg-rose-50 transition-all shadow-xl shadow-white/5 active:scale-95 flex items-center justify-center gap-3 group/btn">
+            <span className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-white text-black font-bold text-base hover:bg-rose-50 transition-all shadow-xl shadow-white/5 active:scale-95 flex items-center justify-center gap-3 group/btn cursor-pointer">
               Watch Now
               <Play className="w-5 h-5 fill-current transition-transform group-hover/btn:scale-110" />
-            </button>
+            </span>
           </Link>
 
           <div className="hidden sm:flex items-center gap-3 pl-4 border-l border-white/20">
@@ -176,10 +176,10 @@ export default function LiveHero() {
           className="flex items-center gap-4 pt-2"
         >
           <Link href={`/app/videos-creations/${heroVideo.id}`} className="flex-1 sm:flex-none">
-            <button className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-white text-black font-bold text-base hover:bg-rose-50 transition-all shadow-xl shadow-white/5 active:scale-95 flex items-center justify-center gap-3 group/btn">
+            <span className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-white text-black font-bold text-base hover:bg-rose-50 transition-all shadow-xl shadow-white/5 active:scale-95 flex items-center justify-center gap-3 group/btn cursor-pointer">
               Watch Now
               <Play className="w-5 h-5 fill-current transition-transform group-hover/btn:scale-110" />
-            </button>
+            </span>
           </Link>
 
           {heroVideo.user && (

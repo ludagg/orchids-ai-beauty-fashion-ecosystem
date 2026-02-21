@@ -61,14 +61,15 @@ export default function ChatSidebar({ selectedId }: ChatSidebarProps) {
       <div className="p-6 border-b border-border space-y-4">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold text-foreground">Messages</h1>
-          <button className="p-2 rounded-xl bg-muted text-foreground hover:bg-muted/80 transition-colors">
+          <button className="p-2 rounded-xl bg-muted text-foreground hover:bg-muted/80 transition-colors" aria-label="Chat options">
             <MoreVertical className="w-5 h-5" />
           </button>
         </div>
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+        <div className="relative" role="search">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" aria-hidden="true" />
           <input
-            type="text"
+            type="search"
+            aria-label="Search conversations"
             placeholder="Search conversations..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -91,6 +92,7 @@ export default function ChatSidebar({ selectedId }: ChatSidebarProps) {
             <Link
               key={chat.id}
               href={`/app/conversations/${chat.id}`}
+              aria-current={selectedId === chat.id ? "page" : undefined}
               className={`w-full p-4 flex gap-4 transition-all border-b border-muted hover:bg-muted/50 ${
                 selectedId === chat.id ? "bg-muted border-l-4 border-l-primary" : ""
               }`}

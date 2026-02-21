@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { AlertCircle, RefreshCcw, Home, Hammer, ShieldAlert } from "lucide-react";
+import Link from "next/link";
 
 type ReporterProps = {
   /*  ⎯⎯ props are only provided on the global-error page ⎯⎯ */
@@ -141,10 +142,10 @@ export default function ErrorReporter({ error, reset }: ReporterProps) {
                 <RefreshCcw className="w-5 h-5" />
                 Try Again
               </button>
-              <a href="/" className="flex items-center justify-center gap-2 px-8 py-4 bg-muted text-foreground border border-border rounded-2xl font-bold hover:bg-muted/80 transition-all active:scale-[0.98]">
+              <Link href="/" className="flex items-center justify-center gap-2 px-8 py-4 bg-muted text-foreground border border-border rounded-2xl font-bold hover:bg-muted/80 transition-all active:scale-[0.98]">
                 <Home className="w-5 h-5" />
                 Back to Home
-              </a>
+              </Link>
             </div>
 
             {process.env.NODE_ENV === "development" && (

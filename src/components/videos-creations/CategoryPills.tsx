@@ -15,6 +15,7 @@ export default function CategoryPills({ categories, selected, onSelect }: Catego
         <button
           key={cat}
           onClick={() => onSelect(cat)}
+          aria-pressed={selected === cat}
           className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all border whitespace-nowrap ${
             selected === cat
               ? "bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/10"
