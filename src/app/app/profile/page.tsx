@@ -16,21 +16,21 @@ export default async function ProfilePage() {
     redirect("/auth");
   }
 
-  // Fetch the salon for the current user
-  let initialSalon = null;
+  // Check if the user is a salon owner
+  let isSalonOwner = false;
   try {
     const userSalons = await db
-      .select()
+      .select({ id: salons.id })
       .from(salons)
       .where(eq(salons.ownerId, session.user.id))
       .limit(1);
 
     if (userSalons.length > 0) {
-      initialSalon = userSalons[0];
+      isSalonOwner = true;
     }
   } catch (error) {
-    console.error("Error fetching user salon:", error);
-    // initialSalon remains null, allowing the page to render in "Become a Partner" mode
+    console.error("Error checking user salon ownership:", error);
+    // isSalonOwner remains false
   }
 
   return (
@@ -44,7 +44,7 @@ export default async function ProfilePage() {
           loyaltyPoints: (session.user as any).loyaltyPoints as number,
           createdAt: session.user.createdAt,
         }}
-        initialSalon={initialSalon}
+        isSalonOwner={isSalonOwner}
       />
     </Suspense>
   );
