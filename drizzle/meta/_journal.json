@@ -78,6 +78,13 @@
       "when": 1771603751001,
       "tag": "0010_sloppy_anthem",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1771657915960,
+      "tag": "0011_slimy_morgan_stark",
+      "breakpoints": true
     }
   ]
 }

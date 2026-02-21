@@ -9,6 +9,7 @@ import { headers } from "next/headers";
 import { eq, and, desc, asc, isNotNull, sql, count, avg } from "drizzle-orm";
 import { nanoid } from "nanoid";
 import { z } from "zod";
+import { LoyaltyEngine } from "@/lib/loyalty";
 
 const createReviewSchema = z.object({
   salonId: z.string(),
@@ -157,6 +158,43 @@ export async function POST(req: NextRequest) {
             link: `/business/reviews`,
             metadata: { reviewId: reviewId, rating }
         });
+    }
+
+    // Loyalty Logic
+    try {
+        let points = 10; // Base points
+        if (images && images.length > 0) points += 20; // Photo bonus
+        if (isVerified) points += 20; // Verified bonus
+
+        await LoyaltyEngine.addPoints(
+            session.user.id,
+            points,
+            'earned_review',
+            `Review for ${salon?.name || 'Salon'}`,
+            reviewId
+        );
+
+        // Check badges
+        const reviewCountResult = await db.select({ value: count() })
+            .from(reviews)
+            .where(eq(reviews.userId, session.user.id));
+        const reviewCount = reviewCountResult[0]?.value || 0;
+
+        const photoReviewCountResult = await db.select({ value: count() })
+            .from(reviews)
+            .where(and(
+                eq(reviews.userId, session.user.id),
+                sql`array_length(${reviews.images}, 1) > 0`
+            ));
+        const photoReviewCount = photoReviewCountResult[0]?.value || 0;
+
+        await LoyaltyEngine.checkBadges(session.user.id, 'review_created', {
+            reviewCount,
+            photoReviewCount,
+            hasPhotos: images && images.length > 0
+        });
+    } catch (err) {
+        console.error("Loyalty error in reviews:", err);
     }
 
     return NextResponse.json(newReview[0], { status: 201 });
