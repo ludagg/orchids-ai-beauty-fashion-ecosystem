@@ -104,49 +104,35 @@ export function StoriesRail() {
 
         {/* Create Story Button (Always first if logged in) */}
         {session?.user && (
-           <div className="flex flex-col items-center gap-1.5 cursor-pointer shrink-0 snap-start group relative">
-                <div
-                    onClick={handleMyStoryClick}
-                    className={cn(
-                    "relative w-[72px] h-[72px] rounded-full p-[2px] transition-transform active:scale-95",
-                    hasMyStory ? "bg-gradient-to-tr from-yellow-400 to-red-600" : "bg-muted border border-border"
-                    )}
-                >
-                  <div className="w-full h-full rounded-full bg-background flex items-center justify-center overflow-hidden relative">
-                     <Avatar className="w-full h-full">
-                        <AvatarImage src={session.user.image || undefined} className="object-cover" />
-                        <AvatarFallback>{session.user.name?.charAt(0)}</AvatarFallback>
-                     </Avatar>
-
-                     {/* Overlay for hover effect if no story */}
-                     {!hasMyStory && (
-                        <div className="absolute inset-0 bg-black/5 group-hover:bg-black/10 transition-colors" />
-                     )}
-                  </div>
-
-                  {/* Plus Button Badge */}
-                  {!hasMyStory && (
+           <div className="flex flex-col items-center justify-center gap-1.5 cursor-pointer shrink-0 snap-start group relative">
+                {hasMyStory ? (
+                  <>
                     <div
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            setIsCreateOpen(true);
-                        }}
-                        className="absolute bottom-0 right-0 translate-x-1 translate-y-1 bg-background rounded-full p-0.5 cursor-pointer z-10 shadow-sm border border-border"
+                        onClick={handleMyStoryClick}
+                        className={cn(
+                        "relative w-[72px] h-[72px] rounded-full p-[2px] transition-transform active:scale-95 bg-gradient-to-tr from-yellow-400 to-red-600"
+                        )}
                     >
-                        <div className="bg-primary text-primary-foreground rounded-full w-5 h-5 flex items-center justify-center">
-                            <Plus className="w-3.5 h-3.5" />
-                        </div>
+                      <div className="w-full h-full rounded-full bg-background flex items-center justify-center overflow-hidden relative">
+                         <Avatar className="w-full h-full">
+                            <AvatarImage src={session.user.image || undefined} className="object-cover" />
+                            <AvatarFallback>{session.user.name?.charAt(0)}</AvatarFallback>
+                         </Avatar>
+                      </div>
                     </div>
-                  )}
-
-                  {/* If has story, maybe just show the ring. The plus is only for creating new.
-                      Actually, Instagram shows a plus if you view your own story and want to add more?
-                      For now, let's keep it simple: Ring = has story. Plus badge = empty state.
-                  */}
-                </div>
-                <span className="text-xs font-medium truncate w-[72px] text-center text-muted-foreground group-hover:text-foreground transition-colors">
-                  Your Story
-                </span>
+                    <span className="text-xs font-medium truncate w-[72px] text-center text-muted-foreground group-hover:text-foreground transition-colors">
+                      Your Story
+                    </span>
+                  </>
+                ) : (
+                  <button
+                      onClick={() => setIsCreateOpen(true)}
+                      className="flex items-center gap-2 px-4 py-2 h-[50px] rounded-full border border-primary text-primary font-medium hover:bg-primary/5 transition-colors mb-5"
+                  >
+                      <Plus className="w-5 h-5" />
+                      Your Story
+                  </button>
+                )}
 
                 <Dialog open={iscreateOpen} onOpenChange={setIsCreateOpen}>
                     <DialogContent>
