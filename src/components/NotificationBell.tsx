@@ -1,12 +1,18 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Bell, Package, Sparkles, Heart, MessageSquare, Calendar, Info, Check } from "lucide-react";
+import { Bell, Package, Sparkles, Heart, MessageSquare, Calendar, Info, Check, BellOff } from "lucide-react";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { formatDistanceToNow } from "date-fns";
@@ -97,17 +103,24 @@ export default function NotificationBell() {
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
-      <PopoverTrigger asChild>
-        <button
-          className="p-2 rounded-full hover:bg-secondary transition-colors relative outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-          aria-label={`Notifications${unreadCount > 0 ? `, ${unreadCount} unread` : ""}`}
-        >
-          <Bell className="w-5 h-5 text-muted-foreground" />
-          {unreadCount > 0 && (
-            <span className="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full border-2 border-card"></span>
-          )}
-        </button>
-      </PopoverTrigger>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <PopoverTrigger asChild>
+            <button
+              className="p-2 rounded-full hover:bg-secondary transition-colors relative outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              aria-label={`Notifications${unreadCount > 0 ? `, ${unreadCount} unread` : ""}`}
+            >
+              <Bell className="w-5 h-5 text-muted-foreground" />
+              {unreadCount > 0 && (
+                <span className="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full border-2 border-card"></span>
+              )}
+            </button>
+          </PopoverTrigger>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>Notifications</p>
+        </TooltipContent>
+      </Tooltip>
       <PopoverContent className="w-80 p-0 overflow-hidden" align="end">
         <div className="p-4 border-b border-border flex items-center justify-between bg-card">
           <h3 className="font-semibold text-sm">Notifications</h3>
@@ -123,12 +136,26 @@ export default function NotificationBell() {
         </div>
         <div className="max-h-[400px] overflow-y-auto">
           {loading ? (
-            <div className="p-4 text-center text-sm text-muted-foreground" role="status">
-              Loading...
+            <div className="p-4 space-y-4" role="status" aria-label="Loading notifications">
+               {[...Array(3)].map((_, i) => (
+                 <div key={i} className="flex gap-3">
+                   <Skeleton className="w-10 h-10 rounded-full flex-shrink-0" />
+                   <div className="flex-1 space-y-2">
+                     <Skeleton className="h-4 w-3/4" />
+                     <Skeleton className="h-3 w-full" />
+                   </div>
+                 </div>
+               ))}
             </div>
           ) : notifications.length === 0 ? (
-            <div className="p-4 text-center text-sm text-muted-foreground" role="status">
-              No notifications
+            <div className="p-8 flex flex-col items-center justify-center text-center" role="status">
+              <div className="w-12 h-12 bg-muted/50 rounded-full flex items-center justify-center mb-3">
+                <BellOff className="w-6 h-6 text-muted-foreground" />
+              </div>
+              <p className="text-sm font-medium text-foreground">No notifications</p>
+              <p className="text-xs text-muted-foreground mt-1">
+                You're all caught up! Check back later.
+              </p>
             </div>
           ) : (
             <ul role="list" className="m-0 p-0 list-none">
