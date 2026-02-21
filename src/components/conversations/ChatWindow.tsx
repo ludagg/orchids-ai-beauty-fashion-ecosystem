@@ -20,6 +20,11 @@ import {
 import Link from "next/link";
 import { useSession } from "@/lib/auth-client";
 import { format } from "date-fns";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface ChatWindowProps {
   chatId: number | string;
@@ -187,15 +192,36 @@ export default function ChatWindow({ chatId }: ChatWindowProps) {
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <button className="p-2.5 rounded-xl hover:bg-muted text-muted-foreground transition-all">
-                  <Phone className="w-5 h-5" />
-                </button>
-                <button className="p-2.5 rounded-xl hover:bg-muted text-muted-foreground transition-all">
-                  <Video className="w-5 h-5" />
-                </button>
-                <button className="p-2.5 rounded-xl hover:bg-muted text-muted-foreground transition-all">
-                  <Info className="w-5 h-5" />
-                </button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button className="p-2.5 rounded-xl hover:bg-muted text-muted-foreground transition-all" aria-label="Start audio call">
+                      <Phone className="w-5 h-5" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Start audio call</p>
+                  </TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button className="p-2.5 rounded-xl hover:bg-muted text-muted-foreground transition-all" aria-label="Start video call">
+                      <Video className="w-5 h-5" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Start video call</p>
+                  </TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button className="p-2.5 rounded-xl hover:bg-muted text-muted-foreground transition-all" aria-label="View info">
+                      <Info className="w-5 h-5" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>View info</p>
+                  </TooltipContent>
+                </Tooltip>
               </div>
             </header>
 
@@ -241,12 +267,26 @@ export default function ChatWindow({ chatId }: ChatWindowProps) {
             <footer className="p-6 bg-card border-t border-border">
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
-                  <button className="p-2.5 rounded-xl hover:bg-muted text-muted-foreground transition-all">
-                    <Paperclip className="w-5 h-5" />
-                  </button>
-                  <button className="p-2.5 rounded-xl hover:bg-muted text-muted-foreground transition-all">
-                    <ImageIcon className="w-5 h-5" />
-                  </button>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button className="p-2.5 rounded-xl hover:bg-muted text-muted-foreground transition-all" aria-label="Attach file">
+                        <Paperclip className="w-5 h-5" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Attach file</p>
+                    </TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button className="p-2.5 rounded-xl hover:bg-muted text-muted-foreground transition-all" aria-label="Attach image">
+                        <ImageIcon className="w-5 h-5" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Attach image</p>
+                    </TooltipContent>
+                  </Tooltip>
                 </div>
                 <div className="flex-1 relative">
                   <input
@@ -257,17 +297,32 @@ export default function ChatWindow({ chatId }: ChatWindowProps) {
                     placeholder="Type a message..."
                     className="w-full pl-4 pr-12 py-4 rounded-2xl bg-muted border-transparent focus:bg-card focus:border-border transition-all outline-none text-sm text-foreground placeholder:text-muted-foreground"
                   />
-                  <button className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-xl text-muted-foreground hover:text-foreground transition-colors">
-                    <Smile className="w-5 h-5" />
-                  </button>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-xl text-muted-foreground hover:text-foreground transition-colors" aria-label="Insert emoji">
+                        <Smile className="w-5 h-5" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Insert emoji</p>
+                    </TooltipContent>
+                  </Tooltip>
                 </div>
-                <button
-                  onClick={handleSendMessage}
-                  disabled={!newMessage.trim()}
-                  className="w-12 h-12 rounded-2xl bg-primary text-primary-foreground flex items-center justify-center hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-xl shadow-primary/10"
-                >
-                  <Send className="w-5 h-5" />
-                </button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      onClick={handleSendMessage}
+                      disabled={!newMessage.trim()}
+                      className="w-12 h-12 rounded-2xl bg-primary text-primary-foreground flex items-center justify-center hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-xl shadow-primary/10"
+                      aria-label="Send message"
+                    >
+                      <Send className="w-5 h-5" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Send message</p>
+                  </TooltipContent>
+                </Tooltip>
               </div>
             </footer>
         </div>
@@ -287,15 +342,36 @@ export default function ChatWindow({ chatId }: ChatWindowProps) {
               <p className="text-sm text-muted-foreground mt-1">{conversation.otherParty.type}</p>
             </div>
             <div className="flex justify-center gap-3">
-              <button className="p-3 rounded-2xl border border-border hover:bg-muted transition-all">
-                <User className="w-5 h-5 text-foreground" />
-              </button>
-              <button className="p-3 rounded-2xl border border-border hover:bg-muted transition-all">
-                <ShoppingBag className="w-5 h-5 text-foreground" />
-              </button>
-              <button className="p-3 rounded-2xl border border-border hover:bg-muted transition-all">
-                <Star className="w-5 h-5 text-foreground" />
-              </button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button className="p-3 rounded-2xl border border-border hover:bg-muted transition-all" aria-label="View profile">
+                    <User className="w-5 h-5 text-foreground" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>View profile</p>
+                </TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button className="p-3 rounded-2xl border border-border hover:bg-muted transition-all" aria-label="View shop">
+                    <ShoppingBag className="w-5 h-5 text-foreground" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>View shop</p>
+                </TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button className="p-3 rounded-2xl border border-border hover:bg-muted transition-all" aria-label="Rate conversation">
+                    <Star className="w-5 h-5 text-foreground" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Rate conversation</p>
+                </TooltipContent>
+              </Tooltip>
             </div>
           </div>
 
@@ -314,10 +390,10 @@ export default function ChatWindow({ chatId }: ChatWindowProps) {
             <section>
               <h4 className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-4">Settings</h4>
               <div className="space-y-2">
-                <button className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-rose-500/10 text-rose-500 transition-all group">
+                <button type="button" className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-rose-500/10 text-rose-500 transition-all group">
                   <span className="text-sm font-bold">Block Business</span>
                 </button>
-                <button className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-muted text-muted-foreground transition-all">
+                <button type="button" className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-muted text-muted-foreground transition-all">
                   <span className="text-sm font-bold">Mute Notifications</span>
                   <div className="w-8 h-4 bg-muted-foreground/30 rounded-full relative">
                     <div className="absolute left-1 top-1 w-2 h-2 bg-card rounded-full" />
