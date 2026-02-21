@@ -24,6 +24,7 @@ interface Salon {
   address: string;
   city: string;
   image: string | null;
+  logo: string | null;
   type: string;
   // Add other fields if needed
 }
@@ -126,7 +127,7 @@ export default function SalonsPage() {
               >
                 <div className="w-full sm:w-48 h-56 sm:h-48 rounded-2xl overflow-hidden flex-shrink-0 bg-secondary shadow-inner relative">
                   <img
-                    src={salon.image || "https://images.unsplash.com/photo-1600948836101-f9ffda59d250?w=400&h=300&fit=crop"}
+                    src={salon.logo || salon.image || "https://images.unsplash.com/photo-1600948836101-f9ffda59d250?w=400&h=300&fit=crop"}
                     alt={salon.name}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   />

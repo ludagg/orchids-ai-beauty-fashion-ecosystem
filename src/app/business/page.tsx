@@ -7,7 +7,11 @@ import { bookings } from "@/db/schema/bookings";
 import { eq, and, gte, desc, sql } from "drizzle-orm";
 import BusinessDashboardStats from "@/components/business/BusinessDashboardStats";
 
-export default async function BusinessDashboardPage() {
+export default async function BusinessDashboardPage({
+    searchParams,
+}: {
+    searchParams: Promise<{ salonId?: string }>;
+}) {
   const session = await auth.api.getSession({
     headers: await headers()
   });
@@ -16,18 +20,37 @@ export default async function BusinessDashboardPage() {
     redirect("/auth");
   }
 
-  // Fetch User's Salon
-  const userSalons = await db
-    .select()
-    .from(salons)
-    .where(eq(salons.ownerId, session.user.id))
-    .limit(1);
+  const params = await searchParams;
+  const salonId = params?.salonId;
+  let salon;
 
-  if (userSalons.length === 0) {
-    redirect("/business/register");
+  // Try to fetch specific salon if ID provided
+  if (salonId) {
+      const results = await db
+        .select()
+        .from(salons)
+        .where(and(eq(salons.id, salonId), eq(salons.ownerId, session.user.id)))
+        .limit(1);
+
+      if (results.length > 0) {
+          salon = results[0];
+      }
   }
 
-  const salon = userSalons[0];
+  // Fallback to first salon if not found or no ID provided
+  if (!salon) {
+      const userSalons = await db
+        .select()
+        .from(salons)
+        .where(eq(salons.ownerId, session.user.id))
+        .limit(1);
+
+      if (userSalons.length === 0) {
+        redirect("/business/register");
+      }
+
+      salon = userSalons[0];
+  }
 
   // Fetch Stats
   // 1. Revenue (Completed bookings)
@@ -60,7 +83,7 @@ export default async function BusinessDashboardPage() {
 
   const upcoming = upcomingResult[0]?.count || 0;
 
-  // 4. Total Customers (Approximate by unique bookings for now or just count all bookings? Better: distinct user_id)
+  // 4. Total Customers (Approximate by unique bookings for now)
   const customersResult = await db
     .select({ count: sql<number>`count(distinct ${bookings.userId})` })
     .from(bookings)

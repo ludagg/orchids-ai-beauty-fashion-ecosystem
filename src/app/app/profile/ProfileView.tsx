@@ -8,7 +8,6 @@ import {
   Settings,
   Video,
   Share2,
-  Lock,
   LayoutDashboard,
   Loader2,
   Gift,
@@ -16,11 +15,11 @@ import {
   TrendingUp,
   Calendar,
   Star,
-  MoreHorizontal,
   CheckCircle2,
   Sparkles,
   MapPin,
-  ArrowRight
+  ArrowRight,
+  Store
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -52,15 +51,6 @@ interface UserData {
     createdAt?: Date;
 }
 
-// Interface for Salon Data
-interface SalonData {
-    id: string;
-    name: string;
-    slug: string;
-    description: string | null;
-    type: "SALON" | "BOUTIQUE" | "BOTH";
-}
-
 interface VideoData {
     id: string;
     title: string;
@@ -74,7 +64,7 @@ interface VideoData {
 
 interface ProfileViewProps {
     user: UserData;
-    initialSalon: SalonData | null;
+    isSalonOwner: boolean;
 }
 
 const containerVariants = {
@@ -99,21 +89,8 @@ const itemVariants = {
   }
 };
 
-export default function ProfileView({ user, initialSalon }: ProfileViewProps) {
+export default function ProfileView({ user, isSalonOwner }: ProfileViewProps) {
   const router = useRouter();
-
-  // State
-  const [isPartner, setIsPartner] = useState(!!initialSalon);
-  const [partnerData, setPartnerData] = useState<{
-        businessName: string;
-        description: string;
-        type: "SALON" | "BOUTIQUE" | "BOTH";
-  } | null>(initialSalon ? {
-        businessName: initialSalon.name,
-        description: initialSalon.description || "",
-        type: initialSalon.type
-  } : null);
-  const [salonId, setSalonId] = useState<string | null>(initialSalon?.id || null);
 
   const [isVideoUploadModalOpen, setIsVideoUploadModalOpen] = useState(false);
   const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false);
@@ -146,11 +123,11 @@ export default function ProfileView({ user, initialSalon }: ProfileViewProps) {
 
   const publishedVideos = videos.filter(v => v.status === 'published');
 
-  // Display Logic
-  const displayName = isPartner && partnerData ? partnerData.businessName : user.name;
-  const displayHandle = isPartner && initialSalon ? `@${initialSalon.slug}` : (user.email ? `@${user.email.split('@')[0]}` : "@creator");
+  // Display Logic - Always User Info
+  const displayName = user.name;
+  const displayHandle = user.email ? `@${user.email.split('@')[0]}` : "@creator";
   const displayAvatar = user.image || "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop";
-  const displayBio = isPartner && partnerData ? partnerData.description : "Fashion enthusiast & style curator. Bringing you the latest trends.";
+  const displayBio = "Fashion enthusiast & style curator. Bringing you the latest trends.";
 
   // Mock stats
   const stats = {
@@ -226,7 +203,7 @@ export default function ProfileView({ user, initialSalon }: ProfileViewProps) {
 
                   {/* Badges */}
                   <div className="flex items-center gap-2 flex-wrap justify-center lg:justify-start">
-                    {isPartner && (
+                    {isSalonOwner && (
                       <Badge variant="default" className="gap-1">
                         <Sparkles className="w-3 h-3" />
                         Partner
@@ -271,7 +248,7 @@ export default function ProfileView({ user, initialSalon }: ProfileViewProps) {
                   Edit Profile
                 </Button>
 
-                {!isPartner ? (
+                {!isSalonOwner ? (
                   <Link href="/become-partner" className="w-full sm:w-auto min-w-[140px]">
                       <Button className="w-full">
                         <Sparkles className="w-4 h-4 mr-2" />
@@ -279,12 +256,12 @@ export default function ProfileView({ user, initialSalon }: ProfileViewProps) {
                       </Button>
                   </Link>
                 ) : (
-                  <Link href={`/app/partner-dashboard?type=${partnerData?.type || 'SALON'}&businessName=${encodeURIComponent(partnerData?.businessName || '')}&salonId=${salonId || ''}`} className="w-full sm:w-auto min-w-[140px]">
+                  <Link href="/app/my-business" className="w-full sm:w-auto min-w-[140px]">
                     <Button
                       className="w-full"
                     >
-                      <LayoutDashboard className="w-4 h-4 mr-2" />
-                      Dashboard
+                      <Store className="w-4 h-4 mr-2" />
+                      My Businesses
                     </Button>
                   </Link>
                 )}

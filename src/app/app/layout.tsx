@@ -92,7 +92,7 @@ export default function AppLayout({
         <nav className="flex-1 px-4 space-y-1">
           {session?.user?.role === "salon_owner" && (
             <Link
-              href="/business"
+              href="/app/my-business"
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-[#D4AF37] hover:bg-secondary hover:text-[#D4AF37] ${isCollapsed ? "justify-center" : ""}`}
             >
               <Store className="w-5 h-5 flex-shrink-0" />
@@ -168,7 +168,7 @@ export default function AppLayout({
             <nav className="flex-1 px-6 py-8 space-y-2">
               {session?.user?.role === "salon_owner" && (
                 <Link
-                  href="/business"
+                  href="/app/my-business"
                   className="w-full flex items-center justify-between py-4 text-xl font-medium border-b border-border text-[#D4AF37] hover:text-[#D4AF37]"
                 >
                   <span className="flex items-center gap-4">
@@ -224,7 +224,7 @@ export default function AppLayout({
 
           <div className="flex items-center gap-4 ml-4">
             {session?.user?.role === "salon_owner" && (
-              <Link href="/business" className="text-sm font-medium hover:text-primary transition-colors mr-4">
+              <Link href="/app/my-business" className="text-sm font-medium hover:text-primary transition-colors mr-4">
                 My Business
               </Link>
             )}
