@@ -2,7 +2,7 @@ import { pgTable, text, timestamp, boolean, jsonb, pgEnum } from 'drizzle-orm/pg
 import { relations } from 'drizzle-orm';
 import { users } from './auth';
 
-export const notificationTypeEnum = pgEnum('notification_type', ['booking', 'message', 'system', 'order', 'promotion']);
+export const notificationTypeEnum = pgEnum('notification_type', ['booking', 'message', 'system', 'order', 'promotion', 'review']);
 
 export const notifications = pgTable('notifications', {
   id: text('id').primaryKey(),

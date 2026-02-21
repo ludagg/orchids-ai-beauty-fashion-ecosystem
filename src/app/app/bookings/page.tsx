@@ -17,13 +17,15 @@ import {
   Truck,
   RotateCcw,
   Loader2,
-  ShoppingBag
+  ShoppingBag,
+  PenSquare
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { format } from "date-fns";
 import { toast } from "sonner";
+import { ReviewForm } from "@/components/reviews/ReviewForm";
 
 interface Booking {
   id: string;
@@ -69,6 +71,8 @@ export default function BookingsAndOrdersPage() {
   const [loading, setLoading] = useState(true);
   const [processingId, setProcessingId] = useState<string | null>(null);
   const [messageLoadingId, setMessageLoadingId] = useState<string | null>(null);
+  const [reviewModalOpen, setReviewModalOpen] = useState(false);
+  const [selectedBookingForReview, setSelectedBookingForReview] = useState<{id: string, salonId: string} | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -143,6 +147,11 @@ export default function BookingsAndOrdersPage() {
     } finally {
         setMessageLoadingId(null);
     }
+  };
+
+  const handleReview = (bookingId: string, salonId: string) => {
+    setSelectedBookingForReview({ id: bookingId, salonId });
+    setReviewModalOpen(true);
   };
 
   const formatPrice = (cents: number) => {
@@ -259,6 +268,16 @@ export default function BookingsAndOrdersPage() {
                         {messageLoadingId === booking.id ? <Loader2 className="w-5 h-5 animate-spin" /> : <MessageCircle className="w-5 h-5" />}
                     </button>
 
+                    {booking.status === 'completed' && (
+                        <button
+                            onClick={() => handleReview(booking.id, booking.salonId)}
+                            className="flex-1 h-14 rounded-2xl border border-border text-foreground font-bold text-sm hover:bg-muted transition-all flex items-center justify-center gap-2"
+                        >
+                            <PenSquare className="w-4 h-4" />
+                            Leave a Review
+                        </button>
+                    )}
+
                     {booking.status !== 'cancelled' && booking.status !== 'completed' && (
                         <button className="flex-1 h-14 rounded-2xl border border-border text-foreground font-bold text-sm hover:bg-muted transition-all">
                             Reschedule
@@ -359,6 +378,19 @@ export default function BookingsAndOrdersPage() {
           )
         )}
       </div>
+
+      {selectedBookingForReview && (
+        <ReviewForm
+            isOpen={reviewModalOpen}
+            onOpenChange={setReviewModalOpen}
+            salonId={selectedBookingForReview.salonId}
+            bookingId={selectedBookingForReview.id}
+            onSuccess={() => {
+                setReviewModalOpen(false);
+                setSelectedBookingForReview(null);
+            }}
+        />
+      )}
     </div>
   );
 }
