@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Heart, Play } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
@@ -97,36 +96,34 @@ export function VideoCard({ video }: VideoCardProps) {
                 />
             )}
 
-            {/* Overlay Gradient */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/60 opacity-60 group-hover:opacity-80 transition-opacity" />
+            {/* Play Icon - Top Right */}
+            <div className="absolute top-3 right-3 p-1.5 bg-black/20 backdrop-blur-md rounded-full border border-white/10 pointer-events-none">
+                <Play className="w-3 h-3 text-white fill-white" />
+            </div>
+
+            {/* Overlay Gradient - Bottom Only */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 pointer-events-none" />
 
             {/* Content */}
-            <div className="absolute bottom-0 left-0 right-0 p-3 text-white">
-                <h3 className="font-medium text-sm line-clamp-2 mb-2 drop-shadow-md leading-tight">
-                    {video.title}
-                </h3>
-
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                        <Avatar className="w-6 h-6 border border-white/20">
-                            <AvatarImage src={video.user.image || undefined} />
-                            <AvatarFallback>{video.user.name.charAt(0)}</AvatarFallback>
-                        </Avatar>
-                        <span className="text-xs text-white/90 truncate max-w-[80px]">
-                            {video.user.name}
-                        </span>
-                    </div>
-
-                    <button
-                        onClick={handleLike}
-                        className="flex items-center gap-1 hover:scale-110 transition-transform"
-                    >
-                        <Heart
-                            className={cn("w-4 h-4 drop-shadow-sm", isLiked ? "fill-red-500 text-red-500" : "text-white")}
-                        />
-                        <span className="text-xs font-medium">{likesCount}</span>
-                    </button>
+            <div className="absolute bottom-0 left-0 right-0 p-3 text-white flex items-end justify-between z-10">
+                <div className="flex flex-col gap-0.5 max-w-[75%]">
+                    <span className="text-[10px] font-medium text-white/80 truncate">
+                        @{video.user.name.replace(/\s+/g, '')}
+                    </span>
+                    <h3 className="font-bold text-sm leading-tight line-clamp-2 drop-shadow-sm">
+                        {video.title}
+                    </h3>
                 </div>
+
+                <button
+                    onClick={handleLike}
+                    className="flex items-center gap-1 hover:scale-110 transition-transform mb-0.5"
+                >
+                    <Heart
+                        className={cn("w-4 h-4 drop-shadow-sm", isLiked ? "fill-red-500 text-red-500" : "text-white")}
+                    />
+                    <span className="text-xs font-medium">{likesCount}</span>
+                </button>
             </div>
         </Link>
     </div>
