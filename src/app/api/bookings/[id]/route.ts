@@ -2,9 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { bookings } from "@/db/schema/bookings"; // Import bookings schema
-import { eq } from "drizzle-orm";
+import { eq, and, count } from "drizzle-orm";
 import { headers } from "next/headers";
 import { sendEmail } from "@/lib/email";
+import { LoyaltyEngine } from "@/lib/loyalty";
 import { EmailTemplates } from "@/lib/email-templates";
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -71,6 +72,39 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
                 updatedAt: new Date()
             })
             .where(eq(bookings.id, id));
+
+        // Loyalty Logic: Award points on completion
+        if (status === 'completed') {
+             try {
+                 const points = Math.floor((booking.totalPrice || 0) / 1000); // 10 pts per 100 currency units (assuming price in cents)
+                 if (points > 0) {
+                     await LoyaltyEngine.addPoints(
+                         booking.userId,
+                         points,
+                         'earned_booking',
+                         `Booking at ${booking.salon.name}`,
+                         booking.id
+                     );
+                 }
+
+                 // Check badges
+                 // Count completed bookings for this user
+                 const bookingCountResult = await db.select({ value: count() })
+                     .from(bookings)
+                     .where(and(
+                         eq(bookings.userId, booking.userId),
+                         eq(bookings.status, 'completed')
+                     ));
+                 const bookingCount = bookingCountResult[0]?.value || 0;
+
+                 await LoyaltyEngine.checkBadges(booking.userId, 'booking_completed', {
+                     bookingCount,
+                     isFirstBooking: bookingCount === 1
+                 });
+             } catch (loyaltyError) {
+                 console.error("Loyalty error:", loyaltyError);
+             }
+        }
 
         // Send Email Notification if Cancelled
         if (status === 'cancelled') {

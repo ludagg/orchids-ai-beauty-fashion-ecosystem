@@ -20,7 +20,8 @@ import {
   MessageSquare,
   Calendar,
   Store,
-  User
+  User,
+  Award
 } from "lucide-react";
 import Link from "next/link";
 import BottomNav from "@/components/BottomNav";
@@ -39,6 +40,7 @@ const sidebarItems = [
   { icon: Compass, label: "Discover", href: "/app" },
   { icon: User, label: "Profile", href: "/app/profile" },
   { icon: ShoppingBag, label: "Marketplace", href: "/app/marketplace" },
+  { icon: Award, label: "Loyalty Program", href: "/app/loyalty" },
   //{ icon: Sparkles, label: "AI Stylist", href: "/app/ai-stylist" },
   { icon: Scissors, label: "Salons", href: "/app/salons" },
   { icon: Video, label: "Videos & Creations", href: "/app/videos-creations" },

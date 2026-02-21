@@ -547,8 +547,21 @@ function EmptyState({ type, onUpload }: { type: string, onUpload?: () => void })
 // Rewards Section Component
 function RewardsSection({ user }: { user: UserData }) {
   const points = user.loyaltyPoints || 0;
-  const nextLevel = 1000;
-  const progress = Math.min((points / nextLevel) * 100, 100);
+
+  // Simple level calculation for display (sync with backend logic ideally)
+  const getLevel = (p: number) => {
+      if (p >= 10000) return { name: "Diamond", next: null, min: 10000 };
+      if (p >= 5000) return { name: "Platinum", next: 10000, min: 5000 };
+      if (p >= 2000) return { name: "Gold", next: 5000, min: 2000 };
+      if (p >= 500) return { name: "Silver", next: 2000, min: 500 };
+      return { name: "Bronze", next: 500, min: 0 };
+  };
+
+  const currentLevel = getLevel(points);
+  const nextMilestone = currentLevel.next || points;
+  const progress = currentLevel.next
+      ? Math.min(Math.max((points - currentLevel.min) / (currentLevel.next - currentLevel.min) * 100, 0), 100)
+      : 100;
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -584,9 +597,17 @@ function RewardsSection({ user }: { user: UserData }) {
                     indicatorClassName="bg-primary-foreground"
                 />
                 <div className="flex justify-between text-xs text-primary-foreground/80 font-medium">
-                    <span>{points} / {nextLevel}</span>
-                    <span>Next Reward: $10 Off</span>
+                    <span>{points} pts</span>
+                    <span>{currentLevel.next ? `Next Level: ${currentLevel.next} pts` : 'Max Level'}</span>
                 </div>
+              </div>
+
+              <div className="pt-4">
+                  <Button variant="secondary" asChild className="w-full sm:w-auto">
+                      <Link href="/app/loyalty">
+                          View Full Dashboard <ArrowRight className="ml-2 h-4 w-4" />
+                      </Link>
+                  </Button>
               </div>
             </div>
           </div>
@@ -612,10 +633,10 @@ function RewardsSection({ user }: { user: UserData }) {
               <div className="flex items-center gap-2 mb-2">
                 <Star className="w-5 h-5 text-amber-500 fill-amber-500" />
                 <h3 className="text-xl font-bold text-foreground">
-                  Gold Member
+                  {currentLevel.name} Member
                 </h3>
               </div>
-              <p className="text-sm text-muted-foreground">Top 10% of active users</p>
+              <p className="text-sm text-muted-foreground">Unlock exclusive benefits as you climb tiers.</p>
             </div>
 
             <Separator />
@@ -623,15 +644,15 @@ function RewardsSection({ user }: { user: UserData }) {
             <div className="space-y-3">
               <div className="flex items-center gap-3 text-sm">
                 <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
-                <span>2x points on all purchases</span>
+                <span>Earn points on all bookings</span>
               </div>
               <div className="flex items-center gap-3 text-sm">
                 <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
-                <span>Priority booking access</span>
+                <span>Redeem for discounts & products</span>
               </div>
               <div className="flex items-center gap-3 text-sm">
                 <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
-                <span>Exclusive partner discounts</span>
+                <span>Unlock special badges</span>
               </div>
             </div>
           </CardContent>
@@ -641,30 +662,28 @@ function RewardsSection({ user }: { user: UserData }) {
           <CardHeader>
             <div className="flex items-start justify-between">
               <div>
-                <CardTitle>Points History</CardTitle>
-                <CardDescription>Recent activity</CardDescription>
+                <CardTitle>Start Earning</CardTitle>
+                <CardDescription>How to get points</CardDescription>
               </div>
-              <Button variant="ghost" size="sm" className="h-8">
-                View All
+              <Button variant="ghost" size="sm" className="h-8" asChild>
+                  <Link href="/app/loyalty/rewards">View Rewards</Link>
               </Button>
             </div>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               {[
-                { action: 'Booking at Luxe Salon', points: '+50', date: '2 hours ago', positive: true },
-                { action: 'Purchase - Summer Collection', points: '+120', date: 'Yesterday', positive: true },
-                { action: 'Reward Redemption', points: '-500', date: '3 days ago', positive: false },
+                { action: 'Complete a Booking', points: '+10 pts / ₹100', icon: '📅' },
+                { action: 'Write a Review', points: '+10 pts', icon: '✍️' },
+                { action: 'Review with Photo', points: '+30 pts', icon: '📸' },
+                { action: 'Refer a Friend', points: '+50 pts', icon: '👥' },
               ].map((item, i) => (
                 <div key={i} className="flex items-center justify-between py-2 border-b border-border/50 last:border-0">
-                  <div className="space-y-1">
+                  <div className="flex items-center gap-3">
+                    <span className="text-lg">{item.icon}</span>
                     <p className="text-sm font-medium">{item.action}</p>
-                    <p className="text-xs text-muted-foreground">{item.date}</p>
                   </div>
-                  <Badge
-                    variant={item.positive ? "outline" : "secondary"}
-                    className={cn(item.positive ? "text-emerald-600 border-emerald-200 bg-emerald-50 dark:bg-emerald-950/20" : "")}
-                  >
+                  <Badge variant="secondary" className="bg-emerald-50 text-emerald-600 dark:bg-emerald-950/20">
                     {item.points}
                   </Badge>
                 </div>
