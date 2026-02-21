@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import { Loader2, Calendar, Clock, User, CheckCircle2, XCircle, Search, Filter, Mail, Phone, MapPin, DollarSign, TrendingUp, AlertCircle } from "lucide-react";
 import { format } from "date-fns";
