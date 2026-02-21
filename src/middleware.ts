@@ -6,6 +6,7 @@ export async function middleware(request: NextRequest) {
   // Define paths that do not require authentication
   const isPublicPath =
     pathname === "/" ||
+    pathname === "/app" ||
     pathname.startsWith("/auth") || // Public auth pages (login/signup)
     pathname.startsWith("/api") || // API endpoints are public (auth handled in route handlers)
     pathname.startsWith("/_next") || // Next.js internals
@@ -42,6 +43,6 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      */
-    '/((?!_next/static|_next/image|favicon.ico).*)',
+    "/((?!_next/static|_next/image|favicon.ico).*)",
   ],
-}
+};
