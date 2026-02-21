@@ -4,9 +4,9 @@ import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { salons } from "@/db/schema/salons";
 import { eq } from "drizzle-orm";
-import { SalonReviewsManager } from "@/components/partner-dashboard/SalonReviewsManager";
+import BusinessRegisterForm from "@/components/business/BusinessRegisterForm";
 
-export default async function BusinessReviewsPage() {
+export default async function BusinessRegisterPage() {
   const session = await auth.api.getSession({
     headers: await headers()
   });
@@ -21,11 +21,9 @@ export default async function BusinessReviewsPage() {
     .where(eq(salons.ownerId, session.user.id))
     .limit(1);
 
-  if (userSalons.length === 0) {
-    redirect("/business/register");
+  if (userSalons.length > 0) {
+    redirect("/business");
   }
 
-  const salon = userSalons[0];
-
-  return <SalonReviewsManager salonId={salon.id} />;
+  return <BusinessRegisterForm />;
 }

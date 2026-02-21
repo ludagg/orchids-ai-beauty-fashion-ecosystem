@@ -4,9 +4,9 @@ import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { salons } from "@/db/schema/salons";
 import { eq } from "drizzle-orm";
-import { SalonReviewsManager } from "@/components/partner-dashboard/SalonReviewsManager";
+import { StaffManager } from "@/components/partner-dashboard/StaffManager";
 
-export default async function BusinessReviewsPage() {
+export default async function BusinessStaffPage() {
   const session = await auth.api.getSession({
     headers: await headers()
   });
@@ -27,5 +27,5 @@ export default async function BusinessReviewsPage() {
 
   const salon = userSalons[0];
 
-  return <SalonReviewsManager salonId={salon.id} />;
+  return <StaffManager salonId={salon.id} />;
 }
