@@ -12,7 +12,13 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { Loader2, Upload, FileText, CheckCircle2, MapPin, X } from "lucide-react";
+import {
+    Loader2, Upload, FileText, CheckCircle2, MapPin, X,
+    User, Building2, FileCheck, Check, ChevronRight,
+    Mail, Phone, Globe, Building, Hash
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { motion, AnimatePresence } from "framer-motion";
 
 // Schema (matching API)
 const partnerSchema = z.object({
@@ -53,6 +59,14 @@ type PartnerFormData = z.infer<typeof partnerSchema>;
 const categories = [
   "Hair Salon", "Nail Bar", "Spa", "Barbershop", "Fashion Store",
   "Beauty Store", "Makeup Artist", "Other"
+];
+
+const STEPS = [
+    { id: 1, label: "Personal Info", icon: User, description: "Your details" },
+    { id: 2, label: "Business Details", icon: Building2, description: "About your salon" },
+    { id: 3, label: "Location", icon: MapPin, description: "Address & Map" },
+    { id: 4, label: "Documents", icon: FileCheck, description: "Verification" },
+    { id: 5, label: "Review", icon: CheckCircle2, description: "Final check" },
 ];
 
 export default function PartnerRegistrationForm({ user }: { user: any }) {
@@ -215,410 +229,456 @@ export default function PartnerRegistrationForm({ user }: { user: any }) {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6">
-      {/* Progress Bar */}
-      <div className="mb-8">
-        <div className="flex justify-between text-sm font-medium text-muted-foreground mb-2">
-            <span>Step {step} of 5</span>
-            <span>{Math.round((step / 5) * 100)}%</span>
-        </div>
-        <div className="h-2 bg-secondary rounded-full overflow-hidden">
-            <div
-                className="h-full bg-primary transition-all duration-500 ease-out"
-                style={{ width: `${(step / 5) * 100}%` }}
-            />
-        </div>
-      </div>
+    <div className="bg-card rounded-[32px] shadow-sm overflow-hidden border border-border min-h-[600px]">
+        <div className="grid lg:grid-cols-12 min-h-[600px]">
+            {/* Sidebar / Stepper */}
+            <div className="lg:col-span-4 bg-muted/30 p-8 lg:border-r border-border">
+                <div className="mb-8">
+                    <h2 className="text-xl font-bold mb-2">Registration</h2>
+                    <p className="text-sm text-muted-foreground">Complete these steps to become a partner.</p>
+                </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-
-        {/* STEP 1: PERSONAL INFO */}
-        {step === 1 && (
-            <div className="space-y-6 animate-in fade-in slide-in-from-right-8 duration-500">
                 <div className="space-y-2">
-                    <h2 className="text-2xl font-bold">Personal Information</h2>
-                    <p className="text-muted-foreground">Tell us about yourself, the business owner.</p>
-                </div>
+                    {STEPS.map((s) => {
+                        const Icon = s.icon;
+                        const isActive = step === s.id;
+                        const isCompleted = step > s.id;
 
-                <div className="grid gap-4">
-                    <div className="grid gap-2">
-                        <Label htmlFor="personal.name">Full Name</Label>
-                        <Input id="personal.name" {...register("personal.name")} disabled />
-                        {errors.personal?.name && <p className="text-red-500 text-sm">{errors.personal.name.message}</p>}
-                    </div>
-
-                    <div className="grid gap-2">
-                        <Label htmlFor="personal.email">Email Address</Label>
-                        <Input id="personal.email" {...register("personal.email")} disabled />
-                    </div>
-
-                    <div className="grid gap-2">
-                        <Label htmlFor="personal.phone">Phone Number</Label>
-                        <Input id="personal.phone" {...register("personal.phone")} placeholder="+1 234 567 890" />
-                        {errors.personal?.phone && <p className="text-red-500 text-sm">{errors.personal.phone.message}</p>}
-                    </div>
-
-                    <div className="grid gap-2">
-                        <Label>Profile Photo</Label>
-                        <div className="flex items-center gap-4">
-                            {formData.personal.profilePhoto ? (
-                                <img src={formData.personal.profilePhoto} alt="Profile" className="w-16 h-16 rounded-full object-cover border" />
-                            ) : (
-                                <div className="w-16 h-16 rounded-full bg-secondary flex items-center justify-center">
-                                    <UserIcon className="w-8 h-8 text-muted-foreground" />
-                                </div>
-                            )}
-                            <div className="flex-1">
-                                <Input
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={(e) => handleFileUpload(e, "personal.profilePhoto", "image")}
-                                    disabled={uploading === "personal.profilePhoto"}
-                                />
-                                <p className="text-xs text-muted-foreground mt-1">Recommended: Square JPG/PNG, max 5MB</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        )}
-
-        {/* STEP 2: BUSINESS INFO */}
-        {step === 2 && (
-            <div className="space-y-6 animate-in fade-in slide-in-from-right-8 duration-500">
-                <div className="space-y-2">
-                    <h2 className="text-2xl font-bold">Business Details</h2>
-                    <p className="text-muted-foreground">Tell us about your business.</p>
-                </div>
-
-                <div className="grid gap-4">
-                    <div className="grid gap-2">
-                        <Label htmlFor="business.name">Business Name</Label>
-                        <Input id="business.name" {...register("business.name")} placeholder="e.g. Luxe Salon" />
-                        {errors.business?.name && <p className="text-red-500 text-sm">{errors.business.name.message}</p>}
-                    </div>
-
-                    <div className="grid gap-2">
-                        <Label htmlFor="business.category">Category</Label>
-                        <Select onValueChange={(val) => setValue("business.category", val)} defaultValue={formData.business.category}>
-                            <SelectTrigger>
-                                <SelectValue placeholder="Select a category" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {categories.map(cat => (
-                                    <SelectItem key={cat} value={cat}>{cat}</SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                        {errors.business?.category && <p className="text-red-500 text-sm">{errors.business.category.message}</p>}
-                    </div>
-
-                    <div className="grid gap-2">
-                        <Label htmlFor="business.description">Description</Label>
-                        <Textarea
-                            id="business.description"
-                            {...register("business.description")}
-                            placeholder="Describe your services and what makes your business unique..."
-                            className="h-24"
-                        />
-                        <p className="text-xs text-muted-foreground text-right">{formData.business.description.length}/500</p>
-                        {errors.business?.description && <p className="text-red-500 text-sm">{errors.business.description.message}</p>}
-                    </div>
-
-                    <div className="grid gap-2">
-                        <Label htmlFor="business.website">Website (Optional)</Label>
-                        <Input id="business.website" {...register("business.website")} placeholder="https://example.com" />
-                    </div>
-
-                    <div className="grid gap-2">
-                        <Label>Business Logo</Label>
-                        <div className="flex items-center gap-4">
-                            {formData.business.logo ? (
-                                <img src={formData.business.logo} alt="Logo" className="w-16 h-16 rounded-lg object-contain border bg-white" />
-                            ) : (
-                                <div className="w-16 h-16 rounded-lg bg-secondary flex items-center justify-center border border-dashed">
-                                    <span className="text-xs text-muted-foreground">No Logo</span>
-                                </div>
-                            )}
-                            <div className="flex-1">
-                                <Input
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={(e) => handleFileUpload(e, "business.logo", "image")}
-                                    disabled={uploading === "business.logo"}
-                                />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="grid gap-2">
-                        <Label>Gallery Photos (Min 2, Max 10)</Label>
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-2">
-                            {formData.gallery.map((url, i) => (
-                                <div key={i} className="relative aspect-square rounded-lg overflow-hidden border group">
-                                    <img src={url} alt={`Gallery ${i}`} className="w-full h-full object-cover" />
-                                    <button
-                                        type="button"
-                                        onClick={() => removeGalleryImage(i)}
-                                        className="absolute top-1 right-1 p-1 bg-black/50 rounded-full text-white opacity-0 group-hover:opacity-100 transition-opacity"
-                                    >
-                                        <X className="w-3 h-3" />
-                                    </button>
-                                </div>
-                            ))}
-                            {formData.gallery.length < 10 && (
-                                <label className="aspect-square rounded-lg border-2 border-dashed border-muted-foreground/20 hover:border-primary/50 flex flex-col items-center justify-center cursor-pointer bg-muted/20 transition-colors">
-                                    <Upload className="w-6 h-6 text-muted-foreground mb-2" />
-                                    <span className="text-xs text-muted-foreground font-medium">Add Photos</span>
-                                    <input
-                                        type="file"
-                                        multiple
-                                        accept="image/*"
-                                        className="hidden"
-                                        onChange={handleGalleryUpload}
-                                        disabled={uploading === "gallery"}
-                                    />
-                                </label>
-                            )}
-                        </div>
-                        {errors.gallery && <p className="text-red-500 text-sm">{errors.gallery.message}</p>}
-                    </div>
-                </div>
-            </div>
-        )}
-
-        {/* STEP 3: ADDRESS */}
-        {step === 3 && (
-            <div className="space-y-6 animate-in fade-in slide-in-from-right-8 duration-500">
-                <div className="space-y-2">
-                    <h2 className="text-2xl font-bold">Location</h2>
-                    <p className="text-muted-foreground">Where can customers find you?</p>
-                </div>
-
-                <div className="grid gap-4">
-                    <div className="grid gap-2">
-                        <Label htmlFor="address.street">Street Address</Label>
-                        <Input id="address.street" {...register("address.street")} placeholder="123 Main St" />
-                        {errors.address?.street && <p className="text-red-500 text-sm">{errors.address.street.message}</p>}
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="grid gap-2">
-                            <Label htmlFor="address.city">City</Label>
-                            <Input id="address.city" {...register("address.city")} placeholder="New York" />
-                            {errors.address?.city && <p className="text-red-500 text-sm">{errors.address.city.message}</p>}
-                        </div>
-                        <div className="grid gap-2">
-                            <Label htmlFor="address.state">State / Region</Label>
-                            <Input id="address.state" {...register("address.state")} placeholder="NY" />
-                            {errors.address?.state && <p className="text-red-500 text-sm">{errors.address.state.message}</p>}
-                        </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="grid gap-2">
-                            <Label htmlFor="address.zipCode">Postal Code</Label>
-                            <Input id="address.zipCode" {...register("address.zipCode")} placeholder="10001" />
-                            {errors.address?.zipCode && <p className="text-red-500 text-sm">{errors.address.zipCode.message}</p>}
-                        </div>
-                        <div className="grid gap-2">
-                            <Label htmlFor="address.country">Country</Label>
-                            <Input id="address.country" {...register("address.country")} placeholder="United States" />
-                            {errors.address?.country && <p className="text-red-500 text-sm">{errors.address.country.message}</p>}
-                        </div>
-                    </div>
-
-                    <div className="p-4 bg-blue-50 text-blue-800 text-sm rounded-lg flex items-start gap-3">
-                        <MapPin className="w-5 h-5 flex-shrink-0 mt-0.5" />
-                        <p>We will use this address to automatically detect your location on the map so customers nearby can find you.</p>
-                    </div>
-                </div>
-            </div>
-        )}
-
-        {/* STEP 4: DOCUMENTS */}
-        {step === 4 && (
-             <div className="space-y-6 animate-in fade-in slide-in-from-right-8 duration-500">
-                <div className="space-y-2">
-                    <h2 className="text-2xl font-bold">Verification Documents</h2>
-                    <p className="text-muted-foreground">Upload official documents to verify your business.</p>
-                </div>
-
-                <div className="grid gap-6">
-                    <div className="grid gap-2">
-                        <Label htmlFor="docs.registrationNumber">Business Registration Number (SIRET, EIN, etc.)</Label>
-                        <Input id="docs.registrationNumber" {...register("docs.registrationNumber")} placeholder="Enter registration number" />
-                        {errors.docs?.registrationNumber && <p className="text-red-500 text-sm">{errors.docs.registrationNumber.message}</p>}
-                    </div>
-
-                    <div className="grid gap-2">
-                        <Label>Owner ID Document (Passport / Driver's License)</Label>
-                        <div className="border-2 border-dashed border-muted-foreground/20 rounded-xl p-6 flex flex-col items-center justify-center text-center hover:bg-muted/30 transition-colors">
-                            {formData.docs.idUrl ? (
-                                <div className="flex items-center gap-2 text-emerald-600 font-medium">
-                                    <CheckCircle2 className="w-5 h-5" />
-                                    <span>ID Document Uploaded</span>
-                                    <button type="button" onClick={() => setValue("docs.idUrl", "")} className="text-xs text-red-500 underline ml-2">Change</button>
-                                </div>
-                            ) : (
-                                <>
-                                    <FileText className="w-10 h-10 text-muted-foreground mb-3" />
-                                    <p className="text-sm font-medium mb-1">Click to upload ID Document</p>
-                                    <p className="text-xs text-muted-foreground">PDF, JPG or PNG (Max 10MB)</p>
-                                    <input
-                                        type="file"
-                                        className="absolute inset-0 opacity-0 cursor-pointer"
-                                        accept=".pdf,image/*"
-                                        onChange={(e) => handleFileUpload(e, "docs.idUrl", "document")}
-                                        disabled={uploading === "docs.idUrl"}
-                                    />
-                                </>
-                            )}
-                        </div>
-                        {uploading === "docs.idUrl" && <p className="text-xs text-primary animate-pulse">Uploading...</p>}
-                        {errors.docs?.idUrl && <p className="text-red-500 text-sm">{errors.docs.idUrl.message}</p>}
-                    </div>
-
-                    <div className="grid gap-2">
-                        <Label>Business Proof (Utility Bill / Registration Cert)</Label>
-                        <div className="border-2 border-dashed border-muted-foreground/20 rounded-xl p-6 flex flex-col items-center justify-center text-center hover:bg-muted/30 transition-colors relative">
-                             {formData.docs.proofUrl ? (
-                                <div className="flex items-center gap-2 text-emerald-600 font-medium">
-                                    <CheckCircle2 className="w-5 h-5" />
-                                    <span>Business Proof Uploaded</span>
-                                    <button type="button" onClick={() => setValue("docs.proofUrl", "")} className="text-xs text-red-500 underline ml-2">Change</button>
-                                </div>
-                            ) : (
-                                <>
-                                    <FileText className="w-10 h-10 text-muted-foreground mb-3" />
-                                    <p className="text-sm font-medium mb-1">Click to upload Business Proof</p>
-                                    <p className="text-xs text-muted-foreground">PDF, JPG or PNG (Max 10MB)</p>
-                                    <input
-                                        type="file"
-                                        className="absolute inset-0 opacity-0 cursor-pointer"
-                                        accept=".pdf,image/*"
-                                        onChange={(e) => handleFileUpload(e, "docs.proofUrl", "document")}
-                                        disabled={uploading === "docs.proofUrl"}
-                                    />
-                                </>
-                            )}
-                        </div>
-                        {uploading === "docs.proofUrl" && <p className="text-xs text-primary animate-pulse">Uploading...</p>}
-                        {errors.docs?.proofUrl && <p className="text-red-500 text-sm">{errors.docs.proofUrl.message}</p>}
-                    </div>
-                </div>
-             </div>
-        )}
-
-        {/* STEP 5: LEGAL */}
-        {step === 5 && (
-            <div className="space-y-6 animate-in fade-in slide-in-from-right-8 duration-500">
-                <div className="space-y-2">
-                    <h2 className="text-2xl font-bold">Review & Confirm</h2>
-                    <p className="text-muted-foreground">Please review your information and accept the terms.</p>
-                </div>
-
-                <div className="bg-muted/30 p-6 rounded-xl space-y-4 text-sm">
-                    <div className="grid grid-cols-3 gap-2">
-                        <span className="font-medium text-muted-foreground">Business:</span>
-                        <span className="col-span-2 font-semibold">{formData.business.name} ({formData.business.category})</span>
-                    </div>
-                    <div className="grid grid-cols-3 gap-2">
-                        <span className="font-medium text-muted-foreground">Owner:</span>
-                        <span className="col-span-2 font-semibold">{formData.personal.name}</span>
-                    </div>
-                    <div className="grid grid-cols-3 gap-2">
-                        <span className="font-medium text-muted-foreground">Address:</span>
-                        <span className="col-span-2">{formData.address.street}, {formData.address.city}</span>
-                    </div>
-                </div>
-
-                <div className="space-y-4">
-                    <div className="flex items-start gap-3">
-                        <Checkbox
-                            id="legal.terms"
-                            checked={formData.legal.terms}
-                            onCheckedChange={(c) => setValue("legal.terms", c === true)}
-                        />
-                        <div className="grid gap-1.5 leading-none">
-                            <label
-                                htmlFor="legal.terms"
-                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        return (
+                            <div
+                                key={s.id}
+                                className={cn(
+                                    "flex items-center gap-4 p-3 rounded-xl transition-all duration-300",
+                                    isActive ? "bg-background shadow-sm border border-border" : "text-muted-foreground"
+                                )}
                             >
-                                I agree to the <span className="text-primary underline cursor-pointer">Partner Terms & Conditions</span>
-                            </label>
-                        </div>
-                    </div>
-                    {errors.legal?.terms && <p className="text-red-500 text-sm ml-7">{errors.legal.terms.message}</p>}
-
-                    <div className="flex items-start gap-3">
-                        <Checkbox
-                            id="legal.confirm"
-                            checked={formData.legal.confirm}
-                            onCheckedChange={(c) => setValue("legal.confirm", c === true)}
-                        />
-                        <div className="grid gap-1.5 leading-none">
-                            <label
-                                htmlFor="legal.confirm"
-                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                            >
-                                I confirm that all provided information is accurate and I am authorized to represent this business.
-                            </label>
-                        </div>
-                    </div>
-                    {errors.legal?.confirm && <p className="text-red-500 text-sm ml-7">{errors.legal.confirm.message}</p>}
+                                <div className={cn(
+                                    "w-10 h-10 rounded-full flex items-center justify-center transition-colors border",
+                                    isActive ? "bg-primary text-primary-foreground border-primary" :
+                                    isCompleted ? "bg-emerald-500 text-white border-emerald-500" : "bg-background border-border"
+                                )}>
+                                    {isCompleted ? <Check className="w-5 h-5" /> : <Icon className="w-5 h-5" />}
+                                </div>
+                                <div>
+                                    <p className={cn("text-sm font-semibold", isActive && "text-foreground")}>{s.label}</p>
+                                    <p className="text-xs text-muted-foreground">{s.description}</p>
+                                </div>
+                            </div>
+                        )
+                    })}
                 </div>
             </div>
-        )}
 
-        <div className="flex justify-between pt-8 border-t">
-            {step > 1 ? (
-                <Button type="button" variant="outline" onClick={prevStep} disabled={loading}>
-                    Back
-                </Button>
-            ) : (
-                <div />
-            )}
+            {/* Form Area */}
+            <div className="lg:col-span-8 p-8 lg:p-12">
+                <form onSubmit={handleSubmit(onSubmit)} className="max-w-xl mx-auto space-y-8">
 
-            {step < 5 ? (
-                <Button type="button" onClick={nextStep} disabled={loading}>
-                    Next Step
-                </Button>
-            ) : (
-                <Button type="submit" disabled={loading || !formData.legal.terms || !formData.legal.confirm}>
-                    {loading ? (
-                        <>
-                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                            Submitting...
-                        </>
-                    ) : (
-                        "Submit Application"
-                    )}
-                </Button>
-            )}
+                    {/* Header for current step */}
+                    <div className="space-y-2">
+                        <AnimatePresence mode="wait">
+                            <motion.div
+                                key={step + "-header"}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <h2 className="text-3xl font-display font-bold">{STEPS[step - 1].label}</h2>
+                                <p className="text-muted-foreground text-lg">
+                                    {step === 1 && "Tell us about yourself, the business owner."}
+                                    {step === 2 && "Tell us about your business and services."}
+                                    {step === 3 && "Where can customers find you?"}
+                                    {step === 4 && "Upload official documents to verify your business."}
+                                    {step === 5 && "Please review your information and accept the terms."}
+                                </p>
+                            </motion.div>
+                        </AnimatePresence>
+                    </div>
+
+                    <AnimatePresence mode="wait">
+                        <motion.div
+                            key={step}
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -20 }}
+                            transition={{ duration: 0.3 }}
+                            className="space-y-6"
+                        >
+
+                            {/* STEP 1: PERSONAL INFO */}
+                            {step === 1 && (
+                                <div className="grid gap-4">
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="personal.name">Full Name</Label>
+                                        <div className="relative">
+                                            <User className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                                            <Input id="personal.name" className="pl-9" {...register("personal.name")} disabled />
+                                        </div>
+                                        {errors.personal?.name && <p className="text-red-500 text-sm">{errors.personal.name.message}</p>}
+                                    </div>
+
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="personal.email">Email Address</Label>
+                                        <div className="relative">
+                                            <Mail className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                                            <Input id="personal.email" className="pl-9" {...register("personal.email")} disabled />
+                                        </div>
+                                    </div>
+
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="personal.phone">Phone Number</Label>
+                                        <div className="relative">
+                                            <Phone className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                                            <Input id="personal.phone" className="pl-9" {...register("personal.phone")} placeholder="+1 234 567 890" />
+                                        </div>
+                                        {errors.personal?.phone && <p className="text-red-500 text-sm">{errors.personal.phone.message}</p>}
+                                    </div>
+
+                                    <div className="grid gap-2">
+                                        <Label>Profile Photo</Label>
+                                        <div className="flex items-center gap-4">
+                                            {formData.personal.profilePhoto ? (
+                                                <img src={formData.personal.profilePhoto} alt="Profile" className="w-16 h-16 rounded-full object-cover border" />
+                                            ) : (
+                                                <div className="w-16 h-16 rounded-full bg-secondary flex items-center justify-center">
+                                                    <User className="w-8 h-8 text-muted-foreground" />
+                                                </div>
+                                            )}
+                                            <div className="flex-1">
+                                                <Input
+                                                    type="file"
+                                                    accept="image/*"
+                                                    onChange={(e) => handleFileUpload(e, "personal.profilePhoto", "image")}
+                                                    disabled={uploading === "personal.profilePhoto"}
+                                                    className="cursor-pointer file:cursor-pointer"
+                                                />
+                                                <p className="text-xs text-muted-foreground mt-1">Recommended: Square JPG/PNG, max 5MB</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* STEP 2: BUSINESS INFO */}
+                            {step === 2 && (
+                                <div className="grid gap-4">
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="business.name">Business Name</Label>
+                                        <div className="relative">
+                                            <Building2 className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                                            <Input id="business.name" className="pl-9" {...register("business.name")} placeholder="e.g. Luxe Salon" />
+                                        </div>
+                                        {errors.business?.name && <p className="text-red-500 text-sm">{errors.business.name.message}</p>}
+                                    </div>
+
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="business.category">Category</Label>
+                                        <Select onValueChange={(val) => setValue("business.category", val)} defaultValue={formData.business.category}>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select a category" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {categories.map(cat => (
+                                                    <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                        {errors.business?.category && <p className="text-red-500 text-sm">{errors.business.category.message}</p>}
+                                    </div>
+
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="business.description">Description</Label>
+                                        <Textarea
+                                            id="business.description"
+                                            {...register("business.description")}
+                                            placeholder="Describe your services and what makes your business unique..."
+                                            className="h-24"
+                                        />
+                                        <p className="text-xs text-muted-foreground text-right">{formData.business.description.length}/500</p>
+                                        {errors.business?.description && <p className="text-red-500 text-sm">{errors.business.description.message}</p>}
+                                    </div>
+
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="business.website">Website (Optional)</Label>
+                                        <div className="relative">
+                                            <Globe className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                                            <Input id="business.website" className="pl-9" {...register("business.website")} placeholder="https://example.com" />
+                                        </div>
+                                    </div>
+
+                                    <div className="grid gap-2">
+                                        <Label>Business Logo</Label>
+                                        <div className="flex items-center gap-4">
+                                            {formData.business.logo ? (
+                                                <img src={formData.business.logo} alt="Logo" className="w-16 h-16 rounded-lg object-contain border bg-white" />
+                                            ) : (
+                                                <div className="w-16 h-16 rounded-lg bg-secondary flex items-center justify-center border border-dashed">
+                                                    <span className="text-xs text-muted-foreground">No Logo</span>
+                                                </div>
+                                            )}
+                                            <div className="flex-1">
+                                                <Input
+                                                    type="file"
+                                                    accept="image/*"
+                                                    onChange={(e) => handleFileUpload(e, "business.logo", "image")}
+                                                    disabled={uploading === "business.logo"}
+                                                    className="cursor-pointer file:cursor-pointer"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="grid gap-2">
+                                        <Label>Gallery Photos (Min 2, Max 10)</Label>
+                                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-2">
+                                            {formData.gallery.map((url, i) => (
+                                                <div key={i} className="relative aspect-square rounded-lg overflow-hidden border group">
+                                                    <img src={url} alt={`Gallery ${i}`} className="w-full h-full object-cover" />
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => removeGalleryImage(i)}
+                                                        className="absolute top-1 right-1 p-1 bg-black/50 rounded-full text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                                                    >
+                                                        <X className="w-3 h-3" />
+                                                    </button>
+                                                </div>
+                                            ))}
+                                            {formData.gallery.length < 10 && (
+                                                <label className="aspect-square rounded-lg border-2 border-dashed border-muted-foreground/20 hover:border-primary/50 flex flex-col items-center justify-center cursor-pointer bg-muted/20 transition-colors">
+                                                    <Upload className="w-6 h-6 text-muted-foreground mb-2" />
+                                                    <span className="text-xs text-muted-foreground font-medium">Add Photos</span>
+                                                    <input
+                                                        type="file"
+                                                        multiple
+                                                        accept="image/*"
+                                                        className="hidden"
+                                                        onChange={handleGalleryUpload}
+                                                        disabled={uploading === "gallery"}
+                                                    />
+                                                </label>
+                                            )}
+                                        </div>
+                                        {errors.gallery && <p className="text-red-500 text-sm">{errors.gallery.message}</p>}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* STEP 3: ADDRESS */}
+                            {step === 3 && (
+                                <div className="grid gap-4">
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="address.street">Street Address</Label>
+                                        <div className="relative">
+                                            <MapPin className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                                            <Input id="address.street" className="pl-9" {...register("address.street")} placeholder="123 Main St" />
+                                        </div>
+                                        {errors.address?.street && <p className="text-red-500 text-sm">{errors.address.street.message}</p>}
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="grid gap-2">
+                                            <Label htmlFor="address.city">City</Label>
+                                            <div className="relative">
+                                                <Building className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                                                <Input id="address.city" className="pl-9" {...register("address.city")} placeholder="New York" />
+                                            </div>
+                                            {errors.address?.city && <p className="text-red-500 text-sm">{errors.address.city.message}</p>}
+                                        </div>
+                                        <div className="grid gap-2">
+                                            <Label htmlFor="address.state">State / Region</Label>
+                                            <Input id="address.state" {...register("address.state")} placeholder="NY" />
+                                            {errors.address?.state && <p className="text-red-500 text-sm">{errors.address.state.message}</p>}
+                                        </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="grid gap-2">
+                                            <Label htmlFor="address.zipCode">Postal Code</Label>
+                                            <div className="relative">
+                                                <Hash className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                                                <Input id="address.zipCode" className="pl-9" {...register("address.zipCode")} placeholder="10001" />
+                                            </div>
+                                            {errors.address?.zipCode && <p className="text-red-500 text-sm">{errors.address.zipCode.message}</p>}
+                                        </div>
+                                        <div className="grid gap-2">
+                                            <Label htmlFor="address.country">Country</Label>
+                                            <div className="relative">
+                                                <Globe className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                                                <Input id="address.country" className="pl-9" {...register("address.country")} placeholder="United States" />
+                                            </div>
+                                            {errors.address?.country && <p className="text-red-500 text-sm">{errors.address.country.message}</p>}
+                                        </div>
+                                    </div>
+
+                                    <div className="p-4 bg-blue-50 text-blue-800 text-sm rounded-lg flex items-start gap-3">
+                                        <MapPin className="w-5 h-5 flex-shrink-0 mt-0.5" />
+                                        <p>We will use this address to automatically detect your location on the map so customers nearby can find you.</p>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* STEP 4: DOCUMENTS */}
+                            {step === 4 && (
+                                <div className="grid gap-6">
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="docs.registrationNumber">Business Registration Number (SIRET, EIN, etc.)</Label>
+                                        <div className="relative">
+                                            <Hash className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                                            <Input id="docs.registrationNumber" className="pl-9" {...register("docs.registrationNumber")} placeholder="Enter registration number" />
+                                        </div>
+                                        {errors.docs?.registrationNumber && <p className="text-red-500 text-sm">{errors.docs.registrationNumber.message}</p>}
+                                    </div>
+
+                                    <div className="grid gap-2">
+                                        <Label>Owner ID Document (Passport / Driver's License)</Label>
+                                        <div className="border-2 border-dashed border-muted-foreground/20 rounded-xl p-6 flex flex-col items-center justify-center text-center hover:bg-muted/30 transition-colors">
+                                            {formData.docs.idUrl ? (
+                                                <div className="flex items-center gap-2 text-emerald-600 font-medium">
+                                                    <CheckCircle2 className="w-5 h-5" />
+                                                    <span>ID Document Uploaded</span>
+                                                    <button type="button" onClick={() => setValue("docs.idUrl", "")} className="text-xs text-red-500 underline ml-2">Change</button>
+                                                </div>
+                                            ) : (
+                                                <>
+                                                    <FileText className="w-10 h-10 text-muted-foreground mb-3" />
+                                                    <p className="text-sm font-medium mb-1">Click to upload ID Document</p>
+                                                    <p className="text-xs text-muted-foreground">PDF, JPG or PNG (Max 10MB)</p>
+                                                    <input
+                                                        type="file"
+                                                        className="absolute inset-0 opacity-0 cursor-pointer"
+                                                        accept=".pdf,image/*"
+                                                        onChange={(e) => handleFileUpload(e, "docs.idUrl", "document")}
+                                                        disabled={uploading === "docs.idUrl"}
+                                                    />
+                                                </>
+                                            )}
+                                        </div>
+                                        {uploading === "docs.idUrl" && <p className="text-xs text-primary animate-pulse">Uploading...</p>}
+                                        {errors.docs?.idUrl && <p className="text-red-500 text-sm">{errors.docs.idUrl.message}</p>}
+                                    </div>
+
+                                    <div className="grid gap-2">
+                                        <Label>Business Proof (Utility Bill / Registration Cert)</Label>
+                                        <div className="border-2 border-dashed border-muted-foreground/20 rounded-xl p-6 flex flex-col items-center justify-center text-center hover:bg-muted/30 transition-colors relative">
+                                            {formData.docs.proofUrl ? (
+                                                <div className="flex items-center gap-2 text-emerald-600 font-medium">
+                                                    <CheckCircle2 className="w-5 h-5" />
+                                                    <span>Business Proof Uploaded</span>
+                                                    <button type="button" onClick={() => setValue("docs.proofUrl", "")} className="text-xs text-red-500 underline ml-2">Change</button>
+                                                </div>
+                                            ) : (
+                                                <>
+                                                    <FileText className="w-10 h-10 text-muted-foreground mb-3" />
+                                                    <p className="text-sm font-medium mb-1">Click to upload Business Proof</p>
+                                                    <p className="text-xs text-muted-foreground">PDF, JPG or PNG (Max 10MB)</p>
+                                                    <input
+                                                        type="file"
+                                                        className="absolute inset-0 opacity-0 cursor-pointer"
+                                                        accept=".pdf,image/*"
+                                                        onChange={(e) => handleFileUpload(e, "docs.proofUrl", "document")}
+                                                        disabled={uploading === "docs.proofUrl"}
+                                                    />
+                                                </>
+                                            )}
+                                        </div>
+                                        {uploading === "docs.proofUrl" && <p className="text-xs text-primary animate-pulse">Uploading...</p>}
+                                        {errors.docs?.proofUrl && <p className="text-red-500 text-sm">{errors.docs.proofUrl.message}</p>}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* STEP 5: LEGAL */}
+                            {step === 5 && (
+                                <div className="space-y-4">
+                                    <div className="bg-muted/30 p-6 rounded-xl space-y-4 text-sm">
+                                        <div className="grid grid-cols-3 gap-2">
+                                            <span className="font-medium text-muted-foreground">Business:</span>
+                                            <span className="col-span-2 font-semibold">{formData.business.name} ({formData.business.category})</span>
+                                        </div>
+                                        <div className="grid grid-cols-3 gap-2">
+                                            <span className="font-medium text-muted-foreground">Owner:</span>
+                                            <span className="col-span-2 font-semibold">{formData.personal.name}</span>
+                                        </div>
+                                        <div className="grid grid-cols-3 gap-2">
+                                            <span className="font-medium text-muted-foreground">Address:</span>
+                                            <span className="col-span-2">{formData.address.street}, {formData.address.city}</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-4">
+                                        <div className="flex items-start gap-3">
+                                            <Checkbox
+                                                id="legal.terms"
+                                                checked={formData.legal.terms}
+                                                onCheckedChange={(c) => setValue("legal.terms", c === true)}
+                                            />
+                                            <div className="grid gap-1.5 leading-none">
+                                                <label
+                                                    htmlFor="legal.terms"
+                                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                                >
+                                                    I agree to the <span className="text-primary underline cursor-pointer">Partner Terms & Conditions</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        {errors.legal?.terms && <p className="text-red-500 text-sm ml-7">{errors.legal.terms.message}</p>}
+
+                                        <div className="flex items-start gap-3">
+                                            <Checkbox
+                                                id="legal.confirm"
+                                                checked={formData.legal.confirm}
+                                                onCheckedChange={(c) => setValue("legal.confirm", c === true)}
+                                            />
+                                            <div className="grid gap-1.5 leading-none">
+                                                <label
+                                                    htmlFor="legal.confirm"
+                                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                                >
+                                                    I confirm that all provided information is accurate and I am authorized to represent this business.
+                                                </label>
+                                            </div>
+                                        </div>
+                                        {errors.legal?.confirm && <p className="text-red-500 text-sm ml-7">{errors.legal.confirm.message}</p>}
+                                    </div>
+                                </div>
+                            )}
+
+                        </motion.div>
+                    </AnimatePresence>
+
+                    {/* Navigation */}
+                    <div className="flex justify-between pt-8 border-t">
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            onClick={prevStep}
+                            disabled={step === 1 || loading}
+                            className={step === 1 ? "invisible" : ""}
+                        >
+                            Back
+                        </Button>
+
+                        {step < 5 ? (
+                            <Button type="button" onClick={nextStep} disabled={loading} className="px-8">
+                                Next Step
+                                <ChevronRight className="w-4 h-4 ml-2" />
+                            </Button>
+                        ) : (
+                            <Button type="submit" disabled={loading || !formData.legal.terms || !formData.legal.confirm} className="px-8">
+                                {loading ? (
+                                    <>
+                                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                        Submitting...
+                                    </>
+                                ) : (
+                                    "Submit Application"
+                                )}
+                            </Button>
+                        )}
+                    </div>
+                </form>
+            </div>
         </div>
-
-      </form>
     </div>
   );
-}
-
-function UserIcon(props: any) {
-    return (
-        <svg
-            {...props}
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-            <circle cx="12" cy="7" r="4" />
-        </svg>
-    )
 }
