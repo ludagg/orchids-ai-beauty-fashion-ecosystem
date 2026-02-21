@@ -90,7 +90,7 @@ export default function VideosCreationsPage() {
     <div className="flex flex-col min-h-screen bg-background">
 
       {/* Feed Tabs - Sticky at top */}
-      <div className="sticky top-[64px] lg:top-16 z-30 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b">
+      <div className="sticky top-0 z-30 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b">
         <div className="flex items-center justify-center gap-8 h-12">
           <button
             onClick={() => setFeedType("foryou")}
@@ -124,17 +124,17 @@ export default function VideosCreationsPage() {
       </div>
 
       {/* Stories Rail */}
-      <div className="pt-4 pb-2 border-b">
+      <div className="border-b bg-muted/20">
         <StoriesRail />
       </div>
 
       {/* Popular Searches */}
-      <div className="py-2">
+      <div className="">
         <PopularSearches />
       </div>
 
       {/* Masonry Grid */}
-      <div className="flex-1 p-4 max-w-[2000px] mx-auto w-full">
+      <div className="flex-1 max-w-[2000px] mx-auto w-full pt-2">
         <MasonryVideoGrid videos={videos} />
 
         {loading && (

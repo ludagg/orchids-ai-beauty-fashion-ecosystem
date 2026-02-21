@@ -19,14 +19,14 @@ const POPULAR_SEARCHES = [
 
 export function PopularSearches() {
   return (
-    <div className="w-full py-2 bg-background">
+    <div className="w-full py-3 bg-background border-b border-border/40">
       <ScrollArea className="w-full whitespace-nowrap">
-        <div className="flex w-max space-x-2 p-4 pt-2">
+        <div className="flex w-max space-x-3 px-4 pb-2">
           {POPULAR_SEARCHES.map((search) => (
             <Badge
               key={search}
-              variant="secondary"
-              className="cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors px-4 py-1.5 text-sm font-normal rounded-full border bg-muted/50"
+              variant="outline"
+              className="cursor-pointer hover:bg-primary hover:text-primary-foreground transition-all px-4 py-2 text-sm font-medium rounded-full border-muted-foreground/20 hover:border-primary bg-background shadow-sm hover:shadow-md"
             >
               #{search.replace(/\s+/g, '')}
             </Badge>
