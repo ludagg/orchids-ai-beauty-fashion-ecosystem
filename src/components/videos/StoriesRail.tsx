@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import { useSession } from "@/lib/auth-client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Plus, Video } from "lucide-react";
+import { Plus } from "lucide-react";
 import { StoryViewer } from "./StoryViewer";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
@@ -44,7 +44,6 @@ export function StoriesRail() {
       const res = await fetch("/api/stories");
       if (res.ok) {
         const data = await res.json();
-        // The API returns groups of stories by user
         setUserStories(data);
       }
     } catch (error) {
@@ -69,7 +68,7 @@ export function StoriesRail() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           mediaUrl: newStoryUrl,
-          mediaType: newStoryUrl.match(/\.(mp4|webm)$/i) ? "video" : "image" // Simple check
+          mediaType: newStoryUrl.match(/\.(mp4|webm)$/i) ? "video" : "image"
         })
       });
 
@@ -77,7 +76,7 @@ export function StoriesRail() {
         toast.success("Story created!");
         setNewStoryUrl("");
         setIsCreateOpen(false);
-        fetchStories(); // Refresh
+        fetchStories();
       } else {
         toast.error("Failed to create story");
       }
@@ -100,49 +99,55 @@ export function StoriesRail() {
   };
 
   return (
-    <div className="w-full py-4 bg-background">
-      <div className="flex gap-4 overflow-x-auto px-4 pb-4 scrollbar-hide snap-x">
+    <div className="w-full py-3 bg-background/50">
+      <div className="flex gap-4 overflow-x-auto px-4 pb-2 scrollbar-hide snap-x items-center">
 
         {/* Create Story Button (Always first if logged in) */}
         {session?.user && (
-           <div className="flex flex-col items-center gap-2 cursor-pointer shrink-0 snap-start group relative">
+           <div className="flex flex-col items-center gap-1.5 cursor-pointer shrink-0 snap-start group relative">
                 <div
                     onClick={handleMyStoryClick}
                     className={cn(
                     "relative w-[72px] h-[72px] rounded-full p-[2px] transition-transform active:scale-95",
-                    hasMyStory ? "bg-gradient-to-tr from-yellow-400 to-red-600" : "bg-muted border-2 border-dashed border-muted-foreground/30"
+                    hasMyStory ? "bg-gradient-to-tr from-yellow-400 to-red-600" : "bg-muted border border-border"
                     )}
                 >
                   <div className="w-full h-full rounded-full bg-background flex items-center justify-center overflow-hidden relative">
                      <Avatar className="w-full h-full">
-                        <AvatarImage src={session.user.image || undefined} className="opacity-80 group-hover:opacity-100 transition-opacity" />
+                        <AvatarImage src={session.user.image || undefined} className="object-cover" />
                         <AvatarFallback>{session.user.name?.charAt(0)}</AvatarFallback>
                      </Avatar>
+
+                     {/* Overlay for hover effect if no story */}
                      {!hasMyStory && (
-                        <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/10 transition-colors">
-                            <Plus className="w-8 h-8 text-white drop-shadow-md" />
-                        </div>
+                        <div className="absolute inset-0 bg-black/5 group-hover:bg-black/10 transition-colors" />
                      )}
                   </div>
 
-                  {/* Plus Button for adding new story (if already has story) OR if no story (redundant but explicit) */}
-                  <div
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        setIsCreateOpen(true);
-                    }}
-                    className="absolute bottom-0 right-0 bg-background rounded-full p-0.5 cursor-pointer hover:scale-110 transition-transform z-10"
-                  >
-                      <div className="bg-primary text-primary-foreground rounded-full w-5 h-5 flex items-center justify-center shadow-sm">
-                          <Plus className="w-3 h-3" />
-                      </div>
-                  </div>
+                  {/* Plus Button Badge */}
+                  {!hasMyStory && (
+                    <div
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setIsCreateOpen(true);
+                        }}
+                        className="absolute bottom-0 right-0 translate-x-1 translate-y-1 bg-background rounded-full p-0.5 cursor-pointer z-10 shadow-sm border border-border"
+                    >
+                        <div className="bg-primary text-primary-foreground rounded-full w-5 h-5 flex items-center justify-center">
+                            <Plus className="w-3.5 h-3.5" />
+                        </div>
+                    </div>
+                  )}
+
+                  {/* If has story, maybe just show the ring. The plus is only for creating new.
+                      Actually, Instagram shows a plus if you view your own story and want to add more?
+                      For now, let's keep it simple: Ring = has story. Plus badge = empty state.
+                  */}
                 </div>
-                <span className="text-xs font-medium truncate w-[72px] text-center">
+                <span className="text-xs font-medium truncate w-[72px] text-center text-muted-foreground group-hover:text-foreground transition-colors">
                   Your Story
                 </span>
 
-                {/* Hidden Dialog Trigger logic */}
                 <Dialog open={iscreateOpen} onOpenChange={setIsCreateOpen}>
                     <DialogContent>
                     <DialogHeader>
@@ -180,28 +185,23 @@ export function StoriesRail() {
 
         {/* User Stories List */}
         {!isLoading && userStories.map((us, index) => {
-            // Skip current user in this list if we want to treat "Add Story" as the main entry point for self
-            // But if user has stories, maybe we want to show them separately?
-            // Usually "Your Story" is the first bubble.
-            // If we use the "Add Story" button as the wrapper for "Your Story", we need click handler logic.
-            // For now, I'll filter out current user from this list to avoid duplication if "Add Story" is present.
             if (session?.user && us.user.id === session.user.id) return null;
 
             return (
                 <button
                     key={us.user.id}
                     onClick={() => setSelectedUserIndex(index)}
-                    className="flex flex-col items-center gap-2 cursor-pointer shrink-0 snap-start group"
+                    className="flex flex-col items-center gap-1.5 cursor-pointer shrink-0 snap-start group"
                 >
                     <div className="w-[72px] h-[72px] rounded-full p-[2px] bg-gradient-to-tr from-yellow-400 to-red-600 transition-transform group-hover:scale-105">
-                        <div className="w-full h-full rounded-full border-2 border-background overflow-hidden">
+                        <div className="w-full h-full rounded-full border-2 border-background overflow-hidden relative">
                             <Avatar className="w-full h-full">
-                                <AvatarImage src={us.user.image || undefined} />
+                                <AvatarImage src={us.user.image || undefined} className="object-cover" />
                                 <AvatarFallback>{us.user.name.charAt(0)}</AvatarFallback>
                             </Avatar>
                         </div>
                     </div>
-                    <span className="text-xs font-medium truncate w-[72px] text-center">
+                    <span className="text-xs font-medium truncate w-[72px] text-center text-muted-foreground group-hover:text-foreground transition-colors">
                         {us.user.name.split(' ')[0]}
                     </span>
                 </button>
