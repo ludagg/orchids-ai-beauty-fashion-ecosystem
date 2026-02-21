@@ -32,7 +32,6 @@ import { Separator } from "@/components/ui/separator";
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { PartnerOnboardingModal, PartnerData } from "@/components/profile/PartnerOnboardingModal";
 import { VideoUploadModal } from "@/components/profile/VideoUploadModal";
 import { EditProfileModal } from "@/components/profile/EditProfileModal";
 import { motion } from "framer-motion";
@@ -105,17 +104,17 @@ export default function ProfileView({ user, initialSalon }: ProfileViewProps) {
 
   // State
   const [isPartner, setIsPartner] = useState(!!initialSalon);
-  const [partnerData, setPartnerData] = useState<PartnerData | null>(initialSalon ? {
+  const [partnerData, setPartnerData] = useState<{
+        businessName: string;
+        description: string;
+        type: "SALON" | "BOUTIQUE" | "BOTH";
+  } | null>(initialSalon ? {
         businessName: initialSalon.name,
         description: initialSalon.description || "",
-        address: "",
-        city: "",
-        zipCode: "",
         type: initialSalon.type
   } : null);
   const [salonId, setSalonId] = useState<string | null>(initialSalon?.id || null);
 
-  const [isPartnerModalOpen, setIsPartnerModalOpen] = useState(false);
   const [isVideoUploadModalOpen, setIsVideoUploadModalOpen] = useState(false);
   const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false);
 
@@ -146,13 +145,6 @@ export default function ProfileView({ user, initialSalon }: ProfileViewProps) {
   }, [fetchVideos]);
 
   const publishedVideos = videos.filter(v => v.status === 'published');
-
-  const handlePartnerComplete = (data: PartnerData & { id?: string }) => {
-    setPartnerData(data);
-    if (data.id) setSalonId(data.id);
-    setIsPartner(true);
-    router.refresh();
-  };
 
   // Display Logic
   const displayName = isPartner && partnerData ? partnerData.businessName : user.name;
@@ -280,13 +272,12 @@ export default function ProfileView({ user, initialSalon }: ProfileViewProps) {
                 </Button>
 
                 {!isPartner ? (
-                  <Button
-                    onClick={() => setIsPartnerModalOpen(true)}
-                    className="w-full sm:w-auto min-w-[140px]"
-                  >
-                    <Sparkles className="w-4 h-4 mr-2" />
-                    Become Partner
-                  </Button>
+                  <Link href="/become-partner" className="w-full sm:w-auto min-w-[140px]">
+                      <Button className="w-full">
+                        <Sparkles className="w-4 h-4 mr-2" />
+                        Become Partner
+                      </Button>
+                  </Link>
                 ) : (
                   <Link href={`/app/partner-dashboard?type=${partnerData?.type || 'SALON'}&businessName=${encodeURIComponent(partnerData?.businessName || '')}&salonId=${salonId || ''}`} className="w-full sm:w-auto min-w-[140px]">
                     <Button
@@ -426,12 +417,6 @@ export default function ProfileView({ user, initialSalon }: ProfileViewProps) {
           </TooltipContent>
         </Tooltip>
       </motion.div>
-
-      <PartnerOnboardingModal
-        isOpen={isPartnerModalOpen}
-        onOpenChange={setIsPartnerModalOpen}
-        onComplete={handlePartnerComplete}
-      />
 
       <VideoUploadModal
         isOpen={isVideoUploadModalOpen}
