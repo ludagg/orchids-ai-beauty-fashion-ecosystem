@@ -16,7 +16,7 @@ import {
 import Link from "next/link";
 import { useState, useEffect } from "react";
 
-const CATEGORIES = ["All", "Apparel", "Footwear", "Accessories", "Jewelry", "Beauty"];
+const CATEGORIES = ["All", "Clothing", "Beauty & Skincare", "Hair Care", "Nail Care", "Fragrances", "Accessories", "Wellness"];
 
 interface Product {
   id: string;
