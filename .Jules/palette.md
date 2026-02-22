@@ -28,3 +28,7 @@
 ## 2026-02-21 - Accessible Icon-Only Actions
 **Learning:** Icon-only buttons (like "Chat", "Call", "Video") are invisible to screen readers without labels. Wrapping them in `Tooltip` components not only provides a visual hover state but also ensures the `aria-label` is reinforced by the tooltip text. Also, `Link` components rendering anchor tags cannot contain `<button>` elements; replacing them with styled `<span>` elements maintains validity and accessibility.
 **Action:** Audit all icon-only buttons for `aria-label` and `Tooltip` wrappers. Ensure `Link` children are not interactive elements like `button`.
+
+## 2026-02-22 - Enhanced Search Experience
+**Learning:** Adding a global keyboard shortcut ('/') to focus the search bar and a clear button ('X') significantly improves search efficiency. Using type="text" instead of type="search" allows for a consistent cross-browser custom clear button UX, as long as semantic roles are maintained.
+**Action:** Implement 'inputRef' and global keydown listeners in search components. Use 'offsetParent !== null' to ensure only visible inputs are focused by shortcuts.
