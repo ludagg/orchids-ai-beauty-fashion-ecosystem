@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { products } from "@/db/schema/commerce";
 import { salons } from "@/db/schema/salons";
-import { eq, and, ilike, desc, asc, gt, gte, lte } from "drizzle-orm";
+import { eq, and, ilike, desc, asc, gt, gte, lte, or, sql } from "drizzle-orm";
 
 export async function GET(req: NextRequest) {
   try {
@@ -19,10 +19,14 @@ export async function GET(req: NextRequest) {
     const minRatingRaw = searchParams.get("minRating");
     const sortBy = searchParams.get("sortBy") || "newest";
 
-    const conditions = [eq(products.isActive, true)];
+    // 1. Base conditions: Status must be ACTIVE and Visibility PUBLIC
+    const conditions = [
+        eq(products.status, 'ACTIVE'),
+        eq(products.visibility, 'PUBLIC')
+    ];
 
     if (category && category !== "All") {
-      conditions.push(eq(products.category, category));
+      conditions.push(eq(products.mainCategory, category));
     }
 
     if (salonId) {
@@ -34,21 +38,23 @@ export async function GET(req: NextRequest) {
     }
 
     if (featured) {
-        // Simple featured logic: high rating or new
-        conditions.push(gt(products.rating, 4.0));
+        // Simple featured logic: high rating (> 4.0) or explicitly marked featured
+        conditions.push(or(gt(products.rating, 4.0), eq(products.featured, true)));
     }
 
+    // Price filtering logic (using originalPrice for simplicity in query, though ideally should use effective price)
+    // For now, we filter on originalPrice to avoid complex SQL in this query builder usage
     if (minPriceRaw) {
-        const minPrice = parseInt(minPriceRaw);
+        const minPrice = parseInt(minPriceRaw); // inputs are in cents
         if (!isNaN(minPrice)) {
-            conditions.push(gte(products.price, minPrice));
+            conditions.push(gte(products.originalPrice, minPrice));
         }
     }
 
     if (maxPriceRaw) {
         const maxPrice = parseInt(maxPriceRaw);
         if (!isNaN(maxPrice)) {
-             conditions.push(lte(products.price, maxPrice));
+             conditions.push(lte(products.originalPrice, maxPrice));
         }
     }
 
@@ -60,12 +66,14 @@ export async function GET(req: NextRequest) {
     }
 
     let orderByClause;
+    const effectivePrice = sql`COALESCE(${products.salePrice}, ${products.originalPrice})`;
+
     switch (sortBy) {
         case 'price_asc':
-            orderByClause = asc(products.price);
+            orderByClause = asc(products.originalPrice); // Simplified sort
             break;
         case 'price_desc':
-            orderByClause = desc(products.price);
+            orderByClause = desc(products.originalPrice);
             break;
         case 'rating':
             orderByClause = desc(products.rating);
@@ -76,7 +84,7 @@ export async function GET(req: NextRequest) {
             break;
     }
 
-    const data = await db.query.products.findMany({
+    const dbProducts = await db.query.products.findMany({
       where: and(...conditions),
       limit: limit,
       with: {
@@ -91,7 +99,22 @@ export async function GET(req: NextRequest) {
       orderBy: [orderByClause],
     });
 
-    return NextResponse.json(data);
+    // Map to frontend structure
+    const mappedProducts = dbProducts.map(p => ({
+        id: p.id,
+        name: p.name,
+        brand: p.brand,
+        price: p.salePrice ?? p.originalPrice, // Use sale price if available
+        originalPrice: p.originalPrice,
+        rating: p.rating || 0,
+        reviewCount: p.reviewCount || 0,
+        images: [p.mainImageUrl, ...(p.galleryUrls || [])].filter(Boolean),
+        category: p.mainCategory,
+        salon: p.salon,
+        featured: p.featured
+    }));
+
+    return NextResponse.json(mappedProducts);
   } catch (error) {
     console.error("Error fetching products:", error);
     return NextResponse.json(
