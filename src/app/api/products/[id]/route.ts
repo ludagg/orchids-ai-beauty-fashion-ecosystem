@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { products, salons } from "@/db/schema";
 import { reviews } from "@/db/schema/reviews";
-import { eq, desc, and } from "drizzle-orm";
+import { eq, desc, and, not } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { z } from "zod";
@@ -82,7 +82,7 @@ export async function GET(
 
     // Fetch recent reviews for this product
     const productReviews = await db.query.reviews.findMany({
-        where: eq(reviews.productId, id),
+        where: and(eq(reviews.productId, id), eq(reviews.status, 'approved')),
         with: {
             user: {
                 columns: {
@@ -96,7 +96,22 @@ export async function GET(
         limit: 5
     });
 
-    return NextResponse.json({ ...product, reviews: productReviews });
+    // Fetch similar products
+    const similarProducts = await db.query.products.findMany({
+        where: and(
+            eq(products.mainCategory, product.mainCategory),
+            eq(products.status, 'ACTIVE'),
+            not(eq(products.id, id))
+        ),
+        limit: 4,
+        orderBy: [desc(products.rating)]
+    });
+
+    return NextResponse.json({
+        ...product,
+        reviews: productReviews,
+        similarProducts
+    });
   } catch (error) {
     console.error("Error fetching product:", error);
     return NextResponse.json(
@@ -155,6 +170,8 @@ export async function PATCH(
         return NextResponse.json({ error: "Forbidden: Cannot edit platform products" }, { status: 403 });
     }
 
+    // Use query to check salon ownership properly or just trust the select
+    // We need to check if session.user.id is the owner of targetProduct.salonId
     const salon = await db
         .select()
         .from(salons)
