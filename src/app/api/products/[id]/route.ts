@@ -9,11 +9,56 @@ import { z } from "zod";
 
 const productUpdateSchema = z.object({
   name: z.string().min(1).optional(),
+  brand: z.string().optional(),
   description: z.string().optional(),
-  price: z.number().int().nonnegative().optional(),
-  stock: z.number().int().nonnegative().optional(),
-  images: z.array(z.string().url()).optional(),
-  isActive: z.boolean().optional(),
+  shortDescription: z.string().optional(),
+
+  mainCategory: z.string().optional(),
+  subcategory: z.string().optional(),
+  productType: z.enum(['PHYSICAL', 'DIGITAL']).optional(),
+  tags: z.array(z.string()).optional(),
+
+  originalPrice: z.number().int().nonnegative().optional(),
+  salePrice: z.number().int().nonnegative().optional().nullable(),
+  saleStartDate: z.string().datetime().optional().nullable(),
+  saleEndDate: z.string().datetime().optional().nullable(),
+  sku: z.string().optional(),
+  totalStock: z.number().int().nonnegative().optional(),
+  lowStockThreshold: z.number().int().nonnegative().optional(),
+  trackInventory: z.boolean().optional(),
+
+  colors: z.array(z.any()).optional(),
+  sizes: z.array(z.any()).optional(),
+  variants: z.array(z.any()).optional(),
+
+  mainImageUrl: z.string().url().optional(),
+  galleryUrls: z.array(z.string().url()).optional(),
+  videoUrl: z.string().url().optional().nullable(),
+
+  weightGrams: z.number().int().nonnegative().optional(),
+  dimensions: z.object({
+      length: z.number().optional(),
+      width: z.number().optional(),
+      height: z.number().optional()
+  }).optional(),
+  material: z.string().optional(),
+  countryOfOrigin: z.string().optional(),
+  careInstructions: z.string().optional(),
+
+  processingTime: z.string().optional(),
+  shippingRegions: z.array(z.string()).optional(),
+  freeShipping: z.boolean().optional(),
+  shippingCost: z.number().int().nonnegative().optional(),
+  returnPolicy: z.string().optional(),
+  returnConditions: z.string().optional(),
+
+  slug: z.string().optional(),
+  metaTitle: z.string().optional(),
+  metaDescription: z.string().optional(),
+  visibility: z.enum(['PUBLIC', 'DRAFT', 'SCHEDULED']).optional(),
+  publishDate: z.string().datetime().optional().nullable(),
+  featured: z.boolean().optional(),
+  status: z.enum(['PENDING_REVIEW', 'ACTIVE', 'REJECTED', 'SUSPENDED']).optional(),
 });
 
 export async function GET(
@@ -120,11 +165,19 @@ export async function PATCH(
         return NextResponse.json({ error: "Forbidden: You do not own this product" }, { status: 403 });
     }
 
+    const data = result.data;
+
+    // Parse dates if present
+    const updateData: any = { ...data };
+    if (data.saleStartDate) updateData.saleStartDate = new Date(data.saleStartDate);
+    if (data.saleEndDate) updateData.saleEndDate = new Date(data.saleEndDate);
+    if (data.publishDate) updateData.publishDate = new Date(data.publishDate);
+
     // 3. Update product
     const updatedProduct = await db
       .update(products)
       .set({
-        ...result.data,
+        ...updateData,
         updatedAt: new Date(),
       })
       .where(eq(products.id, id))

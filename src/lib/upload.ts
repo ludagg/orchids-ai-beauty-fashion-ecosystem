@@ -24,6 +24,7 @@ interface UploadOptions {
     folder: string;
     allowedTypes?: string[];
     maxSize?: number; // in bytes
+    filename?: string; // Optional custom filename
 }
 
 /**
@@ -52,7 +53,7 @@ export async function uploadFile(file: File, options: UploadOptions): Promise<st
 
     // Generate filename
     const extension = path.extname(file.name) || (file.type === 'application/pdf' ? '.pdf' : '.jpg');
-    const filename = `${nanoid()}${extension}`;
+    const filename = options.filename || `${nanoid()}${extension}`;
 
     if (s3Client) {
         try {
