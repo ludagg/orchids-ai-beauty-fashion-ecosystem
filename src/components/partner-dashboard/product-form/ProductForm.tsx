@@ -18,7 +18,6 @@ import { VariantsSection } from "./Variants"
 import { MediaSection } from "./Media"
 import { PhysicalDetailsSection } from "./PhysicalDetails"
 import { ShippingSection } from "./Shipping"
-import { SeoVisibilitySection } from "./SeoVisibility"
 
 interface ProductFormProps {
     salonId: string;
@@ -69,6 +68,9 @@ export function ProductForm({ salonId, initialData, onSuccess }: ProductFormProp
     useEffect(() => {
         const subscription = watch((value, { name, type }) => {
             if (type === 'change') {
+                // Don't auto-save if not created yet (prevents multiple creations on typing)
+                if (!isCreatedRef.current) return;
+
                 setDraftStatus("saving");
                 const timer = setTimeout(() => {
                     handleAutoSave(value);
@@ -81,6 +83,9 @@ export function ProductForm({ salonId, initialData, onSuccess }: ProductFormProp
 
     const handleAutoSave = async (data: any) => {
         if (!data.name) return;
+
+        // Extra safety: never auto-save if not created
+        if (!isCreatedRef.current) return;
 
         try {
             const isUpdate = isCreatedRef.current;
@@ -189,7 +194,6 @@ export function ProductForm({ salonId, initialData, onSuccess }: ProductFormProp
                         <TabsTrigger value="media" className="flex-none min-w-[80px] h-full rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground data-[state=active]:text-foreground transition-all">Media</TabsTrigger>
                         <TabsTrigger value="physical" className="flex-none min-w-[80px] h-full rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground data-[state=active]:text-foreground transition-all">Physical</TabsTrigger>
                         <TabsTrigger value="shipping" className="flex-none min-w-[80px] h-full rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground data-[state=active]:text-foreground transition-all">Shipping</TabsTrigger>
-                        <TabsTrigger value="seo" className="flex-none min-w-[80px] h-full rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground data-[state=active]:text-foreground transition-all">SEO</TabsTrigger>
                     </TabsList>
 
                     <div className="mt-6 space-y-6">
@@ -214,21 +218,36 @@ export function ProductForm({ salonId, initialData, onSuccess }: ProductFormProp
                         <TabsContent value="shipping">
                             <ShippingSection />
                         </TabsContent>
-                        <TabsContent value="seo">
-                            <SeoVisibilitySection />
-                        </TabsContent>
                     </div>
                 </Tabs>
 
                 {/* Navigation Buttons */}
                 <div className="flex justify-between pt-6 border-t">
                      <Button type="button" variant="ghost" onClick={() => {
-                         // Simple logic for tabs navigation could be added here
+                         const tabs = ['basic', 'category', 'pricing', 'variants', 'media', 'physical', 'shipping'];
+                         const currentIndex = tabs.indexOf(activeTab);
+                         if (currentIndex > 0) {
+                             setActiveTab(tabs[currentIndex - 1]);
+                         }
                      }}>
                         Previous
                      </Button>
-                     <Button type="button" onClick={() => {
-                         // Simple logic for tabs navigation could be added here
+                     <Button type="button" onClick={async () => {
+                         const tabs = ['basic', 'category', 'pricing', 'variants', 'media', 'physical', 'shipping'];
+                         const currentIndex = tabs.indexOf(activeTab);
+
+                         // If on basic tab and not created, create first
+                         if (activeTab === 'basic' && !isCreatedRef.current) {
+                             await handleSubmit(onSubmit)();
+                             if (isCreatedRef.current) {
+                                 setActiveTab(tabs[currentIndex + 1]);
+                             }
+                             return;
+                         }
+
+                         if (currentIndex < tabs.length - 1) {
+                             setActiveTab(tabs[currentIndex + 1]);
+                         }
                      }}>
                         Next
                      </Button>

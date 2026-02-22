@@ -8,6 +8,7 @@ import { nanoid } from "nanoid";
 import { headers } from "next/headers";
 
 const productSchema = z.object({
+  id: z.string().optional(),
   name: z.string().min(1, "Name is required"),
   brand: z.string().optional(),
   description: z.string().optional(),
@@ -147,7 +148,7 @@ export async function POST(
     const publishDate = data.publishDate ? new Date(data.publishDate) : null;
 
     const [newProduct] = await db.insert(products).values({
-        id: nanoid(),
+        id: data.id || nanoid(),
         salonId: salonId,
         name: data.name,
         brand: data.brand || "",
