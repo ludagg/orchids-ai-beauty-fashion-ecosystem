@@ -2,27 +2,63 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { products, salons, productVariants } from "@/db/schema";
+import { products, salons } from "@/db/schema";
 import { eq, and, desc } from "drizzle-orm";
 import { nanoid } from "nanoid";
 import { headers } from "next/headers";
 
-const variantSchema = z.object({
-  name: z.string().min(1),
-  price: z.number().int().nonnegative(),
-  stock: z.number().int().nonnegative(),
-  options: z.string().optional(),
-});
-
 const productSchema = z.object({
   name: z.string().min(1, "Name is required"),
-  price: z.number().int().nonnegative("Price must be a non-negative integer (cents)"),
-  stock: z.number().int().nonnegative("Stock must be a non-negative integer"),
-  description: z.string().optional(),
-  images: z.array(z.string().url()).optional(),
-  category: z.string().optional(),
   brand: z.string().optional(),
-  variants: z.array(variantSchema).optional(),
+  description: z.string().optional(),
+  shortDescription: z.string().optional(),
+
+  mainCategory: z.string().optional(),
+  subcategory: z.string().optional(),
+  productType: z.enum(['PHYSICAL', 'DIGITAL']).optional(),
+  tags: z.array(z.string()).optional(),
+
+  originalPrice: z.number().int().nonnegative().optional(),
+  salePrice: z.number().int().nonnegative().optional().nullable(),
+  saleStartDate: z.string().datetime().optional().nullable(),
+  saleEndDate: z.string().datetime().optional().nullable(),
+  sku: z.string().optional(),
+  totalStock: z.number().int().nonnegative().optional(),
+  lowStockThreshold: z.number().int().nonnegative().optional(),
+  trackInventory: z.boolean().optional(),
+
+  colors: z.array(z.any()).optional(),
+  sizes: z.array(z.any()).optional(),
+  variants: z.array(z.any()).optional(),
+
+  mainImageUrl: z.string().url().optional(),
+  galleryUrls: z.array(z.string().url()).optional(),
+  videoUrl: z.string().url().optional().nullable(),
+
+  weightGrams: z.number().int().nonnegative().optional(),
+  dimensions: z.object({
+      length: z.number().optional(),
+      width: z.number().optional(),
+      height: z.number().optional()
+  }).optional(),
+  material: z.string().optional(),
+  countryOfOrigin: z.string().optional(),
+  careInstructions: z.string().optional(),
+
+  processingTime: z.string().optional(),
+  shippingRegions: z.array(z.string()).optional(),
+  freeShipping: z.boolean().optional(),
+  shippingCost: z.number().int().nonnegative().optional(),
+  returnPolicy: z.string().optional(),
+  returnConditions: z.string().optional(),
+
+  slug: z.string().optional(),
+  metaTitle: z.string().optional(),
+  metaDescription: z.string().optional(),
+  visibility: z.enum(['PUBLIC', 'DRAFT', 'SCHEDULED']).optional(),
+  publishDate: z.string().datetime().optional().nullable(),
+  featured: z.boolean().optional(),
+  status: z.enum(['PENDING_REVIEW', 'ACTIVE', 'REJECTED', 'SUSPENDED']).optional(),
 });
 
 // GET /api/salons/[salonId]/products
@@ -37,18 +73,12 @@ export async function GET(
        return NextResponse.json({ error: "Salon ID is required" }, { status: 400 });
     }
 
-    console.log(`Fetching products for salon: ${salonId}`);
     const salonProducts = await db.query.products.findMany({
       where: and(
-        eq(products.salonId, salonId),
-        eq(products.isActive, true)
+        eq(products.salonId, salonId)
       ),
       orderBy: [desc(products.createdAt)],
-      with: {
-        variants: true,
-      }
     });
-    console.log(`Found ${salonProducts.length} products`);
 
     return NextResponse.json(salonProducts);
   } catch (error) {
@@ -75,7 +105,7 @@ export async function POST(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Verify ownership of the salon
+    // Verify ownership
     const salon = await db
       .select()
       .from(salons)
@@ -102,43 +132,64 @@ export async function POST(
       );
     }
 
-    const { name, price, stock, description, images, category, brand, variants } = result.data;
-    const hasVariants = variants && variants.length > 0;
+    const data = result.data;
 
-    // Use transaction to ensure product and variants are created together
-    const newProduct = await db.transaction(async (tx) => {
-      const [product] = await tx
-        .insert(products)
-        .values({
-          id: nanoid(),
-          salonId: salonId,
-          name,
-          price, // cents
-          stock,
-          description: description || null,
-          images: images || [],
-          category: category || null,
-          brand: brand || null,
-          hasVariants: hasVariants || false,
-          isActive: true,
-        })
-        .returning();
+    // Generate slug if not provided
+    let slug = data.slug;
+    if (!slug) {
+        slug = data.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+        slug = `${slug}-${nanoid(6)}`;
+    }
 
-      if (hasVariants) {
-        await tx.insert(productVariants).values(
-          variants.map((v) => ({
-            id: nanoid(),
-            productId: product.id,
-            name: v.name,
-            price: v.price,
-            stock: v.stock,
-            options: v.options || null,
-          }))
-        );
-      }
+    // Parse dates if present
+    const saleStartDate = data.saleStartDate ? new Date(data.saleStartDate) : null;
+    const saleEndDate = data.saleEndDate ? new Date(data.saleEndDate) : null;
+    const publishDate = data.publishDate ? new Date(data.publishDate) : null;
 
-      return product;
-    });
+    const [newProduct] = await db.insert(products).values({
+        id: nanoid(),
+        salonId: salonId,
+        name: data.name,
+        brand: data.brand || "",
+        description: data.description || "",
+        shortDescription: data.shortDescription,
+        mainCategory: data.mainCategory || "Other",
+        subcategory: data.subcategory || "Other",
+        productType: data.productType || "PHYSICAL",
+        tags: data.tags || [],
+        originalPrice: data.originalPrice || 0,
+        salePrice: data.salePrice,
+        saleStartDate,
+        saleEndDate,
+        sku: data.sku,
+        totalStock: data.totalStock || 0,
+        lowStockThreshold: data.lowStockThreshold || 5,
+        trackInventory: data.trackInventory ?? true,
+        colors: data.colors || [],
+        sizes: data.sizes || [],
+        variants: data.variants || [],
+        mainImageUrl: data.mainImageUrl || "",
+        galleryUrls: data.galleryUrls || [],
+        videoUrl: data.videoUrl,
+        weightGrams: data.weightGrams,
+        dimensions: data.dimensions,
+        material: data.material,
+        countryOfOrigin: data.countryOfOrigin,
+        careInstructions: data.careInstructions,
+        processingTime: data.processingTime,
+        shippingRegions: data.shippingRegions || [],
+        freeShipping: data.freeShipping || false,
+        shippingCost: data.shippingCost,
+        returnPolicy: data.returnPolicy,
+        returnConditions: data.returnConditions,
+        slug,
+        metaTitle: data.metaTitle,
+        metaDescription: data.metaDescription,
+        visibility: data.visibility || "DRAFT",
+        publishDate,
+        featured: data.featured || false,
+        status: data.status || "PENDING_REVIEW",
+    }).returning();
 
     return NextResponse.json(newProduct, { status: 201 });
   } catch (error) {

@@ -1,0 +1,75 @@
+
+> app@0.1.0 dev /app
+> next dev --turbopack
+
+▲ Next.js 16.1.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.2:3000
+
+✓ Starting...
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+✓ Ready in 1959ms
+○ Compiling /auth/test-product-form ...
+ GET /auth/test-product-form 200 in 9.5s (compile: 8.6s, proxy.ts: 103ms, render: 727ms)
+○ Compiling /api/salons/[salonId]/products ...
+[2m2026-02-22T13:25:26.559Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
+[2m2026-02-22T13:25:26.564Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
+[2m2026-02-22T13:25:26.565Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
+[2m2026-02-22T13:25:28.622Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
+[2m2026-02-22T13:25:28.625Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
+[2m2026-02-22T13:25:28.626Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
+Error fetching products: Error: Failed query: select "id", "salon_id", "name", "brand", "description", "short_description", "main_category", "subcategory", "product_type", "tags", "original_price", "sale_price", "sale_start_date", "sale_end_date", "sku", "total_stock", "low_stock_threshold", "track_inventory", "colors", "sizes", "variants", "main_image_url", "gallery_urls", "video_url", "weight_grams", "dimensions", "material", "country_of_origin", "care_instructions", "processing_time", "shipping_regions", "free_shipping", "shipping_cost", "return_policy", "return_conditions", "slug", "meta_title", "meta_description", "visibility", "publish_date", "featured", "status", "rating", "review_count", "created_at", "updated_at" from "products" "products" where "products"."salon_id" = $1 order by "products"."created_at" desc
+params: test-salon-id
+    at async GET (src/app/api/salons/[salonId]/products/route.ts:76:27)
+  74 |     }
+  75 |
+> 76 |     const salonProducts = await db.query.products.findMany({
+     |                           ^
+  77 |       where: and(
+  78 |         eq(products.salonId, salonId)
+  79 |       ), {
+  query: 'select "id", "salon_id", "name", "brand", "description", "short_description", "main_category", "subcategory", "product_type", "tags", "original_price", "sale_price", "sale_start_date", "sale_end_date", "sku", "total_stock", "low_stock_threshold", "track_inventory", "colors", "sizes", "variants", "main_image_url", "gallery_urls", "video_url", "weight_grams", "dimensions", "material", "country_of_origin", "care_instructions", "processing_time", "shipping_regions", "free_shipping", "shipping_cost", "return_policy", "return_conditions", "slug", "meta_title", "meta_description", "visibility", "publish_date", "featured", "status", "rating", "review_count", "created_at", "updated_at" from "products" "products" where "products"."salon_id" = $1 order by "products"."created_at" desc',
+  params: [Array],
+  [cause]: AggregateError:
+      at async GET (src/app/api/salons/[salonId]/products/route.ts:76:27)
+    74 |     }
+    75 |
+  > 76 |     const salonProducts = await db.query.products.findMany({
+       |                           ^
+    77 |       where: and(
+    78 |         eq(products.salonId, salonId)
+    79 |       ), {
+    code: 'ECONNREFUSED'
+  }
+}
+ GET /api/salons/test-salon-id/products 500 in 6.7s (compile: 6.0s, proxy.ts: 23ms, render: 661ms)
+ GET /api/salons/test-salon-id/products 200 in 863ms (compile: 824ms, proxy.ts: 8ms, render: 31ms)
+Error fetching products: Error: Failed query: select "id", "salon_id", "name", "brand", "description", "short_description", "main_category", "subcategory", "product_type", "tags", "original_price", "sale_price", "sale_start_date", "sale_end_date", "sku", "total_stock", "low_stock_threshold", "track_inventory", "colors", "sizes", "variants", "main_image_url", "gallery_urls", "video_url", "weight_grams", "dimensions", "material", "country_of_origin", "care_instructions", "processing_time", "shipping_regions", "free_shipping", "shipping_cost", "return_policy", "return_conditions", "slug", "meta_title", "meta_description", "visibility", "publish_date", "featured", "status", "rating", "review_count", "created_at", "updated_at" from "products" "products" where "products"."salon_id" = $1 order by "products"."created_at" desc
+params: test-salon-id
+    at async GET (src/app/api/salons/[salonId]/products/route.ts:76:27)
+  74 |     }
+  75 |
+> 76 |     const salonProducts = await db.query.products.findMany({
+     |                           ^
+  77 |       where: and(
+  78 |         eq(products.salonId, salonId)
+  79 |       ), {
+  query: 'select "id", "salon_id", "name", "brand", "description", "short_description", "main_category", "subcategory", "product_type", "tags", "original_price", "sale_price", "sale_start_date", "sale_end_date", "sku", "total_stock", "low_stock_threshold", "track_inventory", "colors", "sizes", "variants", "main_image_url", "gallery_urls", "video_url", "weight_grams", "dimensions", "material", "country_of_origin", "care_instructions", "processing_time", "shipping_regions", "free_shipping", "shipping_cost", "return_policy", "return_conditions", "slug", "meta_title", "meta_description", "visibility", "publish_date", "featured", "status", "rating", "review_count", "created_at", "updated_at" from "products" "products" where "products"."salon_id" = $1 order by "products"."created_at" desc',
+  params: [Array],
+  [cause]: AggregateError:
+      at async GET (src/app/api/salons/[salonId]/products/route.ts:76:27)
+    74 |     }
+    75 |
+  > 76 |     const salonProducts = await db.query.products.findMany({
+       |                           ^
+    77 |       where: and(
+    78 |         eq(products.salonId, salonId)
+    79 |       ), {
+    code: 'ECONNREFUSED'
+  }
+}
+[2m2026-02-22T13:25:32.813Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
+[2m2026-02-22T13:25:32.817Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
+[2m2026-02-22T13:25:32.817Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
+ ELIFECYCLE  Command failed.
+[?25h

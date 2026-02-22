@@ -2,66 +2,32 @@
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Plus, ShoppingBag, Trash2, X } from "lucide-react"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Switch } from "@/components/ui/switch"
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
+import { Plus, ShoppingBag, Trash2, Edit, ArrowLeft } from "lucide-react"
+import { toast } from "sonner"
+import { Card, CardContent } from "@/components/ui/card"
+import { ProductForm } from "./product-form/ProductForm"
+import { ProductFormValues } from "./product-form/schema"
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { toast } from "sonner"
-import { Card, CardContent } from "@/components/ui/card"
-
-interface Variant {
-    name: string
-    price: string
-    stock: string
-}
-
-interface Product {
-  id: string
-  name: string
-  price: number // cents
-  stock: number
-  hasVariants: boolean
-  variants?: any[]
-  image?: string
-  images?: string[]
-  category?: string
-  salonId: string
-}
 
 interface ProductManagerProps {
     salonId: string;
 }
 
 export function ProductManager({ salonId }: ProductManagerProps) {
-  const [products, setProducts] = useState<Product[]>([])
+  const [products, setProducts] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
-  const [isAddOpen, setIsAddOpen] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-
-  // Form State
-  const [newProduct, setNewProduct] = useState({ name: "", price: "", stock: "", description: "", category: "", brand: "", image: "" })
-  const [hasVariants, setHasVariants] = useState(false)
-  const [variants, setVariants] = useState<Variant[]>([])
-  const [currentVariant, setCurrentVariant] = useState<Variant>({ name: "", price: "", stock: "" })
+  const [view, setView] = useState<"list" | "form">("list")
+  const [editingProduct, setEditingProduct] = useState<ProductFormValues & { id: string } | undefined>(undefined)
 
   useEffect(() => {
     if (salonId) {
         fetchProducts();
     }
-  }, [salonId]);
+  }, [salonId, view]); // Refetch when switching back to list
 
   const fetchProducts = async () => {
     try {
@@ -76,83 +42,6 @@ export function ProductManager({ salonId }: ProductManagerProps) {
         setLoading(false);
     }
   };
-
-  const addVariant = () => {
-      if (!currentVariant.name || !currentVariant.price || !currentVariant.stock) {
-          toast.error("Fill variant details");
-          return;
-      }
-      setVariants([...variants, currentVariant]);
-      setCurrentVariant({ name: "", price: "", stock: "" });
-  };
-
-  const removeVariant = (index: number) => {
-      setVariants(variants.filter((_, i) => i !== index));
-  };
-
-  const handleAdd = async () => {
-    if (!newProduct.name) {
-        toast.error("Product name is required");
-        return;
-    }
-
-    if (!hasVariants && (!newProduct.price || !newProduct.stock)) {
-         toast.error("Price and Stock are required");
-         return;
-    }
-
-    if (hasVariants && variants.length === 0) {
-        toast.error("Add at least one variant");
-        return;
-    }
-
-    setIsSubmitting(true);
-    try {
-        const priceInCents = hasVariants ? 0 : Math.round(parseFloat(newProduct.price) * 100);
-        const stockInt = hasVariants ? 0 : parseInt(newProduct.stock);
-
-        const formattedVariants = variants.map(v => ({
-            name: v.name,
-            price: Math.round(parseFloat(v.price) * 100),
-            stock: parseInt(v.stock),
-            options: JSON.stringify({ name: v.name }) // Simple option storage
-        }));
-
-        const res = await fetch(`/api/salons/${salonId}/products`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                name: newProduct.name,
-                price: priceInCents,
-                stock: stockInt,
-                description: newProduct.description,
-                category: newProduct.category,
-                brand: newProduct.brand,
-                images: newProduct.image ? [newProduct.image] : [],
-                variants: hasVariants ? formattedVariants : undefined
-            })
-        });
-
-        if (!res.ok) {
-             const err = await res.json();
-             throw new Error(err.error || "Failed to add product");
-        }
-
-        const savedProduct = await res.json();
-        setProducts([savedProduct, ...products]); // Add to top
-
-        // Reset form
-        setNewProduct({ name: "", price: "", stock: "", description: "", category: "", brand: "", image: "" });
-        setHasVariants(false);
-        setVariants([]);
-        setIsAddOpen(false);
-        toast.success("Product added");
-    } catch (error: any) {
-        toast.error(error.message || "Failed to add product");
-    } finally {
-        setIsSubmitting(false);
-    }
-  }
 
   const handleDelete = async (id: string) => {
     try {
@@ -171,6 +60,49 @@ export function ProductManager({ salonId }: ProductManagerProps) {
     }
   }
 
+  const handleEdit = (product: any) => {
+      // Map API data to form values
+      // Ensure dates are Date objects
+      const formData: ProductFormValues & { id: string } = {
+          ...product,
+          saleStartDate: product.saleStartDate ? new Date(product.saleStartDate) : null,
+          saleEndDate: product.saleEndDate ? new Date(product.saleEndDate) : null,
+          publishDate: product.publishDate ? new Date(product.publishDate) : null,
+          // Ensure arrays are arrays
+          tags: product.tags || [],
+          colors: product.colors || [],
+          sizes: product.sizes || [],
+          variants: product.variants || [],
+          galleryUrls: product.galleryUrls || [],
+          shippingRegions: product.shippingRegions || [],
+      };
+      setEditingProduct(formData);
+      setView("form");
+  }
+
+  const handleCreate = () => {
+      setEditingProduct(undefined);
+      setView("form");
+  }
+
+  if (view === "form") {
+      return (
+          <div className="space-y-4">
+              <Button variant="ghost" onClick={() => setView("list")} className="gap-2 pl-0">
+                  <ArrowLeft className="w-4 h-4" /> Back to Products
+              </Button>
+              <ProductForm
+                salonId={salonId}
+                initialData={editingProduct}
+                onSuccess={() => {
+                    setView("list");
+                    fetchProducts();
+                }}
+              />
+          </div>
+      )
+  }
+
   if (loading) {
       return <div className="text-center py-8 text-muted-foreground">Loading products...</div>
   }
@@ -182,190 +114,46 @@ export function ProductManager({ salonId }: ProductManagerProps) {
             <h3 className="text-lg font-semibold">Products</h3>
             <p className="text-sm text-muted-foreground">Manage your boutique inventory</p>
         </div>
-        <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
-          <DialogTrigger asChild>
-            <Button className="gap-2">
-              <Plus className="w-4 h-4" /> Add Product
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Add New Product</DialogTitle>
-            </DialogHeader>
-            <div className="grid gap-4 py-4 max-h-[60vh] overflow-y-auto px-1">
-              <div className="grid gap-2">
-                <Label htmlFor="product-name">Product Name</Label>
-                <Input
-                  id="product-name"
-                  value={newProduct.name}
-                  onChange={e => setNewProduct({...newProduct, name: e.target.value})}
-                  placeholder="e.g. Silk Serum"
-                  disabled={isSubmitting}
-                />
-              </div>
-
-              <div className="grid gap-2">
-                <Label htmlFor="product-description">Description</Label>
-                <Input
-                  id="product-description"
-                  value={newProduct.description}
-                  onChange={e => setNewProduct({...newProduct, description: e.target.value})}
-                  placeholder="Product description"
-                  disabled={isSubmitting}
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                 <div className="grid gap-2">
-                    <Label htmlFor="product-category">Category</Label>
-                    <Input
-                      id="product-category"
-                      value={newProduct.category}
-                      onChange={e => setNewProduct({...newProduct, category: e.target.value})}
-                      placeholder="e.g. Hair Care"
-                      disabled={isSubmitting}
-                    />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="product-brand">Brand</Label>
-                    <Input
-                      id="product-brand"
-                      value={newProduct.brand}
-                      onChange={e => setNewProduct({...newProduct, brand: e.target.value})}
-                      placeholder="e.g. Luxe"
-                      disabled={isSubmitting}
-                    />
-                  </div>
-              </div>
-
-              <div className="grid gap-2">
-                <Label htmlFor="product-image">Image URL</Label>
-                <Input
-                  id="product-image"
-                  value={newProduct.image}
-                  onChange={e => setNewProduct({...newProduct, image: e.target.value})}
-                  placeholder="https://..."
-                  disabled={isSubmitting}
-                />
-              </div>
-
-              <div className="flex items-center gap-2 py-2">
-                  <Switch checked={hasVariants} onCheckedChange={setHasVariants} id="has-variants" />
-                  <Label htmlFor="has-variants">This product has variants (Size, Color)</Label>
-              </div>
-
-              {!hasVariants ? (
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="grid gap-2">
-                      <Label htmlFor="product-price">Price ($)</Label>
-                      <Input
-                        id="product-price"
-                        value={newProduct.price}
-                        onChange={e => setNewProduct({...newProduct, price: e.target.value})}
-                        type="number"
-                        placeholder="45"
-                        min="0"
-                        disabled={isSubmitting}
-                      />
-                    </div>
-                    <div className="grid gap-2">
-                      <Label htmlFor="product-stock">Stock</Label>
-                      <Input
-                        id="product-stock"
-                        value={newProduct.stock}
-                        onChange={e => setNewProduct({...newProduct, stock: e.target.value})}
-                        type="number"
-                        placeholder="10"
-                        min="0"
-                        disabled={isSubmitting}
-                      />
-                    </div>
-                  </div>
-              ) : (
-                  <div className="space-y-4 border rounded-md p-3 bg-muted/20">
-                      <div className="text-sm font-medium">Variants</div>
-                      <div className="grid grid-cols-3 gap-2">
-                          <Input
-                              aria-label="Variant Name"
-                              placeholder="Name (e.g. Red / S)"
-                              value={currentVariant.name}
-                              onChange={e => setCurrentVariant({...currentVariant, name: e.target.value})}
-                          />
-                          <Input
-                              aria-label="Variant Price"
-                              placeholder="Price"
-                              type="number"
-                              value={currentVariant.price}
-                              onChange={e => setCurrentVariant({...currentVariant, price: e.target.value})}
-                          />
-                          <div className="flex gap-2">
-                              <Input
-                                  aria-label="Variant Stock"
-                                  placeholder="Stock"
-                                  type="number"
-                                  value={currentVariant.stock}
-                                  onChange={e => setCurrentVariant({...currentVariant, stock: e.target.value})}
-                              />
-                              <Button type="button" size="icon" onClick={addVariant} aria-label="Add variant">
-                                  <Plus className="w-4 h-4"/>
-                              </Button>
-                          </div>
-                      </div>
-
-                      <div className="space-y-2">
-                          {variants.map((v, i) => (
-                              <div key={i} className="flex items-center justify-between text-sm bg-background p-2 rounded border">
-                                  <span>{v.name}</span>
-                                  <div className="flex items-center gap-3">
-                                      <span>${v.price}</span>
-                                      <span className="text-muted-foreground">Qty: {v.stock}</span>
-                                      <Button type="button" variant="ghost" size="icon" className="h-6 w-6" onClick={() => removeVariant(i)} aria-label="Remove variant">
-                                          <X className="w-3 h-3" />
-                                      </Button>
-                                  </div>
-                              </div>
-                          ))}
-                      </div>
-                  </div>
-              )}
-            </div>
-            <DialogFooter>
-              <Button onClick={handleAdd} disabled={isSubmitting}>
-                  {isSubmitting ? "Adding..." : "Add Product"}
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        <Button onClick={handleCreate} className="gap-2">
+            <Plus className="w-4 h-4" /> Add Product
+        </Button>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {products.map((product) => (
-          <Card key={product.id} className="relative group overflow-hidden border-muted">
-             {product.images && product.images.length > 0 && (
-                <div className="h-32 w-full overflow-hidden">
-                    <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover transition-transform group-hover:scale-105" />
+          <Card key={product.id} className="relative group overflow-hidden border-muted hover:border-primary/50 transition-colors">
+             {product.mainImageUrl ? (
+                <div className="h-48 w-full overflow-hidden bg-muted">
+                    <img src={product.mainImageUrl} alt={product.name} className="w-full h-full object-cover transition-transform group-hover:scale-105" />
+                </div>
+            ) : (
+                <div className="h-48 w-full bg-secondary/20 flex items-center justify-center text-muted-foreground">
+                    <ShoppingBag className="w-8 h-8 opacity-20" />
                 </div>
             )}
+
             <CardContent className="p-5">
-              <div className="flex items-start justify-between mb-2">
-                {(!product.images || product.images.length === 0) && (
-                    <div className="p-2 bg-primary/10 rounded-full text-primary">
-                        <ShoppingBag className="w-5 h-5" />
-                    </div>
-                )}
-                 {product.category && (
-                    <span className="text-xs font-medium px-2 py-1 rounded-full bg-secondary text-secondary-foreground">
-                        {product.category}
-                    </span>
-                )}
+              <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity bg-background/80 backdrop-blur-sm rounded-md p-1">
+                 <Tooltip>
+                    <TooltipTrigger asChild>
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 hover:text-primary"
+                            onClick={() => handleEdit(product)}
+                        >
+                            <Edit className="w-4 h-4" />
+                        </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>Edit product</TooltipContent>
+                </Tooltip>
                 <Tooltip>
                     <TooltipTrigger asChild>
                         <Button
                             variant="ghost"
                             size="icon"
-                            className="h-8 w-8 text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 transition-opacity absolute top-2 right-2 bg-background/80 backdrop-blur-sm"
+                            className="h-8 w-8 hover:text-destructive"
                             onClick={() => handleDelete(product.id)}
-                            aria-label="Delete product"
                         >
                             <Trash2 className="w-4 h-4" />
                         </Button>
@@ -373,22 +161,47 @@ export function ProductManager({ salonId }: ProductManagerProps) {
                     <TooltipContent>Delete product</TooltipContent>
                 </Tooltip>
               </div>
-              <h4 className="font-semibold truncate">{product.name}</h4>
-              <div className="flex items-center justify-between mt-2 text-sm text-muted-foreground">
-                <span>{product.hasVariants ? `${product.variants?.length || 0} variants` : `${product.stock} in stock`}</span>
-                <span className="font-medium text-foreground">
-                    {product.hasVariants && product.variants && product.variants.length > 0
-                        ? `From $${(Math.min(...product.variants.map((v: any) => v.price)) / 100).toFixed(2)}`
-                        : `$${(product.price / 100).toFixed(2)}`
-                    }
+
+              <div className="flex items-start justify-between mb-2">
+                 {product.mainCategory && (
+                    <span className="text-xs font-medium px-2 py-1 rounded-full bg-secondary text-secondary-foreground">
+                        {product.mainCategory}
+                    </span>
+                )}
+                <span className={`text-xs font-medium px-2 py-1 rounded-full border ${
+                    product.status === 'ACTIVE' ? 'border-green-200 text-green-700 bg-green-50' :
+                    product.status === 'PENDING_REVIEW' ? 'border-yellow-200 text-yellow-700 bg-yellow-50' :
+                    'border-muted text-muted-foreground bg-muted/50'
+                }`}>
+                    {product.status?.replace('_', ' ') || 'DRAFT'}
+                </span>
+              </div>
+
+              <h4 className="font-semibold truncate text-lg">{product.name}</h4>
+              <p className="text-sm text-muted-foreground truncate mb-2">{product.brand}</p>
+
+              <div className="flex items-center justify-between mt-4 pt-4 border-t">
+                <span className="text-sm text-muted-foreground">
+                    {product.variants?.length > 0
+                        ? `${product.variants.length} variants`
+                        : `${product.totalStock} in stock`}
+                </span>
+                <span className="font-bold text-foreground">
+                    {/* Price is in cents */}
+                    ₹{(product.originalPrice / 100).toFixed(2)}
                 </span>
               </div>
             </CardContent>
           </Card>
         ))}
          {products.length === 0 && (
-            <div className="col-span-full py-12 text-center text-muted-foreground bg-muted/50 rounded-lg border-2 border-dashed">
-                <p>No products added yet.</p>
+            <div className="col-span-full py-16 text-center text-muted-foreground bg-muted/10 rounded-lg border-2 border-dashed border-muted">
+                <ShoppingBag className="w-12 h-12 mx-auto mb-4 opacity-20" />
+                <h3 className="text-lg font-medium mb-2">No products yet</h3>
+                <p className="mb-6 max-w-sm mx-auto">Start building your inventory by adding your first product.</p>
+                <Button onClick={handleCreate} className="gap-2">
+                    <Plus className="w-4 h-4" /> Add Product
+                </Button>
             </div>
         )}
       </div>
