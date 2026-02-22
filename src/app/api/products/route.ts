@@ -11,12 +11,15 @@ export async function GET(req: NextRequest) {
     const salonId = searchParams.get("salonId");
     const featured = searchParams.get("featured") === "true";
     const limit = parseInt(searchParams.get("limit") || "50");
+    const offset = parseInt(searchParams.get("offset") || "0");
     const search = searchParams.get("search");
 
     // New filters
     const minPriceRaw = searchParams.get("minPrice");
     const maxPriceRaw = searchParams.get("maxPrice");
     const minRatingRaw = searchParams.get("minRating");
+    const brand = searchParams.get("brand");
+    const inStock = searchParams.get("inStock") === "true";
     const sortBy = searchParams.get("sortBy") || "newest";
 
     // 1. Base conditions: Status must be ACTIVE and Visibility PUBLIC
@@ -37,9 +40,17 @@ export async function GET(req: NextRequest) {
         conditions.push(ilike(products.name, `%${search}%`));
     }
 
+    if (brand) {
+        conditions.push(ilike(products.brand, brand)); // Case insensitive brand search
+    }
+
     if (featured) {
         // Simple featured logic: high rating (> 4.0) or explicitly marked featured
         conditions.push(or(gt(products.rating, 4.0), eq(products.featured, true)));
+    }
+
+    if (inStock) {
+        conditions.push(gt(products.totalStock, 0));
     }
 
     // Price filtering logic (using originalPrice for simplicity in query, though ideally should use effective price)
@@ -87,6 +98,7 @@ export async function GET(req: NextRequest) {
     const dbProducts = await db.query.products.findMany({
       where: and(...conditions),
       limit: limit,
+      offset: offset,
       with: {
         salon: {
             columns: {
@@ -111,7 +123,11 @@ export async function GET(req: NextRequest) {
         images: [p.mainImageUrl, ...(p.galleryUrls || [])].filter(Boolean),
         category: p.mainCategory,
         salon: p.salon,
-        featured: p.featured
+        featured: p.featured,
+        totalStock: p.totalStock,
+        variants: p.variants,
+        colors: p.colors,
+        sizes: p.sizes,
     }));
 
     return NextResponse.json(mappedProducts);
