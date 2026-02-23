@@ -25,6 +25,10 @@
 **Learning:** Wrapping a decorative avatar component in a semantic `<button>` instead of a `div` instantly makes it accessible to keyboard and screen reader users, transforming a static image into a functional "Change Profile Picture" control without complex custom event handlers.
 **Action:** Always check if "clickable" divs (like avatars, cards) should be semantic `<button>` elements to get native focus and keyboard support for free.
 
+## 2026-02-23 - Enhanced Global Search Experience
+**Learning:** A centralized SearchBar component should provide more than just an input. Adding a clear button and a visual keyboard shortcut hint (like `/`) significantly improves the "native-app" feel. Global event listeners for these shortcuts must be visibility-aware (using `offsetParent !== null`) to avoid focusing hidden inputs in responsive layouts, and should respect modifier keys to avoid browser conflicts.
+**Action:** Always include a clear button and a visibility-aware keyboard shortcut in centralized search components. Ensure consistency by replacing raw inputs in results pages with the centralized component.
+
 ## 2026-02-21 - Accessible Icon-Only Actions
 **Learning:** Icon-only buttons (like "Chat", "Call", "Video") are invisible to screen readers without labels. Wrapping them in `Tooltip` components not only provides a visual hover state but also ensures the `aria-label` is reinforced by the tooltip text. Also, `Link` components rendering anchor tags cannot contain `<button>` elements; replacing them with styled `<span>` elements maintains validity and accessibility.
 **Action:** Audit all icon-only buttons for `aria-label` and `Tooltip` wrappers. Ensure `Link` children are not interactive elements like `button`.
