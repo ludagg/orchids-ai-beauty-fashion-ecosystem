@@ -28,3 +28,7 @@
 ## 2026-02-21 - Accessible Icon-Only Actions
 **Learning:** Icon-only buttons (like "Chat", "Call", "Video") are invisible to screen readers without labels. Wrapping them in `Tooltip` components not only provides a visual hover state but also ensures the `aria-label` is reinforced by the tooltip text. Also, `Link` components rendering anchor tags cannot contain `<button>` elements; replacing them with styled `<span>` elements maintains validity and accessibility.
 **Action:** Audit all icon-only buttons for `aria-label` and `Tooltip` wrappers. Ensure `Link` children are not interactive elements like `button`.
+
+## 2026-02-24 - Custom Search Input UX
+**Learning:** Using `type="search"` is better for mobile keyboard semantics (showing the "Search" key), but requires custom CSS to hide browser-native clear buttons (`::-webkit-search-cancel-button`) to avoid duplication when implementing a custom "Clear" button and keyboard shortcut hints.
+**Action:** Always prefer `type="search"` for search inputs and include the necessary CSS resets in global styles when adding custom interactive elements inside the input field.
