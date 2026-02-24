@@ -7,6 +7,7 @@ import { nanoid } from "nanoid";
 import { db } from "@/lib/db";
 import { salons } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { validateSafePathSegment } from "@/lib/path-validation";
 
 export async function POST(req: NextRequest) {
   try {
@@ -27,6 +28,13 @@ export async function POST(req: NextRequest) {
 
     if (!file || !salonId || !productId || !type) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+    }
+
+    try {
+      validateSafePathSegment(salonId, "salonId");
+      validateSafePathSegment(productId, "productId");
+    } catch (error) {
+      return NextResponse.json({ error: (error as Error).message }, { status: 400 });
     }
 
     // Verify salon ownership
