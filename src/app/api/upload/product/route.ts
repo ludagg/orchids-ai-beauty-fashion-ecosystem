@@ -4,6 +4,9 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import path from "path";
 import { nanoid } from "nanoid";
+import { db } from "@/lib/db";
+import { salons } from "@/db/schema";
+import { eq } from "drizzle-orm";
 
 export async function POST(req: NextRequest) {
   try {
@@ -24,6 +27,15 @@ export async function POST(req: NextRequest) {
 
     if (!file || !salonId || !productId || !type) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+    }
+
+    // Verify salon ownership
+    const salon = await db.query.salons.findFirst({
+        where: eq(salons.id, salonId)
+    });
+
+    if (!salon || salon.ownerId !== session.user.id) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
     }
 
     // Determine folder and filename
