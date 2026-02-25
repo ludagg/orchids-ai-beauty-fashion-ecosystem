@@ -8,10 +8,11 @@ This document serves as the definitive guide for implementing the backend infras
 - **Database:** PostgreSQL (Production) / SQLite (Local Dev if preferred, but Postgres recommended for parity)
 - **ORM:** Drizzle ORM (Type-safe SQL)
 - **Authentication:** Better Auth (with Drizzle adapter)
-- **Payments:** Stripe
+- **Payments:** Stripe (Connect & Checkout)
 - **Email:** Resend
 - **Validation:** Zod
 - **Testing:** Vitest + Docker (for integration tests)
+- **Storage:** Cloudflare R2 (S3 Compatible)
 
 ---
 
@@ -332,3 +333,38 @@ Follow this roadmap to implement the backend incrementally.
 ### Phase 4: Refinement
 10. **Security Audit:** Review RLS (Row Level Security) and API protection.
 11. **Performance:** Optimize queries and add indexes.
+
+---
+
+## 7. Backend Requirements for Advanced UX
+
+To support the high-fidelity UI/UX features, the backend must expose specialized endpoints and services.
+
+### 7.1 Real-Time Infrastructure (WebSockets)
+- **Use Case:** Live Shopping chat, "Typing..." indicators, real-time booking updates.
+- **Tech:** Utilize `socket.io` or a managed service like Pusher/Ably alongside Next.js API routes.
+- **Architecture:** Maintain persistent connections for active sessions, broadcasting events (e.g., `event:product_pinned`) to all viewers of a live stream.
+
+### 7.2 Media Optimization Pipeline (S3/R2)
+- **Use Case:** Instant video playback (TikTok style) and high-res product galleries.
+- **Requirement:**
+    -   Presigned URLs for secure direct uploads.
+    -   Webhook listener for transcoding service (e.g., AWS MediaConvert) completion.
+    -   Delivery via CDN (Cloudflare) with automatic format selection (HLS for video, AVIF/WebP for images).
+
+### 7.3 Geospatial Queries (PostGIS)
+- **Use Case:** "Find Salons Near Me" map view.
+- **Requirement:** Enable PostGIS extension on the Postgres database.
+- **Query Example:**
+    ```sql
+    SELECT * FROM salons
+    WHERE ST_DWithin(
+      geography(ST_MakePoint(longitude, latitude)),
+      geography(ST_MakePoint(:user_lon, :user_lat)),
+      :radius_in_meters
+    );
+    ```
+
+### 7.4 Aggregation & Analytics
+- **Use Case:** Salon Manager Dashboard (Revenue, Occupancy Rate).
+- **Requirement:** Heavy analytical queries should be cached (Redis) or pre-calculated in materialized views to ensure the dashboard loads instantly (< 200ms).
