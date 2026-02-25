@@ -28,3 +28,7 @@
 ## 2026-02-21 - Accessible Icon-Only Actions
 **Learning:** Icon-only buttons (like "Chat", "Call", "Video") are invisible to screen readers without labels. Wrapping them in `Tooltip` components not only provides a visual hover state but also ensures the `aria-label` is reinforced by the tooltip text. Also, `Link` components rendering anchor tags cannot contain `<button>` elements; replacing them with styled `<span>` elements maintains validity and accessibility.
 **Action:** Audit all icon-only buttons for `aria-label` and `Tooltip` wrappers. Ensure `Link` children are not interactive elements like `button`.
+
+## 2026-02-25 - Global Search Keyboard Focus Pattern
+**Learning:** Implementing a global keyboard shortcut (like '/') to focus the search bar provides a delightful "pro" feature for power users. Using `offsetParent !== null` ensures that the shortcut only targets the visible search instance in responsive layouts where multiple search bars might exist (e.g., mobile header vs. desktop header).
+**Action:** Use a global `keydown` listener that checks for active input/textarea focus before triggering. Target visible inputs using `offsetParent` check to avoid focusing hidden elements.

@@ -84,6 +84,7 @@ export default function AppLayout({
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
             className="p-1 rounded-full hover:bg-secondary text-muted-foreground transition-colors"
+            aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
             {isCollapsed ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5" />}
           </button>
@@ -110,6 +111,7 @@ export default function AppLayout({
                     ? "bg-primary text-primary-foreground shadow-lg shadow-foreground/10"
                     : "text-muted-foreground hover:bg-secondary hover:text-foreground"
                 } ${isCollapsed ? "justify-center" : ""}`}
+                title={isCollapsed ? item.label : undefined}
               >
                 <item.icon className="w-5 h-5 flex-shrink-0" />
                 {!isCollapsed && <span>{item.label}</span>}
@@ -144,7 +146,11 @@ export default function AppLayout({
             <CartIcon />
             <NotificationBell />
             <UserAccount showLabel={false} />
-            <button onClick={() => setMobileMenuOpen(true)} className="p-2 ml-1">
+            <button
+              onClick={() => setMobileMenuOpen(true)}
+              className="p-2 ml-1"
+              aria-label="Open menu"
+            >
               <Menu className="w-6 h-6" />
             </button>
           </div>
@@ -161,7 +167,11 @@ export default function AppLayout({
           <div className="flex flex-col h-full">
             <div className="flex items-center justify-between h-16 px-6 border-b border-border">
               <span className="text-3xl font-script text-black dark:text-white">Rare</span>
-              <button onClick={() => setMobileMenuOpen(false)} className="p-2">
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-2"
+                aria-label="Close menu"
+              >
                 <X className="w-6 h-6" />
               </button>
             </div>
