@@ -11,7 +11,8 @@ import {
   CreditCard,
   Search,
   Menu,
-  X
+  X,
+  ShieldAlert
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -25,6 +26,7 @@ const adminNavItems = [
   { icon: ShoppingBag, label: "Marketplace", href: "/admin/marketplace" },
   { icon: BarChart3, label: "Analytics", href: "/admin/analytics" },
   { icon: CreditCard, label: "Payments", href: "/admin/payments" },
+  { icon: ShieldAlert, label: "Moderation", href: "/admin/moderation" },
   { icon: Settings, label: "Settings", href: "/admin/settings" },
 ];
 
