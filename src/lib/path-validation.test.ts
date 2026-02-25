@@ -1,42 +1,41 @@
-import { test, describe, it } from 'node:test';
-import assert from 'node:assert';
+import { describe, it, expect } from 'vitest';
 import { validateSafePathSegment } from './path-validation';
 
 describe('validateSafePathSegment', () => {
   it('should accept valid alphanumeric IDs', () => {
-    assert.doesNotThrow(() => validateSafePathSegment('abc', 'id'));
-    assert.doesNotThrow(() => validateSafePathSegment('123', 'id'));
-    assert.doesNotThrow(() => validateSafePathSegment('abc123', 'id'));
+    expect(() => validateSafePathSegment('abc', 'id')).not.toThrow();
+    expect(() => validateSafePathSegment('123', 'id')).not.toThrow();
+    expect(() => validateSafePathSegment('abc123', 'id')).not.toThrow();
   });
 
   it('should accept IDs with hyphens and underscores', () => {
-    assert.doesNotThrow(() => validateSafePathSegment('foo-bar', 'id'));
-    assert.doesNotThrow(() => validateSafePathSegment('foo_bar', 'id'));
-    assert.doesNotThrow(() => validateSafePathSegment('foo-bar_baz', 'id'));
+    expect(() => validateSafePathSegment('foo-bar', 'id')).not.toThrow();
+    expect(() => validateSafePathSegment('foo_bar', 'id')).not.toThrow();
+    expect(() => validateSafePathSegment('foo-bar_baz', 'id')).not.toThrow();
   });
 
   it('should reject IDs with dots (directory traversal attempt)', () => {
-    assert.throws(() => validateSafePathSegment('..', 'id'), /Invalid id/);
-    assert.throws(() => validateSafePathSegment('.', 'id'), /Invalid id/);
-    assert.throws(() => validateSafePathSegment('foo.bar', 'id'), /Invalid id/);
+    expect(() => validateSafePathSegment('..', 'id')).toThrow(/Invalid id/);
+    expect(() => validateSafePathSegment('.', 'id')).toThrow(/Invalid id/);
+    expect(() => validateSafePathSegment('foo.bar', 'id')).toThrow(/Invalid id/);
   });
 
   it('should reject IDs with slashes (directory traversal attempt)', () => {
-    assert.throws(() => validateSafePathSegment('foo/bar', 'id'), /Invalid id/);
-    assert.throws(() => validateSafePathSegment('/foo', 'id'), /Invalid id/);
-    assert.throws(() => validateSafePathSegment('foo/', 'id'), /Invalid id/);
+    expect(() => validateSafePathSegment('foo/bar', 'id')).toThrow(/Invalid id/);
+    expect(() => validateSafePathSegment('/foo', 'id')).toThrow(/Invalid id/);
+    expect(() => validateSafePathSegment('foo/', 'id')).toThrow(/Invalid id/);
   });
 
   it('should reject IDs with backslashes', () => {
-    assert.throws(() => validateSafePathSegment('foo\\bar', 'id'), /Invalid id/);
+    expect(() => validateSafePathSegment('foo\\bar', 'id')).toThrow(/Invalid id/);
   });
 
   it('should reject empty IDs', () => {
-    assert.throws(() => validateSafePathSegment('', 'id'), /id is required/);
+    expect(() => validateSafePathSegment('', 'id')).toThrow(/id is required/);
   });
 
   it('should reject IDs with special characters', () => {
-    assert.throws(() => validateSafePathSegment('foo@bar', 'id'), /Invalid id/);
-    assert.throws(() => validateSafePathSegment('foo bar', 'id'), /Invalid id/); // Space
+    expect(() => validateSafePathSegment('foo@bar', 'id')).toThrow(/Invalid id/);
+    expect(() => validateSafePathSegment('foo bar', 'id')).toThrow(/Invalid id/); // Space
   });
 });

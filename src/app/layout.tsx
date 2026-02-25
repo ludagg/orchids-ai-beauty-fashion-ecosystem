@@ -7,6 +7,8 @@ import Script from "next/script";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Toaster } from "@/components/ui/sonner";
 import OfflineDetector from "@/components/OfflineDetector";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { CookieConsent } from "@/components/privacy/CookieConsent";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -37,9 +39,18 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const jsonLdData = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Rare",
+    url: process.env.NEXT_PUBLIC_APP_URL || "https://orchids.ai",
+    description: "India's First AI-Powered Beauty & Fashion Ecosystem",
+  };
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${playfair.variable} ${outfit.variable} ${pinyon.variable} font-sans antialiased`}>
+        <JsonLd data={jsonLdData} />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -66,6 +77,7 @@ export default function RootLayout({
         {children}
         <VisualEditsMessenger />
         <Toaster />
+        <CookieConsent />
         <OfflineDetector />
         </ThemeProvider>
       </body>

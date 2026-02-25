@@ -1,7 +1,36 @@
 import { NextResponse, type NextRequest } from "next/server";
+import rateLimit from "@/lib/rate-limit";
+
+const limiter = rateLimit({
+  interval: 60 * 1000, // 60 seconds
+  uniqueTokenPerInterval: 500, // Max 500 users per second
+});
 
 export async function middleware(request: NextRequest) {
+  const start = Date.now();
   const { pathname } = request.nextUrl;
+
+  // Rate Limiting for Auth Routes
+  if (pathname.startsWith("/api/auth")) {
+    const ip = request.headers.get("x-forwarded-for") || "unknown";
+    try {
+      // 20 requests per minute for auth routes
+      await limiter.check(20, ip);
+    } catch {
+      return NextResponse.json(
+        { error: "Too Many Requests" },
+        { status: 429 }
+      );
+    }
+  }
+
+  // Log request for observability
+  console.log(JSON.stringify({
+    timestamp: new Date().toISOString(),
+    method: request.method,
+    path: pathname,
+    userAgent: request.headers.get('user-agent'),
+  }));
 
   // Define paths that do not require authentication
   const isPublicPath =
@@ -9,7 +38,7 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith("/auth") || // Public auth pages (login/signup)
     pathname.startsWith("/api") || // API endpoints are public (auth handled in route handlers)
     pathname.startsWith("/_next") || // Next.js internals
-    pathname.match(/\.(ico|png|jpg|jpeg|svg|css|js)$/) || // Static files
+    pathname.match(/\.(ico|png|jpg|jpeg|svg|css|js|txt|xml)$/) || // Static files
     // Allow public discovery
     pathname.startsWith("/app/search") ||
     pathname.startsWith("/app/salons") ||
@@ -18,7 +47,10 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith("/app/videos-creations");
 
   if (isPublicPath) {
-    return NextResponse.next();
+    const response = NextResponse.next();
+    // Add custom header for debugging
+    response.headers.set("x-orchids-latency", `${Date.now() - start}ms`);
+    return response;
   }
 
   // Check for session cookie presence to avoid blocking API calls in middleware
@@ -31,7 +63,9 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/auth/sign-in", request.url));
   }
 
-  return NextResponse.next();
+  const response = NextResponse.next();
+  response.headers.set("x-orchids-latency", `${Date.now() - start}ms`);
+  return response;
 }
 
 export const config = {
