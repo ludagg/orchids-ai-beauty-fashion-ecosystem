@@ -1,126 +1,100 @@
-# Roadmap, Améliorations & Vision V2
+# Roadmap, Améliorations & Vision V2 - Orchids "Priisme"
 
-Ce document recense de manière exhaustive les fonctionnalités manquantes, les améliorations techniques nécessaires, et les opportunités pour une version 2 (V2) de l'application "Priisme" (TikTok x Beauty Marketplace).
+Ce document détaille la vision stratégique et technique pour l'évolution de la plateforme "Priisme". Il met l'accent sur l'expérience utilisateur (UX), les interfaces (UI) innovantes et les fonctionnalités avancées nécessaires pour créer l'écosystème ultime TikTok x Beauty Marketplace.
 
-## 1. Infrastructure & DevOps (Priorité Haute)
+---
 
-L'application actuelle repose sur des bases solides (Next.js, Drizzle, Stripe), mais manque d'infrastructure pour passer à l'échelle en production.
+## 1. Expérience Utilisateur (UX) & Interface (UI) - Vision Avancée
 
-*   **Stockage de Fichiers (S3 / R2) :**
-    *   *Actuel :* Les URLs des images/vidéos sont souvent entrées manuellement ou stockées en Base64 (ce qui alourdit la BDD).
-    *   *Manquant :* Intégration d'un bucket S3 (AWS) ou Cloudflare R2 pour l'upload réel de fichiers (Drag & Drop).
-    *   *Amélioration :* Redimensionnement automatique des images à l'upload (Next.js Image Optimization ne suffit pas pour l'upload source).
+L'objectif est de dépasser la simple fonctionnalité pour offrir une expérience émotionnelle et immersive.
 
-*   **Traitement Vidéo (Transcodage) :**
-    *   *Actuel :* Lecture directe du fichier source.
-    *   *Manquant :* Pipeline de transcodage (FFmpeg, Mux, ou AWS MediaConvert) pour générer des flux adaptatifs (HLS/DASH) afin que les vidéos chargent vite sur mobile (4G/5G).
-    *   *Amélioration :* Génération automatique de miniatures animées (GIF/WebP) au survol.
+### A. Social Commerce & Vidéo ("Le TikTok de la Beauté")
+*   **Feed Vidéo Immersif (Full Screen) :**
+    *   *Interaction :* Scroll vertical fluide avec "snap" automatique sur la vidéo suivante.
+    *   *Overlay Interactif :* Boutons d'action (Like, Comment, Share) flottants à droite avec micro-animations au clic (explosion de cœurs).
+    *   *Shop the Look :* Un panneau glissant (Bottom Sheet) qui apparaît au clic sur l'icône "Panier" dans la vidéo, listant les produits détectés/tagués sans arrêter la lecture.
+    *   *Transition Fluide :* Passage instantané de la vidéo à la fiche produit via une transition "Hero Animation" (l'image du produit s'agrandit pour devenir l'en-tête de la page produit).
 
-*   **Monitoring & Logs :**
-    *   *Actuel :* `console.log`.
-    *   *Manquant :* Intégration de Sentry ou LogRocket pour le suivi des erreurs client/serveur en temps réel.
-    *   *Amélioration :* Analytics produit (PostHog ou Mixpanel) pour comprendre le comportement utilisateur (rétention, entonnoir d'achat).
+*   **Live Shopping Interactif :**
+    *   *Interface Streamer :* Dashboard avec retour caméra, chat en temps réel, et gestion des produits mis en avant ("Pin product").
+    *   *Interface Viewer :* Vidéo plein écran, chat semi-transparent en bas à gauche, et pop-up produit "Acheter maintenant" qui apparaît dynamiquement quand le streamer présente un article.
+    *   *Gamification Live :* "Pluie de coupons" (animation de billets tombant à l'écran) déclenchée par le streamer.
 
-*   **Cache & Performance :**
-    *   *Actuel :* Cache Next.js standard.
-    *   *Manquant :* Redis (via Upstash ou self-hosted) pour mettre en cache les requêtes lourdes (feed vidéo, disponibilité créneaux).
-    *   *Amélioration :* CDN global pour les assets statiques.
+### B. SaaS Salon & Booking (L'Outil Pro Ultime)
+*   **Calendrier Drag & Drop Intelligent :**
+    *   *Vue :* Agenda hebdomadaire fluide (type Google Calendar) avec code couleur par type de service (Coupe = Bleu, Coloration = Rouge).
+    *   *Interaction :* Glisser-déposer pour déplacer un RDV. Redimensionner pour changer la durée.
+    *   *Indicateurs Visuels :* Icônes d'alerte pour les "No-show" probables (basé sur l'historique client).
+    *   *Quick Actions :* Clic droit sur un créneau pour "Bloquer", "Ajouter une note", ou "Envoyer un rappel SMS".
 
-## 2. Fonctionnalités SaaS Salon & Booking (Le "Toast" de la Beauté)
+*   **Tableau de Bord "Manager" :**
+    *   *Data Viz :* Graphiques circulaires animés pour le CA du jour, taux de remplissage, et performance par employé.
+    *   *Mode Sombre (Dark Mode) :* Optimisé pour les salons souvent peu éclairés ou pour une consultation discrète sur iPad.
 
-Le système de réservation actuel est fonctionnel mais basique pour un usage professionnel intensif.
+### C. IA Stylist & Personnalisation (L'Assistant Personnel)
+*   **Chat Conversationnel Fluide :**
+    *   *UI :* Interface type iMessage/WhatsApp avec bulles de chat.
+    *   *Feedback Visuel :* Indicateur de frappe ("typing...") réaliste pendant que l'IA génère sa réponse.
+    *   *Réponses Riches :* L'IA ne répond pas juste avec du texte, mais avec des "Carrousels de Produits", des "Lookbooks" (grilles d'images), ou des boutons d'action rapide ("Réserver ce look").
 
-*   **Gestion du Staff (Crucial) :**
-    *   *Actuel :* Réservation liée au Salon uniquement.
-    *   *Manquant :* Table `Staff` liée aux Salons. Les clients réservent "Une coupe avec Julie". Gestion des horaires individuels par employé.
-    *   *Amélioration :* Rôles et permissions granulaires pour les employés (accès limité au calendrier, pas aux finances).
+*   **Virtual Try-On (AR) :**
+    *   *Miroir Magique :* Utilisation de la caméra avant pour appliquer en temps réel (ou sur photo uploadée) les couleurs de rouge à lèvres ou les coiffures.
+    *   *Split Screen :* Comparaison Avant/Après avec un slider interactif que l'utilisateur peut déplacer.
 
-*   **Synchronisation Calendrier :**
-    *   *Actuel :* Calendrier interne uniquement.
-    *   *Manquant :* Sync bidirectionnelle avec Google Calendar / Apple Calendar / Outlook (via API Cronofy ou nylas) pour éviter les double-bookings.
+### D. Gamification & Fidélité (Engagement)
+*   **Système de Badges & Niveaux :**
+    *   *Visuel :* Badges 3D animés (WebGL/Three.js) débloqués lors d'actions (ex: "Première Réservation", "Top Reviewer").
+    *   *Progression :* Barre de progression circulaire dans le profil utilisateur montrant les points manquants pour le prochain statut VIP.
+*   **Récompenses Visuelles :** Confettis virtuels lors de la validation d'une commande ou de la publication d'un avis.
 
-*   **Politique d'Annulation & Acomptes :**
-    *   *Actuel :* Paiement total ou rien.
-    *   *Manquant :* Configuration des acomptes (ex: 30% à la résa). Règles d'annulation (ex: gratuit jusqu'à 24h, sinon frais).
-    *   *Amélioration :* "No-show protection" (empreinte bancaire sans débit immédiat).
+---
 
-*   **CRM & Marketing :**
-    *   *Actuel :* Liste de bookings.
-    *   *Manquant :* Base de données clients unifiée par salon. Historique des services par client ("Quelle couleur a fait Mme Michu la dernière fois ?").
-    *   *Amélioration :* Campagnes SMS/Email automatiques (Rappel de RDV, "Bon anniversaire", "Revenez nous voir").
+## 2. Infrastructure & DevOps (Fondations Techniques)
 
-## 3. Marketplace & E-commerce (V1.5)
+Pour supporter cette UX riche, le backend doit être infaillible.
 
-L'expérience d'achat est présente mais doit gérer la complexité du "Multi-vendeur".
+*   **Stockage & Optimisation Média (S3 / R2) :**
+    *   *Upload Drag & Drop :* Zone de dépôt avec prévisualisation immédiate (blur hash) avant même la fin de l'upload.
+    *   *Pipeline Vidéo :* Transcodage automatique en HLS (flux adaptatif) pour un démarrage instantané des vidéos, même en 4G.
+    *   *Image CDN :* Redimensionnement à la volée via Cloudflare ou Imgix pour servir la taille exacte nécessaire au device.
 
-*   **Paiements Multi-Vendeurs (Split Payments) :**
-    *   *Actuel :* Stripe standard.
-    *   *Manquant :* Stripe Connect (Express ou Custom). Lorsqu'un client achète un produit + un service, le paiement doit être splitté automatiquement entre la plateforme (commission) et le salon/vendeur.
-    *   *Amélioration :* Gestion des KYB (Know Your Business) pour l'onboarding des salons vendeurs.
+*   **Performance & Real-time :**
+    *   *WebSockets :* Pour le chat Live Shopping et les notifications instantanées ("Votre coiffeur est prêt").
+    *   *Redis Cache :* Mise en cache agressive des feeds vidéos et des disponibilités salons pour une navigation < 100ms.
+    *   *Optimistic UI :* Les actions (Like, Ajout Panier) sont validées visuellement immédiatement, sans attendre la réponse serveur.
 
-*   **Logistique & Expédition :**
-    *   *Actuel :* Adresse texte simple.
-    *   *Manquant :* Calcul des frais de port réels (intégration ShipStation / SendCloud / La Poste). Génération d'étiquettes d'expédition.
-    *   *Amélioration :* Suivi de colis en temps réel dans l'app.
+---
 
-*   **Gestion des Stocks Avancée :**
-    *   *Actuel :* Compteur simple.
-    *   *Manquant :* Alertes de stock bas. Gestion des variantes complexes (Couleur x Taille x Contenant).
-    *   *Amélioration :* Gestion des retours et remboursements partiels directement depuis le dashboard admin.
+## 3. Marketplace & E-commerce (Fonctionnalités V1.5)
 
-## 4. Social & Contenu (L'aspect "TikTok")
+L'achat doit être aussi simple que le divertissement.
 
-C'est le cœur de l'attraction utilisateur. Il manque des fonctionnalités d'engagement.
+*   **Paiement Express (One-Tap) :**
+    *   Intégration Apple Pay / Google Pay native.
+    *   "Slide to Pay" : Geste de glissement pour confirmer la commande (plus satisfaisant qu'un clic).
 
-*   **Algorithme de Recommandation :**
-    *   *Actuel :* Tri par date ou popularité simple.
-    *   *Manquant :* "For You Page" personnalisée basée sur le graphe d'intérêt (temps passé, likes, catégories consultées). Vector Search (pgvector) pour la similarité sémantique.
-    *   *Amélioration :* A/B testing des thumbnails.
+*   **Logistique Intégrée :**
+    *   *Tracking Visuel :* Timeline de livraison animée (Colis préparé -> En transit -> Livré) avec carte en temps réel du livreur (si disponible).
+    *   *Retours Simplifiés :* Génération de QR code retour en 1 clic depuis l'historique de commande.
 
-*   **Live Streaming (Vrai Live) :**
-    *   *Actuel :* Indicateur `isLive`.
-    *   *Manquant :* Intégration WebRTC ou RTMP (via Mux, Agora ou AWS IVS) pour le streaming vidéo en temps réel avec chat interactif.
-    *   *Amélioration :* "Live Shopping" : Épingler des produits cliquables pendant le live.
+---
 
-*   **Outils de Création In-App :**
-    *   *Actuel :* Upload de fichier fini.
-    *   *Manquant :* Éditeur vidéo basique dans le navigateur (trim, crop, ajouter musique).
-    *   *Amélioration :* Filtres AR (Réalité Augmentée) pour le maquillage virtuel ou fun (via DeepAR ou Banuba).
+## 4. Mobile & Accessibilité
 
-*   **Interactions Sociales :**
-    *   *Actuel :* Like, Commentaire.
-    *   *Manquant :* Partage externe (Deep links). Stories (contenu éphémère 24h). Duets / Remix (répondre en vidéo).
-    *   *Amélioration :* Messagerie privée avec partage de produits/services (actuellement basique).
-
-## 5. Intelligence Artificielle (V2 Vision)
-
-L'utilisation actuelle de Gemini est un bon début (Styliste), mais peut aller plus loin.
-
-*   **Virtual Try-On (VTO) :**
-    *   *Idée :* Utiliser l'IA générative ou la CV (Computer Vision) pour permettre aux utilisateurs de tester virtuellement une couleur de cheveux ou un rouge à lèvres sur leur selfie.
-
-*   **Diagnostic de Peau/Cheveux :**
-    *   *Idée :* Analyse d'une photo de l'utilisateur par IA pour recommander automatiquement une routine de produits (Cross-sell puissant).
-
-*   **Assistant Booking Vocal :**
-    *   *Idée :* "Réserve-moi une coupe chez le coiffeur le plus proche vendredi soir".
-
-## 6. Mobile & Expérience Utilisateur (UX)
-
-*   **PWA & Natif :**
-    *   *Actuel :* Web responsive.
-    *   *Manquant :* Manifest PWA complet (installable sur l'écran d'accueil). Notifications Push natives (via Firebase ou WebPush).
-    *   *Amélioration :* Wrapper Capacitor/React Native pour publication sur App Store / Play Store.
+*   **Progressive Web App (PWA) :**
+    *   Installation sur l'écran d'accueil avec icône personnalisée.
+    *   Mode hors-ligne : Consultation du catalogue et des RDV passés sans connexion.
+    *   Notifications Push natives pour les rappels de RDV et promos flash.
 
 *   **Accessibilité (a11y) :**
-    *   *Manquant :* Audit complet WCAG (navigation clavier, lecteurs d'écran). Mode "Haut Contraste".
+    *   Navigation complète au clavier pour le dashboard salon.
+    *   Support des lecteurs d'écran pour les descriptions produits et vidéos (Alt text généré par IA).
+    *   Mode "Haut Contraste" pour les environnements lumineux.
 
-*   **Internationalisation (i18n) :**
-    *   *Manquant :* Support multi-langues et multi-devises (€, $, £).
+---
 
-## Résumé des Priorités Techniques
+## Résumé des Priorités (Roadmap)
 
-1.  **Refactor Upload :** Passer sur S3/R2 immédiatement.
-2.  **Stripe Connect :** Indispensable pour payer les salons.
-3.  **Staff Management :** Indispensable pour que les salons utilisent l'outil au quotidien.
-4.  **Notifications Push :** Pour la rétention utilisateur.
+1.  **Immédiat (UX Core) :** Refonte de l'upload (S3), Feed Vidéo fluide (HLS), Calendrier Salon Drag & Drop.
+2.  **Court Terme (Engagement) :** Gamification (Points/Badges), Notifications Push, Stripe Connect (Paiements Salons).
+3.  **Moyen Terme (Innovation) :** Live Shopping, IA Try-On (AR), App Mobile Native (React Native/Capacitor).

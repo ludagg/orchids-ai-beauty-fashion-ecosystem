@@ -1,48 +1,109 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Priisme (Orchids Ecosystem)
 
-## Getting Started
+**The Ultimate Beauty & Fashion Ecosystem** combining the virality of TikTok, the utility of a Salon SaaS, and the personalization of AI.
 
-First, run the development server:
+![Priisme Banner](https://images.unsplash.com/photo-1596462502278-27bfdd403cc2?q=80&w=2000&auto=format&fit=crop)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🌟 Overview
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Priisme is a next-generation platform designed to revolutionize the beauty industry in India and beyond. It is not just a marketplace; it is an **experience-driven ecosystem** where content drives commerce.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+*   **For Users:** A personalized feed of beauty videos, one-tap booking for top salons, and an AI stylist that knows your preferences.
+*   **For Salons:** A powerful, mobile-first SaaS to manage bookings, staff, and payments, replacing pen-and-paper or outdated software.
+*   **For Creators:** A platform to monetize content directly through "Shop the Look" features.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Database Setup
+## 🚀 Key Features & UX Vision
 
-This project uses Drizzle ORM and PostgreSQL. To set up the database:
+### 📱 Social Commerce ("TikTok for Beauty")
+*   **Immersive Video Feed:** Full-screen, vertical video scrolling with instant playback.
+*   **Shop the Look:** Products tagged in videos can be purchased without leaving the stream.
+*   **Live Shopping:** Real-time interactive streams with creators, featuring instant purchase pop-ups.
 
-1. Create a `.env` file based on `.env.example`.
-2. Run database migrations:
-   ```bash
-   bun run db:push
-   # or
-   bun run db:migrate
-   ```
+### 💇‍♀️ Salon SaaS & Booking
+*   **Smart Scheduling:** Drag-and-drop calendar management for salon owners.
+*   **Staff Management:** Individual schedules, commission tracking, and performance analytics.
+*   **Automated Marketing:** SMS reminders, "Time to rebook" notifications, and loyalty rewards.
 
-## Learn More
+### 🤖 AI Stylist & Personalization
+*   **Virtual Try-On (AR):** Test hair colors and makeup shades in real-time using the camera.
+*   **Conversational Assistant:** Chat with an AI that understands your skin type, hair texture, and style preferences to recommend products.
+*   **Smart Search:** Search by concern (e.g., "frizzy hair in humidity") rather than just keywords.
 
-To learn more about Next.js, take a look at the following resources:
+### 💎 Gamification & Loyalty
+*   **Earn & Burn:** Points for every booking, review, and video watch.
+*   **Badges:** Unlock status levels (Gold, Platinum) for exclusive perks.
+*   **Community Challenges:** Participate in hashtag challenges to win products.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🛠 Tech Stack
 
-## Deploy on Vercel
+Built with the latest and greatest web technologies for performance and scale.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+*   **Frontend:** [Next.js 15](https://nextjs.org/) (App Router), [React 19](https://react.dev/), [TypeScript](https://www.typescriptlang.org/)
+*   **Styling & UI:** [Tailwind CSS v4](https://tailwindcss.com/), [Radix UI](https://www.radix-ui.com/), [Framer Motion](https://www.framer.com/motion/)
+*   **Backend:** [Better Auth](https://better-auth.com/), [Drizzle ORM](https://orm.drizzle.team/), [PostgreSQL](https://www.postgresql.org/)
+*   **Infrastructure:** [Vercel](https://vercel.com/), [Cloudflare R2](https://www.cloudflare.com/products/r2/), [Stripe Connect](https://stripe.com/connect)
+*   **AI:** [Google Gemini](https://deepmind.google/technologies/gemini/), [Vercel AI SDK](https://sdk.vercel.ai/docs)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 🏁 Getting Started
+
+### Prerequisites
+*   Node.js 18+ (LTS recommended)
+*   PostgreSQL database (Local or Neon/Supabase)
+
+### Installation
+
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/your-org/priisme.git
+    cd priisme
+    ```
+
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    # or
+    pnpm install
+    # or
+    bun install
+    ```
+
+3.  **Environment Setup:**
+    Copy `.env.example` to `.env` and fill in your API keys (Database, Auth, Stripe, etc.).
+
+4.  **Database Migration:**
+    ```bash
+    npm run db:push
+    ```
+
+5.  **Run Development Server:**
+    ```bash
+    npm run dev
+    ```
+
+Open [http://localhost:3000](http://localhost:3000) to view the application.
+
+---
+
+## 📂 Project Structure
+
+*   `src/app`: Next.js App Router pages and layouts.
+*   `src/components`: Reusable UI components (shadcn/ui based).
+*   `src/db/schema`: Database schema definitions (Drizzle).
+*   `src/lib`: Utility functions and third-party configurations.
+*   `public`: Static assets (images, fonts).
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to submit pull requests, report issues, and suggest improvements.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
