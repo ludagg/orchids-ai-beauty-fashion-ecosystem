@@ -1,0 +1,2929 @@
+[
+  {
+    "route": "/",
+    "screenshots": {
+      "desktop": "reports/screenshots/desktop__.png",
+      "mobile": "reports/screenshots/mobile__.png"
+    },
+    "performance": {
+      "navigation": [
+        {
+          "name": "http://localhost:3000/",
+          "entryType": "navigation",
+          "startTime": 0,
+          "duration": 630.6000000000349,
+          "initiatorType": "navigation",
+          "deliveryType": "cache",
+          "nextHopProtocol": "",
+          "renderBlockingStatus": "non-blocking",
+          "contentEncoding": "gzip",
+          "workerStart": 0,
+          "workerRouterEvaluationStart": 0,
+          "workerCacheLookupStart": 0,
+          "workerMatchedSourceType": "",
+          "workerFinalSourceType": "",
+          "redirectStart": 0,
+          "redirectEnd": 0,
+          "fetchStart": 0.1000000000349246,
+          "domainLookupStart": 0.1000000000349246,
+          "domainLookupEnd": 0.1000000000349246,
+          "connectStart": 0.1000000000349246,
+          "secureConnectionStart": 0,
+          "connectEnd": 0.1000000000349246,
+          "requestStart": 1.2000000000116415,
+          "responseStart": 7.100000000034925,
+          "firstInterimResponseStart": 0,
+          "finalResponseHeadersStart": 7.100000000034925,
+          "responseEnd": 7.900000000023283,
+          "transferSize": 300,
+          "encodedBodySize": 15068,
+          "decodedBodySize": 96765,
+          "responseStatus": 200,
+          "serverTiming": [],
+          "unloadEventStart": 188.70000000001164,
+          "unloadEventEnd": 188.70000000001164,
+          "domInteractive": 487.1000000000349,
+          "domContentLoadedEventStart": 487.1000000000349,
+          "domContentLoadedEventEnd": 487.4000000000233,
+          "domComplete": 630.6000000000349,
+          "loadEventStart": 630.6000000000349,
+          "loadEventEnd": 630.6000000000349,
+          "type": "reload",
+          "redirectCount": 0,
+          "activationStart": 0,
+          "criticalCHRestart": 0,
+          "notRestoredReasons": null,
+          "confidence": {
+            "randomizedTriggerRate": 0.4994798,
+            "value": "high"
+          }
+        }
+      ],
+      "paint": [
+        {
+          "name": "first-paint",
+          "entryType": "paint",
+          "startTime": 600,
+          "duration": 0,
+          "paintTime": 446,
+          "presentationTime": 600
+        },
+        {
+          "name": "first-contentful-paint",
+          "entryType": "paint",
+          "startTime": 796,
+          "duration": 0,
+          "paintTime": 603.7000000000116,
+          "presentationTime": 796
+        }
+      ]
+    },
+    "accessibility": [
+      {
+        "id": "button-name",
+        "impact": "critical",
+        "tags": [
+          "cat.name-role-value",
+          "wcag2a",
+          "wcag412",
+          "section508",
+          "section508.22.a",
+          "TTv5",
+          "TT6.a",
+          "EN-301-549",
+          "EN-9.4.1.2",
+          "ACT",
+          "RGAAv4",
+          "RGAA-11.9.1"
+        ],
+        "description": "Ensure buttons have discernible text",
+        "help": "Buttons must have discernible text",
+        "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/button-name?application=playwright",
+        "nodes": [
+          {
+            "any": [
+              {
+                "id": "button-has-visible-text",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element does not have inner text that is visible to screen readers"
+              },
+              {
+                "id": "aria-label",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "aria-label attribute does not exist or is empty"
+              },
+              {
+                "id": "aria-labelledby",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty"
+              },
+              {
+                "id": "non-empty-title",
+                "data": {
+                  "messageKey": "noAttr"
+                },
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element has no title attribute"
+              },
+              {
+                "id": "implicit-label",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element does not have an implicit (wrapped) <label>"
+              },
+              {
+                "id": "explicit-label",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element does not have an explicit <label>"
+              },
+              {
+                "id": "presentational-role",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "critical",
+            "html": "<button class=\"relative h-2 rounded-full transition-all duration-500 w-10\" style=\"background-color:#e11d48;opacity:1\"></button>",
+            "target": [
+              ".h-2.w-10.duration-500"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+          },
+          {
+            "any": [
+              {
+                "id": "button-has-visible-text",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element does not have inner text that is visible to screen readers"
+              },
+              {
+                "id": "aria-label",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "aria-label attribute does not exist or is empty"
+              },
+              {
+                "id": "aria-labelledby",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty"
+              },
+              {
+                "id": "non-empty-title",
+                "data": {
+                  "messageKey": "noAttr"
+                },
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element has no title attribute"
+              },
+              {
+                "id": "implicit-label",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element does not have an implicit (wrapped) <label>"
+              },
+              {
+                "id": "explicit-label",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element does not have an explicit <label>"
+              },
+              {
+                "id": "presentational-role",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "critical",
+            "html": "<button class=\"relative h-2 rounded-full transition-all duration-500 w-2 hover:w-4\" style=\"background-color:var(--muted-foreground);opacity:0.3\"></button>",
+            "target": [
+              ".hover\\:w-4.w-2.h-2:nth-child(2)"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+          },
+          {
+            "any": [
+              {
+                "id": "button-has-visible-text",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element does not have inner text that is visible to screen readers"
+              },
+              {
+                "id": "aria-label",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "aria-label attribute does not exist or is empty"
+              },
+              {
+                "id": "aria-labelledby",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty"
+              },
+              {
+                "id": "non-empty-title",
+                "data": {
+                  "messageKey": "noAttr"
+                },
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element has no title attribute"
+              },
+              {
+                "id": "implicit-label",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element does not have an implicit (wrapped) <label>"
+              },
+              {
+                "id": "explicit-label",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element does not have an explicit <label>"
+              },
+              {
+                "id": "presentational-role",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "critical",
+            "html": "<button class=\"relative h-2 rounded-full transition-all duration-500 w-2 hover:w-4\" style=\"background-color:var(--muted-foreground);opacity:0.3\"></button>",
+            "target": [
+              ".hover\\:w-4.w-2.h-2:nth-child(3)"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+          },
+          {
+            "any": [
+              {
+                "id": "button-has-visible-text",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element does not have inner text that is visible to screen readers"
+              },
+              {
+                "id": "aria-label",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "aria-label attribute does not exist or is empty"
+              },
+              {
+                "id": "aria-labelledby",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty"
+              },
+              {
+                "id": "non-empty-title",
+                "data": {
+                  "messageKey": "noAttr"
+                },
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element has no title attribute"
+              },
+              {
+                "id": "implicit-label",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element does not have an implicit (wrapped) <label>"
+              },
+              {
+                "id": "explicit-label",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element does not have an explicit <label>"
+              },
+              {
+                "id": "presentational-role",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "critical",
+            "html": "<button class=\"relative h-2 rounded-full transition-all duration-500 w-2 hover:w-4\" style=\"background-color:var(--muted-foreground);opacity:0.3\"></button>",
+            "target": [
+              ".hover\\:w-4.w-2.h-2:nth-child(4)"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+          },
+          {
+            "any": [
+              {
+                "id": "button-has-visible-text",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element does not have inner text that is visible to screen readers"
+              },
+              {
+                "id": "aria-label",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "aria-label attribute does not exist or is empty"
+              },
+              {
+                "id": "aria-labelledby",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty"
+              },
+              {
+                "id": "non-empty-title",
+                "data": {
+                  "messageKey": "noAttr"
+                },
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element has no title attribute"
+              },
+              {
+                "id": "implicit-label",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element does not have an implicit (wrapped) <label>"
+              },
+              {
+                "id": "explicit-label",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element does not have an explicit <label>"
+              },
+              {
+                "id": "presentational-role",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "critical",
+            "html": "<button class=\"w-12 h-12 rounded-full border border-border flex items-center justify-center hover:bg-secondary transition-colors\">",
+            "target": [
+              ".hover\\:bg-secondary.w-12.h-12:nth-child(1)"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+          },
+          {
+            "any": [
+              {
+                "id": "button-has-visible-text",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element does not have inner text that is visible to screen readers"
+              },
+              {
+                "id": "aria-label",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "aria-label attribute does not exist or is empty"
+              },
+              {
+                "id": "aria-labelledby",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty"
+              },
+              {
+                "id": "non-empty-title",
+                "data": {
+                  "messageKey": "noAttr"
+                },
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element has no title attribute"
+              },
+              {
+                "id": "implicit-label",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element does not have an implicit (wrapped) <label>"
+              },
+              {
+                "id": "explicit-label",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element does not have an explicit <label>"
+              },
+              {
+                "id": "presentational-role",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "critical",
+            "html": "<button class=\"w-12 h-12 rounded-full border border-border flex items-center justify-center hover:bg-secondary transition-colors\">",
+            "target": [
+              ".hover\\:bg-secondary.w-12.h-12:nth-child(3)"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+          }
+        ]
+      },
+      {
+        "id": "landmark-one-main",
+        "impact": "moderate",
+        "tags": [
+          "cat.semantics",
+          "best-practice"
+        ],
+        "description": "Ensure the document has a main landmark",
+        "help": "Document should have one main landmark",
+        "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/landmark-one-main?application=playwright",
+        "nodes": [
+          {
+            "any": [],
+            "all": [
+              {
+                "id": "page-has-main",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Document does not have a main landmark"
+              }
+            ],
+            "none": [],
+            "impact": "moderate",
+            "html": "<html lang=\"en\" class=\"light\" style=\"color-scheme: light;\">",
+            "target": [
+              "html"
+            ],
+            "failureSummary": "Fix all of the following:\n  Document does not have a main landmark"
+          }
+        ]
+      },
+      {
+        "id": "region",
+        "impact": "moderate",
+        "tags": [
+          "cat.keyboard",
+          "best-practice",
+          "RGAAv4",
+          "RGAA-9.2.1"
+        ],
+        "description": "Ensure all page content is contained by landmarks",
+        "help": "All page content should be contained by landmarks",
+        "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/region?application=playwright",
+        "nodes": [
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<div class=\"inline-flex items-center gap-2 px-4 py-2 rounded-full bg-card border border-border shadow-sm mb-8\" style=\"opacity: 1; transform: none;\">",
+            "target": [
+              ".shadow-sm.inline-flex.py-2"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<h1 class=\"text-[44px] sm:text-[56px] md:text-[72px] lg:text-[88px] font-semibold leading-[1.05] tracking-tight font-display\" style=\"opacity: 1; transform: none;\">Where Fashion<br><span class=\"text-gradient-color font-display italic\">Meets Intelligence.</span></h1>",
+            "target": [
+              "h1"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<p class=\"text-[17px] md:text-[21px] text-muted-foreground max-w-[540px] mx-auto mt-6 leading-relaxed\" style=\"opacity: 1; transform: none;\">Experience the future of fashion. Explore our AI-powered ecosystem and discover the intelligence behind style.</p>",
+            "target": [
+              ".mt-6"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<div class=\"flex flex-wrap items-center justify-center gap-6 mt-10\" style=\"opacity: 1;\">",
+            "target": [
+              ".flex-wrap.mt-10.gap-6"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<p class=\"mt-4 text-muted-foreground text-sm\">Watch how Rare works</p>",
+            "target": [
+              ".text-center > .mt-4"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<div class=\"text-center mb-16 md:mb-20\" style=\"opacity:0;transform:translateY(40px)\">",
+            "target": [
+              "#features > .max-w-\\[1200px\\].px-6.mx-auto > .md\\:mb-20.mb-16.text-center"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<img src=\"https://images.unsplash.com/photo-1558171813-4c088753af8f?w=800&amp;h=600&amp;fit=crop\" alt=\"Fashion Marketplace\" class=\"w-full h-full object-cover\">",
+            "target": [
+              "img[alt=\"Fashion Marketplace\"]"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<h3 class=\"text-2xl sm:text-3xl font-semibold text-white mb-2 font-display\">Fashion Marketplace</h3>",
+            "target": [
+              ".shadow-black\\/20 > .aspect-\\[4\\/5\\].overflow-hidden.relative > .right-0.p-6.bottom-0 > div > .sm\\:text-3xl.mb-2.text-2xl"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<p class=\"text-white/80 text-sm sm:text-base leading-relaxed mb-4\">Curated collections from India's finest designers. Shop with confidence.</p>",
+            "target": [
+              ".shadow-black\\/20 > .aspect-\\[4\\/5\\].overflow-hidden.relative > .right-0.p-6.bottom-0 > div > .text-white\\/80.sm\\:text-base.mb-4"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<img src=\"https://images.unsplash.com/photo-1560066984-138dadb4c035?w=800&amp;h=600&amp;fit=crop\" alt=\"Salon Booking\" class=\"w-full h-full object-cover\">",
+            "target": [
+              "img[alt=\"Salon Booking\"]"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<div class=\"absolute bottom-0 left-0 right-0 p-6\">",
+            "target": [
+              ".w-\\[320px\\].sm\\:w-\\[380px\\].md\\:w-\\[440px\\]:nth-child(2) > .transition-shadow.shadow-2xl.shadow-foreground\\/10 > .aspect-\\[4\\/5\\].overflow-hidden.relative > .right-0.p-6.bottom-0"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<img src=\"https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&amp;h=600&amp;fit=crop\" alt=\"Video Commerce\" class=\"w-full h-full object-cover\">",
+            "target": [
+              "img[alt=\"Video Commerce\"]"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<div class=\"absolute bottom-0 left-0 right-0 p-6\">",
+            "target": [
+              ".w-\\[320px\\].sm\\:w-\\[380px\\].md\\:w-\\[440px\\]:nth-child(3) > .transition-shadow.shadow-2xl.shadow-foreground\\/10 > .aspect-\\[4\\/5\\].overflow-hidden.relative > .right-0.p-6.bottom-0"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<img src=\"https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800&amp;h=600&amp;fit=crop\" alt=\"AI Stylist\" class=\"w-full h-full object-cover\">",
+            "target": [
+              "img[alt=\"AI Stylist\"]"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<div class=\"absolute bottom-0 left-0 right-0 p-6\">",
+            "target": [
+              ".w-\\[320px\\].sm\\:w-\\[380px\\].md\\:w-\\[440px\\]:nth-child(4) > .transition-shadow.shadow-2xl.shadow-foreground\\/10 > .aspect-\\[4\\/5\\].overflow-hidden.relative > .right-0.p-6.bottom-0"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<div class=\"text-center\"><p class=\"text-sm text-muted-foreground\"><span class=\"font-semibold text-foreground\">1</span> / <!-- -->4</p></div>",
+            "target": [
+              ".gap-8.mt-8.justify-center > .text-center"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<div class=\"text-center mb-6\" style=\"opacity:0;transform:translateY(40px)\">",
+            "target": [
+              ".text-center.mb-6"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<p class=\"text-muted-foreground text-[17px] md:text-[21px] text-center max-w-[560px] mx-auto mb-16 md:mb-20 leading-relaxed\" style=\"opacity:0;transform:translateY(20px)\">Advanced machine learning that understands your style, body type, and preferences.</p>",
+            "target": [
+              ".max-w-\\[560px\\]"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<div class=\"mt-auto\"><h3 class=\"text-[15px] md:text-[17px] font-semibold mb-1 text-foreground\">Virtual Try-On</h3><p class=\"text-muted-foreground text-xs md:text-sm leading-relaxed\">See how clothes look on you before buying</p></div>",
+            "target": [
+              ".row-span-2 > .z-10.h-full.flex-col > .mt-auto"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<div class=\"mt-auto\"><h3 class=\"text-[15px] md:text-[17px] font-semibold mb-1 text-foreground\">Style DNA</h3><p class=\"text-muted-foreground text-xs md:text-sm leading-relaxed\">AI learns your unique preferences</p></div>",
+            "target": [
+              ".col-span-1.row-span-1.hover\\:-translate-y-1:nth-child(2) > .z-10.h-full.flex-col > .mt-auto"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<div class=\"mt-auto\"><h3 class=\"text-[15px] md:text-[17px] font-semibold mb-1 text-foreground\">Trend Forecast</h3><p class=\"text-muted-foreground text-xs md:text-sm leading-relaxed\">Stay ahead of fashion curves</p></div>",
+            "target": [
+              ".col-span-1.row-span-1.hover\\:-translate-y-1:nth-child(3) > .z-10.h-full.flex-col > .mt-auto"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<div class=\"mt-auto\"><h3 class=\"text-[15px] md:text-[17px] font-semibold mb-1 text-foreground\">Smart Sizing</h3><p class=\"text-muted-foreground text-xs md:text-sm leading-relaxed\">Perfect fit recommendations using body measurements</p></div>",
+            "target": [
+              ".col-span-2.row-span-1.hover\\:-translate-y-1 > .z-10.h-full.flex-col > .mt-auto"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<div class=\"mt-auto\"><h3 class=\"text-[15px] md:text-[17px] font-semibold mb-1 text-foreground\">Wishlist Sync</h3><p class=\"text-muted-foreground text-xs md:text-sm leading-relaxed\">Price alerts &amp; availability tracking</p></div>",
+            "target": [
+              ".col-span-1.row-span-1.hover\\:-translate-y-1:nth-child(5) > .z-10.h-full.flex-col > .mt-auto"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<div class=\"grid sm:grid-cols-3 gap-6 md:gap-8 mt-16\">",
+            "target": [
+              ".sm\\:grid-cols-3"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<span class=\"inline-block px-4 py-1.5 rounded-full bg-secondary text-sm text-muted-foreground font-medium mb-6\">Marketplace</span>",
+            "target": [
+              ".lg\\:grid-cols-2.lg\\:gap-20.gap-12 > div:nth-child(1) > .bg-secondary.inline-block.py-1\\.5"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<h2 class=\"text-[36px] sm:text-[44px] md:text-[48px] font-semibold leading-tight tracking-tight mb-6 font-display\">Shop with<br><span class=\"text-muted-foreground italic\">confidence.</span></h2>",
+            "target": [
+              "#marketplace > .max-w-\\[1200px\\].px-6.mx-auto > .lg\\:grid-cols-2.lg\\:gap-20.gap-12 > div:nth-child(1) > .md\\:text-\\[48px\\].sm\\:text-\\[44px\\]"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<p class=\"text-muted-foreground text-[17px] leading-relaxed mb-8 max-w-[440px]\">Curated fashion from verified sellers. Secure payments. Easy returns. Virtual try-on powered by AI.</p>",
+            "target": [
+              "div:nth-child(1) > .max-w-\\[440px\\].mb-8.text-\\[17px\\]"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<ul class=\"space-y-3 mb-8\">",
+            "target": [
+              "div:nth-child(1) > ul"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<img src=\"https://images.unsplash.com/photo-1558171813-4c088753af8f?w=400&amp;h=500&amp;fit=crop\" alt=\"Fashion\" class=\"w-full h-[240px] sm:h-[280px] object-cover transition-transform duration-500 group-hover:scale-110\">",
+            "target": [
+              ".shadow-xl.shadow-foreground\\/10.rounded-2xl:nth-child(1) > .overflow-hidden.relative > .h-\\[240px\\].sm\\:h-\\[280px\\].group-hover\\:scale-110"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<div class=\"p-4\"><p class=\"font-semibold text-foreground\">₹2,499</p><p class=\"text-sm text-muted-foreground\">Designer Collection</p></div>",
+            "target": [
+              ".shadow-xl.shadow-foreground\\/10.rounded-2xl:nth-child(1) > .p-4"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<img src=\"https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=400&amp;h=500&amp;fit=crop\" alt=\"Fashion\" class=\"w-full h-[240px] sm:h-[280px] object-cover transition-transform duration-500 group-hover:scale-110\">",
+            "target": [
+              ".mt-8.shadow-xl.shadow-foreground\\/10 > .overflow-hidden.relative > .h-\\[240px\\].sm\\:h-\\[280px\\].group-hover\\:scale-110"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<div class=\"p-4\"><p class=\"font-semibold text-foreground\">₹3,299</p><p class=\"text-sm text-muted-foreground\">Designer Collection</p></div>",
+            "target": [
+              ".mt-8.shadow-xl.shadow-foreground\\/10 > .p-4"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<div class=\"relative overflow-hidden\">",
+            "target": [
+              ".hover\\:shadow-2xl > .overflow-hidden.relative"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<div><p class=\"font-semibold text-lg text-foreground\">Luxe Beauty Lounge</p><p class=\"text-muted-foreground text-sm\">Koramangala, Bangalore</p></div>",
+            "target": [
+              ".items-start.justify-between.mb-4 > div:nth-child(1)"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<span class=\"text-sm font-medium\">4.9</span>",
+            "target": [
+              ".px-2\\.5 > .font-medium"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<div class=\"flex gap-2 mb-5\"><span class=\"px-3 py-1 rounded-full bg-muted text-xs text-muted-foreground\">Haircut</span><span class=\"px-3 py-1 rounded-full bg-muted text-xs text-muted-foreground\">Color</span><span class=\"px-3 py-1 rounded-full bg-muted text-xs text-muted-foreground\">Spa</span></div>",
+            "target": [
+              ".mb-5"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<span class=\"inline-block px-4 py-1.5 rounded-full bg-card border border-border text-sm text-muted-foreground font-medium mb-6\">Salon Booking</span>",
+            "target": [
+              ".order-1 > .inline-block.py-1\\.5.px-4"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<h2 class=\"text-[36px] sm:text-[44px] md:text-[48px] font-semibold leading-tight tracking-tight mb-6 font-display\">Beauty services,<br><span class=\"text-muted-foreground italic\">verified.</span></h2>",
+            "target": [
+              ".order-1 > .md\\:text-\\[48px\\].sm\\:text-\\[44px\\]"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<p class=\"text-muted-foreground text-[17px] leading-relaxed mb-8 max-w-[440px]\">Book appointments at India's top salons. Real reviews. Real-time availability. Secure, hassle-free payments.</p>",
+            "target": [
+              ".order-1 > .max-w-\\[440px\\].mb-8.text-\\[17px\\]"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<ul class=\"space-y-3 mb-8\">",
+            "target": [
+              ".order-1 > ul"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<div class=\"text-center mb-16 md:mb-20\" style=\"opacity:0;transform:translateY(40px)\">",
+            "target": [
+              "#testimonials > .max-w-\\[1200px\\].px-6.mx-auto > .md\\:mb-20.mb-16.text-center"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<p class=\"text-foreground text-lg leading-relaxed mb-8\">“<!-- -->Rare has completely changed how I discover new designers. The AI Stylist is surprisingly accurate and helps me find pieces I wouldn't have considered before.<!-- -->”</p>",
+            "target": [
+              ".p-8.bg-background.hover\\:shadow-xl:nth-child(1) > .text-lg.mb-8.leading-relaxed"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<div class=\"flex items-center gap-4\">",
+            "target": [
+              ".p-8.bg-background.hover\\:shadow-xl:nth-child(1) > .gap-4.items-center.flex"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<p class=\"text-foreground text-lg leading-relaxed mb-8\">“<!-- -->The virtual try-on feature is a game changer. I've bought three outfits so far and they all fit perfectly. No more returns because of wrong sizing!<!-- -->”</p>",
+            "target": [
+              ".p-8.bg-background.hover\\:shadow-xl:nth-child(2) > .text-lg.mb-8.leading-relaxed"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<div class=\"flex items-center gap-4\">",
+            "target": [
+              ".p-8.bg-background.hover\\:shadow-xl:nth-child(2) > .gap-4.items-center.flex"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<p class=\"text-foreground text-lg leading-relaxed mb-8\">“<!-- -->Booking my favorite salon has never been easier. Love the real-time availability and the fact that I can see verified reviews before booking.<!-- -->”</p>",
+            "target": [
+              ".p-8.bg-background.hover\\:shadow-xl:nth-child(3) > .text-lg.mb-8.leading-relaxed"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<div class=\"flex items-center gap-4\">",
+            "target": [
+              ".p-8.bg-background.hover\\:shadow-xl:nth-child(3) > .gap-4.items-center.flex"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<span class=\"inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6\">For Partners</span>",
+            "target": [
+              ".bg-primary\\/10.text-primary.inline-block"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<h2 class=\"text-[36px] sm:text-[44px] md:text-[48px] font-semibold leading-tight tracking-tight mb-6 font-display\">Grow your business<br><span class=\"text-muted-foreground italic\">with intelligence.</span></h2>",
+            "target": [
+              ".z-10.max-w-\\[1200px\\].px-6 > .lg\\:grid-cols-2.lg\\:gap-20.gap-12 > div:nth-child(1) > .md\\:text-\\[48px\\].sm\\:text-\\[44px\\]"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<p class=\"text-muted-foreground text-[17px] leading-relaxed mb-10 max-w-[480px]\">Join thousands of salons and creators using Rare to streamline operations, reach new customers, and increase revenue through AI-powered tools.</p>",
+            "target": [
+              ".max-w-\\[480px\\].mb-10.text-\\[17px\\]"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<div><h3 class=\"font-semibold text-foreground mb-1\">Smart Booking Management</h3><p class=\"text-sm text-muted-foreground\">Automated scheduling, reminders, and payment processing.</p></div>",
+            "target": [
+              ".space-y-8 > .gap-4.flex:nth-child(1) > div:nth-child(2)"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<div><h3 class=\"font-semibold text-foreground mb-1\">Video Commerce Tools</h3><p class=\"text-sm text-muted-foreground\">Sell products directly through engaging video content.</p></div>",
+            "target": [
+              ".space-y-8 > .gap-4.flex:nth-child(2) > div:nth-child(2)"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<div><h3 class=\"font-semibold text-foreground mb-1\">Growth Analytics</h3><p class=\"text-sm text-muted-foreground\">Real-time insights to track performance and revenue.</p></div>",
+            "target": [
+              ".space-y-8 > .gap-4.flex:nth-child(3) > div:nth-child(2)"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<img src=\"https://images.unsplash.com/photo-1521590832896-7ea20ade7336?w=800&amp;h=1000&amp;fit=crop\" alt=\"Business Dashboard\" class=\"w-full h-[600px] object-cover\">",
+            "target": [
+              "img[alt=\"Business Dashboard\"]"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<p class=\"text-xs text-white/70 mb-1\">Total Revenue</p>",
+            "target": [
+              ".bg-white\\/10.backdrop-blur-md.border-white\\/20:nth-child(1) > .text-white\\/70.mb-1.text-xs"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<p class=\"text-2xl font-bold text-white\">₹1,24,500</p>",
+            "target": [
+              ".bg-white\\/10.backdrop-blur-md.border-white\\/20:nth-child(1) > .font-bold.text-2xl.text-white"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<span>+12.5% vs last month</span>",
+            "target": [
+              ".bg-white\\/10.backdrop-blur-md.border-white\\/20:nth-child(1) > .text-emerald-400.mt-1.gap-1 > span"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<p class=\"text-xs text-white/70 mb-1\">New Bookings</p>",
+            "target": [
+              ".bg-white\\/10.backdrop-blur-md.border-white\\/20:nth-child(2) > .text-white\\/70.mb-1.text-xs"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<p class=\"text-2xl font-bold text-white\">48</p>",
+            "target": [
+              ".bg-white\\/10.backdrop-blur-md.border-white\\/20:nth-child(2) > .font-bold.text-2xl.text-white"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<span>8 pending confirmation</span>",
+            "target": [
+              ".bg-white\\/10.backdrop-blur-md.border-white\\/20:nth-child(2) > .text-emerald-400.mt-1.gap-1 > span"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<p class=\"text-white/90 text-sm italic border-l-2 border-primary pl-4\">\"Rare has completely transformed how we manage our salon. bookings are up 40% in just two months.\"</p>",
+            "target": [
+              ".text-white\\/90"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<div class=\"flex items-center gap-3 mt-4 pl-4\">",
+            "target": [
+              ".mt-4.pl-4.gap-3"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<div><p class=\"text-xs font-medium\">New Order</p><p class=\"text-[10px] text-muted-foreground\">Just now</p></div>",
+            "target": [
+              ".mb-3 > div:nth-child(2)"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<div class=\"flex items-center justify-between\"><p class=\"text-sm font-semibold\">₹1,499</p><span class=\"text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400\">Paid</span></div>",
+            "target": [
+              ".-top-6 > .justify-between.items-center.flex"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<span class=\"inline-block px-4 py-1.5 rounded-full bg-secondary text-sm text-muted-foreground font-medium mb-6\">Mobile App</span>",
+            "target": [
+              ".md\\:text-left > div > .bg-secondary.inline-block.py-1\\.5"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<h2 class=\"text-[36px] sm:text-[44px] md:text-[56px] font-semibold leading-tight tracking-tight mb-6 font-display\">Fashion in your<br><span class=\"text-gradient-color italic\">pocket.</span></h2>",
+            "target": [
+              ".md\\:text-left > div > .md\\:text-\\[56px\\].sm\\:text-\\[44px\\]"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<p class=\"text-muted-foreground text-[17px] leading-relaxed mb-8 max-w-[480px] mx-auto md:mx-0\">Experience the full power of Rare on iOS and Android. Watch live streams, try on clothes virtually, and book salons on the go.</p>",
+            "target": [
+              ".md\\:mx-0"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<p class=\"text-sm font-medium\">4.9/5 rating on App Store</p>",
+            "target": [
+              ".md\\:justify-start.mt-8.gap-2 > .font-medium"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<img src=\"https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&amp;h=1200&amp;fit=crop\" alt=\"App Interface\" class=\"w-full h-full object-cover\">",
+            "target": [
+              "img[alt=\"App Interface\"]"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<div class=\"flex items-center gap-3 mb-4\">",
+            "target": [
+              ".gap-3.mb-4.items-center"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<div class=\"absolute top-20 -right-4 sm:right-10 bg-card p-4 rounded-2xl shadow-xl border border-border max-w-[200px]\" style=\"transform: translateY(-15.8863px);\">",
+            "target": [
+              ".top-20"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<div class=\"text-center mb-16\" style=\"opacity:0;transform:translateY(30px)\">",
+            "target": [
+              ".max-w-\\[800px\\] > .mb-16.text-center"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<h2 class=\"text-[36px] sm:text-[48px] md:text-[64px] lg:text-[72px] font-semibold leading-tight tracking-tight mb-4 font-display\">Join the<br><span class=\"text-gradient-color italic\">future of fashion.</span></h2>",
+            "target": [
+              ".sm\\:text-\\[48px\\]"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<p class=\"text-muted-foreground text-[17px] md:text-[21px] max-w-[540px] mx-auto mb-10 leading-relaxed\">Be the first to experience India's most intelligent fashion ecosystem. Start your journey today.</p>",
+            "target": [
+              ".max-w-\\[540px\\].md\\:text-\\[21px\\].mb-10"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<p class=\"text-center text-sm text-muted-foreground mb-10\" style=\"opacity:0\">Trusted by leading brands worldwide</p>",
+            "target": [
+              ".mb-10.text-center"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          },
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<div class=\"text-sm text-muted-foreground pr-8\"><p>We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies.<a class=\"text-primary underline ml-1\" href=\"/privacy\">Learn more</a></p></div>",
+            "target": [
+              ".pr-8"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          }
+        ]
+      }
+    ],
+    "consoleErrors": [],
+    "networkErrors": [
+      {
+        "url": "https://images.unsplash.com/photo-1521590832896-7ea20ade7336?w=800&h=1000&fit=crop",
+        "error": "net::ERR_BLOCKED_BY_ORB"
+      },
+      {
+        "url": "http://localhost:3000/auth/sign-in",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1521590832896-7ea20ade7336?w=800&h=1000&fit=crop",
+        "error": "net::ERR_BLOCKED_BY_ORB"
+      }
+    ]
+  },
+  {
+    "route": "/auth/sign-in",
+    "screenshots": {
+      "desktop": "",
+      "mobile": ""
+    },
+    "performance": {
+      "navigation": {},
+      "paint": {}
+    },
+    "accessibility": {},
+    "consoleErrors": [
+      "Audit script error: TimeoutError: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/auth/sign-in\", waiting until \"networkidle\"\u001b[22m\n"
+    ],
+    "networkErrors": []
+  },
+  {
+    "route": "/become-partner",
+    "screenshots": {
+      "desktop": "",
+      "mobile": ""
+    },
+    "performance": {
+      "navigation": {},
+      "paint": {}
+    },
+    "accessibility": {},
+    "consoleErrors": [
+      "Audit script error: TimeoutError: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/become-partner\", waiting until \"networkidle\"\u001b[22m\n"
+    ],
+    "networkErrors": []
+  },
+  {
+    "route": "/app/search",
+    "screenshots": {
+      "desktop": "reports/screenshots/desktop__app_search.png",
+      "mobile": "reports/screenshots/mobile__app_search.png"
+    },
+    "performance": {
+      "navigation": [
+        {
+          "name": "http://localhost:3000/app/search",
+          "entryType": "navigation",
+          "startTime": 0,
+          "duration": 85.29999999993015,
+          "initiatorType": "navigation",
+          "deliveryType": "cache",
+          "nextHopProtocol": "",
+          "renderBlockingStatus": "non-blocking",
+          "contentEncoding": "gzip",
+          "workerStart": 0,
+          "workerRouterEvaluationStart": 0,
+          "workerCacheLookupStart": 0,
+          "workerMatchedSourceType": "",
+          "workerFinalSourceType": "",
+          "redirectStart": 0,
+          "redirectEnd": 0,
+          "fetchStart": 0.19999999995343387,
+          "domainLookupStart": 0.19999999995343387,
+          "domainLookupEnd": 0.19999999995343387,
+          "connectStart": 0.19999999995343387,
+          "secureConnectionStart": 0,
+          "connectEnd": 0.19999999995343387,
+          "requestStart": 1.2999999999301508,
+          "responseStart": 14.199999999953434,
+          "firstInterimResponseStart": 0,
+          "finalResponseHeadersStart": 14.199999999953434,
+          "responseEnd": 15.099999999976717,
+          "transferSize": 300,
+          "encodedBodySize": 7123,
+          "decodedBodySize": 46374,
+          "responseStatus": 200,
+          "serverTiming": [],
+          "unloadEventStart": 17.699999999953434,
+          "unloadEventEnd": 17.699999999953434,
+          "domInteractive": 33.89999999990687,
+          "domContentLoadedEventStart": 34,
+          "domContentLoadedEventEnd": 34,
+          "domComplete": 85.29999999993015,
+          "loadEventStart": 85.29999999993015,
+          "loadEventEnd": 85.29999999993015,
+          "type": "reload",
+          "redirectCount": 0,
+          "activationStart": 0,
+          "criticalCHRestart": 0,
+          "notRestoredReasons": null,
+          "confidence": {
+            "randomizedTriggerRate": 0.4994798,
+            "value": "low"
+          }
+        }
+      ],
+      "paint": [
+        {
+          "name": "first-paint",
+          "entryType": "paint",
+          "startTime": 108,
+          "duration": 0,
+          "paintTime": 83.59999999997672,
+          "presentationTime": 108
+        },
+        {
+          "name": "first-contentful-paint",
+          "entryType": "paint",
+          "startTime": 108,
+          "duration": 0,
+          "paintTime": 83.59999999997672,
+          "presentationTime": 108
+        }
+      ]
+    },
+    "accessibility": [
+      {
+        "id": "button-name",
+        "impact": "critical",
+        "tags": [
+          "cat.name-role-value",
+          "wcag2a",
+          "wcag412",
+          "section508",
+          "section508.22.a",
+          "TTv5",
+          "TT6.a",
+          "EN-301-549",
+          "EN-9.4.1.2",
+          "ACT",
+          "RGAAv4",
+          "RGAA-11.9.1"
+        ],
+        "description": "Ensure buttons have discernible text",
+        "help": "Buttons must have discernible text",
+        "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/button-name?application=playwright",
+        "nodes": [
+          {
+            "any": [
+              {
+                "id": "button-has-visible-text",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element does not have inner text that is visible to screen readers"
+              },
+              {
+                "id": "aria-label",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "aria-label attribute does not exist or is empty"
+              },
+              {
+                "id": "aria-labelledby",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty"
+              },
+              {
+                "id": "non-empty-title",
+                "data": {
+                  "messageKey": "noAttr"
+                },
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element has no title attribute"
+              },
+              {
+                "id": "implicit-label",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element does not have an implicit (wrapped) <label>"
+              },
+              {
+                "id": "explicit-label",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element does not have an explicit <label>"
+              },
+              {
+                "id": "presentational-role",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "critical",
+            "html": "<button class=\"p-1 rounded-full hover:bg-secondary text-muted-foreground transition-colors\">",
+            "target": [
+              ".p-1"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+          },
+          {
+            "any": [
+              {
+                "id": "button-has-visible-text",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element does not have inner text that is visible to screen readers"
+              },
+              {
+                "id": "aria-label",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "aria-label attribute does not exist or is empty"
+              },
+              {
+                "id": "aria-labelledby",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty"
+              },
+              {
+                "id": "non-empty-title",
+                "data": {
+                  "messageKey": "noAttr"
+                },
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element has no title attribute"
+              },
+              {
+                "id": "implicit-label",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element does not have an implicit (wrapped) <label>"
+              },
+              {
+                "id": "explicit-label",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element does not have an explicit <label>"
+              },
+              {
+                "id": "presentational-role",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "critical",
+            "html": "<button class=\"flex items-center ju...\" type=\"button\" aria-haspopup=\"dialog\" aria-expanded=\"false\" aria-controls=\"radix-_R_2b4nklb_\" data-state=\"closed\" data-slot=\"sheet-trigger\">",
+            "target": [
+              "button[aria-controls=\"radix-_R_2b4nklb_\"]"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+          }
+        ]
+      },
+      {
+        "id": "page-has-heading-one",
+        "impact": "moderate",
+        "tags": [
+          "cat.semantics",
+          "best-practice"
+        ],
+        "description": "Ensure that the page, or at least one of its frames contains a level-one heading",
+        "help": "Page should contain a level-one heading",
+        "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/page-has-heading-one?application=playwright",
+        "nodes": [
+          {
+            "any": [],
+            "all": [
+              {
+                "id": "page-has-heading-one",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Page must have a level-one heading"
+              }
+            ],
+            "none": [],
+            "impact": "moderate",
+            "html": "<html lang=\"en\" class=\"light\" style=\"color-scheme: light;\">",
+            "target": [
+              "html"
+            ],
+            "failureSummary": "Fix all of the following:\n  Page must have a level-one heading"
+          }
+        ]
+      },
+      {
+        "id": "region",
+        "impact": "moderate",
+        "tags": [
+          "cat.keyboard",
+          "best-practice",
+          "RGAAv4",
+          "RGAA-9.2.1"
+        ],
+        "description": "Ensure all page content is contained by landmarks",
+        "help": "All page content should be contained by landmarks",
+        "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/region?application=playwright",
+        "nodes": [
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<div class=\"text-sm text-muted-foreground pr-8\"><p>We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies.<a class=\"text-primary underline ml-1\" href=\"/privacy\">Learn more</a></p></div>",
+            "target": [
+              ".pr-8"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          }
+        ]
+      }
+    ],
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "networkErrors": [
+      {
+        "url": "http://localhost:3000/app/notifications?_rsc=1npve",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3000/app/loyalty?_rsc=1npve",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3000/auth/sign-in",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3000/app/bookings?_rsc=1npve",
+        "error": "net::ERR_ABORTED"
+      }
+    ]
+  },
+  {
+    "route": "/app/marketplace",
+    "screenshots": {
+      "desktop": "reports/screenshots/desktop__app_marketplace.png",
+      "mobile": "reports/screenshots/mobile__app_marketplace.png"
+    },
+    "performance": {
+      "navigation": [
+        {
+          "name": "http://localhost:3000/app/marketplace",
+          "entryType": "navigation",
+          "startTime": 0,
+          "duration": 91.70000000006985,
+          "initiatorType": "navigation",
+          "deliveryType": "cache",
+          "nextHopProtocol": "",
+          "renderBlockingStatus": "non-blocking",
+          "contentEncoding": "gzip",
+          "workerStart": 0,
+          "workerRouterEvaluationStart": 0,
+          "workerCacheLookupStart": 0,
+          "workerMatchedSourceType": "",
+          "workerFinalSourceType": "",
+          "redirectStart": 0,
+          "redirectEnd": 0,
+          "fetchStart": 0.10000000009313226,
+          "domainLookupStart": 0.10000000009313226,
+          "domainLookupEnd": 0.10000000009313226,
+          "connectStart": 0.10000000009313226,
+          "secureConnectionStart": 0,
+          "connectEnd": 0.10000000009313226,
+          "requestStart": 1.2000000000698492,
+          "responseStart": 7.900000000023283,
+          "firstInterimResponseStart": 0,
+          "finalResponseHeadersStart": 7.900000000023283,
+          "responseEnd": 9.800000000046566,
+          "transferSize": 300,
+          "encodedBodySize": 8810,
+          "decodedBodySize": 57083,
+          "responseStatus": 200,
+          "serverTiming": [],
+          "unloadEventStart": 14.400000000023283,
+          "unloadEventEnd": 14.400000000023283,
+          "domInteractive": 33.10000000009313,
+          "domContentLoadedEventStart": 33.20000000006985,
+          "domContentLoadedEventEnd": 33.20000000006985,
+          "domComplete": 91.70000000006985,
+          "loadEventStart": 91.70000000006985,
+          "loadEventEnd": 91.70000000006985,
+          "type": "reload",
+          "redirectCount": 0,
+          "activationStart": 0,
+          "criticalCHRestart": 0,
+          "notRestoredReasons": null,
+          "confidence": {
+            "randomizedTriggerRate": 0.4994798,
+            "value": "high"
+          }
+        }
+      ],
+      "paint": [
+        {
+          "name": "first-paint",
+          "entryType": "paint",
+          "startTime": 124,
+          "duration": 0,
+          "paintTime": 89.80000000004657,
+          "presentationTime": 124
+        },
+        {
+          "name": "first-contentful-paint",
+          "entryType": "paint",
+          "startTime": 124,
+          "duration": 0,
+          "paintTime": 89.80000000004657,
+          "presentationTime": 124
+        }
+      ]
+    },
+    "accessibility": [
+      {
+        "id": "button-name",
+        "impact": "critical",
+        "tags": [
+          "cat.name-role-value",
+          "wcag2a",
+          "wcag412",
+          "section508",
+          "section508.22.a",
+          "TTv5",
+          "TT6.a",
+          "EN-301-549",
+          "EN-9.4.1.2",
+          "ACT",
+          "RGAAv4",
+          "RGAA-11.9.1"
+        ],
+        "description": "Ensure buttons have discernible text",
+        "help": "Buttons must have discernible text",
+        "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/button-name?application=playwright",
+        "nodes": [
+          {
+            "any": [
+              {
+                "id": "button-has-visible-text",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element does not have inner text that is visible to screen readers"
+              },
+              {
+                "id": "aria-label",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "aria-label attribute does not exist or is empty"
+              },
+              {
+                "id": "aria-labelledby",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty"
+              },
+              {
+                "id": "non-empty-title",
+                "data": {
+                  "messageKey": "noAttr"
+                },
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element has no title attribute"
+              },
+              {
+                "id": "implicit-label",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element does not have an implicit (wrapped) <label>"
+              },
+              {
+                "id": "explicit-label",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element does not have an explicit <label>"
+              },
+              {
+                "id": "presentational-role",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "critical",
+            "html": "<button class=\"p-1 rounded-full hover:bg-secondary text-muted-foreground transition-colors\">",
+            "target": [
+              ".p-1"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+          },
+          {
+            "any": [
+              {
+                "id": "button-has-visible-text",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element does not have inner text that is visible to screen readers"
+              },
+              {
+                "id": "aria-label",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "aria-label attribute does not exist or is empty"
+              },
+              {
+                "id": "aria-labelledby",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty"
+              },
+              {
+                "id": "non-empty-title",
+                "data": {
+                  "messageKey": "noAttr"
+                },
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element has no title attribute"
+              },
+              {
+                "id": "implicit-label",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element does not have an implicit (wrapped) <label>"
+              },
+              {
+                "id": "explicit-label",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element does not have an explicit <label>"
+              },
+              {
+                "id": "presentational-role",
+                "data": null,
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "critical",
+            "html": "<button class=\"flex items-center ju...\" type=\"button\" aria-haspopup=\"dialog\" aria-expanded=\"false\" aria-controls=\"radix-_R_2b4nklb_\" data-state=\"closed\" data-slot=\"sheet-trigger\">",
+            "target": [
+              "button[aria-controls=\"radix-_R_2b4nklb_\"]"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+          }
+        ]
+      },
+      {
+        "id": "region",
+        "impact": "moderate",
+        "tags": [
+          "cat.keyboard",
+          "best-practice",
+          "RGAAv4",
+          "RGAA-9.2.1"
+        ],
+        "description": "Ensure all page content is contained by landmarks",
+        "help": "All page content should be contained by landmarks",
+        "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/region?application=playwright",
+        "nodes": [
+          {
+            "any": [
+              {
+                "id": "region",
+                "data": {
+                  "isIframe": false
+                },
+                "relatedNodes": [],
+                "impact": "moderate",
+                "message": "Some page content is not contained by landmarks"
+              }
+            ],
+            "all": [],
+            "none": [],
+            "impact": "moderate",
+            "html": "<div class=\"text-sm text-muted-foreground pr-8\"><p>We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies.<a class=\"text-primary underline ml-1\" href=\"/privacy\">Learn more</a></p></div>",
+            "target": [
+              ".pr-8"
+            ],
+            "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+          }
+        ]
+      }
+    ],
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "networkErrors": [
+      {
+        "url": "http://localhost:3000/app/bookings?_rsc=jpimq",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3000/app/notifications?_rsc=jpimq",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3000/app/loyalty?_rsc=jpimq",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3000/app/settings?_rsc=jpimq",
+        "error": "net::ERR_ABORTED"
+      }
+    ]
+  },
+  {
+    "route": "/contact",
+    "screenshots": {
+      "desktop": "",
+      "mobile": ""
+    },
+    "performance": {
+      "navigation": {},
+      "paint": {}
+    },
+    "accessibility": {},
+    "consoleErrors": [
+      "Audit script error: TimeoutError: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/contact\", waiting until \"networkidle\"\u001b[22m\n"
+    ],
+    "networkErrors": []
+  },
+  {
+    "route": "/about",
+    "screenshots": {
+      "desktop": "",
+      "mobile": ""
+    },
+    "performance": {
+      "navigation": {},
+      "paint": {}
+    },
+    "accessibility": {},
+    "consoleErrors": [
+      "Audit script error: TimeoutError: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/about\", waiting until \"networkidle\"\u001b[22m\n"
+    ],
+    "networkErrors": []
+  },
+  {
+    "route": "/privacy",
+    "screenshots": {
+      "desktop": "",
+      "mobile": ""
+    },
+    "performance": {
+      "navigation": {},
+      "paint": {}
+    },
+    "accessibility": {},
+    "consoleErrors": [
+      "Audit script error: TimeoutError: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/privacy\", waiting until \"networkidle\"\u001b[22m\n"
+    ],
+    "networkErrors": []
+  },
+  {
+    "route": "/terms",
+    "screenshots": {
+      "desktop": "",
+      "mobile": ""
+    },
+    "performance": {
+      "navigation": {},
+      "paint": {}
+    },
+    "accessibility": {},
+    "consoleErrors": [
+      "Audit script error: TimeoutError: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/terms\", waiting until \"networkidle\"\u001b[22m\n"
+    ],
+    "networkErrors": []
+  },
+  {
+    "route": "/help",
+    "screenshots": {
+      "desktop": "",
+      "mobile": ""
+    },
+    "performance": {
+      "navigation": {},
+      "paint": {}
+    },
+    "accessibility": {},
+    "consoleErrors": [
+      "Audit script error: TimeoutError: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/help\", waiting until \"networkidle\"\u001b[22m\n"
+    ],
+    "networkErrors": []
+  },
+  {
+    "route": "/app",
+    "screenshots": {
+      "desktop": "",
+      "mobile": ""
+    },
+    "performance": {
+      "navigation": {},
+      "paint": {}
+    },
+    "accessibility": {},
+    "consoleErrors": [
+      "Audit script error: TimeoutError: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/app\", waiting until \"networkidle\"\u001b[22m\n"
+    ],
+    "networkErrors": []
+  },
+  {
+    "route": "/careers",
+    "screenshots": {
+      "desktop": "",
+      "mobile": ""
+    },
+    "performance": {
+      "navigation": {},
+      "paint": {}
+    },
+    "accessibility": {},
+    "consoleErrors": [
+      "Audit script error: TimeoutError: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/careers\", waiting until \"networkidle\"\u001b[22m\n"
+    ],
+    "networkErrors": []
+  },
+  {
+    "route": "/press",
+    "screenshots": {
+      "desktop": "",
+      "mobile": ""
+    },
+    "performance": {
+      "navigation": {},
+      "paint": {}
+    },
+    "accessibility": {},
+    "consoleErrors": [
+      "Audit script error: TimeoutError: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/press\", waiting until \"networkidle\"\u001b[22m\n"
+    ],
+    "networkErrors": []
+  }
+]
