@@ -6,12 +6,9 @@ import {
   Scissors,
   Video,
   Sparkles,
-  Search,
   Bell,
-  LayoutDashboard,
   Compass,
   Settings,
-  ArrowRight,
   ChevronLeft,
   ChevronRight,
   Menu,
@@ -21,7 +18,8 @@ import {
   Calendar,
   Store,
   User,
-  Award
+  Award,
+  LogOut
 } from "lucide-react";
 import Link from "next/link";
 import BottomNav from "@/components/BottomNav";
@@ -35,13 +33,13 @@ import { useState, useEffect } from "react";
 import { CartProvider } from "@/lib/cart-context";
 import AIStylistSheet from "@/components/ai-stylist/AIStylistSheet";
 import { useSession } from "@/lib/auth-client";
+import { cn } from "@/lib/utils";
 
 const sidebarItems = [
   { icon: Compass, label: "Discover", href: "/app" },
   { icon: User, label: "Profile", href: "/app/profile" },
   { icon: ShoppingBag, label: "Marketplace", href: "/app/marketplace" },
   { icon: Award, label: "Loyalty Program", href: "/app/loyalty" },
-  //{ icon: Sparkles, label: "AI Stylist", href: "/app/ai-stylist" },
   { icon: Scissors, label: "Salons", href: "/app/salons" },
   { icon: Video, label: "Videos & Creations", href: "/app/videos-creations" },
   { icon: MessageSquare, label: "Conversations", href: "/app/conversations" },
@@ -66,66 +64,97 @@ export default function AppLayout({
     setMobileMenuOpen(false);
   }, [pathname]);
 
+  // Prevent scrolling when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [mobileMenuOpen]);
+
   const handleSearch = (query: string) => {
     router.push(`/app/search?q=${encodeURIComponent(query)}`);
   };
 
   return (
     <CartProvider>
-    <div className="min-h-screen bg-background text-foreground flex flex-col lg:flex-row">
-      {/* Sidebar - Desktop */}
-      <aside className={`border-r border-border bg-card hidden lg:flex flex-col sticky top-0 h-screen transition-all duration-300 ${isCollapsed ? "w-20" : "w-64"}`}>
-        <div className={`p-6 flex items-center ${isCollapsed ? "justify-center" : "justify-between"}`}>
+    <div className="min-h-screen bg-background text-foreground flex flex-col lg:flex-row font-sans">
+
+      {/* Desktop Sidebar */}
+      <aside
+        className={cn(
+            "border-r border-border bg-card hidden lg:flex flex-col sticky top-0 h-screen transition-all duration-300 z-40",
+            isCollapsed ? "w-20" : "w-72"
+        )}
+      >
+        <div className={cn(
+            "h-16 flex items-center border-b border-border/50 px-6",
+            isCollapsed ? "justify-center" : "justify-between"
+        )}>
           {!isCollapsed && (
-            <Link href="/" className="text-3xl font-script text-black dark:text-white">
+            <Link href="/" className="text-3xl font-script text-foreground">
               Rare
             </Link>
           )}
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className="p-1 rounded-full hover:bg-secondary text-muted-foreground transition-colors"
+            className="p-2 rounded-lg hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors"
+            aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
             {isCollapsed ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5" />}
           </button>
         </div>
 
-        <nav className="flex-1 px-4 space-y-1">
-          {session?.user?.role === "salon_owner" && (
-            <Link
-              href="/app/my-business"
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-[#D4AF37] hover:bg-secondary hover:text-[#D4AF37] ${isCollapsed ? "justify-center" : ""}`}
-            >
-              <Store className="w-5 h-5 flex-shrink-0" />
-              {!isCollapsed && <span>My Business</span>}
-            </Link>
-          )}
-          {sidebarItems.map((item) => {
-            const isActive = pathname === item.href;
-            return (
-              <Link
-                key={item.label}
-                href={item.href}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
-                  isActive
-                    ? "bg-primary text-primary-foreground shadow-lg shadow-foreground/10"
-                    : "text-muted-foreground hover:bg-secondary hover:text-foreground"
-                } ${isCollapsed ? "justify-center" : ""}`}
-              >
-                <item.icon className="w-5 h-5 flex-shrink-0" />
-                {!isCollapsed && <span>{item.label}</span>}
-              </Link>
-            );
-          })}
-        </nav>
+        <div className="flex-1 overflow-y-auto py-6 px-3">
+          <nav className="space-y-1">
+            {session?.user?.role === "salon_owner" && (
+                <Link
+                href="/app/my-business"
+                className={cn(
+                    "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all group mb-6 border border-amber-500/20 bg-amber-500/5 hover:bg-amber-500/10",
+                    isCollapsed ? "justify-center" : ""
+                )}
+                title="My Business"
+                >
+                <Store className="w-5 h-5 flex-shrink-0 text-amber-600 dark:text-amber-400" />
+                {!isCollapsed && <span className="text-amber-700 dark:text-amber-300">My Business</span>}
+                </Link>
+            )}
 
-        
+            {sidebarItems.map((item) => {
+                const isActive = pathname === item.href;
+                return (
+                <Link
+                    key={item.label}
+                    href={item.href}
+                    className={cn(
+                        "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all group",
+                        isActive
+                            ? "bg-primary text-primary-foreground shadow-md shadow-primary/10"
+                            : "text-muted-foreground hover:bg-secondary hover:text-foreground",
+                        isCollapsed ? "justify-center" : ""
+                    )}
+                    title={item.label}
+                >
+                    <item.icon className={cn("w-5 h-5 flex-shrink-0", isActive ? "text-primary-foreground" : "group-hover:text-foreground")} />
+                    {!isCollapsed && <span>{item.label}</span>}
+                </Link>
+                );
+            })}
+          </nav>
+        </div>
 
-        <div className={`p-4 border-t border-border ${isCollapsed ? "flex justify-center" : ""}`}>
+        <div className="p-4 border-t border-border/50 bg-background/50">
           <Link
             href="/app/settings"
-            className={`w-full flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors ${
-              pathname === "/app/settings" ? "text-foreground" : "text-muted-foreground hover:text-foreground"
-            } ${isCollapsed ? "justify-center" : ""}`}
+            className={cn(
+                "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors hover:bg-secondary",
+                pathname === "/app/settings" ? "text-foreground bg-secondary" : "text-muted-foreground",
+                isCollapsed ? "justify-center" : ""
+            )}
+            title="Settings"
           >
             <Settings className="w-5 h-5 flex-shrink-0" />
             {!isCollapsed && <span>Settings</span>}
@@ -133,112 +162,157 @@ export default function AppLayout({
         </div>
       </aside>
 
-      {/* Mobile Nav */}
-      <header className="lg:hidden bg-card/80 backdrop-blur-md sticky top-0 z-40 border-b border-border">
-        <div className="h-16 px-4 flex items-center justify-between">
-          <Link href="/" className="text-2xl font-script text-black dark:text-white">
+      {/* Mobile Header */}
+      <header className="lg:hidden bg-background/80 backdrop-blur-md sticky top-0 z-40 border-b border-border">
+        <div className="h-14 px-4 flex items-center justify-between">
+          <Link href="/" className="text-2xl font-script text-foreground">
             Rare
           </Link>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-2">
             <ThemeSwitcher />
             <CartIcon />
             <NotificationBell />
-            <UserAccount showLabel={false} />
-            <button onClick={() => setMobileMenuOpen(true)} className="p-2 ml-1">
+            <button
+                onClick={() => setMobileMenuOpen(true)}
+                className="p-2 -mr-2 text-foreground active:opacity-70"
+                aria-label="Open menu"
+            >
               <Menu className="w-6 h-6" />
             </button>
           </div>
         </div>
+
+        {/* Mobile Search Bar Area */}
         <div className="px-4 pb-3 flex items-center gap-2">
-          <SearchBar value={searchQuery} onChange={setSearchQuery} onSubmit={handleSearch} className="flex-1" />
-          <AIStylistSheet />
+            <div className="flex-1">
+                 <SearchBar value={searchQuery} onChange={setSearchQuery} onSubmit={handleSearch} className="w-full" />
+            </div>
+            <AIStylistSheet />
         </div>
       </header>
 
       {/* Mobile Menu Overlay */}
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 z-[50] bg-background lg:hidden">
-          <div className="flex flex-col h-full">
+      <AnimatePresence>
+        {mobileMenuOpen && (
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 z-50 bg-background lg:hidden flex flex-col"
+            >
             <div className="flex items-center justify-between h-16 px-6 border-b border-border">
-              <span className="text-3xl font-script text-black dark:text-white">Rare</span>
-              <button onClick={() => setMobileMenuOpen(false)} className="p-2">
-                <X className="w-6 h-6" />
-              </button>
-            </div>
-            <nav className="flex-1 px-6 py-8 space-y-2">
-              {session?.user?.role === "salon_owner" && (
-                <Link
-                  href="/app/my-business"
-                  className="w-full flex items-center justify-between py-4 text-xl font-medium border-b border-border text-[#D4AF37] hover:text-[#D4AF37]"
+                <span className="text-3xl font-script text-foreground">Rare</span>
+                <button
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="p-2 -mr-2 text-foreground active:opacity-70"
+                    aria-label="Close menu"
                 >
-                  <span className="flex items-center gap-4">
-                    <Store className="w-6 h-6" />
-                    My Business
-                  </span>
-                  <ChevronRight className="w-5 h-5" />
-                </Link>
-              )}
-              {sidebarItems.filter(item => item.label !== "AI Stylist").map((item) => {
-                const isActive = pathname === item.href;
-                return (
-                  <Link
-                    key={item.label}
-                    href={item.href}
-                    className={`w-full flex items-center justify-between py-4 text-xl font-medium border-b border-border ${
-                      isActive ? "text-foreground" : "text-muted-foreground"
-                    }`}
-                  >
-                    <span className="flex items-center gap-4">
-                      <item.icon className="w-6 h-6" />
-                      {item.label}
-                    </span>
-                    <ChevronRight className="w-5 h-5" />
-                  </Link>
-                );
-              })}
-              <Link
-                href="/app/wishlist"
-                className={`w-full flex items-center justify-between py-4 text-xl font-medium border-b border-border ${
-                  pathname === "/app/wishlist" ? "text-foreground" : "text-muted-foreground"
-                }`}
-              >
-                <span className="flex items-center gap-4">
-                  <Heart className="w-6 h-6" />
-                  Wishlist
-                </span>
-                <ChevronRight className="w-5 h-5" />
-              </Link>
-            </nav>
-          </div>
-        </div>
-      )}
+                    <X className="w-6 h-6" />
+                </button>
+            </div>
 
-      {/* Main Content */}
-      <div className="flex-1 min-w-0 flex flex-col relative overflow-x-hidden">
-        {/* Header - Desktop Search */}
-        <header className="hidden lg:flex h-16 border-b border-border bg-card/80 backdrop-blur-md sticky top-0 z-30 px-6 items-center justify-between">
-          <div className="flex-1 max-w-xl flex items-center gap-2">
+            <div className="flex-1 overflow-y-auto px-6 py-6">
+                <div className="flex items-center gap-4 mb-8 p-4 bg-secondary/50 rounded-2xl">
+                    <UserAccount showLabel={true} />
+                </div>
+
+                <nav className="space-y-1">
+                    {session?.user?.role === "salon_owner" && (
+                        <Link
+                        href="/app/my-business"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex items-center justify-between py-4 border-b border-border text-lg font-medium text-amber-600 dark:text-amber-400"
+                        >
+                        <span className="flex items-center gap-4">
+                            <Store className="w-5 h-5" />
+                            My Business
+                        </span>
+                        <ChevronRight className="w-5 h-5 opacity-50" />
+                        </Link>
+                    )}
+
+                    {sidebarItems.map((item) => {
+                        const isActive = pathname === item.href;
+                        return (
+                        <Link
+                            key={item.label}
+                            href={item.href}
+                            onClick={() => setMobileMenuOpen(false)}
+                            className={cn(
+                                "flex items-center justify-between py-4 border-b border-border text-lg font-medium",
+                                isActive ? "text-primary" : "text-foreground/80"
+                            )}
+                        >
+                            <span className="flex items-center gap-4">
+                            <item.icon className="w-5 h-5" />
+                            {item.label}
+                            </span>
+                            <ChevronRight className="w-5 h-5 opacity-30" />
+                        </Link>
+                        );
+                    })}
+
+                    <Link
+                        href="/app/wishlist"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex items-center justify-between py-4 border-b border-border text-lg font-medium text-foreground/80"
+                    >
+                        <span className="flex items-center gap-4">
+                        <Heart className="w-5 h-5" />
+                        Wishlist
+                        </span>
+                        <ChevronRight className="w-5 h-5 opacity-30" />
+                    </Link>
+
+                    <Link
+                        href="/app/settings"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex items-center justify-between py-4 border-b border-border text-lg font-medium text-foreground/80"
+                    >
+                        <span className="flex items-center gap-4">
+                        <Settings className="w-5 h-5" />
+                        Settings
+                        </span>
+                        <ChevronRight className="w-5 h-5 opacity-30" />
+                    </Link>
+                </nav>
+
+                <div className="mt-8">
+                     <button className="flex items-center gap-3 text-destructive font-medium px-2 py-3 w-full hover:bg-destructive/5 rounded-lg transition-colors">
+                        <LogOut className="w-5 h-5" />
+                        Sign Out
+                     </button>
+                </div>
+            </div>
+            </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Main Content Area */}
+      <div className="flex-1 min-w-0 flex flex-col relative">
+        {/* Desktop Header */}
+        <header className="hidden lg:flex h-16 border-b border-border bg-background/80 backdrop-blur-md sticky top-0 z-30 px-8 items-center justify-between">
+          <div className="flex-1 max-w-xl flex items-center gap-3">
             <SearchBar value={searchQuery} onChange={setSearchQuery} onSubmit={handleSearch} className="flex-1" />
             <AIStylistSheet />
           </div>
 
-          <div className="flex items-center gap-4 ml-4">
-            {session?.user?.role === "salon_owner" && (
-              <Link href="/app/my-business" className="text-sm font-medium hover:text-primary transition-colors mr-4">
-                My Business
-              </Link>
-            )}
-            <ThemeSwitcher />
-            <CartIcon />
-            <NotificationBell />
+          <div className="flex items-center gap-6 pl-6">
+            <div className="flex items-center gap-2 border-r border-border pr-6">
+                <ThemeSwitcher />
+                <NotificationBell />
+                <CartIcon />
+            </div>
             <UserAccount />
           </div>
         </header>
 
-        <main className="flex-1 min-h-0 overflow-y-auto pb-20 lg:pb-0">
+        {/* Page Content */}
+        <main className="flex-1 overflow-y-auto overflow-x-hidden bg-muted/10 pb-20 lg:pb-0">
           {children}
         </main>
 
+        {/* Mobile Bottom Nav */}
         <BottomNav />
       </div>
     </div>
