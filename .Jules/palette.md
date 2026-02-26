@@ -28,3 +28,7 @@
 ## 2026-02-21 - Accessible Icon-Only Actions
 **Learning:** Icon-only buttons (like "Chat", "Call", "Video") are invisible to screen readers without labels. Wrapping them in `Tooltip` components not only provides a visual hover state but also ensures the `aria-label` is reinforced by the tooltip text. Also, `Link` components rendering anchor tags cannot contain `<button>` elements; replacing them with styled `<span>` elements maintains validity and accessibility.
 **Action:** Audit all icon-only buttons for `aria-label` and `Tooltip` wrappers. Ensure `Link` children are not interactive elements like `button`.
+
+## 2026-02-26 - Unified Search UX with Keyboard Shortcuts
+**Learning:** A truly delightful search experience combines visual cues (custom clear buttons) with power-user features (global '/' shortcut). Hiding native browser decorations in CSS and implementing a visibility-aware shortcut listener ensures the feature feels native and polished across all screen sizes without UI duplication.
+**Action:** Use `::-webkit-search-cancel-button` to hide native clear buttons. Implement a global `keydown` listener for '/' that checks `offsetParent !== null` to target only the visible search instance.
