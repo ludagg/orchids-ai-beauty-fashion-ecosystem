@@ -1,22 +1,40 @@
 import { NextResponse, type NextRequest } from "next/server";
 import rateLimit from "@/lib/rate-limit";
+import { createRequestLogger } from "@/lib/logger";
 
 const limiter = rateLimit({
   interval: 60 * 1000, // 60 seconds
   uniqueTokenPerInterval: 500, // Max 500 users per second
 });
 
+// Hash function for IP to avoid storing PII
+function hashIp(ip: string): string {
+  let hash = 0;
+  for (let i = 0; i < ip.length; i++) {
+    const char = ip.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash;
+  }
+  return `hash_${Math.abs(hash).toString(16)}`;
+}
+
 export async function middleware(request: NextRequest) {
   const start = Date.now();
   const { pathname } = request.nextUrl;
+  const logger = createRequestLogger({
+    method: request.method,
+    url: pathname,
+  });
 
   // Rate Limiting for Auth Routes
   if (pathname.startsWith("/api/auth")) {
-    const ip = request.headers.get("x-forwarded-for") || "unknown";
+    const rawIp = request.headers.get("x-forwarded-for") || "unknown";
+    const ip = hashIp(rawIp);
     try {
       // 20 requests per minute for auth routes
       await limiter.check(20, ip);
     } catch {
+      logger.warn('Rate limit exceeded', { ip });
       return NextResponse.json(
         { error: "Too Many Requests" },
         { status: 429 }
@@ -24,13 +42,11 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // Log request for observability
-  console.log(JSON.stringify({
-    timestamp: new Date().toISOString(),
+  // Log request for observability (without PII)
+  logger.info('Request started', {
     method: request.method,
     path: pathname,
-    userAgent: request.headers.get('user-agent'),
-  }));
+  });
 
   // Define paths that do not require authentication
   const isPublicPath =
@@ -48,8 +64,16 @@ export async function middleware(request: NextRequest) {
 
   if (isPublicPath) {
     const response = NextResponse.next();
+    const duration = Date.now() - start;
+    
     // Add custom header for debugging
-    response.headers.set("x-orchids-latency", `${Date.now() - start}ms`);
+    response.headers.set("x-orchids-latency", `${duration}ms`);
+    
+    logger.debug('Public path served', { 
+      path: pathname, 
+      duration: `${duration}ms`,
+    });
+    
     return response;
   }
 
@@ -60,11 +84,19 @@ export async function middleware(request: NextRequest) {
     request.cookies.has("__Secure-better-auth.session_token");
 
   if (!hasSessionCookie) {
+    logger.info('Redirecting unauthenticated user to sign-in', { path: pathname });
     return NextResponse.redirect(new URL("/auth/sign-in", request.url));
   }
 
   const response = NextResponse.next();
-  response.headers.set("x-orchids-latency", `${Date.now() - start}ms`);
+  const duration = Date.now() - start;
+  response.headers.set("x-orchids-latency", `${duration}ms`);
+  
+  logger.debug('Authenticated request served', { 
+    path: pathname, 
+    duration: `${duration}ms`,
+  });
+  
   return response;
 }
 

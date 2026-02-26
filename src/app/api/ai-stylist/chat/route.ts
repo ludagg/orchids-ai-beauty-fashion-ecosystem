@@ -3,12 +3,25 @@ import { db } from "@/lib/db";
 import { products } from "@/db/schema/commerce";
 import { ilike, or, and, desc, eq, SQL } from "drizzle-orm";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { log } from "@/lib/logger";
 
 const FALLBACK_KEYWORDS = {
     colors: ["red", "blue", "green", "yellow", "black", "white", "pink", "purple", "orange", "grey", "silver", "gold", "beige", "navy", "maroon"],
     categories: ["shirt", "t-shirt", "dress", "jeans", "pants", "skirt", "shoe", "sneaker", "boot", "sandal", "jacket", "coat", "hoodie", "sweater", "accessory", "bag", "watch", "jewelry", "top", "blouse", "trouser", "gown"],
     occasions: ["party", "wedding", "casual", "formal", "office", "summer", "winter", "beach", "gym", "sport", "date", "night"]
 };
+
+interface SearchCriteria {
+    category: string[];
+    color: string[];
+    occasion: string[];
+    keywords: string[];
+}
+
+interface GeminiResponse {
+    reply: string;
+    searchCriteria: SearchCriteria;
+}
 
 async function fallbackKeywordMatching(message: string) {
     const normalizedMessage = message.toLowerCase();
@@ -29,7 +42,7 @@ async function fallbackKeywordMatching(message: string) {
         }
     }
 
-    let resultProducts: any[] = [];
+    let resultProducts: unknown[] = [];
     let replyMessage = "";
 
     if (searchTerms.length > 0) {
@@ -82,7 +95,7 @@ export async function POST(req: NextRequest) {
         const apiKey = process.env.GEMINI_API_KEY;
 
         if (!apiKey) {
-             console.warn("GEMINI_API_KEY is not set. Falling back to keyword matching.");
+             log.warn("GEMINI_API_KEY is not set. Falling back to keyword matching.");
              return fallbackKeywordMatching(message);
         }
 
@@ -121,7 +134,7 @@ export async function POST(req: NextRequest) {
         try {
             result = await model.generateContent(prompt);
         } catch (geminiError) {
-            console.error("Gemini API Error:", geminiError);
+            log.error("Gemini API Error", geminiError);
             return fallbackKeywordMatching(message);
         }
 
@@ -129,11 +142,11 @@ export async function POST(req: NextRequest) {
         const text = response.text();
         const jsonString = text.replace(/```json/g, "").replace(/```/g, "").trim();
 
-        let parsedResponse;
+        let parsedResponse: GeminiResponse;
         try {
-            parsedResponse = JSON.parse(jsonString);
+            parsedResponse = JSON.parse(jsonString) as GeminiResponse;
         } catch (e) {
-            console.error("Failed to parse Gemini response:", text);
+            log.error("Failed to parse Gemini response", e, { responseText: text.substring(0, 200) });
             return fallbackKeywordMatching(message);
         }
 
@@ -227,7 +240,7 @@ export async function POST(req: NextRequest) {
         });
 
     } catch (error) {
-        console.error("AI Stylist Error:", error);
+        log.error("AI Stylist Error", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }
