@@ -1,29 +1,530 @@
 
-> app@0.1.0 dev
-> next dev --turbopack
+> app@0.1.0 start
+> next start
 
-▲ Next.js 16.1.6 (Turbopack)
+▲ Next.js 16.1.6
 - Local:         http://localhost:3000
 - Network:       http://192.168.0.2:3000
 
 ✓ Starting...
-Attention: Next.js now collects completely anonymous telemetry regarding usage.
-This information is used to shape Next.js' roadmap and prioritize features.
-You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
-https://nextjs.org/telemetry
-
-⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
-✓ Ready in 1722ms
-○ Compiling / ...
-`legacyBehavior` is deprecated and will be removed in a future release. A codemod is available to upgrade your components:
-
-npx @next/codemod@latest new-link .
-
-Learn more: https://nextjs.org/docs/app/building-your-application/upgrading/codemods#remove-a-tags-from-link-components
- GET / 200 in 6.5s (compile: 5.7s, proxy.ts: 106ms, render: 640ms)
-`legacyBehavior` is deprecated and will be removed in a future release. A codemod is available to upgrade your components:
-
-npx @next/codemod@latest new-link .
-
-Learn more: https://nextjs.org/docs/app/building-your-application/upgrading/codemods#remove-a-tags-from-link-components
- GET / 200 in 476ms (compile: 82ms, proxy.ts: 8ms, render: 386ms)
+✓ Ready in 700ms
+[2m2026-02-26T19:47:58.665Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
+STRIPE_SECRET_KEY is missing. Stripe functionality will be disabled.
+[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]
+⨯ unhandledRejection:  [Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]
+{"timestamp":"2026-02-26T19:48:04.489Z","method":"GET","path":"/","userAgent":"curl/8.5.0"}
+{"timestamp":"2026-02-26T19:48:40.600Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:41.129Z","method":"GET","path":"/privacy","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:41.147Z","method":"GET","path":"/app","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:41.155Z","method":"GET","path":"/auth","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:41.169Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:41.180Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:41.222Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:41.232Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:41.239Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:41.278Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:41.289Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:41.307Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:41.313Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:41.340Z","method":"GET","path":"/auth","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:41.347Z","method":"GET","path":"/auth","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:41.352Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:42.203Z","method":"GET","path":"/business","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:42.207Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:42.215Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:43.127Z","method":"GET","path":"/privacy","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:43.130Z","method":"GET","path":"/app","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:43.132Z","method":"GET","path":"/auth","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:43.136Z","method":"GET","path":"/business","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:43.278Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:43.292Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:43.295Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:43.304Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:43.308Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:43.313Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:43.336Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:43.341Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:43.352Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:43.355Z","method":"GET","path":"/auth","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:43.454Z","method":"GET","path":"/auth","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:43.461Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:43.466Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:48.851Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:49.071Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:49.078Z","method":"GET","path":"/auth/forgot-password","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:49.088Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:49.094Z","method":"GET","path":"/privacy","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:49.099Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:49.105Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:49.109Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:49.121Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:49.125Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:49.129Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:49.137Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:49.141Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:49.148Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:49.152Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:48:49.165Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:18.894Z","method":"GET","path":"/become-partner","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:18.898Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:19.109Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:19.115Z","method":"GET","path":"/auth/forgot-password","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:19.121Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:19.126Z","method":"GET","path":"/privacy","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:19.130Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:19.134Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:19.137Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:19.142Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:19.149Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:19.152Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:19.155Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:19.159Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:19.166Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:19.169Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:19.174Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:48.942Z","method":"GET","path":"/app/search","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:49.187Z","method":"GET","path":"/api/auth/get-session","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+⨯ [Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]
+{"timestamp":"2026-02-26T19:49:49.222Z","method":"GET","path":"/api/notifications","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+Error fetching notifications: [Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]
+{"timestamp":"2026-02-26T19:49:49.237Z","method":"GET","path":"/api/notifications","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+Error fetching notifications: [Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]
+{"timestamp":"2026-02-26T19:49:49.287Z","method":"GET","path":"/privacy","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:49.294Z","method":"GET","path":"/app/videos-creations","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:49.303Z","method":"GET","path":"/app/salons","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:49.310Z","method":"GET","path":"/app/conversations","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:49.314Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:49.322Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:49.329Z","method":"GET","path":"/auth","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:49.335Z","method":"GET","path":"/app/cart","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:49.341Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:49.350Z","method":"GET","path":"/app/marketplace","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:49.363Z","method":"GET","path":"/app","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:49.367Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:49.376Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:49.382Z","method":"GET","path":"/auth","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:49.387Z","method":"GET","path":"/auth","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:49.397Z","method":"GET","path":"/auth","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:49.401Z","method":"GET","path":"/auth","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:49.405Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:49.414Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:49.418Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:49.421Z","method":"GET","path":"/app/videos-creations","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:49.425Z","method":"GET","path":"/app/videos-creations","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:49.433Z","method":"GET","path":"/app/videos-creations","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:49.437Z","method":"GET","path":"/app/videos-creations","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:49.441Z","method":"GET","path":"/app/salons","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:49.447Z","method":"GET","path":"/app/salons","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:49.458Z","method":"GET","path":"/app/salons","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:49.461Z","method":"GET","path":"/app/marketplace","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:49.464Z","method":"GET","path":"/app/marketplace","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:49.469Z","method":"GET","path":"/app/marketplace","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:49.481Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:49.485Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:49.759Z","method":"GET","path":"/api/salons","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:49.782Z","method":"GET","path":"/api/products","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:49.793Z","method":"GET","path":"/api/videos","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+Error fetching videos: [Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]
+Error fetching salons: Error: Failed query: select "id", "owner_id", "name", "slug", "description", "address", "city", "zip_code", "latitude", "longitude", "phone", "email", "website", "image", "logo", "category", "state", "country", "formatted_address", "registration_number", "id_document_url", "business_proof_url", "gallery_urls", "status", "is_verified", "type", "average_rating", "total_reviews", "created_at", "updated_at", 0 from "salons" where "salons"."status" = $1 order by "salons"."created_at" desc limit $2
+params: active,6
+    at m.queryWithCache (.next/server/chunks/app_1d99f128._.js:8:40349)
+    at async (.next/server/chunks/app_1d99f128._.js:8:43913)
+    at async R (.next/server/chunks/app_fc85ecff._.js:6:850)
+    at async u (.next/server/chunks/app_fc85ecff._.js:6:6807)
+    at async d (.next/server/chunks/app_fc85ecff._.js:6:7848)
+    at async Module.C (.next/server/chunks/app_fc85ecff._.js:6:8926) {
+  query: 'select "id", "owner_id", "name", "slug", "description", "address", "city", "zip_code", "latitude", "longitude", "phone", "email", "website", "image", "logo", "category", "state", "country", "formatted_address", "registration_number", "id_document_url", "business_proof_url", "gallery_urls", "status", "is_verified", "type", "average_rating", "total_reviews", "created_at", "updated_at", 0 from "salons" where "salons"."status" = $1 order by "salons"."created_at" desc limit $2',
+  params: [Array],
+  [cause]: AggregateError:
+      at async (.next/server/chunks/app_1d99f128._.js:8:44128)
+      at async m.queryWithCache (.next/server/chunks/app_1d99f128._.js:8:40324)
+      at async (.next/server/chunks/app_1d99f128._.js:8:43913)
+      at async R (.next/server/chunks/app_fc85ecff._.js:6:850)
+      at async u (.next/server/chunks/app_fc85ecff._.js:6:6807) {
+    code: 'ECONNREFUSED'
+  }
+}
+Error fetching products: Error: Failed query: select "products"."id", "products"."salon_id", "products"."name", "products"."brand", "products"."description", "products"."short_description", "products"."main_category", "products"."subcategory", "products"."product_type", "products"."tags", "products"."original_price", "products"."sale_price", "products"."sale_start_date", "products"."sale_end_date", "products"."sku", "products"."total_stock", "products"."low_stock_threshold", "products"."track_inventory", "products"."colors", "products"."sizes", "products"."variants", "products"."main_image_url", "products"."gallery_urls", "products"."video_url", "products"."weight_grams", "products"."dimensions", "products"."material", "products"."country_of_origin", "products"."care_instructions", "products"."processing_time", "products"."shipping_regions", "products"."free_shipping", "products"."shipping_cost", "products"."return_policy", "products"."return_conditions", "products"."slug", "products"."meta_title", "products"."meta_description", "products"."visibility", "products"."publish_date", "products"."featured", "products"."status", "products"."rating", "products"."review_count", "products"."created_at", "products"."updated_at", "products_salon"."data" as "salon" from "products" "products" left join lateral (select json_build_array("products_salon"."name", "products_salon"."id", "products_salon"."slug") as "data" from (select * from "salons" "products_salon" where "products_salon"."id" = "products"."salon_id" limit $1) "products_salon") "products_salon" on true where ("products"."status" = $2 and "products"."visibility" = $3) order by "products"."created_at" desc limit $4
+params: 1,ACTIVE,PUBLIC,8
+    at m.queryWithCache (.next/server/chunks/app_1d99f128._.js:8:40349)
+    at async (.next/server/chunks/app_1d99f128._.js:8:43913)
+    at async u (.next/server/chunks/[root-of-the-server]__5f7594ee._.js:1:7593)
+    at async u (.next/server/chunks/[root-of-the-server]__5f7594ee._.js:1:11571)
+    at async p (.next/server/chunks/[root-of-the-server]__5f7594ee._.js:1:12612)
+    at async Module.b (.next/server/chunks/[root-of-the-server]__5f7594ee._.js:1:13690) {
+  query: 'select "products"."id", "products"."salon_id", "products"."name", "products"."brand", "products"."description", "products"."short_description", "products"."main_category", "products"."subcategory", "products"."product_type", "products"."tags", "products"."original_price", "products"."sale_price", "products"."sale_start_date", "products"."sale_end_date", "products"."sku", "products"."total_stock", "products"."low_stock_threshold", "products"."track_inventory", "products"."colors", "products"."sizes", "products"."variants", "products"."main_image_url", "products"."gallery_urls", "products"."video_url", "products"."weight_grams", "products"."dimensions", "products"."material", "products"."country_of_origin", "products"."care_instructions", "products"."processing_time", "products"."shipping_regions", "products"."free_shipping", "products"."shipping_cost", "products"."return_policy", "products"."return_conditions", "products"."slug", "products"."meta_title", "products"."meta_description", "products"."visibility", "products"."publish_date", "products"."featured", "products"."status", "products"."rating", "products"."review_count", "products"."created_at", "products"."updated_at", "products_salon"."data" as "salon" from "products" "products" left join lateral (select json_build_array("products_salon"."name", "products_salon"."id", "products_salon"."slug") as "data" from (select * from "salons" "products_salon" where "products_salon"."id" = "products"."salon_id" limit $1) "products_salon") "products_salon" on true where ("products"."status" = $2 and "products"."visibility" = $3) order by "products"."created_at" desc limit $4',
+  params: [Array],
+  [cause]: AggregateError:
+      at async (.next/server/chunks/app_1d99f128._.js:8:44128)
+      at async m.queryWithCache (.next/server/chunks/app_1d99f128._.js:8:40324)
+      at async (.next/server/chunks/app_1d99f128._.js:8:43913)
+      at async u (.next/server/chunks/[root-of-the-server]__5f7594ee._.js:1:7593)
+      at async u (.next/server/chunks/[root-of-the-server]__5f7594ee._.js:1:11571) {
+    code: 'ECONNREFUSED'
+  }
+}
+{"timestamp":"2026-02-26T19:49:50.403Z","method":"GET","path":"/app/search","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.413Z","method":"GET","path":"/app/settings","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.418Z","method":"GET","path":"/app/bookings","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.422Z","method":"GET","path":"/app/notifications","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.424Z","method":"GET","path":"/app/loyalty","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.429Z","method":"GET","path":"/app/profile","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.495Z","method":"GET","path":"/api/auth/get-session","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+⨯ [Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]
+{"timestamp":"2026-02-26T19:49:50.511Z","method":"GET","path":"/api/notifications","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+Error fetching notifications: [Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]
+{"timestamp":"2026-02-26T19:49:50.518Z","method":"GET","path":"/api/notifications","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+Error fetching notifications: [Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]
+{"timestamp":"2026-02-26T19:49:50.555Z","method":"GET","path":"/auth","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.561Z","method":"GET","path":"/app/cart","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.565Z","method":"GET","path":"/privacy","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.568Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.575Z","method":"GET","path":"/app/settings","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.578Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.583Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.587Z","method":"GET","path":"/app/bookings","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.589Z","method":"GET","path":"/app/notifications","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.591Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.595Z","method":"GET","path":"/app/conversations","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.597Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.601Z","method":"GET","path":"/app/videos-creations","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.607Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.612Z","method":"GET","path":"/app/salons","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.618Z","method":"GET","path":"/app/loyalty","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.620Z","method":"GET","path":"/app/marketplace","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.625Z","method":"GET","path":"/app/profile","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.627Z","method":"GET","path":"/app","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.629Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.634Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.638Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.644Z","method":"GET","path":"/auth","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.648Z","method":"GET","path":"/auth","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.652Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.658Z","method":"GET","path":"/auth","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.662Z","method":"GET","path":"/auth","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.665Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.669Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.681Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.685Z","method":"GET","path":"/app/videos-creations","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.689Z","method":"GET","path":"/app/videos-creations","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.692Z","method":"GET","path":"/app/videos-creations","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.708Z","method":"GET","path":"/app/videos-creations","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.712Z","method":"GET","path":"/app/salons","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.718Z","method":"GET","path":"/app/salons","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.723Z","method":"GET","path":"/app/salons","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.736Z","method":"GET","path":"/app/marketplace","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.743Z","method":"GET","path":"/app/marketplace","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.747Z","method":"GET","path":"/app/marketplace","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.750Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:50.758Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:51.030Z","method":"GET","path":"/api/salons","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:51.037Z","method":"GET","path":"/api/products","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:51.046Z","method":"GET","path":"/api/videos","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+Error fetching videos: [Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]
+Error fetching salons: Error: Failed query: select "id", "owner_id", "name", "slug", "description", "address", "city", "zip_code", "latitude", "longitude", "phone", "email", "website", "image", "logo", "category", "state", "country", "formatted_address", "registration_number", "id_document_url", "business_proof_url", "gallery_urls", "status", "is_verified", "type", "average_rating", "total_reviews", "created_at", "updated_at", 0 from "salons" where "salons"."status" = $1 order by "salons"."created_at" desc limit $2
+params: active,6
+    at m.queryWithCache (.next/server/chunks/app_1d99f128._.js:8:40349)
+    at async (.next/server/chunks/app_1d99f128._.js:8:43913)
+    at async R (.next/server/chunks/app_fc85ecff._.js:6:850)
+    at async u (.next/server/chunks/app_fc85ecff._.js:6:6807)
+    at async d (.next/server/chunks/app_fc85ecff._.js:6:7848)
+    at async Module.C (.next/server/chunks/app_fc85ecff._.js:6:8926) {
+  query: 'select "id", "owner_id", "name", "slug", "description", "address", "city", "zip_code", "latitude", "longitude", "phone", "email", "website", "image", "logo", "category", "state", "country", "formatted_address", "registration_number", "id_document_url", "business_proof_url", "gallery_urls", "status", "is_verified", "type", "average_rating", "total_reviews", "created_at", "updated_at", 0 from "salons" where "salons"."status" = $1 order by "salons"."created_at" desc limit $2',
+  params: [Array],
+  [cause]: AggregateError:
+      at async (.next/server/chunks/app_1d99f128._.js:8:44128)
+      at async m.queryWithCache (.next/server/chunks/app_1d99f128._.js:8:40324)
+      at async (.next/server/chunks/app_1d99f128._.js:8:43913)
+      at async R (.next/server/chunks/app_fc85ecff._.js:6:850)
+      at async u (.next/server/chunks/app_fc85ecff._.js:6:6807) {
+    code: 'ECONNREFUSED'
+  }
+}
+Error fetching products: Error: Failed query: select "products"."id", "products"."salon_id", "products"."name", "products"."brand", "products"."description", "products"."short_description", "products"."main_category", "products"."subcategory", "products"."product_type", "products"."tags", "products"."original_price", "products"."sale_price", "products"."sale_start_date", "products"."sale_end_date", "products"."sku", "products"."total_stock", "products"."low_stock_threshold", "products"."track_inventory", "products"."colors", "products"."sizes", "products"."variants", "products"."main_image_url", "products"."gallery_urls", "products"."video_url", "products"."weight_grams", "products"."dimensions", "products"."material", "products"."country_of_origin", "products"."care_instructions", "products"."processing_time", "products"."shipping_regions", "products"."free_shipping", "products"."shipping_cost", "products"."return_policy", "products"."return_conditions", "products"."slug", "products"."meta_title", "products"."meta_description", "products"."visibility", "products"."publish_date", "products"."featured", "products"."status", "products"."rating", "products"."review_count", "products"."created_at", "products"."updated_at", "products_salon"."data" as "salon" from "products" "products" left join lateral (select json_build_array("products_salon"."name", "products_salon"."id", "products_salon"."slug") as "data" from (select * from "salons" "products_salon" where "products_salon"."id" = "products"."salon_id" limit $1) "products_salon") "products_salon" on true where ("products"."status" = $2 and "products"."visibility" = $3) order by "products"."created_at" desc limit $4
+params: 1,ACTIVE,PUBLIC,8
+    at m.queryWithCache (.next/server/chunks/app_1d99f128._.js:8:40349)
+    at async (.next/server/chunks/app_1d99f128._.js:8:43913)
+    at async u (.next/server/chunks/[root-of-the-server]__5f7594ee._.js:1:7593)
+    at async u (.next/server/chunks/[root-of-the-server]__5f7594ee._.js:1:11571)
+    at async p (.next/server/chunks/[root-of-the-server]__5f7594ee._.js:1:12612)
+    at async Module.b (.next/server/chunks/[root-of-the-server]__5f7594ee._.js:1:13690) {
+  query: 'select "products"."id", "products"."salon_id", "products"."name", "products"."brand", "products"."description", "products"."short_description", "products"."main_category", "products"."subcategory", "products"."product_type", "products"."tags", "products"."original_price", "products"."sale_price", "products"."sale_start_date", "products"."sale_end_date", "products"."sku", "products"."total_stock", "products"."low_stock_threshold", "products"."track_inventory", "products"."colors", "products"."sizes", "products"."variants", "products"."main_image_url", "products"."gallery_urls", "products"."video_url", "products"."weight_grams", "products"."dimensions", "products"."material", "products"."country_of_origin", "products"."care_instructions", "products"."processing_time", "products"."shipping_regions", "products"."free_shipping", "products"."shipping_cost", "products"."return_policy", "products"."return_conditions", "products"."slug", "products"."meta_title", "products"."meta_description", "products"."visibility", "products"."publish_date", "products"."featured", "products"."status", "products"."rating", "products"."review_count", "products"."created_at", "products"."updated_at", "products_salon"."data" as "salon" from "products" "products" left join lateral (select json_build_array("products_salon"."name", "products_salon"."id", "products_salon"."slug") as "data" from (select * from "salons" "products_salon" where "products_salon"."id" = "products"."salon_id" limit $1) "products_salon") "products_salon" on true where ("products"."status" = $2 and "products"."visibility" = $3) order by "products"."created_at" desc limit $4',
+  params: [Array],
+  [cause]: AggregateError:
+      at async (.next/server/chunks/app_1d99f128._.js:8:44128)
+      at async m.queryWithCache (.next/server/chunks/app_1d99f128._.js:8:40324)
+      at async (.next/server/chunks/app_1d99f128._.js:8:43913)
+      at async u (.next/server/chunks/[root-of-the-server]__5f7594ee._.js:1:7593)
+      at async u (.next/server/chunks/[root-of-the-server]__5f7594ee._.js:1:11571) {
+    code: 'ECONNREFUSED'
+  }
+}
+{"timestamp":"2026-02-26T19:49:52.960Z","method":"GET","path":"/app/marketplace","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:53.192Z","method":"GET","path":"/api/auth/get-session","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+⨯ [Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]
+{"timestamp":"2026-02-26T19:49:53.256Z","method":"GET","path":"/api/notifications","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+Error fetching notifications: [Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]
+{"timestamp":"2026-02-26T19:49:53.262Z","method":"GET","path":"/api/notifications","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+Error fetching notifications: [Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]
+{"timestamp":"2026-02-26T19:49:53.292Z","method":"GET","path":"/privacy","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:53.294Z","method":"GET","path":"/app/cart","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:53.296Z","method":"GET","path":"/app/videos-creations","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:53.300Z","method":"GET","path":"/app/salons","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:53.303Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:53.308Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:53.312Z","method":"GET","path":"/app/conversations","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:53.314Z","method":"GET","path":"/app/marketplace","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:53.317Z","method":"GET","path":"/app","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:53.320Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:53.324Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:53.328Z","method":"GET","path":"/auth","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:53.332Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:53.340Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:53.343Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:53.347Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:53.351Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:53.357Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:53.360Z","method":"GET","path":"/app/videos-creations","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:53.364Z","method":"GET","path":"/app/videos-creations","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:53.367Z","method":"GET","path":"/app/videos-creations","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:53.376Z","method":"GET","path":"/app/videos-creations","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:53.379Z","method":"GET","path":"/app/salons","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:53.383Z","method":"GET","path":"/app/salons","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:53.387Z","method":"GET","path":"/app/salons","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:53.394Z","method":"GET","path":"/app/marketplace","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:53.398Z","method":"GET","path":"/app/marketplace","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:53.404Z","method":"GET","path":"/app/marketplace","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:53.407Z","method":"GET","path":"/auth","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:53.416Z","method":"GET","path":"/auth","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:53.420Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:53.423Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:53.557Z","method":"GET","path":"/api/products","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+Error fetching products: Error: Failed query: select "products"."id", "products"."salon_id", "products"."name", "products"."brand", "products"."description", "products"."short_description", "products"."main_category", "products"."subcategory", "products"."product_type", "products"."tags", "products"."original_price", "products"."sale_price", "products"."sale_start_date", "products"."sale_end_date", "products"."sku", "products"."total_stock", "products"."low_stock_threshold", "products"."track_inventory", "products"."colors", "products"."sizes", "products"."variants", "products"."main_image_url", "products"."gallery_urls", "products"."video_url", "products"."weight_grams", "products"."dimensions", "products"."material", "products"."country_of_origin", "products"."care_instructions", "products"."processing_time", "products"."shipping_regions", "products"."free_shipping", "products"."shipping_cost", "products"."return_policy", "products"."return_conditions", "products"."slug", "products"."meta_title", "products"."meta_description", "products"."visibility", "products"."publish_date", "products"."featured", "products"."status", "products"."rating", "products"."review_count", "products"."created_at", "products"."updated_at", "products_salon"."data" as "salon" from "products" "products" left join lateral (select json_build_array("products_salon"."name", "products_salon"."id", "products_salon"."slug") as "data" from (select * from "salons" "products_salon" where "products_salon"."id" = "products"."salon_id" limit $1) "products_salon") "products_salon" on true where ("products"."status" = $2 and "products"."visibility" = $3) order by "products"."created_at" desc limit $4
+params: 1,ACTIVE,PUBLIC,50
+    at m.queryWithCache (.next/server/chunks/app_1d99f128._.js:8:40349)
+    at async (.next/server/chunks/app_1d99f128._.js:8:43913)
+    at async u (.next/server/chunks/[root-of-the-server]__5f7594ee._.js:1:7593)
+    at async u (.next/server/chunks/[root-of-the-server]__5f7594ee._.js:1:11571)
+    at async p (.next/server/chunks/[root-of-the-server]__5f7594ee._.js:1:12612)
+    at async Module.b (.next/server/chunks/[root-of-the-server]__5f7594ee._.js:1:13690) {
+  query: 'select "products"."id", "products"."salon_id", "products"."name", "products"."brand", "products"."description", "products"."short_description", "products"."main_category", "products"."subcategory", "products"."product_type", "products"."tags", "products"."original_price", "products"."sale_price", "products"."sale_start_date", "products"."sale_end_date", "products"."sku", "products"."total_stock", "products"."low_stock_threshold", "products"."track_inventory", "products"."colors", "products"."sizes", "products"."variants", "products"."main_image_url", "products"."gallery_urls", "products"."video_url", "products"."weight_grams", "products"."dimensions", "products"."material", "products"."country_of_origin", "products"."care_instructions", "products"."processing_time", "products"."shipping_regions", "products"."free_shipping", "products"."shipping_cost", "products"."return_policy", "products"."return_conditions", "products"."slug", "products"."meta_title", "products"."meta_description", "products"."visibility", "products"."publish_date", "products"."featured", "products"."status", "products"."rating", "products"."review_count", "products"."created_at", "products"."updated_at", "products_salon"."data" as "salon" from "products" "products" left join lateral (select json_build_array("products_salon"."name", "products_salon"."id", "products_salon"."slug") as "data" from (select * from "salons" "products_salon" where "products_salon"."id" = "products"."salon_id" limit $1) "products_salon") "products_salon" on true where ("products"."status" = $2 and "products"."visibility" = $3) order by "products"."created_at" desc limit $4',
+  params: [Array],
+  [cause]: AggregateError:
+      at async (.next/server/chunks/app_1d99f128._.js:8:44128)
+      at async m.queryWithCache (.next/server/chunks/app_1d99f128._.js:8:40324)
+      at async (.next/server/chunks/app_1d99f128._.js:8:43913)
+      at async u (.next/server/chunks/[root-of-the-server]__5f7594ee._.js:1:7593)
+      at async u (.next/server/chunks/[root-of-the-server]__5f7594ee._.js:1:11571) {
+    code: 'ECONNREFUSED'
+  }
+}
+{"timestamp":"2026-02-26T19:49:54.186Z","method":"GET","path":"/app/marketplace","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.197Z","method":"GET","path":"/app/settings","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.202Z","method":"GET","path":"/app/bookings","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.204Z","method":"GET","path":"/app/notifications","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.205Z","method":"GET","path":"/app/loyalty","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.207Z","method":"GET","path":"/app/profile","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.284Z","method":"GET","path":"/api/auth/get-session","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+⨯ [Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]
+{"timestamp":"2026-02-26T19:49:54.295Z","method":"GET","path":"/api/notifications","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+Error fetching notifications: [Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]
+{"timestamp":"2026-02-26T19:49:54.302Z","method":"GET","path":"/api/notifications","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+Error fetching notifications: [Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]
+{"timestamp":"2026-02-26T19:49:54.350Z","method":"GET","path":"/app/bookings","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.352Z","method":"GET","path":"/app/notifications","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.354Z","method":"GET","path":"/privacy","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.356Z","method":"GET","path":"/app/settings","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.358Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.364Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.367Z","method":"GET","path":"/auth","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.370Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.374Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.377Z","method":"GET","path":"/app/cart","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.379Z","method":"GET","path":"/app/conversations","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.381Z","method":"GET","path":"/app/videos-creations","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.384Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.391Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.396Z","method":"GET","path":"/app/salons","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.399Z","method":"GET","path":"/app/loyalty","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.403Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.406Z","method":"GET","path":"/app/profile","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.408Z","method":"GET","path":"/app/marketplace","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.411Z","method":"GET","path":"/app","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.413Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.419Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.424Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.427Z","method":"GET","path":"/auth","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.430Z","method":"GET","path":"/auth","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.433Z","method":"GET","path":"/auth","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.441Z","method":"GET","path":"/auth","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.444Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.447Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.450Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.464Z","method":"GET","path":"/app/videos-creations","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.468Z","method":"GET","path":"/app/videos-creations","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.471Z","method":"GET","path":"/app/videos-creations","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.474Z","method":"GET","path":"/app/videos-creations","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.483Z","method":"GET","path":"/app/salons","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.488Z","method":"GET","path":"/app/salons","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.491Z","method":"GET","path":"/app/salons","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.494Z","method":"GET","path":"/app/marketplace","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.498Z","method":"GET","path":"/app/marketplace","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.502Z","method":"GET","path":"/app/marketplace","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.505Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.509Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:54.604Z","method":"GET","path":"/api/products","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+Error fetching products: Error: Failed query: select "products"."id", "products"."salon_id", "products"."name", "products"."brand", "products"."description", "products"."short_description", "products"."main_category", "products"."subcategory", "products"."product_type", "products"."tags", "products"."original_price", "products"."sale_price", "products"."sale_start_date", "products"."sale_end_date", "products"."sku", "products"."total_stock", "products"."low_stock_threshold", "products"."track_inventory", "products"."colors", "products"."sizes", "products"."variants", "products"."main_image_url", "products"."gallery_urls", "products"."video_url", "products"."weight_grams", "products"."dimensions", "products"."material", "products"."country_of_origin", "products"."care_instructions", "products"."processing_time", "products"."shipping_regions", "products"."free_shipping", "products"."shipping_cost", "products"."return_policy", "products"."return_conditions", "products"."slug", "products"."meta_title", "products"."meta_description", "products"."visibility", "products"."publish_date", "products"."featured", "products"."status", "products"."rating", "products"."review_count", "products"."created_at", "products"."updated_at", "products_salon"."data" as "salon" from "products" "products" left join lateral (select json_build_array("products_salon"."name", "products_salon"."id", "products_salon"."slug") as "data" from (select * from "salons" "products_salon" where "products_salon"."id" = "products"."salon_id" limit $1) "products_salon") "products_salon" on true where ("products"."status" = $2 and "products"."visibility" = $3) order by "products"."created_at" desc limit $4
+params: 1,ACTIVE,PUBLIC,50
+    at m.queryWithCache (.next/server/chunks/app_1d99f128._.js:8:40349)
+    at async (.next/server/chunks/app_1d99f128._.js:8:43913)
+    at async u (.next/server/chunks/[root-of-the-server]__5f7594ee._.js:1:7593)
+    at async u (.next/server/chunks/[root-of-the-server]__5f7594ee._.js:1:11571)
+    at async p (.next/server/chunks/[root-of-the-server]__5f7594ee._.js:1:12612)
+    at async Module.b (.next/server/chunks/[root-of-the-server]__5f7594ee._.js:1:13690) {
+  query: 'select "products"."id", "products"."salon_id", "products"."name", "products"."brand", "products"."description", "products"."short_description", "products"."main_category", "products"."subcategory", "products"."product_type", "products"."tags", "products"."original_price", "products"."sale_price", "products"."sale_start_date", "products"."sale_end_date", "products"."sku", "products"."total_stock", "products"."low_stock_threshold", "products"."track_inventory", "products"."colors", "products"."sizes", "products"."variants", "products"."main_image_url", "products"."gallery_urls", "products"."video_url", "products"."weight_grams", "products"."dimensions", "products"."material", "products"."country_of_origin", "products"."care_instructions", "products"."processing_time", "products"."shipping_regions", "products"."free_shipping", "products"."shipping_cost", "products"."return_policy", "products"."return_conditions", "products"."slug", "products"."meta_title", "products"."meta_description", "products"."visibility", "products"."publish_date", "products"."featured", "products"."status", "products"."rating", "products"."review_count", "products"."created_at", "products"."updated_at", "products_salon"."data" as "salon" from "products" "products" left join lateral (select json_build_array("products_salon"."name", "products_salon"."id", "products_salon"."slug") as "data" from (select * from "salons" "products_salon" where "products_salon"."id" = "products"."salon_id" limit $1) "products_salon") "products_salon" on true where ("products"."status" = $2 and "products"."visibility" = $3) order by "products"."created_at" desc limit $4',
+  params: [Array],
+  [cause]: AggregateError:
+      at async (.next/server/chunks/app_1d99f128._.js:8:44128)
+      at async m.queryWithCache (.next/server/chunks/app_1d99f128._.js:8:40324)
+      at async (.next/server/chunks/app_1d99f128._.js:8:43913)
+      at async u (.next/server/chunks/[root-of-the-server]__5f7594ee._.js:1:7593)
+      at async u (.next/server/chunks/[root-of-the-server]__5f7594ee._.js:1:11571) {
+    code: 'ECONNREFUSED'
+  }
+}
+{"timestamp":"2026-02-26T19:49:56.370Z","method":"GET","path":"/contact","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:56.374Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:56.584Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:56.588Z","method":"GET","path":"/auth/forgot-password","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:56.591Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:56.598Z","method":"GET","path":"/privacy","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:56.602Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:56.605Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:56.608Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:56.611Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:56.620Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:56.623Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:56.626Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:56.629Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:56.635Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:56.638Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:49:56.641Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:50:26.412Z","method":"GET","path":"/about","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:50:26.415Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:50:26.636Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:50:26.643Z","method":"GET","path":"/auth/forgot-password","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:50:26.647Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:50:26.652Z","method":"GET","path":"/privacy","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:50:26.654Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:50:26.658Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:50:26.662Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:50:26.665Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:50:26.669Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:50:26.680Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:50:26.683Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:50:26.686Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:50:26.690Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:50:26.701Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:50:26.705Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:50:56.450Z","method":"GET","path":"/privacy","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:50:56.453Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:50:56.670Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:50:56.675Z","method":"GET","path":"/auth/forgot-password","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:50:56.680Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:50:56.684Z","method":"GET","path":"/privacy","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:50:56.688Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:50:56.695Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:50:56.697Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:50:56.702Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:50:56.709Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:50:56.712Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:50:56.716Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:50:56.719Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:50:56.726Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:50:56.728Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:50:56.732Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:51:26.491Z","method":"GET","path":"/terms","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:51:26.495Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:51:26.719Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:51:26.724Z","method":"GET","path":"/auth/forgot-password","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:51:26.728Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:51:26.739Z","method":"GET","path":"/privacy","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:51:26.742Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:51:26.746Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:51:26.749Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:51:26.755Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:51:26.761Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:51:26.765Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:51:26.769Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:51:26.773Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:51:26.779Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:51:26.784Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:51:26.787Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:51:56.531Z","method":"GET","path":"/help","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:51:56.534Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:51:56.750Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:51:56.755Z","method":"GET","path":"/auth/forgot-password","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:51:56.759Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:51:56.763Z","method":"GET","path":"/privacy","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:51:56.767Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:51:56.770Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:51:56.774Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:51:56.777Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:51:56.786Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:51:56.789Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:51:56.793Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:51:56.796Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:51:56.805Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:51:56.808Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:51:56.811Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:52:26.571Z","method":"GET","path":"/app","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:52:26.575Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:52:26.798Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:52:26.804Z","method":"GET","path":"/auth/forgot-password","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:52:26.813Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:52:26.818Z","method":"GET","path":"/privacy","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:52:26.820Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:52:26.824Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:52:26.827Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:52:26.833Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:52:26.838Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:52:26.841Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:52:26.844Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:52:26.852Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:52:26.855Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:52:26.858Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:52:26.861Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:52:56.608Z","method":"GET","path":"/careers","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:52:56.611Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:52:56.828Z","method":"GET","path":"/privacy","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:52:56.831Z","method":"GET","path":"/auth/forgot-password","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:52:56.834Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:52:56.839Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:52:56.842Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:52:56.849Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:52:56.852Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:52:56.855Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:52:56.858Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:52:56.865Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:52:56.869Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:52:56.872Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:52:56.875Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:52:56.881Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:52:56.885Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:53:26.646Z","method":"GET","path":"/press","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:53:26.650Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:53:26.867Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:53:26.871Z","method":"GET","path":"/auth/forgot-password","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:53:26.875Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:53:26.882Z","method":"GET","path":"/privacy","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:53:26.887Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:53:26.893Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:53:26.899Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:53:26.905Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:53:26.915Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:53:26.920Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:53:26.936Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:53:26.960Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:53:26.975Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:53:26.979Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-02-26T19:53:26.987Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
