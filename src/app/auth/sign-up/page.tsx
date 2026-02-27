@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -30,14 +31,65 @@ export default function SignUpPage() {
     phone: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    terms: false
   })
 
+  const [passwordStrength, setPasswordStrength] = useState(0)
   const [errors, setErrors] = useState<Record<string, string>>({})
+
+  const calculatePasswordStrength = (password: string) => {
+    let strength = 0
+    if (password.length >= 8) strength += 1
+    if (/[A-Z]/.test(password)) strength += 1
+    if (/[0-9]/.test(password)) strength += 1
+    if (/[^A-Za-z0-9]/.test(password)) strength += 1
+    return strength
+  }
+
+  const validateField = (name: string, value: string) => {
+    let error = ''
+    switch (name) {
+      case 'email':
+        if (!value) error = 'Email is required'
+        else if (!/\S+@\S+\.\S+/.test(value)) error = 'Please enter a valid email'
+        break
+      case 'password':
+        if (!value) error = 'Password is required'
+        else if (value.length < 8) error = 'Password must be at least 8 characters'
+        break
+      case 'confirmPassword':
+        if (value !== formData.password) error = 'Passwords do not match'
+        break
+      case 'firstName':
+        if (!value) error = 'First name is required'
+        break
+      case 'lastName':
+        if (!value) error = 'Last name is required'
+        break
+      case 'phone':
+        if (!value) error = 'Phone number is required'
+        break
+      case 'country':
+        if (!value) error = 'Country is required'
+        break
+      case 'city':
+        if (!value) error = 'City is required'
+        break
+      case 'sex':
+        if (!value) error = 'Sex is required'
+        break
+      case 'terms':
+        if (!value) error = 'You must accept the terms and conditions'
+        break
+    }
+    setErrors(prev => ({ ...prev, [name]: error }))
+  }
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {}
 
+    if (!formData.terms) newErrors.terms = 'You must accept the terms and conditions'
     if (!formData.firstName) newErrors.firstName = 'First name is required'
     if (!formData.lastName) newErrors.lastName = 'Last name is required'
     if (!formData.sex) newErrors.sex = 'Sex is required'
@@ -106,8 +158,35 @@ export default function SignUpPage() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }))
+
+    if (name === 'password') {
+      setPasswordStrength(calculatePasswordStrength(value))
+      if (formData.confirmPassword) {
+        if (value !== formData.confirmPassword) {
+            setErrors(prev => ({ ...prev, confirmPassword: 'Passwords do not match' }))
+        } else {
+            setErrors(prev => ({ ...prev, confirmPassword: '' }))
+        }
+      }
+    }
+
+    if (name === 'confirmPassword') {
+        if (value !== formData.password) {
+             setErrors(prev => ({ ...prev, confirmPassword: 'Passwords do not match' }))
+        } else {
+             setErrors(prev => ({ ...prev, confirmPassword: '' }))
+        }
+    }
+
+    validateField(name, value)
+  }
+
+  const handleCheckboxChange = (checked: boolean) => {
+    setFormData(prev => ({ ...prev, terms: checked }))
+    if (checked) {
+      setErrors(prev => ({ ...prev, terms: '' }))
+    } else {
+      setErrors(prev => ({ ...prev, terms: 'You must accept the terms and conditions' }))
     }
   }
 
@@ -328,6 +407,33 @@ export default function SignUpPage() {
                   </button>
                 </div>
                 {errors.password && <p className="text-xs text-red-500">{errors.password}</p>}
+                {formData.password && (
+                  <div className="space-y-1">
+                    <div className="flex h-1 w-full gap-1">
+                      {[...Array(4)].map((_, i) => (
+                        <div
+                          key={i}
+                          className={`h-full w-full rounded-full transition-colors ${
+                            i < passwordStrength
+                              ? passwordStrength <= 2
+                                ? 'bg-red-500'
+                                : passwordStrength === 3
+                                ? 'bg-yellow-500'
+                                : 'bg-green-500'
+                              : 'bg-muted'
+                          }`}
+                        />
+                      ))}
+                    </div>
+                    <p className="text-[10px] text-muted-foreground text-right">
+                      {passwordStrength === 0 && 'Too weak'}
+                      {passwordStrength === 1 && 'Weak'}
+                      {passwordStrength === 2 && 'Fair'}
+                      {passwordStrength === 3 && 'Good'}
+                      {passwordStrength === 4 && 'Strong'}
+                    </p>
+                  </div>
+                )}
               </div>
 
               <div className="space-y-2">
@@ -355,6 +461,33 @@ export default function SignUpPage() {
                   </button>
                 </div>
                 {errors.confirmPassword && <p className="text-xs text-red-500">{errors.confirmPassword}</p>}
+              </div>
+            </div>
+
+            <div className="flex items-start space-x-2 my-4">
+              <Checkbox
+                id="terms"
+                checked={formData.terms}
+                onCheckedChange={handleCheckboxChange}
+                disabled={isLoading}
+              />
+              <div className="grid gap-1.5 leading-none">
+                <Label
+                  htmlFor="terms"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  I agree to the{" "}
+                  <Link href="/terms" className="text-primary hover:underline">
+                    Terms of Service
+                  </Link>{" "}
+                  and{" "}
+                  <Link href="/privacy" className="text-primary hover:underline">
+                    Privacy Policy
+                  </Link>
+                </Label>
+                {errors.terms && (
+                  <p className="text-xs text-red-500">{errors.terms}</p>
+                )}
               </div>
             </div>
 
