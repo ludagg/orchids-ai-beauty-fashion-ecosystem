@@ -92,6 +92,7 @@ export function ProductCard({ product, view = 'grid' }: ProductCardProps) {
               alt={product.name}
               fill
               className="object-cover transition-transform duration-300 group-hover:scale-105"
+              sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
             />
           ) : (
              <div className="flex h-full w-full items-center justify-center bg-gray-100 text-gray-400">No Image</div>
