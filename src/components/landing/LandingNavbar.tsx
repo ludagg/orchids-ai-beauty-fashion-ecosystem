@@ -37,6 +37,23 @@ export default function LandingNavbar() {
     return () => { document.body.style.overflow = ""; };
   }, [mobileMenuOpen]);
 
+  const handleAnchorClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (isHome && !href.startsWith('/')) {
+      e.preventDefault();
+      const element = document.getElementById(href);
+      if (element) {
+        const offset = 80;
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.scrollY - offset;
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth"
+        });
+      }
+      setMobileMenuOpen(false);
+    }
+  };
+
   const getLinkHref = (item: typeof navItems[0]) => {
     if (item.external) return item.href;
     const hash = `#${item.href}`;
@@ -46,7 +63,7 @@ export default function LandingNavbar() {
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 ${
           scrolled ? "bg-card/90 backdrop-blur-2xl shadow-sm" : ""
         }`}
       >
@@ -68,12 +85,13 @@ export default function LandingNavbar() {
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.05 }}
+                    onClick={(e) => !item.external && handleAnchorClick(e, item.href)}
                     className={`relative text-sm transition-colors py-2 group cursor-pointer ${
                       item.external ? "text-primary font-medium" : "text-muted-foreground hover:text-foreground"
                     }`}
                   >
                     {item.label}
-                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-foreground transition-all duration-300 group-hover:w-full" />
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-foreground transition-all duration-200 group-hover:w-full" />
                   </motion.a>
                 </Link>
               ))}
@@ -91,8 +109,9 @@ export default function LandingNavbar() {
                 </motion.button>
               </Link>
               <button
-                className="md:hidden p-2 -mr-2"
+                className="md:hidden p-2 -mr-2 min-h-[44px] min-w-[44px] flex items-center justify-center"
                 onClick={() => setMobileMenuOpen(true)}
+                aria-label="Open menu"
               >
                 <Menu className="w-6 h-6" />
               </button>
@@ -115,7 +134,7 @@ export default function LandingNavbar() {
                   <span className="text-3xl font-script text-black dark:text-white">Rare</span>
                   <ThemeSwitcher />
                 </div>
-                <button onClick={() => setMobileMenuOpen(false)} className="p-2 -mr-2">
+                <button onClick={() => setMobileMenuOpen(false)} className="p-2 -mr-2 min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label="Close menu">
                   <X className="w-6 h-6" />
                 </button>
               </div>
@@ -128,7 +147,17 @@ export default function LandingNavbar() {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: i * 0.1 }}
                     >
-                      <Link href={getLinkHref(item)} onClick={() => setMobileMenuOpen(false)} className={`flex items-center justify-between py-4 text-2xl font-medium border-b border-border hover:text-muted-foreground transition-colors w-full ${item.external ? "text-primary" : ""}`}>
+                      <Link 
+                        href={getLinkHref(item)} 
+                        onClick={(e) => {
+                          if (!item.external) {
+                            handleAnchorClick(e as React.MouseEvent<HTMLAnchorElement>, item.href);
+                          } else {
+                            setMobileMenuOpen(false);
+                          }
+                        }} 
+                        className={`flex items-center justify-between py-4 text-2xl font-medium border-b border-border hover:text-muted-foreground transition-colors w-full min-h-[56px] ${item.external ? "text-primary" : ""}`}
+                      >
                         {item.label}
                         <ChevronRight className="w-5 h-5 text-muted-foreground" />
                       </Link>
@@ -138,7 +167,7 @@ export default function LandingNavbar() {
               </nav>
               <div className="px-6 py-8 border-t border-border space-y-3">
                 <Link href="/auth" onClick={() => setMobileMenuOpen(false)}>
-                  <button className="w-full py-4 rounded-2xl bg-primary text-primary-foreground font-medium hover:opacity-90 transition-colors">
+                  <button className="w-full py-4 rounded-2xl bg-primary text-primary-foreground font-medium hover:opacity-90 transition-colors min-h-[52px]">
                     Sign In
                   </button>
                 </Link>

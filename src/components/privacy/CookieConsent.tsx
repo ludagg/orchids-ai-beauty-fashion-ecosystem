@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
 import Link from "next/link";
 
 export function CookieConsent() {
@@ -10,57 +9,45 @@ export function CookieConsent() {
 
   useEffect(() => {
     const consented = localStorage.getItem("cookie-consent");
-    const rejected = localStorage.getItem("cookie-rejected");
-    if (!consented && !rejected) {
+    if (!consented) {
       setIsVisible(true);
     }
   }, []);
 
   const accept = () => {
-    localStorage.setItem("cookie-consent", "true");
-    localStorage.removeItem("cookie-rejected");
+    localStorage.setItem("cookie-consent", "accepted");
     setIsVisible(false);
   };
 
   const reject = () => {
-    localStorage.setItem("cookie-rejected", "true");
-    localStorage.removeItem("cookie-consent");
+    localStorage.setItem("cookie-consent", "rejected");
     setIsVisible(false);
   };
 
   if (!isVisible) return null;
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:max-w-md z-50 p-5 bg-background/90 backdrop-blur-xl border border-border/50 shadow-2xl rounded-2xl animate-in slide-in-from-bottom-10 duration-500">
-      <div className="flex flex-col gap-4">
-        <div className="flex items-start justify-between gap-4">
-          <p className="text-sm text-muted-foreground leading-relaxed">
-            We use cookies to enhance your experience and provide personalized content. By using our site, you agree to our use of cookies.
-            <Link href="/privacy" className="text-primary font-medium hover:underline ml-1 inline-block">
-              Privacy Policy
-            </Link>
-          </p>
-          <button
-            onClick={() => setIsVisible(false)}
-            className="text-muted-foreground/60 hover:text-foreground transition-colors p-1 -mr-1 -mt-1"
-            aria-label="Dismiss"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        </div>
-        <div className="flex items-center gap-3">
-          <Button
-            onClick={reject}
-            variant="outline"
+    <div className="fixed bottom-0 left-0 right-0 z-50 p-3 sm:p-4 bg-background/95 backdrop-blur border-t border-border shadow-lg animate-in slide-in-from-bottom-10 duration-200">
+      <div className="container mx-auto max-w-6xl flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
+        <p className="text-xs sm:text-sm text-muted-foreground text-center sm:text-left">
+          We use cookies to enhance your experience.{" "}
+          <Link href="/privacy" className="text-primary underline hover:no-underline">
+            Learn more
+          </Link>
+        </p>
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          <Button 
+            variant="ghost" 
+            onClick={reject} 
             size="sm"
-            className="flex-1 h-10 rounded-xl border-border/50 bg-background/50 hover:bg-secondary/80 font-medium"
+            className="h-9 px-3 text-xs sm:text-sm"
           >
             Reject All
           </Button>
-          <Button
-            onClick={accept}
+          <Button 
+            onClick={accept} 
             size="sm"
-            className="flex-1 h-10 rounded-xl font-medium shadow-lg shadow-primary/20"
+            className="h-9 px-4 text-xs sm:text-sm"
           >
             Accept All
           </Button>

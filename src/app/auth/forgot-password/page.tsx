@@ -2,63 +2,57 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Mail, ArrowLeft } from 'lucide-react'
+import { Mail, ArrowLeft, CheckCircle } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { authClient } from '@/lib/auth-client'
 import { toast } from 'sonner'
 import { Spinner } from '@/components/ui/spinner'
 
 export default function ForgotPasswordPage() {
-  const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [email, setEmail] = useState('')
   const [error, setError] = useState('')
 
-  const validateForm = () => {
-    if (!email) {
-      setError('Email is required')
-      return false
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-      setError('Please enter a valid email')
-      return false
-    }
-    setError('')
-    return true
-  }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-
-    if (!validateForm()) return
+    
+    if (!email) {
+      setError('Email is required')
+      return
+    }
+    
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      setError('Please enter a valid email')
+      return
+    }
 
     setIsLoading(true)
     setError('')
 
     try {
-      const { data, error } = await authClient.forgetPassword({
-        email: email,
-        redirectTo: "/auth/reset-password", // Ensure this route exists or will be handled
+      const { error: resetError } = await authClient.forgetPassword({
+        email,
+        redirectTo: '/auth/reset-password'
       })
 
-      if (error) {
-        toast.error(error.message || "Failed to send reset email")
-        setError(error.message || "Failed to send reset email")
+      if (resetError) {
+        toast.error(resetError.message || "Failed to send reset email")
+        setError(resetError.message || "Failed to send reset email")
         setIsLoading(false)
         return
       }
 
       setIsSuccess(true)
-      toast.success("Reset link sent!")
-
+      toast.success("Reset email sent!")
     } catch (err) {
-      console.error(err)
       toast.error("An unexpected error occurred")
+      setError("An unexpected error occurred")
+    } finally {
       setIsLoading(false)
     }
   }
@@ -72,32 +66,35 @@ export default function ForgotPasswordPage() {
         className="w-full"
       >
         <Card className="border-none shadow-none bg-transparent">
-          <CardHeader className="space-y-1 px-0">
-            <CardTitle className="text-3xl font-bold tracking-tight">
+          <CardHeader className="space-y-1 px-0 text-center">
+            <div className="mx-auto mb-4 w-12 h-12 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+              <CheckCircle className="w-6 h-6 text-green-600 dark:text-green-400" />
+            </div>
+            <CardTitle className="text-2xl font-bold tracking-tight">
               Check your email
             </CardTitle>
             <CardDescription className="text-base text-muted-foreground">
-              We have sent a password reset link to <span className="font-medium text-foreground">{email}</span>
+              We&apos;ve sent a password reset link to <strong className="font-medium text-foreground">{email}</strong>
             </CardDescription>
           </CardHeader>
           <CardContent className="px-0">
-            <p className="text-sm text-muted-foreground mb-6">
-              Did not receive the email? Check your spam folder or try again.
+            <p className="text-sm text-muted-foreground text-center mb-6">
+              Didn&apos;t receive the email? Check your spam folder or try again with a different email address.
             </p>
-            <Button
-                variant="outline"
-                className="w-full h-11"
-                onClick={() => {
-                    setIsSuccess(false)
-                    setIsLoading(false)
-                }}
+            <Button 
+              variant="outline" 
+              className="w-full h-11"
+              onClick={() => setIsSuccess(false)}
             >
-              Try another email
+              Try again
             </Button>
           </CardContent>
           <CardFooter className="flex justify-center px-0">
-            <Link href="/auth/sign-in" className="flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-              <ArrowLeft className="w-4 h-4 mr-2" />
+            <Link 
+              href="/auth/sign-in" 
+              className="text-sm font-medium text-primary hover:underline inline-flex items-center gap-1"
+            >
+              <ArrowLeft className="w-4 h-4" />
               Back to sign in
             </Link>
           </CardFooter>
@@ -119,7 +116,7 @@ export default function ForgotPasswordPage() {
             Forgot password?
           </CardTitle>
           <CardDescription className="text-base text-muted-foreground">
-            No worries, we'll send you reset instructions.
+            Enter your email and we&apos;ll send you a link to reset your password
           </CardDescription>
         </CardHeader>
         <CardContent className="px-0">
@@ -132,6 +129,7 @@ export default function ForgotPasswordPage() {
                   id="email"
                   name="email"
                   type="email"
+                  autoComplete="email"
                   placeholder="name@example.com"
                   value={email}
                   onChange={(e) => {
@@ -151,17 +149,20 @@ export default function ForgotPasswordPage() {
               {isLoading ? (
                 <span className="flex items-center gap-2">
                   <Spinner className="h-4 w-4 text-white" />
-                  Sending link...
+                  Sending...
                 </span>
               ) : (
-                'Send Reset Link'
+                'Send reset link'
               )}
             </Button>
           </form>
         </CardContent>
         <CardFooter className="flex justify-center px-0">
-          <Link href="/auth/sign-in" className="flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-            <ArrowLeft className="w-4 h-4 mr-2" />
+          <Link 
+            href="/auth/sign-in" 
+            className="text-sm font-medium text-primary hover:underline inline-flex items-center gap-1"
+          >
+            <ArrowLeft className="w-4 h-4" />
             Back to sign in
           </Link>
         </CardFooter>
