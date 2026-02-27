@@ -293,7 +293,12 @@ function HeroCarousel({ slides }: { slides: typeof HERO_SLIDES }) {
   };
 
   return (
-    <div className="relative rounded-[32px] overflow-hidden aspect-[3/4] md:aspect-[21/9] group shadow-2xl shadow-black/5">
+    <div
+      className="relative rounded-[32px] overflow-hidden aspect-[3/4] md:aspect-[21/9] group shadow-2xl shadow-black/5"
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="Featured content"
+    >
       <AnimatePresence initial={false} mode="popLayout">
         <motion.div
           key={current}
@@ -341,6 +346,8 @@ function HeroCarousel({ slides }: { slides: typeof HERO_SLIDES }) {
               setDirection(index > current ? 1 : -1);
               setCurrent(index);
             }}
+            aria-label={`Go to slide ${index + 1}`}
+            aria-current={index === current}
             className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
               index === current ? "bg-white w-8" : "bg-white/50 hover:bg-white/80"
             }`}
@@ -376,8 +383,11 @@ function StyleCard({ style, index }: { style: any, index: number }) {
         <img src={style.thumbnailUrl || style.videoUrl || "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400&h=500&fit=crop"} alt={style.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-        <div className="absolute top-3 right-3 translate-y-[-10px] opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-          <button className="p-2 rounded-full bg-white/20 backdrop-blur-md text-white hover:bg-white hover:text-rose-500 transition-colors">
+        <div className="absolute top-3 right-3 translate-y-[-10px] opacity-0 group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:translate-y-0 group-focus-within:opacity-100 transition-all duration-300">
+          <button
+            className="p-2 rounded-full bg-white/20 backdrop-blur-md text-white hover:bg-white hover:text-rose-500 transition-colors"
+            aria-label={`Like ${style.title}`}
+          >
             <Heart className="w-4 h-4" />
           </button>
         </div>
@@ -407,9 +417,13 @@ function VideoCard({ video, index }: { video: any, index: number }) {
       <div className="relative aspect-[9/16] rounded-2xl overflow-hidden mb-3 shadow-md border border-border bg-black">
         <img src={video.thumbnailUrl || video.videoUrl || "https://images.unsplash.com/photo-1562322140-8baeececf3df?w=400&h=600&fit=crop"} alt={video.title} className="w-full h-full object-cover opacity-80 group-hover:opacity-60 transition-opacity duration-300" />
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+          <button
+            type="button"
+            className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center group-hover:scale-110 group-focus-within:scale-110 transition-transform duration-300"
+            aria-label={`Play ${video.title}`}
+          >
             <Play className="w-5 h-5 text-white fill-white" />
-          </div>
+          </button>
         </div>
         <div className="absolute bottom-3 left-3 right-3 text-white">
           <p className="text-xs font-medium bg-black/50 backdrop-blur px-2 py-1 rounded-full inline-block mb-1">{video.views} views</p>
@@ -491,12 +505,18 @@ function ProductCard({ product, index }: { product: any, index: number }) {
             </div>
             )}
 
-            <button className="absolute top-2 right-2 p-2 rounded-full bg-white/80 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all hover:bg-white hover:text-rose-500 hover:scale-110">
+            <button
+              className="absolute top-2 right-2 p-2 rounded-full bg-white/80 backdrop-blur-md opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-all hover:bg-white hover:text-rose-500 hover:scale-110"
+              aria-label={`Like ${product.name}`}
+            >
             <Heart className="w-4 h-4" />
             </button>
 
-            <div className="absolute bottom-0 left-0 right-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-gradient-to-t from-black/80 to-transparent">
-            <button className="w-full py-2 rounded-xl bg-white text-black text-xs font-bold hover:bg-gray-100 transition-colors shadow-lg">
+            <div className="absolute bottom-0 left-0 right-0 p-3 translate-y-full group-hover:translate-y-0 group-focus-within:translate-y-0 transition-transform duration-300 bg-gradient-to-t from-black/80 to-transparent">
+            <button
+              className="w-full py-2 rounded-xl bg-white text-black text-xs font-bold hover:bg-gray-100 transition-colors shadow-lg"
+              aria-label={`View ${product.name}`}
+            >
                 View
             </button>
             </div>

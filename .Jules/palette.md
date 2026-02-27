@@ -32,3 +32,11 @@
 ## 2026-02-26 - Unified Search UX with Keyboard Shortcuts
 **Learning:** A truly delightful search experience combines visual cues (custom clear buttons) with power-user features (global '/' shortcut). Hiding native browser decorations in CSS and implementing a visibility-aware shortcut listener ensures the feature feels native and polished across all screen sizes without UI duplication.
 **Action:** Use `::-webkit-search-cancel-button` to hide native clear buttons. Implement a global `keydown` listener for '/' that checks `offsetParent !== null` to target only the visible search instance.
+
+## 2026-02-27 - Keyboard Visibility for Hover Actions
+**Learning:** UX patterns that rely solely on hover to reveal interactive elements (like "Like" buttons on product cards) are inaccessible to keyboard and screen reader users. Using the `group-focus-within` Tailwind class on the parent container ensures these elements become visible and interactive when focused via Tab, maintaining the aesthetic for mouse users while supporting accessibility.
+**Action:** Audit all hover-revealed actions and ensure they use `focus-within` or `group-focus-within` to appear on keyboard focus.
+
+## 2026-02-27 - Semantic Carousel Structure
+**Learning:** Carousels are often difficult to navigate for screen reader users. Explicitly declaring `role="region"` and `aria-roledescription="carousel"` provides the necessary context. Furthermore, interactive navigation dots must have descriptive labels like `aria-label="Go to slide [n]"` rather than just being decorative indicators.
+**Action:** Always wrap carousel components in a semantic region with an `aria-label` and ensure all navigation controls have descriptive labels.
