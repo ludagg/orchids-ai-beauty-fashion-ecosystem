@@ -145,6 +145,7 @@ export default function SignInPage() {
                   onChange={handleChange}
                   className={`pl-10 h-11 ${errors.email ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                   disabled={isLoading}
+                  autoComplete="email"
                 />
               </div>
               {errors.email && (
@@ -173,6 +174,7 @@ export default function SignInPage() {
                   onChange={handleChange}
                   className={`pl-10 pr-10 h-11 ${errors.password ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                   disabled={isLoading}
+                  autoComplete="current-password"
                 />
                 <button
                   type="button"
