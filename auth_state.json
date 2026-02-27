@@ -1,0 +1,29 @@
+{
+  "cookies": [
+    {
+      "name": "__Secure-better-auth.session_token",
+      "value": "tN5kXFox1LnCTWZg9qs89QSu7rj5ugLP.pBK2DWCuqOlRNgHXCiWaQ7HmdqBBltTiW9Vart8vyRg%3D",
+      "domain": "133priitest.vercel.app",
+      "path": "/",
+      "expires": 1772787762.68803,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "https://133priitest.vercel.app",
+      "localStorage": [
+        {
+          "name": "rare-cart",
+          "value": "[]"
+        },
+        {
+          "name": "orchids_visual_edit_mode",
+          "value": "false"
+        }
+      ]
+    }
+  ]
+}
