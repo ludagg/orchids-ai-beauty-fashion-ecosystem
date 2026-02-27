@@ -15,6 +15,7 @@
 | 12 | /auth/sign-up | [PM-2] Password strength manquant | 🟠 | ✅ Corrigé | fix(auth): improve UX with real-time validation... |
 | 13 | /auth/sign-up | [PMoy-1] Terms non cochables | 🟡 | ✅ Corrigé | fix(auth): improve UX with real-time validation... |
 | 14 | /auth/sign-in | [PMoy-1] Design différenciant Google/GitHub buttons | 🟡 | ✅ Corrigé | fix(auth): improve UX with real-time validation... |
+| 15 | /app/salons | [PM-2] Filtres limités (prix, note, services) | 🟠 | ✅ Corrigé | fix(salons): add sorting by rating and price... |
 
 ## ❌ Corrections échouées (à reprendre en priorité)
 *Aucun échec lors de cette session.*
@@ -26,7 +27,6 @@
 - /admin : [PC-1] Protection des routes admin insuffisante → À vérifier
 
 ### 🟠 Ensuite (majeurs)
-- /app/salons : [PM-2] Filtres limités (prix, note, services)
 - /app/profile : [PM-1] Pas de fonctionnalité d'édition de profil
 - /app/profile : [PM-2] Avatar par défaut générique
 - /app/shop : [PM-1] Images produits non optimisées
@@ -56,9 +56,9 @@
   - Critiques : 6
   - Majeurs : 21
   - Moyens : 30
-- Résolus (Session 2 + Session 3) : 14
-- Restants : 43
-- Progression : ~25%
+- Résolus (Session 2 + Session 3) : 15
+- Restants : 42
+- Progression : ~26%
 
 ## 💡 Note pour la prochaine tâche
 Toutes les corrections prévues pour la page d'accueil et les problèmes critiques globaux ont été traitées. La prochaine étape devrait être une vérification complète de bout en bout (E2E) sur un environnement de staging.
