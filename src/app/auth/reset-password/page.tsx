@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { Suspense, useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
@@ -13,7 +13,7 @@ import { authClient } from '@/lib/auth-client'
 import { toast } from 'sonner'
 import { Spinner } from '@/components/ui/spinner'
 
-export default function ResetPasswordPage() {
+function ResetPasswordContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [showPassword, setShowPassword] = useState(false)
@@ -257,5 +257,21 @@ export default function ResetPasswordPage() {
         </CardFooter>
       </Card>
     </motion.div>
+  )
+}
+
+function ResetPasswordLoading() {
+  return (
+    <div className="w-full flex items-center justify-center py-12">
+      <Spinner className="size-8 text-primary" />
+    </div>
+  )
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={<ResetPasswordLoading />}>
+      <ResetPasswordContent />
+    </Suspense>
   )
 }

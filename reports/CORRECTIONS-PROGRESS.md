@@ -2,7 +2,7 @@
 # 📊 Rapport de Progression — Session 1
 **Date** : 27 février 2026
 **Branche Git** : cto/tu-es-une-equipe-d-elite-cto-tech-lead-50-developpeurs-senio-e01
-**Statut** : EN COURS
+**Statut** : ✅ TERMINÉ - Build réussi
 
 ---
 
@@ -58,6 +58,7 @@
   - Indicateur de force du mot de passe
   - Toggle visibilité mot de passe
   - Intégration avec `authClient.resetPassword`
+  - **Fix additionnel** : Enveloppé dans Suspense boundary pour Next.js 16 (useSearchParams)
 
 ### 🟠 Majeurs corrigés (2/21)
 
