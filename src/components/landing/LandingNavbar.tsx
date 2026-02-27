@@ -43,10 +43,14 @@ export default function LandingNavbar() {
     return isHome ? hash : `/${hash}`;
   };
 
+  const handleMobileLinkClick = () => {
+    setMobileMenuOpen(false);
+  };
+
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 ${
           scrolled ? "bg-card/90 backdrop-blur-2xl shadow-sm" : ""
         }`}
       >
@@ -73,7 +77,7 @@ export default function LandingNavbar() {
                     }`}
                   >
                     {item.label}
-                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-foreground transition-all duration-300 group-hover:w-full" />
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-foreground transition-all duration-200 group-hover:w-full" />
                   </motion.a>
                 </Link>
               ))}
@@ -107,6 +111,7 @@ export default function LandingNavbar() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
             className="fixed inset-0 z-[100] bg-background"
           >
             <div className="flex flex-col h-full">
@@ -126,9 +131,9 @@ export default function LandingNavbar() {
                       key={item.label}
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: i * 0.1 }}
+                      transition={{ delay: i * 0.05, duration: 0.2 }}
                     >
-                      <Link href={getLinkHref(item)} onClick={() => setMobileMenuOpen(false)} className={`flex items-center justify-between py-4 text-2xl font-medium border-b border-border hover:text-muted-foreground transition-colors w-full ${item.external ? "text-primary" : ""}`}>
+                      <Link href={getLinkHref(item)} onClick={handleMobileLinkClick} className={`flex items-center justify-between py-4 text-2xl font-medium border-b border-border hover:text-muted-foreground transition-colors w-full ${item.external ? "text-primary" : ""}`}>
                         {item.label}
                         <ChevronRight className="w-5 h-5 text-muted-foreground" />
                       </Link>

@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";
+import Image from "next/image";
 
 export default function MobileAppSection() {
   return (
@@ -70,17 +71,24 @@ export default function MobileAppSection() {
             {/* Phone Mockup */}
             <div className="relative z-10 w-[300px] h-[600px] bg-black rounded-[40px] border-[8px] border-zinc-800 overflow-hidden shadow-2xl">
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/3 h-6 bg-zinc-800 rounded-b-2xl z-20" />
-              <img
+              <Image
                 src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&h=1200&fit=crop"
                 alt="App Interface"
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 33vw"
               />
 
               {/* App UI Overlay Mockup */}
               <div className="absolute bottom-0 inset-x-0 h-1/2 bg-gradient-to-t from-black/80 to-transparent p-6 flex flex-col justify-end">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-full border-2 border-primary overflow-hidden">
-                     <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop" alt="User" />
+                  <div className="relative w-10 h-10 rounded-full border-2 border-primary overflow-hidden">
+                     <Image
+                      src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop"
+                      alt="User"
+                      fill
+                      className="object-cover"
+                     />
                   </div>
                   <div>
                      <p className="text-white font-medium text-sm">@fashionista</p>
