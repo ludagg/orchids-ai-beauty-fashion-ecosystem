@@ -140,6 +140,7 @@ export default function SignInPage() {
                   id="email"
                   name="email"
                   type="email"
+                  autoComplete="email"
                   placeholder="name@example.com"
                   value={formData.email}
                   onChange={handleChange}
@@ -169,6 +170,7 @@ export default function SignInPage() {
                   id="password"
                   name="password"
                   type={showPassword ? 'text' : 'password'}
+                  autoComplete="current-password"
                   placeholder="••••••••"
                   value={formData.password}
                   onChange={handleChange}

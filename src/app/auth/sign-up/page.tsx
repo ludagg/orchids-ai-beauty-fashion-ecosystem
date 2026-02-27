@@ -176,6 +176,7 @@ export default function SignUpPage() {
                   <Input
                     id="firstName"
                     name="firstName"
+                    autoComplete="given-name"
                     placeholder="John"
                     value={formData.firstName}
                     onChange={handleChange}
@@ -194,6 +195,7 @@ export default function SignUpPage() {
                   <Input
                     id="lastName"
                     name="lastName"
+                    autoComplete="family-name"
                     placeholder="Doe"
                     value={formData.lastName}
                     onChange={handleChange}
@@ -231,6 +233,7 @@ export default function SignUpPage() {
                     id="phone"
                     name="phone"
                     type="tel"
+                    autoComplete="tel"
                     placeholder="+1 (555)..."
                     value={formData.phone}
                     onChange={handleChange}
@@ -251,6 +254,7 @@ export default function SignUpPage() {
                   <Input
                     id="country"
                     name="country"
+                    autoComplete="country-name"
                     placeholder="USA"
                     value={formData.country}
                     onChange={handleChange}
@@ -269,6 +273,7 @@ export default function SignUpPage() {
                   <Input
                     id="city"
                     name="city"
+                    autoComplete="address-level2"
                     placeholder="NY"
                     value={formData.city}
                     onChange={handleChange}
@@ -290,6 +295,7 @@ export default function SignUpPage() {
                   id="email"
                   name="email"
                   type="email"
+                  autoComplete="email"
                   placeholder="name@example.com"
                   value={formData.email}
                   onChange={handleChange}
@@ -311,6 +317,7 @@ export default function SignUpPage() {
                     id="password"
                     name="password"
                     type={showPassword ? 'text' : 'password'}
+                    autoComplete="new-password"
                     placeholder="••••••••"
                     value={formData.password}
                     onChange={handleChange}
@@ -338,6 +345,7 @@ export default function SignUpPage() {
                     id="confirmPassword"
                     name="confirmPassword"
                     type={showConfirmPassword ? 'text' : 'password'}
+                    autoComplete="new-password"
                     placeholder="••••••••"
                     value={formData.confirmPassword}
                     onChange={handleChange}
