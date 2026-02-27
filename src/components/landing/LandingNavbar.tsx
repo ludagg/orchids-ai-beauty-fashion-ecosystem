@@ -44,6 +44,7 @@ export default function LandingNavbar() {
   };
 
   const handleMobileLinkClick = () => {
+    document.body.style.overflow = "";
     setMobileMenuOpen(false);
   };
 

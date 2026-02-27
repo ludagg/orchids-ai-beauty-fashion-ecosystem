@@ -14,6 +14,7 @@ import { toast } from 'sonner'
 import { Spinner } from '@/components/ui/spinner'
 
 export default function ForgotPasswordPage() {
+  // Ensure this page is rebuilt
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)

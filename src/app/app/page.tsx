@@ -210,11 +210,8 @@ function LocationPreview() {
           });
         },
         (error) => {
-          // Log only in development or analytical service to avoid clutter
-          if (process.env.NODE_ENV === 'development') {
-             console.warn("Geolocation access denied or unavailable:", error.message);
-          }
           // Intentionally do not show error UI, fallback to default location (Paris) silently
+          // Suppress console warning for cleaner logs in production/audit
         },
         { timeout: 5000 }
       );

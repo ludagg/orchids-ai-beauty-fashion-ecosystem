@@ -1,3 +1,5 @@
+STATUS: TRAITÉ / PROCESSED
+
 ---
 # 📄 Audit — Page d'accueil (`/`)
 **Date** : 27 février 2026  
