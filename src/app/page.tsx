@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 import {
@@ -233,7 +234,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-[44px] sm:text-[56px] md:text-[72px] lg:text-[88px] font-semibold leading-[1.05] tracking-tight font-display"
+            className="text-[48px] sm:text-[64px] md:text-[80px] lg:text-[96px] font-bold leading-[1.0] tracking-tighter font-display"
           >
             Where Fashion
             <br />
@@ -301,7 +302,13 @@ export default function Home() {
                 <p className="mt-4 text-muted-foreground text-sm">Watch how Rare works</p>
               </div>
             </div>
-            <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&h=675&fit=crop')] bg-cover bg-center opacity-30" />
+            <Image
+              src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&h=675&fit=crop"
+              alt="Video thumbnail"
+              fill
+              className="object-cover opacity-30"
+              priority
+            />
           </div>
         </motion.div>
 
@@ -413,10 +420,12 @@ export default function Home() {
                         }}
                       >
                         <div className="relative aspect-[4/5] overflow-hidden">
-                          <img 
-                            src={feature.image} 
+                          <Image
+                            src={feature.image}
                             alt={feature.title}
-                            className="w-full h-full object-cover"
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 768px) 100vw, 33vw"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                           
@@ -446,7 +455,7 @@ export default function Home() {
                                   initial={{ opacity: 0, y: 10 }}
                                   animate={{ opacity: 1, y: 0 }}
                                   transition={{ delay: 0.2 }}
-                                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-card text-foreground text-sm font-medium hover:opacity-90 transition-colors group/btn"
+                                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-black text-sm font-medium hover:bg-white/90 transition-colors group/btn"
                                 >
                                   Explore
                                   <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
@@ -640,11 +649,13 @@ export default function Home() {
                     transition={{ delay: i * 0.1 }}
                     className={`group rounded-2xl overflow-hidden shadow-xl shadow-foreground/10 bg-card ${i === 1 ? "mt-8" : ""}`}
                   >
-                    <div className="relative overflow-hidden">
-                      <img
+                    <div className="relative overflow-hidden h-[240px] sm:h-[280px]">
+                      <Image
                         src={item.src}
                         alt="Fashion"
-                        className="w-full h-[240px] sm:h-[280px] object-cover transition-transform duration-500 group-hover:scale-110"
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-110"
+                        sizes="(max-width: 768px) 50vw, 25vw"
                       />
                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
                       <button className="absolute bottom-4 left-4 right-4 py-3 rounded-xl bg-card text-foreground font-medium text-sm opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 hover:bg-secondary">
@@ -673,13 +684,15 @@ export default function Home() {
               className="order-2 lg:order-1"
             >
               <div className="rounded-3xl overflow-hidden bg-card shadow-xl shadow-foreground/10 hover:shadow-2xl transition-shadow duration-300">
-                <div className="relative overflow-hidden">
-                  <img
+                <div className="relative overflow-hidden h-[260px] sm:h-[300px]">
+                  <Image
                     src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=600&h=400&fit=crop"
                     alt="Salon"
-                    className="w-full h-[260px] sm:h-[300px] object-cover"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 1024px) 100vw, 50vw"
                   />
-                  <div className="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-card/95 backdrop-blur text-xs font-medium flex items-center gap-1.5">
+                  <div className="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-card/95 backdrop-blur text-xs font-medium flex items-center gap-1.5 z-10">
                     <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
                     Open Now
                   </div>
@@ -783,10 +796,12 @@ export default function Home() {
                   &ldquo;{testimonial.content}&rdquo;
                 </p>
                 <div className="flex items-center gap-4">
-                  <img
+                  <Image
                     src={testimonial.avatar}
                     alt={testimonial.name}
-                    className="w-12 h-12 rounded-full object-cover"
+                    width={48}
+                    height={48}
+                    className="rounded-full object-cover"
                   />
                   <div>
                     <p className="font-semibold text-foreground">{testimonial.name}</p>

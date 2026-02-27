@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Calendar, ShoppingBag, BarChart3, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 const benefits = [
   {
@@ -86,11 +87,13 @@ export default function BusinessSection() {
             viewport={{ once: true }}
             className="relative"
           >
-            <div className="relative rounded-3xl overflow-hidden shadow-2xl shadow-foreground/10 border border-border bg-card">
-              <img
+            <div className="relative rounded-3xl overflow-hidden shadow-2xl shadow-foreground/10 border border-border bg-card h-[600px]">
+              <Image
                 src="https://images.unsplash.com/photo-1521590832896-7ea20ade7336?w=800&h=1000&fit=crop"
                 alt="Business Dashboard"
-                className="w-full h-[600px] object-cover"
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
@@ -118,11 +121,14 @@ export default function BusinessSection() {
                   "Rare has completely transformed how we manage our salon. bookings are up 40% in just two months."
                 </p>
                 <div className="flex items-center gap-3 mt-4 pl-4">
-                  <img
-                    src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100&h=100&fit=crop"
-                    alt="Salon Owner"
-                    className="w-8 h-8 rounded-full border-2 border-white/20"
-                  />
+                  <div className="relative w-8 h-8 rounded-full border-2 border-white/20 overflow-hidden">
+                    <Image
+                      src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100&h=100&fit=crop"
+                      alt="Salon Owner"
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
                   <div>
                     <p className="text-white text-sm font-medium">Sarah Jenkins</p>
                     <p className="text-white/60 text-xs">Owner, Glow Studio</p>
