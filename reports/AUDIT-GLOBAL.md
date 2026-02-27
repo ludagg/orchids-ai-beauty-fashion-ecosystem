@@ -1,8 +1,8 @@
 ---
 # 🏆 Rapport d'Audit Global — Plateforme Beauté (Rare)
 **Date** : 27 février 2026  
-**Pages analysées** : 15 pages + Analyse Produit
-**Durée de l'analyse** : ~75 minutes  
+**Pages analysées** : 16 pages + Analyse Produit + Pages Manquantes
+**Durée de l'analyse** : ~90 minutes  
 
 ---
 
@@ -11,6 +11,7 @@
 |------|-------------|-----------|---------|--------|---------|
 | / (Home) | 6.9/10 | 2 | 3 | 3 | 2 |
 | /auth/sign-in | 6.5/10 | 1 | 2 | 1 | 0 |
+| /auth/sign-up | 6.5/10 | 1 | 2 | 1 | 0 |
 | /app (Dashboard) | 6.6/10 | 1 | 3 | 3 | 0 |
 | /app/profile | 6.5/10 | 0 | 2 | 2 | 0 |
 | /app/salons | 6.8/10 | 0 | 2 | 1 | 0 |
@@ -24,7 +25,24 @@
 | /app/my-business | 6.7/10 | 0 | 2 | 2 | 0 |
 | /app/partner-dashboard | 6.5/10 | 0 | 0 | 2 | 0 |
 | /admin | 6.5/10 | 1 | 1 | 2 | 0 |
-| **TOTAL** | **~6.7/10** | **5** | **20** | **29** | **2** |
+| **TOTAL** | **~6.7/10** | **6** | **21** | **30** | **2** |
+
+---
+
+## 📋 Pages Non Analysées (Problème Identifié)
+
+Les pages suivantes existent mais ne sont pas accessibles (bug de middleware):
+- `/about` - Redirige vers /auth (BUG)
+- `/contact` - Redirige vers /auth (BUG)
+- `/blog` - Redirige vers /auth (BUG)
+- `/help` - Redirige vers /auth (BUG)
+- `/terms` - Redirige vers /auth (BUG)
+- `/privacy` - Redirige vers /auth (BUG)
+
+Pages manquantes:
+- `/auth/forgot-password` - Page 404 à créer
+
+Voir rapport détaillé: `reports/PAGES-MISSING.md`
 
 ---
 
