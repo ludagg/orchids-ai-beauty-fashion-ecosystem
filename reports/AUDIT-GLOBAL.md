@@ -1,8 +1,8 @@
 ---
 # 🏆 Rapport d'Audit Global — Plateforme Beauté (Rare)
 **Date** : 27 février 2026  
-**Pages analysées** : 12 pages + Analyse Produit
-**Durée de l'analyse** : ~60 minutes  
+**Pages analysées** : 15 pages + Analyse Produit
+**Durée de l'analyse** : ~75 minutes  
 
 ---
 
@@ -21,7 +21,10 @@
 | /app/wishlist | 6.8/10 | 0 | 0 | 2 | 0 |
 | /app/ai-stylist | 6.8/10 | 0 | 2 | 2 | 0 |
 | /app/cart | 7.0/10 | 0 | 0 | 2 | 0 |
-| **TOTAL** | **~6.7/10** | **4** | **17** | **23** | **2** |
+| /app/my-business | 6.7/10 | 0 | 2 | 2 | 0 |
+| /app/partner-dashboard | 6.5/10 | 0 | 0 | 2 | 0 |
+| /admin | 6.5/10 | 1 | 1 | 2 | 0 |
+| **TOTAL** | **~6.7/10** | **5** | **20** | **29** | **2** |
 
 ---
 
