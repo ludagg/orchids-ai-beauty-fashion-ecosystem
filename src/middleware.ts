@@ -40,6 +40,7 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith("/_next") || // Next.js internals
     pathname.match(/\.(ico|png|jpg|jpeg|svg|css|js|txt|xml)$/) || // Static files
     // Allow public discovery
+    pathname === "/app" ||
     pathname.startsWith("/app/search") ||
     pathname.startsWith("/app/salons") ||
     pathname.startsWith("/app/marketplace") ||

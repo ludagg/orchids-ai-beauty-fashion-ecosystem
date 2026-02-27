@@ -31,6 +31,7 @@ export default function UserAccount({ showLabel = true }: { showLabel?: boolean 
   const user = session?.user;
 
   const isPublicPath =
+    pathname === "/app" ||
     pathname?.startsWith("/app/search") ||
     pathname?.startsWith("/app/salons") ||
     pathname?.startsWith("/app/marketplace") ||
