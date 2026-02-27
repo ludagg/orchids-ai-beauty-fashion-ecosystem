@@ -30,7 +30,8 @@ export default function SignUpPage() {
     phone: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    terms: false
   })
 
   const [errors, setErrors] = useState<Record<string, string>>({})
@@ -59,6 +60,10 @@ export default function SignUpPage() {
 
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match'
+    }
+
+    if (!formData.terms) {
+      newErrors.terms = 'You must agree to the terms and conditions'
     }
 
     setErrors(newErrors)
@@ -106,8 +111,36 @@ export default function SignUpPage() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
-    if (errors[name]) {
+
+    // Real-time validation for better UX
+    const newErrors: Record<string, string> = {}
+
+    if (name === 'email' && value) {
+      if (!/\S+@\S+\.\S+/.test(value)) {
+        newErrors.email = 'Please enter a valid email'
+      }
+    }
+
+    if (name === 'password' && value) {
+      if (value.length < 8) {
+        newErrors.password = 'Password must be at least 8 characters'
+      }
+    }
+
+    if (name === 'confirmPassword' && formData.password) {
+      if (value !== formData.password) {
+        newErrors.confirmPassword = 'Passwords do not match'
+      }
+    }
+
+    // Clear error for other fields or if valid
+    if (errors[name] && !newErrors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }))
+    }
+
+    // Set new errors if any
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(prev => ({ ...prev, ...newErrors }))
     }
   }
 
@@ -328,6 +361,21 @@ export default function SignUpPage() {
                   </button>
                 </div>
                 {errors.password && <p className="text-xs text-red-500">{errors.password}</p>}
+                {/* Password strength indicator */}
+                {formData.password && (
+                  <div className="space-y-1">
+                    <div className="flex gap-1 h-1">
+                      <div className={`flex-1 rounded-full transition-colors ${formData.password.length >= 8 ? 'bg-emerald-500' : 'bg-gray-200 dark:bg-gray-700'}`} />
+                      <div className={`flex-1 rounded-full transition-colors ${formData.password.length >= 12 ? 'bg-emerald-500' : 'bg-gray-200 dark:bg-gray-700'}`} />
+                      <div className={`flex-1 rounded-full transition-colors ${formData.password.length >= 8 && /[A-Z]/.test(formData.password) && /[0-9]/.test(formData.password) ? 'bg-emerald-500' : 'bg-gray-200 dark:bg-gray-700'}`} />
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      {formData.password.length < 8 && 'At least 8 characters'}
+                      {formData.password.length >= 8 && formData.password.length < 12 && 'Good'}
+                      {formData.password.length >= 12 && /[A-Z]/.test(formData.password) && /[0-9]/.test(formData.password) && 'Strong'}
+                    </p>
+                  </div>
+                )}
               </div>
 
               <div className="space-y-2">
@@ -358,6 +406,30 @@ export default function SignUpPage() {
               </div>
             </div>
 
+            {/* Terms and Conditions */}
+            <div className="flex items-start space-x-2">
+              <input
+                type="checkbox"
+                id="terms"
+                name="terms"
+                checked={formData.terms || false}
+                onChange={(e) => setFormData(prev => ({ ...prev, terms: e.target.checked }))}
+                className="mt-0.5 h-4 w-4 rounded border-border text-primary focus:ring-primary"
+                required
+              />
+              <label htmlFor="terms" className="text-sm text-muted-foreground">
+                I agree to the{' '}
+                <Link href="/terms" className="text-primary hover:underline font-medium">
+                  Terms of Service
+                </Link>{' '}
+                and{' '}
+                <Link href="/privacy" className="text-primary hover:underline font-medium">
+                  Privacy Policy
+                </Link>
+              </label>
+            </div>
+            {errors.terms && <p className="text-xs text-red-500">{errors.terms}</p>}
+
             <Button type="submit" className="w-full h-11 text-base mt-2" disabled={isLoading}>
               {isLoading ? (
                 <span className="flex items-center gap-2">
@@ -382,11 +454,23 @@ export default function SignUpPage() {
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <Button variant="outline" className="h-11" type="button" disabled={isLoading} onClick={() => handleSocialSignIn('google')}>
+            <Button
+              variant="outline"
+              className="h-11 hover:bg-background hover:border-primary/50 transition-all duration-200"
+              type="button"
+              disabled={isLoading}
+              onClick={() => handleSocialSignIn('google')}
+            >
               <Chrome className="mr-2 h-4 w-4" />
               Google
             </Button>
-            <Button variant="outline" className="h-11" type="button" disabled={isLoading} onClick={() => handleSocialSignIn('github')}>
+            <Button
+              variant="outline"
+              className="h-11 hover:bg-background hover:border-primary/50 transition-all duration-200"
+              type="button"
+              disabled={isLoading}
+              onClick={() => handleSocialSignIn('github')}
+            >
               <Github className="mr-2 h-4 w-4" />
               GitHub
             </Button>

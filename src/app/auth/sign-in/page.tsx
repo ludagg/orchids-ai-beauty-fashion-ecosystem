@@ -214,11 +214,23 @@ export default function SignInPage() {
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <Button variant="outline" className="h-11" type="button" disabled={isLoading} onClick={() => handleSocialSignIn('google')}>
+            <Button
+              variant="outline"
+              className="h-11 hover:bg-background hover:border-primary/50 transition-all duration-200"
+              type="button"
+              disabled={isLoading}
+              onClick={() => handleSocialSignIn('google')}
+            >
               <Chrome className="mr-2 h-4 w-4" />
               Google
             </Button>
-            <Button variant="outline" className="h-11" type="button" disabled={isLoading} onClick={() => handleSocialSignIn('github')}>
+            <Button
+              variant="outline"
+              className="h-11 hover:bg-background hover:border-primary/50 transition-all duration-200"
+              type="button"
+              disabled={isLoading}
+              onClick={() => handleSocialSignIn('github')}
+            >
               <Github className="mr-2 h-4 w-4" />
               GitHub
             </Button>

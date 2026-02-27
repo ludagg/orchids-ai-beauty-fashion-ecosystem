@@ -26,11 +26,14 @@ interface Salon {
   image: string | null;
   logo: string | null;
   type: string;
+  rating?: number;
+  priceRange?: string;
   // Add other fields if needed
 }
 
 export default function SalonsPage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [sortBy, setSortBy] = useState<"rating" | "price" | null>(null);
   const [salons, setSalons] = useState<Salon[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -54,6 +57,19 @@ export default function SalonsPage() {
     fetchSalons();
   }, []);
 
+  // Filter and sort salons based on category and sort preference
+  const filteredSalons = salons
+    .filter(salon => selectedCategory === "All" || salon.type === selectedCategory)
+    .sort((a, b) => {
+      if (sortBy === "rating") {
+        return (b.rating || 0) - (a.rating || 0);
+      }
+      if (sortBy === "price") {
+        return (a.priceRange || "").localeCompare(b.priceRange || "");
+      }
+      return 0;
+    });
+
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-8 max-w-[1400px] mx-auto w-full">
       {/* Header Section */}
@@ -73,10 +89,26 @@ export default function SalonsPage() {
               defaultValue="Bangalore"
             />
           </div>
-          <button className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-border bg-card text-foreground text-sm font-medium hover:bg-secondary transition-all">
-            <Filter className="w-4 h-4" />
-            Filters
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setSortBy(sortBy === "rating" ? null : "rating")}
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-medium hover:bg-secondary transition-all ${
+                sortBy === "rating" ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-foreground"
+              }`}
+            >
+              <Star className="w-4 h-4" />
+              Rating
+            </button>
+            <button
+              onClick={() => setSortBy(sortBy === "price" ? null : "price")}
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-medium hover:bg-secondary transition-all ${
+                sortBy === "price" ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-foreground"
+              }`}
+            >
+              <span className="font-bold">₹</span>
+              Price
+            </button>
+          </div>
         </div>
       </section>
 
@@ -114,7 +146,7 @@ export default function SalonsPage() {
         </div>
       ) : (
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {salons.map((salon, i) => (
+          {filteredSalons.map((salon, i) => (
             <motion.div
               key={salon.id}
               initial={{ opacity: 0, x: i % 2 === 0 ? -20 : 20 }}
