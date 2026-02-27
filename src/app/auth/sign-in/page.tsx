@@ -140,15 +140,17 @@ export default function SignInPage() {
                   id="email"
                   name="email"
                   type="email"
+                  autocomplete="email"
                   placeholder="name@example.com"
                   value={formData.email}
                   onChange={handleChange}
+                  aria-describedby="email-error"
                   className={`pl-10 h-11 ${errors.email ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                   disabled={isLoading}
                 />
               </div>
               {errors.email && (
-                <p className="text-sm text-red-500 mt-1">{errors.email}</p>
+                <p id="email-error" className="text-sm text-red-500 mt-1" role="alert">{errors.email}</p>
               )}
             </div>
 
@@ -168,9 +170,11 @@ export default function SignInPage() {
                   id="password"
                   name="password"
                   type={showPassword ? 'text' : 'password'}
+                  autocomplete="current-password"
                   placeholder="••••••••"
                   value={formData.password}
                   onChange={handleChange}
+                  aria-describedby="password-error"
                   className={`pl-10 pr-10 h-11 ${errors.password ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                   disabled={isLoading}
                 />
@@ -184,7 +188,7 @@ export default function SignInPage() {
                 </button>
               </div>
               {errors.password && (
-                <p className="text-sm text-red-500 mt-1">{errors.password}</p>
+                <p id="password-error" className="text-sm text-red-500 mt-1" role="alert">{errors.password}</p>
               )}
             </div>
 

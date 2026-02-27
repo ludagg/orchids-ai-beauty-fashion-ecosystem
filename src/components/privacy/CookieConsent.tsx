@@ -16,7 +16,16 @@ export function CookieConsent() {
   }, []);
 
   const accept = () => {
-    localStorage.setItem("cookie-consent", "true");
+    localStorage.setItem("cookie-consent", "accepted");
+    setIsVisible(false);
+  };
+
+  const reject = () => {
+    localStorage.setItem("cookie-consent", "rejected");
+    setIsVisible(false);
+  };
+
+  const close = () => {
     setIsVisible(false);
   };
 
@@ -33,16 +42,24 @@ export function CookieConsent() {
             </Link>
           </p>
         </div>
-        <div className="flex items-center gap-4">
-          <Button onClick={accept} size="sm">
+        <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+          <Button 
+            onClick={reject} 
+            variant="outline" 
+            size="sm"
+            className="text-xs sm:text-sm h-9 sm:h-10"
+          >
+            Reject All
+          </Button>
+          <Button onClick={accept} size="sm" className="text-xs sm:text-sm h-9 sm:h-10">
             Accept All
           </Button>
           <button
-            onClick={() => setIsVisible(false)}
-            className="text-muted-foreground hover:text-foreground"
-            aria-label="Dismiss"
+            onClick={close}
+            className="text-muted-foreground hover:text-foreground p-1.5 rounded-md hover:bg-secondary transition-colors"
+            aria-label="Close cookies banner"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
         </div>
       </div>

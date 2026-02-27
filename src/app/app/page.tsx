@@ -16,6 +16,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 const Map = dynamic(() => import('@/components/ui/Map'), {
   ssr: false,
@@ -85,7 +86,7 @@ export default function DiscoverPage() {
                 setVideoClips(data);
             }
         } catch (error) {
-            console.error("Error fetching homepage data:", error);
+            toast.error("Failed to load content. Please refresh the page.");
         } finally {
             setLoading(false);
         }
@@ -199,6 +200,7 @@ export default function DiscoverPage() {
 
 function LocationPreview() {
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [locationError, setLocationError] = useState<string | null>(null);
 
   useEffect(() => {
     if ("geolocation" in navigator) {
@@ -208,11 +210,26 @@ function LocationPreview() {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
           });
+          setLocationError(null);
         },
         (error) => {
-          console.error("Error getting location:", error);
+          switch (error.code) {
+            case error.PERMISSION_DENIED:
+              setLocationError("Location access denied");
+              break;
+            case error.POSITION_UNAVAILABLE:
+              setLocationError("Location unavailable");
+              break;
+            case error.TIMEOUT:
+              setLocationError("Location request timed out");
+              break;
+            default:
+              setLocationError("Unable to get location");
+          }
         }
       );
+    } else {
+      setLocationError("Geolocation not supported");
     }
   }, []);
 
