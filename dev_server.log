@@ -1,0 +1,16 @@
+
+> app@0.1.0 dev
+> next dev --turbopack
+
+▲ Next.js 16.1.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.2:3000
+
+✓ Starting...
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+✓ Ready in 1597ms
+{"timestamp":"2026-02-27T11:28:36.713Z","method":"GET","path":"/auth/forgot-password","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/143.0.7499.4 Safari/537.36"}
+○ Compiling /auth/forgot-password ...
+ GET /auth/forgot-password 200 in 6.2s (compile: 5.5s, proxy.ts: 112ms, render: 602ms)
+{"timestamp":"2026-02-27T11:28:44.148Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/143.0.7499.4 Safari/537.36"}
+ GET /auth/sign-up 200 in 2.1s (compile: 1852ms, proxy.ts: 11ms, render: 259ms)
