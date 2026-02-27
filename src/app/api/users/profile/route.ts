@@ -16,10 +16,10 @@ export async function PATCH(req: Request) {
 
   try {
     const body = await req.json();
-    const { name, image } = body;
+    const { name, image, bio, socialLinks } = body;
 
     // Validate body (basic check)
-    if (!name && !image) {
+    if (!name && !image && !bio && !socialLinks) {
       return NextResponse.json({ error: "Nothing to update" }, { status: 400 });
     }
 
@@ -28,6 +28,8 @@ export async function PATCH(req: Request) {
       .set({
         ...(name && { name }),
         ...(image && { image }),
+        ...(bio !== undefined && { bio }),
+        ...(socialLinks !== undefined && { socialLinks }),
         updatedAt: new Date(),
       })
       .where(eq(users.id, session.user.id))

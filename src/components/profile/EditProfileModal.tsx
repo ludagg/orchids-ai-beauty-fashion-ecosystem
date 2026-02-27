@@ -28,40 +28,71 @@ interface EditProfileModalProps {
 export function EditProfileModal({ isOpen, onOpenChange, user, onSave }: EditProfileModalProps) {
   const [name, setName] = useState(user.name);
   const [image, setImage] = useState<string | null>(user.image);
+  const [bio, setBio] = useState((user as any).bio || "");
+  const [instagram, setInstagram] = useState("");
+  const [youtube, setYoutube] = useState("");
+  const [website, setWebsite] = useState("");
+
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setName(user.name);
     setImage(user.image);
+    setBio((user as any).bio || "");
+    try {
+        const socialLinks = (user as any).socialLinks ? JSON.parse((user as any).socialLinks) : {};
+        setInstagram(socialLinks.instagram || "");
+        setYoutube(socialLinks.youtube || "");
+        setWebsite(socialLinks.website || "");
+    } catch (e) {
+        // ignore
+    }
   }, [user]);
 
   const handleImageClick = () => {
     fileInputRef.current?.click();
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > 2 * 1024 * 1024) {
         toast.error("Image size should be less than 2MB");
         return;
       }
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImage(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+
+      // Upload immediately
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+          const res = await fetch("/api/upload/avatar", {
+              method: "POST",
+              body: formData
+          });
+
+          if (!res.ok) throw new Error("Upload failed");
+
+          const data = await res.json();
+          setImage(data.url);
+          toast.success("Avatar uploaded");
+      } catch (err) {
+          console.error(err);
+          toast.error("Failed to upload avatar");
+      }
     }
   };
 
   const handleSubmit = async () => {
     setLoading(true);
     try {
+      const socialLinks = JSON.stringify({ instagram, youtube, website });
+
       const res = await fetch("/api/users/profile", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, image }),
+        body: JSON.stringify({ name, image, bio, socialLinks }),
       });
 
       if (!res.ok) throw new Error("Failed to update profile");
@@ -153,7 +184,8 @@ export function EditProfileModal({ isOpen, onOpenChange, user, onSave }: EditPro
                     id="bio"
                     placeholder="Tell us about yourself..."
                     className="min-h-[100px]"
-                    defaultValue="Passionate about sustainable fashion and minimalist design. Sharing my journey and tips for a conscious wardrobe."
+                    value={bio}
+                    onChange={(e) => setBio(e.target.value)}
                   />
              </div>
              <div className="space-y-4">
@@ -161,15 +193,27 @@ export function EditProfileModal({ isOpen, onOpenChange, user, onSave }: EditPro
                   <div className="grid gap-3">
                     <div className="flex items-center space-x-2">
                       <Instagram className="w-5 h-5 text-pink-600 shrink-0" />
-                      <Input placeholder="Instagram Handle" defaultValue="@jane.fashion" />
+                      <Input
+                        placeholder="Instagram Handle"
+                        value={instagram}
+                        onChange={(e) => setInstagram(e.target.value)}
+                      />
                     </div>
                     <div className="flex items-center space-x-2">
                       <Youtube className="w-5 h-5 text-red-600 shrink-0" />
-                      <Input placeholder="YouTube Channel" defaultValue="Jane's Style" />
+                      <Input
+                        placeholder="YouTube Channel"
+                        value={youtube}
+                        onChange={(e) => setYoutube(e.target.value)}
+                      />
                     </div>
                     <div className="flex items-center space-x-2">
                       <Globe className="w-5 h-5 text-blue-500 shrink-0" />
-                      <Input placeholder="Website URL" defaultValue="https://janedoe.com" />
+                      <Input
+                        placeholder="Website URL"
+                        value={website}
+                        onChange={(e) => setWebsite(e.target.value)}
+                      />
                     </div>
                   </div>
              </div>

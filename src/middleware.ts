@@ -53,6 +53,17 @@ export async function middleware(request: NextRequest) {
     return response;
   }
 
+  // Admin routes protection (extra safety)
+  if (pathname.startsWith("/admin")) {
+     const hasSessionCookie =
+        request.cookies.has("better-auth.session_token") ||
+        request.cookies.has("__Secure-better-auth.session_token");
+
+     if (!hasSessionCookie) {
+        return NextResponse.redirect(new URL("/auth/sign-in", request.url));
+     }
+  }
+
   // Check for session cookie presence to avoid blocking API calls in middleware
   // Actual session validation happens on the client (UserAccount) and server (API routes)
   const hasSessionCookie =

@@ -49,6 +49,8 @@ interface UserData {
     id: string;
     loyaltyPoints?: number;
     createdAt?: Date;
+    bio?: string;
+    socialLinks?: string;
 }
 
 interface VideoData {
@@ -127,7 +129,7 @@ export default function ProfileView({ user, isSalonOwner }: ProfileViewProps) {
   const displayName = user.name;
   const displayHandle = user.email ? `@${user.email.split('@')[0]}` : "@creator";
   const displayAvatar = user.image || "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop";
-  const displayBio = "Fashion enthusiast & style curator. Bringing you the latest trends.";
+  const displayBio = user.bio || "Fashion enthusiast & style curator. Bringing you the latest trends.";
 
   // Mock stats
   const stats = {
@@ -226,10 +228,18 @@ export default function ProfileView({ user, isSalonOwner }: ProfileViewProps) {
 
               {/* Stats Grid */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:divide-x sm:divide-border/50 py-2">
-                <StatItem value={stats.followers} label="Followers" trend="+12%" />
-                <StatItem value="482" label="Following" trend="+3%" />
-                <StatItem value={stats.likes} label="Likes" trend="+8%" />
-                <StatItem value={stats.videos} label="Videos" />
+                <Link href="#" className="hover:opacity-70 transition-opacity">
+                    <StatItem value={stats.followers} label="Followers" trend="+12%" />
+                </Link>
+                <Link href="#" className="hover:opacity-70 transition-opacity">
+                    <StatItem value="482" label="Following" trend="+3%" />
+                </Link>
+                <Link href="#" className="hover:opacity-70 transition-opacity">
+                    <StatItem value={stats.likes} label="Likes" trend="+8%" />
+                </Link>
+                <Link href="#" className="hover:opacity-70 transition-opacity">
+                    <StatItem value={stats.videos} label="Videos" />
+                </Link>
               </div>
 
               {/* Bio */}
@@ -660,6 +670,15 @@ function RewardsSection({ user }: { user: UserData }) {
 
 // About Section Component
 function AboutSection({ user }: { user: UserData }) {
+  let socialLinks = { instagram: '', youtube: '', website: '' };
+  try {
+      if (user.socialLinks) {
+          socialLinks = JSON.parse(user.socialLinks);
+      }
+  } catch (e) {
+      console.error(e);
+  }
+
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <Card>
@@ -695,6 +714,16 @@ function AboutSection({ user }: { user: UserData }) {
               </div>
             </div>
           </div>
+
+          {user.bio && (
+            <>
+                <Separator />
+                <div>
+                     <h4 className="font-semibold mb-2 text-sm">Bio</h4>
+                     <p className="text-sm text-muted-foreground leading-relaxed">{user.bio}</p>
+                </div>
+            </>
+          )}
 
           <Separator />
 
@@ -751,18 +780,20 @@ function AboutSection({ user }: { user: UserData }) {
           </CardHeader>
           <CardContent className="space-y-3">
             {[
-              { platform: 'Instagram', handle: '@janedoe_style', icon: 'I' },
-              { platform: 'TikTok', handle: '@janedoe_style', icon: 'T' },
-              { platform: 'YouTube', handle: 'Jane Doe Style', icon: 'Y' },
+              { platform: 'Instagram', handle: socialLinks.instagram || 'Add link', icon: 'I', url: socialLinks.instagram ? `https://instagram.com/${socialLinks.instagram.replace('@', '')}` : '#' },
+              { platform: 'YouTube', handle: socialLinks.youtube || 'Add link', icon: 'Y', url: socialLinks.youtube ? `https://youtube.com/@${socialLinks.youtube.replace('@', '')}` : '#' },
+              { platform: 'Website', handle: socialLinks.website || 'Add link', icon: 'W', url: socialLinks.website || '#' },
             ].map((social, i) => (
-              <motion.button
+              <a
                 key={i}
-                whileHover={{ x: 4 }}
-                className="w-full flex items-center justify-between p-3 rounded-lg border hover:border-primary/50 transition-colors bg-card hover:bg-accent/50"
+                href={social.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full flex items-center justify-between p-3 rounded-lg border hover:border-primary/50 transition-colors bg-card hover:bg-accent/50 group"
                 aria-label={`Connect on ${social.platform}`}
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-md bg-muted flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-md bg-muted flex items-center justify-center group-hover:bg-background transition-colors">
                     <span className="text-foreground text-xs font-bold">{social.icon}</span>
                   </div>
                   <div className="text-left">
@@ -770,8 +801,8 @@ function AboutSection({ user }: { user: UserData }) {
                     <p className="text-xs text-muted-foreground">{social.handle}</p>
                   </div>
                 </div>
-                <ArrowRight className="w-4 h-4 text-muted-foreground" />
-              </motion.button>
+                <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:translate-x-1 transition-transform" />
+              </a>
             ))}
           </CardContent>
         </Card>

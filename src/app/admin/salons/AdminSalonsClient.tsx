@@ -109,6 +109,23 @@ export default function AdminSalonsClient({ data }: AdminSalonsClientProps) {
     }
   };
 
+  const handleReject = async (id: string) => {
+      if (!confirm("Are you sure you want to reject this salon application?")) return;
+      setIsPending(true);
+      try {
+        // Assuming rejectSalon sets status to 'suspended' or 'rejected'
+        // Using suspendSalon logic as fallback if rejectSalon is just a wrapper
+        await suspendSalon(id);
+        toast.success("Salon application rejected");
+        router.refresh();
+      } catch (error) {
+        toast.error("Failed to reject salon");
+        console.error(error);
+      } finally {
+        setIsPending(false);
+      }
+  };
+
   return (
     <div className="space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -222,25 +239,41 @@ export default function AdminSalonsClient({ data }: AdminSalonsClientProps) {
                 </div>
                 <div className="flex items-center gap-2">
                     {s.status === 'pending' && (
+                        <>
+                            <button
+                                onClick={() => handleApprove(s.id)}
+                                disabled={isPending}
+                                className="px-4 py-2 rounded-xl bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-700 transition-all flex items-center gap-2"
+                            >
+                                Approve
+                            </button>
+                            <button
+                                onClick={() => handleReject(s.id)}
+                                disabled={isPending}
+                                className="px-4 py-2 rounded-xl bg-rose-50 text-rose-600 text-xs font-bold hover:bg-rose-100 transition-all flex items-center gap-2"
+                            >
+                                Reject
+                            </button>
+                        </>
+                    )}
+                    {s.status === 'active' && (
                         <button
-                            onClick={() => handleApprove(s.id)}
+                            onClick={() => handleSuspend(s.id)}
                             disabled={isPending}
-                            className="px-4 py-2 rounded-xl bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-700 transition-all flex items-center gap-2"
+                            className="px-4 py-2 rounded-xl bg-rose-50 text-rose-600 text-xs font-bold hover:bg-rose-100 transition-all flex items-center gap-2"
                         >
-                            Approve
+                            Suspend
                         </button>
                     )}
-                     <button
-                        onClick={() => handleSuspend(s.id)}
-                        disabled={isPending}
-                        className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
-                            s.status === 'suspended'
-                            ? "bg-slate-100 text-slate-500 cursor-not-allowed"
-                            : "bg-rose-50 text-rose-600 hover:bg-rose-100"
-                        }`}
-                    >
-                        {s.status === 'suspended' ? "Suspended" : "Suspend"}
-                    </button>
+                    {s.status === 'suspended' && (
+                        <button
+                            onClick={() => handleApprove(s.id)} // Reactivate
+                            disabled={isPending}
+                            className="px-4 py-2 rounded-xl bg-emerald-50 text-emerald-600 text-xs font-bold hover:bg-emerald-100 transition-all flex items-center gap-2"
+                        >
+                            Reactivate
+                        </button>
+                    )}
                     <Link href={`/admin/salons/${s.id}`} className="px-4 py-2 rounded-xl bg-blue-50 text-blue-600 text-xs font-bold hover:bg-blue-100 transition-all flex items-center gap-2">
                         View Details
                     </Link>
