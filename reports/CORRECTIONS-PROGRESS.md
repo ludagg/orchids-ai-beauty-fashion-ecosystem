@@ -1,21 +1,22 @@
 
 ---
-# 📊 Rapport de Progression — Session 3
+# 📊 Rapport de Progression — Session 4
 **Date** : 27 février 2026
 **Branche Git** : cto/tu-es-une-equipe-d-elite-cto-tech-lead-50-developpeurs-senio-e02
 **Statut** : EN COURS
 
 ## ✅ Corrections effectuées sessions précédentes
-*Voir Session 2 pour les corrections sur la page /home*
+*Voir Session 3 pour les corrections sur /auth et /app/salons*
 
 ## ✅ Corrections effectuées cette session
 | # | Page | Problème | Type | Résultat | Commit |
 |---|------|----------|------|----------|--------|
-| 11 | /auth/sign-up | [PC-1] Validation des champs insuffisante | 🔴 | ✅ Corrigé | fix(auth): improve UX with real-time validation... |
-| 12 | /auth/sign-up | [PM-2] Password strength manquant | 🟠 | ✅ Corrigé | fix(auth): improve UX with real-time validation... |
-| 13 | /auth/sign-up | [PMoy-1] Terms non cochables | 🟡 | ✅ Corrigé | fix(auth): improve UX with real-time validation... |
-| 14 | /auth/sign-in | [PMoy-1] Design différenciant Google/GitHub buttons | 🟡 | ✅ Corrigé | fix(auth): improve UX with real-time validation... |
-| 15 | /app/salons | [PM-2] Filtres limités (prix, note, services) | 🟠 | ✅ Corrigé | fix(salons): add sorting by rating and price... |
+| 16 | /admin | [PC-1] Protection des routes admin insuffisante | 🔴 | ✅ Corrigé | fix(admin): enforce admin role in middleware |
+| 17 | /admin | [PM-1] Dashboard admin pas fonctionnel pour l'utilisateur test | 🟢 | ✅ Corrigé | script: add make-admin utility and fix user role |
+| 18 | /admin | [PM-2] Pas de gestion des partenaires | 🟢 | ✅ Corrigé | feat(admin): add salon approval and rejection workflow |
+| 19 | /admin | [PMoy-1] Pas de logs d'activité | 🟢 | ✅ Corrigé | feat(admin): implement activity logs |
+| 20 | /app/profile | [PM-1] Pas de fonctionnalité d'édition de profil | 🟠 | ✅ Corrigé | feat(profile): enable profile editing with bio and social links |
+| 21 | /app/profile | [PM-2] Avatar par défaut générique | 🟠 | ✅ Corrigé | feat(profile): add avatar upload functionality |
 
 ## ❌ Corrections échouées (à reprendre en priorité)
 *Aucun échec lors de cette session.*
@@ -23,12 +24,7 @@
 ## ⏳ Reste à faire (prochaine tâche)
 **À traiter dans cet ordre exact :**
 
-### 🔴 Priorité absolue (critiques non traités + échecs)
-- /admin : [PC-1] Protection des routes admin insuffisante → À vérifier
-
 ### 🟠 Ensuite (majeurs)
-- /app/profile : [PM-1] Pas de fonctionnalité d'édition de profil
-- /app/profile : [PM-2] Avatar par défaut générique
 - /app/shop : [PM-1] Images produits non optimisées
 - /app/shop : [PM-2] Pagination ou infinite scroll manquant
 - /app/ai-stylist : [PM-1] Latence des réponses IA
@@ -45,9 +41,6 @@
 - /app/ai-stylist : [PMoy-2] Upload de photos limité
 
 ### 🟢 Enfin (mineurs)
-- /admin : [PM-1] Dashboard admin pas fonctionnel pour l'utilisateur test
-- /admin : [PM-2] Pas de gestion des partenaires
-- /admin : [PMoy-1] Pas de logs d'activité
 - /admin : [PMoy-2] Export données absent
 - /app/settings : [PMoy-2] Section sécurité limitée
 
@@ -56,10 +49,10 @@
   - Critiques : 6
   - Majeurs : 21
   - Moyens : 30
-- Résolus (Session 2 + Session 3) : 15
-- Restants : 42
-- Progression : ~26%
+- Résolus : 21
+- Restants : 36
+- Progression : ~37%
 
 ## 💡 Note pour la prochaine tâche
-Toutes les corrections prévues pour la page d'accueil et les problèmes critiques globaux ont été traitées. La prochaine étape devrait être une vérification complète de bout en bout (E2E) sur un environnement de staging.
+Les sections Admin et Profile ont reçu des améliorations majeures. La prochaine session devrait se concentrer sur l'expérience d'achat (Shop) et l'IA Stylist.
 ---

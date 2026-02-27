@@ -9,9 +9,21 @@ import {
   ArrowUpRight,
   ArrowDownRight,
   Activity,
-  DollarSign
+  DollarSign,
+  ShieldCheck,
+  Clock,
+  CircleAlert
 } from "lucide-react";
 import Link from "next/link";
+
+interface ActivityLog {
+  id: string;
+  adminId: string | null;
+  action: string;
+  targetId: string;
+  targetType: string;
+  createdAt: string;
+}
 
 interface AdminDashboardClientProps {
   stats: {
@@ -150,9 +162,12 @@ export default function AdminDashboardClient({ stats: data }: AdminDashboardClie
           </div>
 
           <div className="mt-8 p-4 rounded-xl bg-secondary border border-border">
-            <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-2">Latest Alert</p>
+            <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-2 flex items-center gap-2">
+                <CircleAlert className="w-3.5 h-3.5 text-amber-500" />
+                System Alert
+            </p>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Storage usage exceeding 85% on AP-South region. Consider upgrading capacity.
+              Storage usage exceeding 85% on AP-South region. Consider upgrading capacity soon.
             </p>
           </div>
         </div>

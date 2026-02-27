@@ -11,3 +11,4 @@ export * from './stories';
 export * from './staff';
 export * from './loyalty';
 export * from './cart';
+export * from './admin';

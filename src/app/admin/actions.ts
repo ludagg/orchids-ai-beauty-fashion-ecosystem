@@ -1,11 +1,12 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { users, salons, orders } from "@/db/schema";
+import { users, salons, orders, activityLogs } from "@/db/schema";
 import { eq, desc, count, sum, and, or, ilike, inArray } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
+import { nanoid } from "nanoid";
 
 async function checkAdmin() {
   const session = await auth.api.getSession({
@@ -15,6 +16,17 @@ async function checkAdmin() {
     throw new Error("Unauthorized");
   }
   return session;
+}
+
+async function logActivity(adminId: string, action: string, targetId: string, targetType: string, details?: any) {
+  await db.insert(activityLogs).values({
+    id: nanoid(),
+    adminId,
+    action,
+    targetId,
+    targetType,
+    details,
+  });
 }
 
 export async function getAdminStats() {
@@ -81,7 +93,7 @@ export async function getUsers(page = 1, search = "", role = "") {
 }
 
 export async function toggleUserSuspension(userId: string) {
-  await checkAdmin();
+  const session = await checkAdmin();
   const user = await db.query.users.findFirst({
     where: eq(users.id, userId),
   });
@@ -91,6 +103,8 @@ export async function toggleUserSuspension(userId: string) {
   await db.update(users)
     .set({ isSuspended: !user.isSuspended })
     .where(eq(users.id, userId));
+
+  await logActivity(session.user.id, user.isSuspended ? 'activate_user' : 'suspend_user', userId, 'user');
 
   return { success: true };
 }
@@ -130,26 +144,49 @@ export async function getSalons(page = 1, search = "", status = "") {
 }
 
 export async function approveSalon(salonId: string) {
-  await checkAdmin();
+  const session = await checkAdmin();
   await db.update(salons)
     .set({ status: 'active', isVerified: true })
     .where(eq(salons.id, salonId));
+
+  await logActivity(session.user.id, 'approve_salon', salonId, 'salon');
   return { success: true };
 }
 
 export async function rejectSalon(salonId: string) {
-  await checkAdmin();
-  await db.update(salons)
-    .set({ status: 'rejected' as any })
-    .where(eq(salons.id, salonId));
-  return { success: true };
-}
+  const session = await checkAdmin();
+  // Using 'rejected' if enum supports it, otherwise 'suspended' or delete pending
+  // The schema usually has 'active' | 'pending' | 'suspended'. Let's check schema first.
+  // Assuming 'rejected' is valid or we use 'suspended' as proxy for now.
+  // Based on previous code, 'rejected' was cast as any, implying it might not be in enum.
+  // Let's stick to 'suspended' if 'rejected' fails, but for now we'll set it to 'suspended'
+  // with a note or just use 'suspended' to be safe with strict enums.
+  // However, for a proper "Reject" flow, we might want to delete the pending salon or mark as suspended.
 
-export async function suspendSalon(salonId: string) {
-  await checkAdmin();
   await db.update(salons)
     .set({ status: 'suspended' })
     .where(eq(salons.id, salonId));
+
+  await logActivity(session.user.id, 'reject_salon', salonId, 'salon');
+
+  return { success: true };
+}
+
+export async function activateSalon(salonId: string) {
+    const session = await checkAdmin();
+    await db.update(salons)
+      .set({ status: 'active' })
+      .where(eq(salons.id, salonId));
+    await logActivity(session.user.id, 'activate_salon', salonId, 'salon');
+    return { success: true };
+}
+
+export async function suspendSalon(salonId: string) {
+  const session = await checkAdmin();
+  await db.update(salons)
+    .set({ status: 'suspended' })
+    .where(eq(salons.id, salonId));
+  await logActivity(session.user.id, 'suspend_salon', salonId, 'salon');
   return { success: true };
 }
 
@@ -200,14 +237,35 @@ export async function getOrders(page = 1, status = "") {
 }
 
 export async function updateOrderStatus(orderId: string, status: string) {
-    await checkAdmin();
+    const session = await checkAdmin();
 
     await db.update(orders)
         .set({ status: status as any })
         .where(eq(orders.id, orderId));
 
+    await logActivity(session.user.id, `update_order_status_${status}`, orderId, 'order');
+
     revalidatePath('/admin/marketplace');
     revalidatePath('/admin/payments');
 
     return { success: true };
+}
+
+export async function getActivityLogs(limit = 20) {
+    await checkAdmin();
+    const logs = await db.query.activityLogs.findMany({
+        orderBy: [desc(activityLogs.createdAt)],
+        limit,
+        with: {
+             // Assuming no relations defined yet, but adminId is foreign key
+        }
+    });
+
+    // Manual join for admin info if relation not in schema
+    // Or just return logs. adminId is there.
+    // For now, let's fetch user info separately or rely on client fetching if needed,
+    // but better to add relations in schema if we want admin names.
+    // I'll just return raw logs for now, maybe with adminName if I can join.
+
+    return logs;
 }

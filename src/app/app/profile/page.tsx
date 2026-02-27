@@ -43,6 +43,8 @@ export default async function ProfilePage() {
           id: session.user.id,
           loyaltyPoints: (session.user as any).loyaltyPoints as number,
           createdAt: session.user.createdAt,
+          bio: (session.user as any).bio,
+          socialLinks: (session.user as any).socialLinks,
         }}
         isSalonOwner={isSalonOwner}
       />

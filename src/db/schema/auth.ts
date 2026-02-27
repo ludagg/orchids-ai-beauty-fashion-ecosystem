@@ -10,6 +10,8 @@ export const users = pgTable('users', {
   phone: text('phone'),
   emailVerified: boolean('email_verified').notNull().default(false),
   image: text('image'),
+  bio: text('bio'),
+  socialLinks: text('social_links'), // JSON string or simple text structure
   role: userRoleEnum('role').default('user').notNull(),
   isSuspended: boolean('is_suspended').default(false).notNull(),
   loyaltyPoints: integer('loyalty_points').default(0).notNull(),
