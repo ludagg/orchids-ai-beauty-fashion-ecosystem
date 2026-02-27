@@ -5,6 +5,7 @@ import { useState, useEffect, Suspense } from "react";
 import { motion } from "framer-motion";
 import { Search, MapPin, Star, ShoppingBag, Video, Scissors, Sparkles, Users, Filter, X, Loader2, Play } from "lucide-react";
 import Link from "next/link";
+import { toast } from "sonner";
 
 const TABS = [
   { id: "all", label: "All Results" },
@@ -136,19 +137,32 @@ function SearchContent() {
   };
 
   const handleUseLocation = () => {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-            setUserLoc({
-                lat: position.coords.latitude,
-                lng: position.coords.longitude
-            });
-            setCity("Current Location"); // Visual feedback
-        }, (error) => {
-            console.error("Error getting location", error);
-            alert("Could not retrieve your location.");
-        });
+    if ("geolocation" in navigator) {
+      const toastId = toast.loading("Getting your location...");
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLoc({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          });
+          setCity("Current Location"); // Visual feedback
+          toast.dismiss(toastId);
+          toast.success("Location updated");
+        },
+        (error) => {
+          console.error("Error getting location", error);
+          toast.dismiss(toastId);
+          let errorMessage = "Could not retrieve your location.";
+          if (error.code === 1) errorMessage = "Location access denied. Please enable permissions.";
+          else if (error.code === 2) errorMessage = "Location unavailable.";
+          else if (error.code === 3) errorMessage = "Location request timed out.";
+
+          toast.error(errorMessage);
+        },
+        { timeout: 10000 }
+      );
     } else {
-        alert("Geolocation is not supported by this browser.");
+      toast.error("Geolocation is not supported by this browser.");
     }
   };
 

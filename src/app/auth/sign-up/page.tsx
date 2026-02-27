@@ -181,6 +181,7 @@ export default function SignUpPage() {
                     onChange={handleChange}
                     className={`pl-10 ${errors.firstName ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                     disabled={isLoading}
+                    autoComplete="given-name"
                   />
                 </div>
                 {errors.firstName && <p className="text-xs text-red-500">{errors.firstName}</p>}
@@ -198,6 +199,7 @@ export default function SignUpPage() {
                     onChange={handleChange}
                     className={`pl-10 ${errors.lastName ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                     disabled={isLoading}
+                    autoComplete="family-name"
                   />
                 </div>
                 {errors.lastName && <p className="text-xs text-red-500">{errors.lastName}</p>}
@@ -234,6 +236,7 @@ export default function SignUpPage() {
                     onChange={handleChange}
                     className={`pl-10 ${errors.phone ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                     disabled={isLoading}
+                    autoComplete="tel"
                   />
                 </div>
                 {errors.phone && <p className="text-xs text-red-500">{errors.phone}</p>}
@@ -253,6 +256,7 @@ export default function SignUpPage() {
                     onChange={handleChange}
                     className={`pl-10 ${errors.country ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                     disabled={isLoading}
+                    autoComplete="country-name"
                   />
                 </div>
                 {errors.country && <p className="text-xs text-red-500">{errors.country}</p>}
@@ -270,6 +274,7 @@ export default function SignUpPage() {
                     onChange={handleChange}
                     className={`pl-10 ${errors.city ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                     disabled={isLoading}
+                    autoComplete="address-level2"
                   />
                 </div>
                 {errors.city && <p className="text-xs text-red-500">{errors.city}</p>}
@@ -290,6 +295,7 @@ export default function SignUpPage() {
                   onChange={handleChange}
                   className={`pl-10 ${errors.email ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                   disabled={isLoading}
+                  autoComplete="email"
                 />
               </div>
               {errors.email && <p className="text-xs text-red-500">{errors.email}</p>}
@@ -310,6 +316,7 @@ export default function SignUpPage() {
                     onChange={handleChange}
                     className={`pl-10 pr-10 ${errors.password ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                     disabled={isLoading}
+                    autoComplete="new-password"
                   />
                   <button
                     type="button"
@@ -336,6 +343,7 @@ export default function SignUpPage() {
                     onChange={handleChange}
                     className={`pl-10 pr-10 ${errors.confirmPassword ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                     disabled={isLoading}
+                    autoComplete="new-password"
                   />
                   <button
                     type="button"
