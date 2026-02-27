@@ -32,28 +32,28 @@ const features = [
     description: "Curated collections from India's finest designers. Shop with confidence.",
     icon: ShoppingBag,
     color: "#e11d48",
-    image: "https://images.unsplash.com/photo-1558171813-4c088753af8f?w=800&h=600&fit=crop",
+    image: "https://images.unsplash.com/photo-1558171813-4c088753af8f",
   },
   {
     title: "Salon Booking",
     description: "Book verified beauty services instantly. Real reviews, real results.",
     icon: Scissors,
     color: "#9333ea",
-    image: "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=800&h=600&fit=crop",
+    image: "https://images.unsplash.com/photo-1560066984-138dadb4c035",
   },
   {
     title: "Video Commerce",
     description: "Shop from live streams and videos. See it, love it, own it.",
     icon: Video,
     color: "#2563eb",
-    image: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&h=600&fit=crop",
+    image: "https://images.unsplash.com/photo-1483985988355-763728e1935b",
   },
   {
     title: "AI Stylist",
     description: "Your personal style advisor. Intelligent recommendations, perfect fits.",
     icon: Sparkles,
     color: "#059669",
-    image: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800&h=600&fit=crop",
+    image: "https://images.unsplash.com/photo-1469334031218-e382a71b716b",
   },
 ];
 
@@ -117,21 +117,21 @@ const testimonials = [
     name: "Ananya Sharma",
     role: "Fashion Blogger",
     content: "Rare has completely changed how I discover new designers. The AI Stylist is surprisingly accurate and helps me find pieces I wouldn't have considered before.",
-    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
+    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330",
     rating: 5
   },
   {
     name: "Rahul Mehra",
     role: "Verified Buyer",
     content: "The virtual try-on feature is a game changer. I've bought three outfits so far and they all fit perfectly. No more returns because of wrong sizing!",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
+    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d",
     rating: 5
   },
   {
     name: "Priya Patel",
     role: "Salon Regular",
     content: "Booking my favorite salon has never been easier. Love the real-time availability and the fact that I can see verified reviews before booking.",
-    avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop",
+    avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80",
     rating: 5
   }
 ];
@@ -303,7 +303,7 @@ export default function Home() {
               </div>
             </div>
             <Image
-              src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&h=675&fit=crop"
+              src="https://images.unsplash.com/photo-1441986300917-64674bd600d8"
               alt="Video thumbnail"
               fill
               className="object-cover opacity-30"
@@ -638,8 +638,8 @@ export default function Home() {
             >
               <div className="grid grid-cols-2 gap-4">
                 {[
-                  { src: "https://images.unsplash.com/photo-1558171813-4c088753af8f?w=400&h=500&fit=crop", price: "₹2,499" },
-                  { src: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=400&h=500&fit=crop", price: "₹3,299" },
+                  { src: "https://images.unsplash.com/photo-1558171813-4c088753af8f", price: "₹2,499" },
+                  { src: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b", price: "₹3,299" },
                 ].map((item, i) => (
                   <motion.div
                     key={i}
@@ -686,7 +686,7 @@ export default function Home() {
               <div className="rounded-3xl overflow-hidden bg-card shadow-xl shadow-foreground/10 hover:shadow-2xl transition-shadow duration-300">
                 <div className="relative overflow-hidden h-[260px] sm:h-[300px]">
                   <Image
-                    src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=600&h=400&fit=crop"
+                    src="https://images.unsplash.com/photo-1560066984-138dadb4c035"
                     alt="Salon"
                     fill
                     className="object-cover"
