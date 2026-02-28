@@ -11,7 +11,9 @@ import {
   CheckSquare,
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { useState, useEffect } from "react";
+import { useSession } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 
 // ─────────────────────────────────────────────
@@ -39,6 +41,7 @@ interface Product {
 // Page principale
 // ─────────────────────────────────────────────
 export default function DiscoverPage() {
+  const { data: session } = useSession();
   const [topSalons, setTopSalons] = useState<Salon[]>([]);
   const [marketplacePicks, setMarketplacePicks] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -77,7 +80,9 @@ export default function DiscoverPage() {
         transition={{ duration: 0.35 }}
         className="mb-7"
       >
-        <h1 className="text-3xl font-bold font-display text-foreground">Hi Joe!</h1>
+        <h1 className="text-3xl font-bold font-display text-foreground">
+          {session?.user?.name ? `Hi ${session.user.name}!` : "Hi!"}
+        </h1>
         <p className="text-muted-foreground text-sm mt-1">Let&apos;s get you beauty ready</p>
       </motion.div>
 
@@ -92,50 +97,34 @@ export default function DiscoverPage() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.05 }}
-            className="relative bg-card rounded-2xl border border-border shadow-sm overflow-hidden min-h-[160px] flex items-center"
+            className="relative bg-card rounded-3xl border border-border shadow-md hover:shadow-lg transition-shadow overflow-hidden min-h-[180px] flex items-center"
           >
-            {/* Decorative right area */}
-            <div className="absolute right-0 top-0 h-full w-[220px] bg-secondary/60 rounded-l-[80px]" />
-
-            {/* Illustration (SVG léger, remplaçable par une vraie image) */}
-            <div className="absolute right-6 top-1/2 -translate-y-1/2 opacity-70 pointer-events-none select-none">
-              <svg width="140" height="110" viewBox="0 0 150 110" fill="none">
-                <ellipse cx="75" cy="45" rx="28" ry="34" fill="#d4cec6" stroke="#ccc" strokeWidth="1.5"/>
-                <ellipse cx="75" cy="45" rx="22" ry="27" fill="#edeae4"/>
-                <rect x="70" y="77" width="10" height="16" rx="3" fill="#bbb"/>
-                <rect x="60" y="91" width="30" height="5" rx="2.5" fill="#bbb"/>
-                <rect x="112" y="55" width="10" height="30" rx="3" fill="#c9a8a8"/>
-                <rect x="114" y="48" width="6" height="10" rx="2" fill="#c97a7a"/>
-                <rect x="20" y="50" width="6" height="38" rx="3" fill="#c9b87a"/>
-                <rect x="21" y="46" width="4" height="10" rx="2" fill="#8b7355"/>
-                <rect x="95" y="62" width="18" height="26" rx="4" fill="#b8c4d4"/>
-                <rect x="101" y="56" width="6" height="8" rx="2" fill="#8fa0b4"/>
-              </svg>
-            </div>
+            <Image src="https://images.unsplash.com/photo-1560066984-138dadb4c035" alt="Salon Background" fill className="object-cover" priority sizes="(max-width: 1200px) 100vw, 800px" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/80 to-black/20 z-0" />
 
             {/* Content */}
             <div className="relative z-10 p-7 max-w-xs">
-              <h2 className="text-xl font-bold text-foreground leading-snug mb-1">
+              <h2 className="text-xl font-bold text-white leading-snug mb-1">
                 Book your next appointment
               </h2>
-              <p className="text-muted-foreground text-sm mb-5">
+              <p className="text-white/80 text-sm mb-5">
                 Check out top-rated salons near you
               </p>
               <Link href="/app/search?tab=salons">
-                <Button className="rounded-full px-5 gap-2 shadow-sm">
+                <Button className="rounded-full px-5 gap-2 shadow-sm hover:scale-105 transition-transform bg-white text-black hover:bg-white/90">
                   <MapPin className="w-4 h-4" />
                   Find a Salon
                 </Button>
               </Link>
             </div>
-          </motion.div>
+</motion.div>
 
           {/* Top Rated Salons */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.1 }}
-            className="bg-card rounded-2xl border border-border shadow-sm p-5"
+            className="bg-card rounded-3xl border border-border shadow-md hover:shadow-lg transition-shadow p-5"
           >
             <SectionHeader title="Top Rated Salons" href="/app/search?tab=salons" />
 
@@ -160,7 +149,7 @@ export default function DiscoverPage() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.15 }}
-            className="bg-card rounded-2xl border border-border shadow-sm p-5"
+            className="bg-card rounded-3xl border border-border shadow-md hover:shadow-lg transition-shadow p-5"
           >
             <SectionHeader
               title="Dashboard"
@@ -179,12 +168,12 @@ export default function DiscoverPage() {
                     {loyaltyTarget - loyaltyPoints} more points to next reward
                   </p>
                 </div>
-                <div className="h-2 bg-secondary rounded-full overflow-hidden">
+                <div className="h-3 bg-secondary/50 rounded-full overflow-hidden">
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: `${loyaltyProgress}%` }}
                     transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
-                    className="h-full bg-foreground rounded-full"
+                    className="h-full bg-gradient-to-r from-primary to-purple-500 rounded-full"
                   />
                 </div>
               </div>
@@ -192,7 +181,7 @@ export default function DiscoverPage() {
               {/* My Bookings */}
               <div className="rounded-xl border border-border p-4 flex flex-col gap-3">
                 <h4 className="font-bold text-sm text-foreground">My Bookings</h4>
-                <div className="rounded-lg border border-border/70 p-3 bg-secondary/30">
+                <div className="rounded-lg border border-border/50 p-3 bg-secondary/50">
                   <p className="font-semibold text-sm text-foreground">{nextBooking.salon}</p>
                   <p className="text-xs text-muted-foreground mt-0.5">{nextBooking.date}</p>
                 </div>
@@ -211,7 +200,7 @@ export default function DiscoverPage() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.12 }}
-            className="bg-card rounded-2xl border border-border shadow-sm p-5"
+            className="bg-card rounded-3xl border border-border shadow-md hover:shadow-lg transition-shadow p-5"
           >
             <SectionHeader title="Top Rated Salons" href="/app/search?tab=salons" />
 
@@ -238,7 +227,7 @@ export default function DiscoverPage() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.18 }}
-            className="bg-card rounded-2xl border border-border shadow-sm p-5"
+            className="bg-card rounded-3xl border border-border shadow-md hover:shadow-lg transition-shadow p-5"
           >
             <h3 className="font-bold text-sm text-foreground mb-4">Marketplace</h3>
 
@@ -251,17 +240,7 @@ export default function DiscoverPage() {
                   className="w-full h-full object-cover opacity-80"
                 />
               ) : (
-                <svg width="200" height="100" viewBox="0 0 200 100" fill="none">
-                  <rect x="18" y="18" width="24" height="52" rx="6" fill="#b8c4d4"/>
-                  <rect x="24" y="12" width="12" height="10" rx="3" fill="#8fa0b4"/>
-                  <rect x="52" y="36" width="30" height="30" rx="6" fill="#d4cec6"/>
-                  <rect x="52" y="28" width="30" height="12" rx="4" fill="#bbb4ac"/>
-                  <rect x="92" y="26" width="14" height="44" rx="5" fill="#c9a8a8"/>
-                  <rect x="116" y="24" width="32" height="40" rx="5" fill="#edeae4"/>
-                  <rect x="116" y="24" width="32" height="12" rx="4" fill="#d4d0c8"/>
-                  <rect x="158" y="34" width="12" height="30" rx="4" fill="#c9d4b8"/>
-                  <rect x="160" y="28" width="8" height="8" rx="3" fill="#a8b890"/>
-                </svg>
+                <Image src="https://images.unsplash.com/photo-1558171813-4c088753af8f" alt="Marketplace" fill className="object-cover opacity-80" sizes="(max-width: 768px) 100vw, 320px" />
               )}
             </div>
 
