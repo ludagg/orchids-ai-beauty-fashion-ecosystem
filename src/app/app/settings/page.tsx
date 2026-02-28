@@ -39,6 +39,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
+import { useState } from "react";
 
 const ThemeSwitcher = dynamic(
   () => import("@/components/ThemeSwitcher").then((mod) => mod.ThemeSwitcher),
@@ -110,6 +111,48 @@ function SectionCard({
       </Card>
     </motion.div>
   );
+}
+
+const SETTINGS_KEY = "app-settings-prefs";
+
+function loadPrefs() {
+  if (typeof window === "undefined") return {};
+  try {
+    const raw = localStorage.getItem(SETTINGS_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+function savePrefs(key: string, value: boolean) {
+  if (typeof window === "undefined") return;
+  try {
+    const current = loadPrefs();
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify({ ...current, [key]: value }));
+  } catch {
+    // ignore
+  }
+}
+
+function AutoSwitch({
+  prefKey,
+  defaultChecked = false,
+}: {
+  prefKey: string;
+  defaultChecked?: boolean;
+}) {
+  const prefs = loadPrefs();
+  const initial = prefKey in prefs ? prefs[prefKey] : defaultChecked;
+  const [checked, setChecked] = useState<boolean>(initial);
+
+  const handleChange = (val: boolean) => {
+    setChecked(val);
+    savePrefs(prefKey, val);
+    toast.success("Preference saved", { duration: 1500 });
+  };
+
+  return <Switch checked={checked} onCheckedChange={handleChange} />;
 }
 
 export default function SettingsPage() {
@@ -240,14 +283,14 @@ export default function SettingsPage() {
               description="Minimize animations throughout the app."
               icon={<Zap className="w-4 h-4" />}
             >
-              <Switch />
+              <AutoSwitch prefKey="reduce_motion" defaultChecked={false} />
             </SettingRow>
             <SettingRow
               label="Sound Effects"
               description="Play subtle sounds on interactions."
               icon={<Volume2 className="w-4 h-4" />}
             >
-              <Switch defaultChecked />
+              <AutoSwitch prefKey="sound_effects" defaultChecked={true} />
             </SettingRow>
           </SectionCard>
         </TabsContent>
@@ -266,21 +309,21 @@ export default function SettingsPage() {
               description="Receive updates and summaries via email."
               icon={<Mail className="w-4 h-4" />}
             >
-              <Switch defaultChecked />
+              <AutoSwitch prefKey="notif_email" defaultChecked={true} />
             </SettingRow>
             <SettingRow
               label="Push Notifications"
               description="Real-time alerts sent to your device."
               icon={<Smartphone className="w-4 h-4" />}
             >
-              <Switch defaultChecked />
+              <AutoSwitch prefKey="notif_push" defaultChecked={true} />
             </SettingRow>
             <SettingRow
               label="In-App Notifications"
               description="Show notification banners inside the app."
               icon={<BellRing className="w-4 h-4" />}
             >
-              <Switch defaultChecked />
+              <AutoSwitch prefKey="notif_inapp" defaultChecked={true} />
             </SettingRow>
           </SectionCard>
 
@@ -295,25 +338,25 @@ export default function SettingsPage() {
               label="New Comments"
               description="When someone comments on your creations."
             >
-              <Switch defaultChecked />
+              <AutoSwitch prefKey="notif_comments" defaultChecked={true} />
             </SettingRow>
             <SettingRow
               label="New Followers"
               description="When someone starts following your profile."
             >
-              <Switch defaultChecked />
+              <AutoSwitch prefKey="notif_followers" defaultChecked={true} />
             </SettingRow>
             <SettingRow
               label="Mentions"
               description="When someone tags you in a post or comment."
             >
-              <Switch defaultChecked />
+              <AutoSwitch prefKey="notif_mentions" defaultChecked={true} />
             </SettingRow>
             <SettingRow
               label="Direct Messages"
               description="New messages from your conversations."
             >
-              <Switch defaultChecked />
+              <AutoSwitch prefKey="notif_dm" defaultChecked={true} />
             </SettingRow>
           </SectionCard>
 
@@ -328,25 +371,25 @@ export default function SettingsPage() {
               label="New Bookings"
               description="When someone books a session or appointment with you."
             >
-              <Switch defaultChecked />
+              <AutoSwitch prefKey="notif_bookings" defaultChecked={true} />
             </SettingRow>
             <SettingRow
               label="Booking Reminders"
               description="Reminders before your upcoming appointments."
             >
-              <Switch defaultChecked />
+              <AutoSwitch prefKey="notif_reminders" defaultChecked={true} />
             </SettingRow>
             <SettingRow
               label="Order Updates"
               description="Shipping and delivery status for your orders."
             >
-              <Switch defaultChecked />
+              <AutoSwitch prefKey="notif_orders" defaultChecked={true} />
             </SettingRow>
             <SettingRow
               label="Promotions & Offers"
               description="Exclusive deals, discounts, and platform updates."
             >
-              <Switch />
+              <AutoSwitch prefKey="notif_promos" defaultChecked={false} />
             </SettingRow>
           </SectionCard>
 
@@ -361,7 +404,7 @@ export default function SettingsPage() {
               label="Enable Do Not Disturb"
               description="Silence notifications between 10 PM and 8 AM."
             >
-              <Switch />
+              <AutoSwitch prefKey="dnd_enabled" defaultChecked={false} />
             </SettingRow>
           </SectionCard>
         </TabsContent>
@@ -380,20 +423,20 @@ export default function SettingsPage() {
               description="Allow anyone to view your profile and creations."
               icon={<Eye className="w-4 h-4" />}
             >
-              <Switch defaultChecked />
+              <AutoSwitch prefKey="privacy_public" defaultChecked={true} />
             </SettingRow>
             <SettingRow
               label="Show in Search Results"
               description="Let other users discover your profile via search."
               icon={<EyeOff className="w-4 h-4" />}
             >
-              <Switch defaultChecked />
+              <AutoSwitch prefKey="privacy_search" defaultChecked={true} />
             </SettingRow>
             <SettingRow
               label="Show Online Status"
               description="Display when you were last active."
             >
-              <Switch />
+              <AutoSwitch prefKey="privacy_online" defaultChecked={false} />
             </SettingRow>
           </SectionCard>
 
@@ -408,19 +451,19 @@ export default function SettingsPage() {
               label="Personalized Recommendations"
               description="Use your activity to suggest relevant content."
             >
-              <Switch defaultChecked />
+              <AutoSwitch prefKey="privacy_recommendations" defaultChecked={true} />
             </SettingRow>
             <SettingRow
               label="Analytics & Usage Data"
               description="Share anonymous usage data to help improve the platform."
             >
-              <Switch defaultChecked />
+              <AutoSwitch prefKey="privacy_analytics" defaultChecked={true} />
             </SettingRow>
             <SettingRow
               label="Third-Party Integrations"
               description="Allow approved partners to access limited profile info."
             >
-              <Switch />
+              <AutoSwitch prefKey="privacy_third_party" defaultChecked={false} />
             </SettingRow>
           </SectionCard>
 
