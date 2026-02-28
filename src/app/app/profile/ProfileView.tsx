@@ -226,19 +226,31 @@ export default function ProfileView({ user, isSalonOwner }: ProfileViewProps) {
                 </p>
               </div>
 
-              {/* Stats Grid */}
+              {/* Stats Grid — cliquable pour voir le détail */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:divide-x sm:divide-border/50 py-2">
-                <Link href="#" className="hover:opacity-70 transition-opacity">
-                    <StatItem value={stats.followers} label="Followers" trend="+12%" />
+                <button
+                  onClick={() => {
+                    const el = document.getElementById("profile-about");
+                    el?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="hover:opacity-70 transition-opacity text-left"
+                >
+                  <StatItem value={stats.followers} label="Followers" trend="+12%" />
+                </button>
+                <button
+                  onClick={() => {
+                    const el = document.getElementById("profile-about");
+                    el?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="hover:opacity-70 transition-opacity text-left"
+                >
+                  <StatItem value="482" label="Following" trend="+3%" />
+                </button>
+                <Link href="/app/videos-creations" className="hover:opacity-70 transition-opacity">
+                  <StatItem value={stats.likes} label="Likes" trend="+8%" />
                 </Link>
-                <Link href="#" className="hover:opacity-70 transition-opacity">
-                    <StatItem value="482" label="Following" trend="+3%" />
-                </Link>
-                <Link href="#" className="hover:opacity-70 transition-opacity">
-                    <StatItem value={stats.likes} label="Likes" trend="+8%" />
-                </Link>
-                <Link href="#" className="hover:opacity-70 transition-opacity">
-                    <StatItem value={stats.videos} label="Videos" />
+                <Link href="/app/videos-creations" className="hover:opacity-70 transition-opacity">
+                  <StatItem value={stats.videos} label="Videos" />
                 </Link>
               </div>
 
@@ -375,7 +387,7 @@ export default function ProfileView({ user, isSalonOwner }: ProfileViewProps) {
             <RewardsSection user={user} />
           </TabsContent>
 
-          <TabsContent value="about" className="mt-0 focus-visible:outline-none">
+          <TabsContent value="about" id="profile-about" className="mt-0 focus-visible:outline-none">
             <AboutSection user={user} />
           </TabsContent>
         </div>

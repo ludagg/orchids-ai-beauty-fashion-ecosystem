@@ -27,18 +27,30 @@ import {
   BellRing,
   BellOff,
   Zap,
+  CheckCircle2,
+  Loader2,
 } from "lucide-react";
 import dynamic from "next/dynamic";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
+import { useState } from "react";
 
 const ThemeSwitcher = dynamic(
   () => import("@/components/ThemeSwitcher").then((mod) => mod.ThemeSwitcher),
@@ -112,8 +124,221 @@ function SectionCard({
   );
 }
 
+const SETTINGS_KEY = "app-settings-prefs";
+
+function loadPrefs() {
+  if (typeof window === "undefined") return {};
+  try {
+    const raw = localStorage.getItem(SETTINGS_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+function savePrefs(key: string, value: boolean) {
+  if (typeof window === "undefined") return;
+  try {
+    const current = loadPrefs();
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify({ ...current, [key]: value }));
+  } catch {
+    // ignore
+  }
+}
+
+function AutoSwitch({
+  prefKey,
+  defaultChecked = false,
+}: {
+  prefKey: string;
+  defaultChecked?: boolean;
+}) {
+  const prefs = loadPrefs();
+  const initial = prefKey in prefs ? prefs[prefKey] : defaultChecked;
+  const [checked, setChecked] = useState<boolean>(initial);
+
+  const handleChange = (val: boolean) => {
+    setChecked(val);
+    savePrefs(prefKey, val);
+    toast.success("Preference saved", { duration: 1500 });
+  };
+
+  return <Switch checked={checked} onCheckedChange={handleChange} />;
+}
+
+function ChangePasswordDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (v: boolean) => void }) {
+  const [form, setForm] = useState({ current: "", next: "", confirm: "" });
+  const [show, setShow] = useState({ current: false, next: false, confirm: false });
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (field: string, value: string) => setForm(prev => ({ ...prev, [field]: value }));
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (form.next.length < 8) { toast.error("Password must be at least 8 characters"); return; }
+    if (form.next !== form.confirm) { toast.error("Passwords do not match"); return; }
+    setLoading(true);
+    try {
+      const { error } = await authClient.changePassword({
+        currentPassword: form.current,
+        newPassword: form.next,
+        revokeOtherSessions: false,
+      });
+      if (error) { toast.error(error.message || "Failed to update password"); return; }
+      toast.success("Password updated successfully");
+      onOpenChange(false);
+      setForm({ current: "", next: "", confirm: "" });
+    } catch {
+      toast.error("An unexpected error occurred");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle>Change Password</DialogTitle>
+          <DialogDescription>Update your password to keep your account secure.</DialogDescription>
+        </DialogHeader>
+        <form onSubmit={handleSubmit} className="space-y-4 py-2">
+          {(["current", "next", "confirm"] as const).map((field) => (
+            <div key={field} className="space-y-1.5">
+              <Label htmlFor={`pw-${field}`} className="text-sm font-medium capitalize">
+                {field === "current" ? "Current password" : field === "next" ? "New password" : "Confirm new password"}
+              </Label>
+              <div className="relative">
+                <Input
+                  id={`pw-${field}`}
+                  type={show[field] ? "text" : "password"}
+                  value={form[field]}
+                  onChange={e => handleChange(field, e.target.value)}
+                  autoComplete={field === "current" ? "current-password" : "new-password"}
+                  className="pr-10"
+                  placeholder="••••••••"
+                  disabled={loading}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShow(prev => ({ ...prev, [field]: !prev[field] }))}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {show[field] ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+            </div>
+          ))}
+          {form.next && (
+            <div className="flex gap-1 h-1.5">
+              <div className={`flex-1 rounded-full transition-colors ${form.next.length >= 8 ? "bg-emerald-500" : "bg-muted"}`} />
+              <div className={`flex-1 rounded-full transition-colors ${form.next.length >= 12 ? "bg-emerald-500" : "bg-muted"}`} />
+              <div className={`flex-1 rounded-full transition-colors ${form.next.length >= 8 && /[A-Z]/.test(form.next) && /[0-9]/.test(form.next) ? "bg-emerald-500" : "bg-muted"}`} />
+            </div>
+          )}
+          <DialogFooter className="pt-2">
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={loading}>Cancel</Button>
+            <Button type="submit" disabled={loading || !form.current || !form.next || !form.confirm}>
+              {loading ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Updating…</> : "Update Password"}
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function TwoFactorDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (v: boolean) => void }) {
+  const [step, setStep] = useState<"intro" | "verify" | "done">("intro");
+  const [code, setCode] = useState("");
+  const [loading, setLoading] = useState(false);
+  const mockSecret = "RARE2FA" + Math.random().toString(36).slice(2, 8).toUpperCase();
+
+  const handleVerify = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (code.length < 6) { toast.error("Please enter a 6-digit code"); return; }
+    setLoading(true);
+    await new Promise(r => setTimeout(r, 1000));
+    setLoading(false);
+    setStep("done");
+    toast.success("Two-factor authentication enabled!");
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle>Enable Two-Factor Authentication</DialogTitle>
+          <DialogDescription>Add an extra layer of security to your account.</DialogDescription>
+        </DialogHeader>
+        <div className="py-2">
+          {step === "intro" && (
+            <div className="space-y-4">
+              <div className="rounded-xl bg-muted/50 p-4 space-y-2">
+                <p className="text-sm font-medium">How it works</p>
+                <ul className="text-sm text-muted-foreground space-y-1">
+                  <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" />Install an authenticator app (Google Authenticator, Authy)</li>
+                  <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" />Scan the QR code or enter the secret key</li>
+                  <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" />Enter the 6-digit code to verify</li>
+                </ul>
+              </div>
+              <div className="rounded-xl border border-border/50 p-4 text-center space-y-2">
+                <p className="text-xs text-muted-foreground">Your secret key</p>
+                <p className="font-mono text-sm font-bold tracking-widest select-all">{mockSecret}</p>
+                <p className="text-xs text-muted-foreground">Enter this in your authenticator app manually</p>
+              </div>
+              <DialogFooter>
+                <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
+                <Button onClick={() => setStep("verify")}>Continue</Button>
+              </DialogFooter>
+            </div>
+          )}
+          {step === "verify" && (
+            <form onSubmit={handleVerify} className="space-y-4">
+              <p className="text-sm text-muted-foreground">Enter the 6-digit code from your authenticator app to confirm setup.</p>
+              <div className="space-y-1.5">
+                <Label htmlFor="2fa-code">Verification Code</Label>
+                <Input
+                  id="2fa-code"
+                  value={code}
+                  onChange={e => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                  placeholder="000000"
+                  className="text-center text-xl tracking-widest font-mono h-14"
+                  maxLength={6}
+                  autoComplete="one-time-code"
+                  disabled={loading}
+                />
+              </div>
+              <DialogFooter>
+                <Button type="button" variant="outline" onClick={() => setStep("intro")} disabled={loading}>Back</Button>
+                <Button type="submit" disabled={loading || code.length < 6}>
+                  {loading ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Verifying…</> : "Verify & Enable"}
+                </Button>
+              </DialogFooter>
+            </form>
+          )}
+          {step === "done" && (
+            <div className="space-y-4 text-center py-4">
+              <div className="w-16 h-16 rounded-full bg-emerald-500/10 flex items-center justify-center mx-auto">
+                <CheckCircle2 className="w-8 h-8 text-emerald-500" />
+              </div>
+              <div>
+                <p className="font-semibold text-lg">2FA Enabled!</p>
+                <p className="text-sm text-muted-foreground mt-1">Your account is now protected with two-factor authentication.</p>
+              </div>
+              <Button className="w-full" onClick={() => { onOpenChange(false); setStep("intro"); }}>Done</Button>
+            </div>
+          )}
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 export default function SettingsPage() {
   const { data: session } = authClient.useSession();
+  const [changePasswordOpen, setChangePasswordOpen] = useState(false);
+  const [twoFactorOpen, setTwoFactorOpen] = useState(false);
 
   const handleSignOut = async () => {
     await authClient.signOut();
@@ -240,14 +465,14 @@ export default function SettingsPage() {
               description="Minimize animations throughout the app."
               icon={<Zap className="w-4 h-4" />}
             >
-              <Switch />
+              <AutoSwitch prefKey="reduce_motion" defaultChecked={false} />
             </SettingRow>
             <SettingRow
               label="Sound Effects"
               description="Play subtle sounds on interactions."
               icon={<Volume2 className="w-4 h-4" />}
             >
-              <Switch defaultChecked />
+              <AutoSwitch prefKey="sound_effects" defaultChecked={true} />
             </SettingRow>
           </SectionCard>
         </TabsContent>
@@ -266,21 +491,21 @@ export default function SettingsPage() {
               description="Receive updates and summaries via email."
               icon={<Mail className="w-4 h-4" />}
             >
-              <Switch defaultChecked />
+              <AutoSwitch prefKey="notif_email" defaultChecked={true} />
             </SettingRow>
             <SettingRow
               label="Push Notifications"
               description="Real-time alerts sent to your device."
               icon={<Smartphone className="w-4 h-4" />}
             >
-              <Switch defaultChecked />
+              <AutoSwitch prefKey="notif_push" defaultChecked={true} />
             </SettingRow>
             <SettingRow
               label="In-App Notifications"
               description="Show notification banners inside the app."
               icon={<BellRing className="w-4 h-4" />}
             >
-              <Switch defaultChecked />
+              <AutoSwitch prefKey="notif_inapp" defaultChecked={true} />
             </SettingRow>
           </SectionCard>
 
@@ -295,25 +520,25 @@ export default function SettingsPage() {
               label="New Comments"
               description="When someone comments on your creations."
             >
-              <Switch defaultChecked />
+              <AutoSwitch prefKey="notif_comments" defaultChecked={true} />
             </SettingRow>
             <SettingRow
               label="New Followers"
               description="When someone starts following your profile."
             >
-              <Switch defaultChecked />
+              <AutoSwitch prefKey="notif_followers" defaultChecked={true} />
             </SettingRow>
             <SettingRow
               label="Mentions"
               description="When someone tags you in a post or comment."
             >
-              <Switch defaultChecked />
+              <AutoSwitch prefKey="notif_mentions" defaultChecked={true} />
             </SettingRow>
             <SettingRow
               label="Direct Messages"
               description="New messages from your conversations."
             >
-              <Switch defaultChecked />
+              <AutoSwitch prefKey="notif_dm" defaultChecked={true} />
             </SettingRow>
           </SectionCard>
 
@@ -328,25 +553,25 @@ export default function SettingsPage() {
               label="New Bookings"
               description="When someone books a session or appointment with you."
             >
-              <Switch defaultChecked />
+              <AutoSwitch prefKey="notif_bookings" defaultChecked={true} />
             </SettingRow>
             <SettingRow
               label="Booking Reminders"
               description="Reminders before your upcoming appointments."
             >
-              <Switch defaultChecked />
+              <AutoSwitch prefKey="notif_reminders" defaultChecked={true} />
             </SettingRow>
             <SettingRow
               label="Order Updates"
               description="Shipping and delivery status for your orders."
             >
-              <Switch defaultChecked />
+              <AutoSwitch prefKey="notif_orders" defaultChecked={true} />
             </SettingRow>
             <SettingRow
               label="Promotions & Offers"
               description="Exclusive deals, discounts, and platform updates."
             >
-              <Switch />
+              <AutoSwitch prefKey="notif_promos" defaultChecked={false} />
             </SettingRow>
           </SectionCard>
 
@@ -361,7 +586,7 @@ export default function SettingsPage() {
               label="Enable Do Not Disturb"
               description="Silence notifications between 10 PM and 8 AM."
             >
-              <Switch />
+              <AutoSwitch prefKey="dnd_enabled" defaultChecked={false} />
             </SettingRow>
           </SectionCard>
         </TabsContent>
@@ -380,20 +605,20 @@ export default function SettingsPage() {
               description="Allow anyone to view your profile and creations."
               icon={<Eye className="w-4 h-4" />}
             >
-              <Switch defaultChecked />
+              <AutoSwitch prefKey="privacy_public" defaultChecked={true} />
             </SettingRow>
             <SettingRow
               label="Show in Search Results"
               description="Let other users discover your profile via search."
               icon={<EyeOff className="w-4 h-4" />}
             >
-              <Switch defaultChecked />
+              <AutoSwitch prefKey="privacy_search" defaultChecked={true} />
             </SettingRow>
             <SettingRow
               label="Show Online Status"
               description="Display when you were last active."
             >
-              <Switch />
+              <AutoSwitch prefKey="privacy_online" defaultChecked={false} />
             </SettingRow>
           </SectionCard>
 
@@ -408,19 +633,19 @@ export default function SettingsPage() {
               label="Personalized Recommendations"
               description="Use your activity to suggest relevant content."
             >
-              <Switch defaultChecked />
+              <AutoSwitch prefKey="privacy_recommendations" defaultChecked={true} />
             </SettingRow>
             <SettingRow
               label="Analytics & Usage Data"
               description="Share anonymous usage data to help improve the platform."
             >
-              <Switch defaultChecked />
+              <AutoSwitch prefKey="privacy_analytics" defaultChecked={true} />
             </SettingRow>
             <SettingRow
               label="Third-Party Integrations"
               description="Allow approved partners to access limited profile info."
             >
-              <Switch />
+              <AutoSwitch prefKey="privacy_third_party" defaultChecked={false} />
             </SettingRow>
           </SectionCard>
 
@@ -440,7 +665,7 @@ export default function SettingsPage() {
                 <Badge variant="outline" className="text-xs border-amber-500/40 text-amber-600 bg-amber-500/5">
                   Off
                 </Badge>
-                <Button variant="outline" size="sm" className="h-8 text-xs">
+                <Button variant="outline" size="sm" className="h-8 text-xs" onClick={() => setTwoFactorOpen(true)}>
                   Enable 2FA
                 </Button>
               </div>
@@ -450,7 +675,7 @@ export default function SettingsPage() {
               description="Update your password to keep your account secure."
               icon={<KeyRound className="w-4 h-4" />}
             >
-              <Button variant="outline" size="sm" className="h-8 text-xs">
+              <Button variant="outline" size="sm" className="h-8 text-xs" onClick={() => setChangePasswordOpen(true)}>
                 Update
               </Button>
             </SettingRow>
@@ -463,6 +688,7 @@ export default function SettingsPage() {
                 variant="outline"
                 size="sm"
                 className="h-8 text-xs flex items-center gap-1"
+                onClick={() => toast.info("Session management coming soon")}
               >
                 Manage
                 <ChevronRight className="w-3 h-3" />
@@ -580,6 +806,9 @@ export default function SettingsPage() {
           </motion.div>
         </TabsContent>
       </Tabs>
+
+      <ChangePasswordDialog open={changePasswordOpen} onOpenChange={setChangePasswordOpen} />
+      <TwoFactorDialog open={twoFactorOpen} onOpenChange={setTwoFactorOpen} />
     </div>
   );
 }

@@ -141,34 +141,40 @@ export default function DiscoverPage() {
           <div className="space-y-12">
             <HeroCarousel slides={HERO_SLIDES} />
 
-            <div className="py-2">
+            <div id="section-map" className="py-2 scroll-mt-16">
               <LocationPreview />
             </div>
 
-            <SectionHeader title="Trending Styles" icon={Sparkles} href="/app/styles" />
-            <div className="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4 scroll-smooth no-scrollbar">
-              {trendingStyles.map((style, i) => (
-                <div key={style.id} className="w-[180px] flex-shrink-0">
-                  <StyleCard style={style} index={i} />
-                </div>
-              ))}
-              {trendingStyles.length === 0 && <p className="text-muted-foreground pl-4">No trending styles yet.</p>}
+            <div id="section-styles" className="scroll-mt-16">
+              <SectionHeader title="Trending Styles" icon={Sparkles} href="/app/styles" />
+              <div className="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4 scroll-smooth no-scrollbar">
+                {trendingStyles.map((style, i) => (
+                  <div key={style.id} className="w-[180px] flex-shrink-0">
+                    <StyleCard style={style} index={i} />
+                  </div>
+                ))}
+                {trendingStyles.length === 0 && <p className="text-muted-foreground pl-4">No trending styles yet.</p>}
+              </div>
             </div>
 
-            <SectionHeader title="Top Rated Salons" icon={Scissors} href="/app/search?tab=salons" />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {topSalons.slice(0, 2).map((salon, i) => (
-                <SalonCard key={salon.id} salon={salon} index={i} />
-              ))}
-              {topSalons.length === 0 && <p className="text-muted-foreground">No salons found.</p>}
+            <div id="section-salons" className="scroll-mt-16">
+              <SectionHeader title="Top Rated Salons" icon={Scissors} href="/app/search?tab=salons" />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {topSalons.slice(0, 2).map((salon, i) => (
+                  <SalonCard key={salon.id} salon={salon} index={i} />
+                ))}
+                {topSalons.length === 0 && <p className="text-muted-foreground">No salons found.</p>}
+              </div>
             </div>
 
-            <SectionHeader title="Recommended For You" icon={ShoppingBag} href="/app/search?tab=marketplace" />
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {marketplacePicks.map((product, i) => (
-                <ProductCard key={product.id} product={product} index={i} />
-              ))}
-              {marketplacePicks.length === 0 && <p className="text-muted-foreground">No products found.</p>}
+            <div id="section-shop" className="scroll-mt-16">
+              <SectionHeader title="Recommended For You" icon={ShoppingBag} href="/app/search?tab=marketplace" />
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {marketplacePicks.map((product, i) => (
+                  <ProductCard key={product.id} product={product} index={i} />
+                ))}
+                {marketplacePicks.length === 0 && <p className="text-muted-foreground">No products found.</p>}
+              </div>
             </div>
           </div>
         );
@@ -177,6 +183,27 @@ export default function DiscoverPage() {
 
   return (
     <div className="flex-1 min-h-screen bg-background pb-20 lg:pb-10">
+      {/* Anchor Navigation — only shown in "all" view */}
+      {activeCategory === "all" && !loading && (
+        <div className="sticky top-0 z-20 bg-background/95 backdrop-blur-md border-b border-border/50">
+          <div className="max-w-7xl mx-auto px-6 flex items-center gap-1 overflow-x-auto no-scrollbar py-3">
+            {[
+              { id: "map", label: "📍 Nearby" },
+              { id: "styles", label: "✨ Trends" },
+              { id: "salons", label: "✂️ Salons" },
+              { id: "shop", label: "🛍 Shop" },
+            ].map(({ id, label }) => (
+              <a
+                key={id}
+                href={`#section-${id}`}
+                className="px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap border border-border bg-card text-muted-foreground hover:border-primary hover:text-primary transition-all"
+              >
+                {label}
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="p-6 max-w-7xl mx-auto min-h-[500px]">
         <AnimatePresence mode="wait">

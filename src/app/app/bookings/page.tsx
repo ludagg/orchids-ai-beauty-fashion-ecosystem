@@ -64,8 +64,12 @@ interface Order {
     }[];
 }
 
+const BOOKING_STATUSES = ["All", "Pending", "Confirmed", "Completed", "Cancelled"] as const;
+type BookingStatusFilter = typeof BOOKING_STATUSES[number];
+
 export default function BookingsAndOrdersPage() {
   const [activeTab, setActiveTab] = useState("Bookings");
+  const [statusFilter, setStatusFilter] = useState<BookingStatusFilter>("All");
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
@@ -158,6 +162,10 @@ export default function BookingsAndOrdersPage() {
     return (cents / 100).toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
   };
 
+  const filteredBookings = statusFilter === "All"
+    ? bookings
+    : bookings.filter(b => b.status.toLowerCase() === statusFilter.toLowerCase());
+
   return (
     <div className="flex-1 p-4 sm:p-6 lg:p-8 max-w-[1400px] mx-auto w-full bg-background">
       <div className="space-y-8">
@@ -171,7 +179,7 @@ export default function BookingsAndOrdersPage() {
           {["Bookings", "Orders"].map((tab) => (
             <button
               key={tab}
-              onClick={() => setActiveTab(tab)}
+              onClick={() => { setActiveTab(tab); setStatusFilter("All"); }}
               className={`px-8 py-3 rounded-2xl text-sm font-bold transition-all ${
                 activeTab === tab ? "bg-card text-foreground shadow-lg shadow-foreground/5" : "text-muted-foreground hover:text-foreground"
               }`}
@@ -181,19 +189,44 @@ export default function BookingsAndOrdersPage() {
           ))}
         </div>
 
+        {/* Booking Status Filters */}
+        {activeTab === "Bookings" && !loading && (
+          <div className="flex flex-wrap gap-2">
+            {BOOKING_STATUSES.map((status) => {
+              const count = status === "All" ? bookings.length : bookings.filter(b => b.status.toLowerCase() === status.toLowerCase()).length;
+              return (
+                <button
+                  key={status}
+                  onClick={() => setStatusFilter(status)}
+                  className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all border ${
+                    statusFilter === status
+                      ? "bg-foreground text-background border-foreground"
+                      : "bg-transparent text-muted-foreground border-border hover:border-foreground hover:text-foreground"
+                  }`}
+                >
+                  {status} {count > 0 && <span className="ml-1 opacity-70">({count})</span>}
+                </button>
+              );
+            })}
+          </div>
+        )}
+
         {loading ? (
              <div className="flex justify-center py-20">
                 <Loader2 className="w-10 h-10 animate-spin text-primary" />
              </div>
         ) : activeTab === "Bookings" ? (
-          bookings.length === 0 ? (
+          filteredBookings.length === 0 ? (
             <div className="text-center py-20 text-muted-foreground">
-              <p>No bookings found.</p>
-              <Link href="/app/salons" className="text-primary hover:underline mt-2 inline-block">Book an appointment</Link>
+              <p>{statusFilter === "All" ? "No bookings found." : `No ${statusFilter.toLowerCase()} bookings.`}</p>
+              {statusFilter !== "All"
+                ? <button onClick={() => setStatusFilter("All")} className="text-primary hover:underline mt-2 inline-block">View all bookings</button>
+                : <Link href="/app/salons" className="text-primary hover:underline mt-2 inline-block">Book an appointment</Link>
+              }
             </div>
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {bookings.map((booking, i) => (
+              {filteredBookings.map((booking, i) => (
                 <motion.div
                   key={booking.id}
                   initial={{ opacity: 0, y: 20 }}

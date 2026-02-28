@@ -5,16 +5,13 @@ import {
   Users,
   ShoppingBag,
   Scissors,
-  TrendingUp,
   ArrowUpRight,
-  ArrowDownRight,
-  Activity,
   DollarSign,
-  ShieldCheck,
-  Clock,
-  CircleAlert
+  CircleAlert,
+  Download,
 } from "lucide-react";
 import Link from "next/link";
+import { toast } from "sonner";
 
 interface ActivityLog {
   id: string;
@@ -33,6 +30,35 @@ interface AdminDashboardClientProps {
     totalRevenue: number;
     recentTransactions: any[];
   }
+}
+
+function exportToCSV(rows: any[], filename: string) {
+  if (!rows.length) {
+    toast.error("No data to export");
+    return;
+  }
+  const headers = Object.keys(rows[0]);
+  const csvContent = [
+    headers.join(","),
+    ...rows.map((row) =>
+      headers
+        .map((h) => {
+          const val = row[h] ?? "";
+          const str = String(val).replace(/"/g, '""');
+          return `"${str}"`;
+        })
+        .join(",")
+    ),
+  ].join("\n");
+
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  link.click();
+  URL.revokeObjectURL(url);
+  toast.success(`${filename} exported successfully`);
 }
 
 export default function AdminDashboardClient({ stats: data }: AdminDashboardClientProps) {
@@ -82,9 +108,30 @@ export default function AdminDashboardClient({ stats: data }: AdminDashboardClie
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Recent Activity */}
         <div className="lg:col-span-2 bg-card rounded-2xl border border-border shadow-sm overflow-hidden">
-          <div className="p-6 border-b border-border flex items-center justify-between">
+          <div className="p-6 border-b border-border flex items-center justify-between gap-4">
             <h3 className="font-bold text-foreground">Recent Transactions</h3>
-            <Link href="/admin/marketplace" className="text-sm font-medium text-indigo-600 hover:text-indigo-700">View All</Link>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => {
+                  const rows = data.recentTransactions.map((o: any) => ({
+                    id: o.id,
+                    user: o.user?.name || "Unknown",
+                    email: o.user?.email || "",
+                    amount: `₹${(o.totalAmount / 100).toFixed(2)}`,
+                    status: o.status,
+                    date: new Date(o.createdAt).toLocaleDateString(),
+                  }));
+                  exportToCSV(rows, "transactions.csv");
+                }}
+                className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground border border-border rounded-lg px-3 py-1.5 hover:bg-secondary transition-all"
+              >
+                <Download className="w-3.5 h-3.5" />
+                Export CSV
+              </button>
+              <Link href="/admin/marketplace" className="text-sm font-medium text-indigo-600 hover:text-indigo-700">
+                View All
+              </Link>
+            </div>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">

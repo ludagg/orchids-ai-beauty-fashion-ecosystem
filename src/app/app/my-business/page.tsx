@@ -8,7 +8,9 @@ import Link from "next/link";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, LayoutDashboard, PlusCircle, Store } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { MapPin, LayoutDashboard, PlusCircle, Store, TrendingUp } from "lucide-react";
+import { BusinessAnalytics } from "@/components/my-business/BusinessAnalytics";
 
 export default async function MyBusinessPage() {
   const session = await auth.api.getSession({
@@ -19,7 +21,6 @@ export default async function MyBusinessPage() {
     redirect("/auth");
   }
 
-  // Fetch user salons
   const userSalons = await db
     .select()
     .from(salons)
@@ -55,14 +56,11 @@ export default async function MyBusinessPage() {
                 </Link>
             </Card>
         ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {userSalons.map((salon) => (
                     <Card key={salon.id} className="overflow-hidden hover:shadow-lg transition-shadow group flex flex-col">
                         <div className="aspect-video relative bg-muted flex items-center justify-center overflow-hidden">
-                             {/*
-                                Prioritize Logo as requested by user ("le logo soit être le principal").
-                                If logo exists, show it. If not, fallback to image (gallery[0]), then placeholder.
-                             */}
                             <img
                                 src={salon.logo || salon.image || "https://images.unsplash.com/photo-1521590832896-7bbc6823b63b?w=500&h=300&fit=crop"}
                                 alt={salon.name}
@@ -89,7 +87,7 @@ export default async function MyBusinessPage() {
                                 {salon.description || "No description provided."}
                             </p>
                         </CardContent>
-                        <CardFooter className="pt-0">
+                        <CardFooter className="pt-0 gap-2 flex flex-col sm:flex-row">
                             <Link href={`/business?salonId=${salon.id}`} className="w-full">
                                 <Button className="w-full" variant="outline">
                                     <LayoutDashboard className="mr-2 h-4 w-4" />
@@ -99,7 +97,12 @@ export default async function MyBusinessPage() {
                         </CardFooter>
                     </Card>
                 ))}
-            </div>
+              </div>
+
+              <Separator className="my-8" />
+
+              <BusinessAnalytics salonName={userSalons[0]?.name || "Your Business"} />
+            </>
         )}
     </div>
   );
