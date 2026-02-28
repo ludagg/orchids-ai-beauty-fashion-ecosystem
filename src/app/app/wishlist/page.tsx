@@ -11,11 +11,26 @@ import {
   TrendingUp,
   Share2,
   Plus,
-  Loader2
+  Loader2,
+  Bell,
+  BellOff,
+  Link2,
 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
+
+const PRICE_ALERTS_KEY = "wishlist-price-alerts";
+
+function loadAlerts(): Record<string, boolean> {
+  if (typeof window === "undefined") return {};
+  try { return JSON.parse(localStorage.getItem(PRICE_ALERTS_KEY) || "{}"); } catch { return {}; }
+}
+
+function saveAlerts(alerts: Record<string, boolean>) {
+  if (typeof window === "undefined") return;
+  localStorage.setItem(PRICE_ALERTS_KEY, JSON.stringify(alerts));
+}
 
 interface Product {
     id: string;
@@ -51,8 +66,10 @@ interface Favorite {
 export default function WishlistPage() {
   const [items, setItems] = useState<Favorite[]>([]);
   const [loading, setLoading] = useState(true);
+  const [priceAlerts, setPriceAlerts] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
+    setPriceAlerts(loadAlerts());
     async function fetchFavorites() {
         try {
             const res = await fetch('/api/favorites');
@@ -68,6 +85,23 @@ export default function WishlistPage() {
     }
     fetchFavorites();
   }, []);
+
+  const toggleAlert = (itemId: string) => {
+    const next = { ...priceAlerts, [itemId]: !priceAlerts[itemId] };
+    setPriceAlerts(next);
+    saveAlerts(next);
+    toast.success(next[itemId] ? "Price alert enabled — we'll notify you!" : "Price alert disabled");
+  };
+
+  const shareWishlist = async () => {
+    const url = window.location.href;
+    if (navigator.share) {
+      await navigator.share({ title: "My Wishlist on Rare", url });
+    } else {
+      await navigator.clipboard.writeText(url);
+      toast.success("Wishlist link copied to clipboard!");
+    }
+  };
 
 
   const removeItem = async (id: string) => {
@@ -107,6 +141,13 @@ export default function WishlistPage() {
 
         {validItems.length > 0 && (
             <div className="flex items-center gap-3">
+            <button
+              onClick={shareWishlist}
+              className="flex items-center gap-2 px-5 py-3 rounded-2xl border border-border text-sm font-bold hover:bg-muted transition-all"
+            >
+                <Link2 className="w-4 h-4" />
+                Share List
+            </button>
             <button className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-foreground text-white text-sm font-bold hover:bg-[#333] transition-all shadow-xl shadow-foreground/10">
                 <ShoppingBag className="w-4 h-4" />
                 Add All to Bag
@@ -152,12 +193,23 @@ export default function WishlistPage() {
                     <button
                         onClick={() => removeItem(item.id)}
                         className="p-3 rounded-2xl bg-card/90 backdrop-blur-md text-rose-500 shadow-lg hover:bg-rose-500 hover:text-white transition-all"
+                        title="Remove from wishlist"
                     >
                         <Trash2 className="w-4 h-4" />
                     </button>
-                    <button className="p-3 rounded-2xl bg-card/90 backdrop-blur-md text-foreground shadow-lg hover:bg-foreground hover:text-white transition-all">
-                        <Share2 className="w-4 h-4" />
-                    </button>
+                    {isProduct && (
+                      <button
+                        onClick={() => toggleAlert(item.id)}
+                        className={`p-3 rounded-2xl bg-card/90 backdrop-blur-md shadow-lg transition-all ${
+                          priceAlerts[item.id]
+                            ? "text-amber-500 hover:bg-amber-500 hover:text-white"
+                            : "text-foreground hover:bg-foreground hover:text-white"
+                        }`}
+                        title={priceAlerts[item.id] ? "Disable price alert" : "Enable price alert"}
+                      >
+                        {priceAlerts[item.id] ? <Bell className="w-4 h-4" /> : <BellOff className="w-4 h-4" />}
+                      </button>
+                    )}
                     </div>
 
                     {isProduct && (
