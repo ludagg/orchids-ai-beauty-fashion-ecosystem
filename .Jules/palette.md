@@ -32,3 +32,7 @@
 ## 2026-02-26 - Unified Search UX with Keyboard Shortcuts
 **Learning:** A truly delightful search experience combines visual cues (custom clear buttons) with power-user features (global '/' shortcut). Hiding native browser decorations in CSS and implementing a visibility-aware shortcut listener ensures the feature feels native and polished across all screen sizes without UI duplication.
 **Action:** Use `::-webkit-search-cancel-button` to hide native clear buttons. Implement a global `keydown` listener for '/' that checks `offsetParent !== null` to target only the visible search instance.
+
+## 2026-03-01 - Consistent Labeling for AI Interaction
+**Learning:** Even advanced features like an AI Stylist can be overlooked if they lack visual and programmatic labeling. Integrating icon-only triggers with the established Tooltip system and adding specific ARIA labels to chat controls (upload, input, send) ensures the feature is accessible and consistent with the rest of the application's premium header.
+**Action:** Wrap AI triggers in `Tooltip` components and ensure all internal chat buttons have descriptive `aria-label` attributes.
