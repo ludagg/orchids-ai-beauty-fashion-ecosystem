@@ -21,6 +21,11 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 
@@ -95,11 +100,21 @@ export default function AIStylistSheet() {
 
   return (
     <Sheet>
-      <SheetTrigger asChild>
-        <button className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 group">
-            <Sparkles className="w-5 h-5 group-hover:animate-pulse" />
-        </button>
-      </SheetTrigger>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <SheetTrigger asChild>
+            <button
+              className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 group"
+              aria-label="AI Stylist"
+            >
+              <Sparkles className="w-5 h-5 group-hover:animate-pulse" />
+            </button>
+          </SheetTrigger>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>AI Stylist</p>
+        </TooltipContent>
+      </Tooltip>
       <SheetContent
         side={isMobile ? "bottom" : "right"}
         className={cn(
@@ -191,13 +206,17 @@ export default function AIStylistSheet() {
 
             <div className="p-4 bg-background border-t border-border mt-auto sticky bottom-0 z-10">
                 <div className="relative flex items-center gap-2">
-                    <button className="p-2 rounded-xl hover:bg-secondary text-muted-foreground transition-colors shrink-0">
+                    <button
+                        className="p-2 rounded-xl hover:bg-secondary text-muted-foreground transition-colors shrink-0"
+                        aria-label="Upload image"
+                    >
                         <ImageIcon className="w-5 h-5" />
                     </button>
                     <div className="relative flex-1">
                         <input
                             type="text"
                             placeholder="Ask me anything..."
+                            aria-label="Chat message"
                             value={inputValue}
                             onChange={(e) => setInputValue(e.target.value)}
                             onKeyDown={(e) => e.key === "Enter" && handleSend()}
@@ -206,6 +225,7 @@ export default function AIStylistSheet() {
                         <button
                             onClick={handleSend}
                             disabled={!inputValue.trim()}
+                            aria-label="Send message"
                             className="absolute right-1 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:opacity-90 disabled:bg-transparent disabled:text-muted-foreground transition-all"
                         >
                             <Send className="w-4 h-4" />
