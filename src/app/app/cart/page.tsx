@@ -3,12 +3,21 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { Minus, Plus, Trash2, ArrowRight } from 'lucide-react';
+import { Minus, Plus, Trash2, ArrowRight, ShoppingCart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 import { Skeleton } from '@/components/ui/skeleton';
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle
+} from "@/components/ui/empty";
+import { motion } from "framer-motion";
 
 export default function CartPage() {
   const router = useRouter();
@@ -96,10 +105,38 @@ export default function CartPage() {
 
   if (!cart || !cart.items || cart.items.length === 0) {
     return (
-        <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4 p-4">
-            <h2 className="text-xl font-bold">Your cart is empty</h2>
-            <Button onClick={() => router.push('/app/shop')}>Start Shopping</Button>
-        </div>
+      <div className="min-h-[70vh] flex items-center justify-center p-4 relative overflow-hidden">
+        {/* Decorative Background */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#e5e5e5_1px,transparent_1px)] dark:bg-[radial-gradient(circle_at_center,#262626_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]" />
+
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 0.1, scale: 1 }}
+          transition={{ duration: 2, repeat: Infinity, repeatType: "reverse" }}
+          className="absolute top-1/4 left-1/4 w-64 h-64 bg-rose-500 rounded-full blur-[100px]"
+        />
+
+        <Empty className="relative z-10 bg-card/50 backdrop-blur-sm border-none shadow-xl max-w-md w-full">
+          <EmptyHeader>
+            <EmptyMedia variant="icon" className="bg-rose-500/10 text-rose-500">
+              <ShoppingCart className="w-6 h-6" />
+            </EmptyMedia>
+            <EmptyTitle>Your cart is empty</EmptyTitle>
+            <EmptyDescription>
+              Looks like you haven't added anything to your cart yet. Discover curated fashion and beauty products from our partners.
+            </EmptyDescription>
+          </EmptyHeader>
+          <EmptyContent>
+            <Button
+              size="lg"
+              className="w-full bg-primary text-primary-foreground hover:bg-primary/90 rounded-full h-12 font-semibold"
+              onClick={() => router.push('/app/marketplace')}
+            >
+              Start Shopping
+            </Button>
+          </EmptyContent>
+        </Empty>
+      </div>
     );
   }
 
@@ -165,16 +202,39 @@ export default function CartPage() {
                                         <p className="font-semibold">{formatPrice(price * item.quantity)}</p>
                                     </div>
                                     <div className="flex items-center justify-between mt-2">
-                                        <div className="flex items-center border rounded-md">
-                                            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => updateQuantity(item.id, item.quantity - 1)} disabled={updating}>
+                                        <div className="flex items-center border rounded-md overflow-hidden">
+                                            <Button
+                                              variant="ghost"
+                                              size="icon"
+                                              className="h-8 w-8 rounded-none border-r"
+                                              onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                                              disabled={updating}
+                                              aria-label={`Decrease quantity of ${item.product.name}`}
+                                            >
                                                 <Minus className="h-3 w-3" />
                                             </Button>
-                                            <span className="w-8 text-center text-sm">{item.quantity}</span>
-                                            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => updateQuantity(item.id, item.quantity + 1)} disabled={updating}>
+                                            <span className="w-8 text-center text-sm font-medium" aria-label={`Quantity: ${item.quantity}`}>
+                                              {item.quantity}
+                                            </span>
+                                            <Button
+                                              variant="ghost"
+                                              size="icon"
+                                              className="h-8 w-8 rounded-none border-l"
+                                              onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                                              disabled={updating}
+                                              aria-label={`Increase quantity of ${item.product.name}`}
+                                            >
                                                 <Plus className="h-3 w-3" />
                                             </Button>
                                         </div>
-                                        <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10" onClick={() => removeItem(item.id)} disabled={updating}>
+                                        <Button
+                                          variant="ghost"
+                                          size="icon"
+                                          className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10 rounded-full"
+                                          onClick={() => removeItem(item.id)}
+                                          disabled={updating}
+                                          aria-label={`Remove ${item.product.name} from cart`}
+                                        >
                                             <Trash2 className="h-4 w-4" />
                                         </Button>
                                     </div>
