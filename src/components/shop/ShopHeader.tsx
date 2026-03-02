@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Search, ShoppingBag, Heart } from 'lucide-react';
+import { Search, ShoppingCart, Heart } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -67,7 +67,7 @@ export function ShopHeader() {
 
             {/* Cart */}
             <Button variant="ghost" size="icon" onClick={() => router.push('/app/cart')} className="relative">
-            <ShoppingBag className="h-5 w-5" />
+            <ShoppingCart className="h-5 w-5" />
             {cartCount > 0 && (
                 <Badge variant="destructive" className="absolute -top-1 -right-1 h-4 w-4 rounded-full p-0 flex items-center justify-center text-[10px]">
                     {cartCount}
