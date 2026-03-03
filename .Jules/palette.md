@@ -36,3 +36,7 @@
 ## 2026-03-01 - Consistent Labeling for AI Interaction
 **Learning:** Even advanced features like an AI Stylist can be overlooked if they lack visual and programmatic labeling. Integrating icon-only triggers with the established Tooltip system and adding specific ARIA labels to chat controls (upload, input, send) ensures the feature is accessible and consistent with the rest of the application's premium header.
 **Action:** Wrap AI triggers in `Tooltip` components and ensure all internal chat buttons have descriptive `aria-label` attributes.
+
+## 2026-03-10 - Themed Confirmation Dialogs
+**Learning:** Native `confirm()` dialogs are non-themeable, vary by browser, and can be easily blocked. Replacing them with an `AlertDialog` component ensures a consistent design language, better accessibility (focus trapping, ARIA roles), and prevents "confirm fatigue" where users accidentally dismiss alerts.
+**Action:** Audit destructive actions (delete, remove) using `confirm()` and replace them with the `AlertDialog` UI component. Always add a loading state and guard against double-submissions in the confirmation action.

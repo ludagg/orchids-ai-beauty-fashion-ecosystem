@@ -17,6 +17,21 @@ import {
   EmptyMedia,
   EmptyTitle
 } from "@/components/ui/empty";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { motion } from "framer-motion";
 
 export default function CartPage() {
@@ -24,6 +39,7 @@ export default function CartPage() {
   const [cart, setCart] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
+  const [itemToRemove, setItemToRemove] = useState<{ id: string; name: string } | null>(null);
 
   const fetchCart = () => {
     setLoading(true);
@@ -71,27 +87,32 @@ export default function CartPage() {
     }
   };
 
-  const removeItem = async (itemId: string) => {
-    if (!confirm("Remove this item?")) return;
+  const removeItem = (itemId: string, itemName: string) => {
+    setItemToRemove({ id: itemId, name: itemName });
+  };
+
+  const confirmRemove = async () => {
+    if (!itemToRemove || updating) return;
     setUpdating(true);
     try {
-        const res = await fetch(`/api/cart/${itemId}`, {
-            method: 'DELETE'
+      const res = await fetch(`/api/cart/${itemToRemove.id}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        setCart((prev: any) => {
+          if (!prev) return prev;
+          return {
+            ...prev,
+            items: prev.items.filter((item: any) => item.id !== itemToRemove.id),
+          };
         });
-        if (res.ok) {
-             setCart((prev: any) => {
-                if (!prev) return prev;
-                return {
-                    ...prev,
-                    items: prev.items.filter((item: any) => item.id !== itemId)
-                };
-            });
-            toast.success("Item removed");
-        }
+        toast.success("Item removed");
+      }
     } catch (error) {
-        toast.error("Failed to remove item");
+      toast.error("Failed to remove item");
     } finally {
-        setUpdating(false);
+      setUpdating(false);
+      setItemToRemove(null);
     }
   };
 
@@ -227,16 +248,21 @@ export default function CartPage() {
                                                 <Plus className="h-3 w-3" />
                                             </Button>
                                         </div>
-                                        <Button
-                                          variant="ghost"
-                                          size="icon"
-                                          className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10 rounded-full"
-                                          onClick={() => removeItem(item.id)}
-                                          disabled={updating}
-                                          aria-label={`Remove ${item.product.name} from cart`}
-                                        >
-                                            <Trash2 className="h-4 w-4" />
-                                        </Button>
+                                        <Tooltip>
+                                          <TooltipTrigger asChild>
+                                            <Button
+                                              variant="ghost"
+                                              size="icon"
+                                              className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10 rounded-full"
+                                              onClick={() => removeItem(item.id, item.product.name)}
+                                              disabled={updating}
+                                              aria-label={`Remove ${item.product.name} from cart`}
+                                            >
+                                              <Trash2 className="h-4 w-4" />
+                                            </Button>
+                                          </TooltipTrigger>
+                                          <TooltipContent side="top">Remove item</TooltipContent>
+                                        </Tooltip>
                                     </div>
                                 </div>
                             </div>
@@ -265,6 +291,27 @@ export default function CartPage() {
             Proceed to Booking <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
       </div>
+
+      <AlertDialog open={!!itemToRemove} onOpenChange={(open: boolean) => !open && setItemToRemove(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Remove from cart?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to remove <span className="font-semibold text-foreground">{itemToRemove?.name}</span> from your cart?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmRemove}
+              disabled={updating}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {updating ? "Removing..." : "Remove"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
