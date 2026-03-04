@@ -13,7 +13,9 @@ import {
   Loader2,
   MapPin,
   Clock,
-  MessageCircle
+  MessageCircle,
+  Minus,
+  Plus
 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
@@ -23,6 +25,11 @@ import { useSession } from "@/lib/auth-client";
 import { useCart } from "@/lib/cart-context";
 import { Textarea } from "@/components/ui/textarea";
 import { format } from "date-fns";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface Product {
   id: string;
@@ -281,6 +288,8 @@ export default function ProductDetailsPage() {
                   className={`w-20 h-20 rounded-2xl overflow-hidden border-2 transition-all flex-shrink-0 ${
                     activeImage === i ? "border-foreground" : "border-transparent opacity-60 hover:opacity-100"
                   }`}
+                  aria-label={`View product image ${i + 1}`}
+                  aria-current={activeImage === i ? "true" : "false"}
                 >
                   <img src={img} alt={`View ${i + 1}`} className="w-full h-full object-cover" />
                 </button>
@@ -336,16 +345,22 @@ export default function ProductDetailsPage() {
                  <div className="flex items-center gap-4 bg-secondary rounded-xl p-1">
                      <button
                         onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                        className="w-8 h-8 flex items-center justify-center rounded-lg bg-card shadow-sm font-bold hover:bg-muted"
+                        className="w-8 h-8 flex items-center justify-center rounded-lg bg-card shadow-sm hover:bg-muted transition-colors disabled:opacity-50"
+                        aria-label="Decrease quantity"
+                        disabled={quantity <= 1}
                      >
-                         -
+                         <Minus className="w-4 h-4" />
                      </button>
-                     <span className="w-4 text-center font-bold">{quantity}</span>
+                     <span className="w-6 text-center font-bold text-sm" aria-live="polite">
+                        {quantity}
+                     </span>
                      <button
                         onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
-                        className="w-8 h-8 flex items-center justify-center rounded-lg bg-card shadow-sm font-bold hover:bg-muted"
+                        className="w-8 h-8 flex items-center justify-center rounded-lg bg-card shadow-sm hover:bg-muted transition-colors disabled:opacity-50"
+                        aria-label="Increase quantity"
+                        disabled={quantity >= product.stock}
                      >
-                         +
+                         <Plus className="w-4 h-4" />
                      </button>
                  </div>
              </div>
@@ -366,13 +381,21 @@ export default function ProductDetailsPage() {
                 >
                     Buy Now
                 </button>
-                <button
-                    onClick={handleWishlist}
-                    disabled={wishlisting}
-                    className="h-16 w-16 flex items-center justify-center rounded-2xl bg-secondary hover:bg-rose-100 dark:hover:bg-rose-900/20 text-foreground hover:text-rose-600 transition-colors shadow-lg shadow-black/5 flex-shrink-0"
-                >
-                    {wishlisting ? <Loader2 className="w-6 h-6 animate-spin" /> : <Heart className="w-6 h-6" />}
-                </button>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <button
+                            onClick={handleWishlist}
+                            disabled={wishlisting}
+                            className="h-16 w-16 flex items-center justify-center rounded-2xl bg-secondary hover:bg-rose-100 dark:hover:bg-rose-900/20 text-foreground hover:text-rose-600 transition-colors shadow-lg shadow-black/5 flex-shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                            aria-label="Add to wishlist"
+                        >
+                            {wishlisting ? <Loader2 className="w-6 h-6 animate-spin" /> : <Heart className="w-6 h-6" />}
+                        </button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        <p>Add to wishlist</p>
+                    </TooltipContent>
+                </Tooltip>
             </div>
             <p className="text-center text-xs text-muted-foreground">
                 Free shipping on orders over ₹5000. Easy returns.
@@ -416,7 +439,8 @@ export default function ProductDetailsPage() {
                                 key={star}
                                 type="button"
                                 onClick={() => setReviewRating(star)}
-                                className="focus:outline-none transition-transform active:scale-90"
+                                className="focus:outline-none transition-transform active:scale-90 p-1 rounded-md hover:bg-secondary focus-visible:ring-2 focus-visible:ring-ring"
+                                aria-label={`Rate ${star} out of 5 stars`}
                             >
                                 <Star
                                     className={`w-6 h-6 ${
