@@ -44,3 +44,7 @@
 ## 2026-03-12 - Marketplace Product Accessibility
 **Learning:** Adding `aria-label` to icon-only quantity controls and `aria-live="polite"` to the value display ensures that screen reader users are informed of state changes during selection. Likewise, `aria-current` on image thumbnails helps users understand which view is active in a gallery.
 **Action:** Always wrap icon-only actions in `Tooltip` components and provide explicit ARIA labels. Use `aria-live` for numerical values that change via user interaction.
+
+## 2026-03-05 - Accessible Checkout Feedback
+**Learning:** In high-stakes flows like checkout, static loading text ("Processing...") can feel disconnected. Replacing it with a synchronized 'Spinner' component provides a stronger visual cue of progress. Additionally, ensuring all secondary actions (like promo code removal) have both ARIA labels and visual tooltips prevents user hesitation and improves screen reader transparency.
+**Action:** Use the centralized 'Spinner' component for all primary async actions and wrap icon-only buttons in 'Tooltip' + 'aria-label' pairs consistently across the application.

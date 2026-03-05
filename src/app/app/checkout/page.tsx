@@ -9,6 +9,12 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
+import { Spinner } from '@/components/ui/spinner';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const PROMO_CODES: Record<string, number> = {
   "RARE10": 10,
@@ -165,14 +171,24 @@ export default function CheckoutPage() {
                           <span className="font-mono font-bold">{appliedPromo.code}</span>
                           <span>— {appliedPromo.discount}% off</span>
                         </div>
-                        <button onClick={removePromo} className="text-emerald-600 hover:text-emerald-800 dark:hover:text-emerald-300 transition-colors">
-                          <X className="w-4 h-4" />
-                        </button>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <button
+                              onClick={removePromo}
+                              className="text-emerald-600 hover:text-emerald-800 dark:hover:text-emerald-300 transition-colors"
+                              aria-label="Remove promo code"
+                            >
+                              <X className="w-4 h-4" />
+                            </button>
+                          </TooltipTrigger>
+                          <TooltipContent side="top">Remove promo code</TooltipContent>
+                        </Tooltip>
                       </div>
                     ) : (
                       <div className="flex gap-2">
                         <Input
                           placeholder="Promo code (e.g. RARE10)"
+                          aria-label="Promo code"
                           value={promoCode}
                           onChange={e => setPromoCode(e.target.value.toUpperCase())}
                           onKeyDown={e => e.key === "Enter" && handleApplyPromo()}
@@ -200,7 +216,14 @@ export default function CheckoutPage() {
                 onClick={handlePayment}
                 disabled={loading}
             >
-                {loading ? "Processing..." : `Confirm & Pay ${appliedPromo ? formatPrice(finalTotal) : ''}`}
+                {loading ? (
+                  <>
+                    <Spinner className="mr-2 h-4 w-4" />
+                    Processing...
+                  </>
+                ) : (
+                  `Confirm & Pay ${appliedPromo ? formatPrice(finalTotal) : ''}`
+                )}
             </Button>
         </div>
       </div>
