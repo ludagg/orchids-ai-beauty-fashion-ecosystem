@@ -40,3 +40,7 @@
 ## 2026-03-10 - Themed Confirmation Dialogs
 **Learning:** Native `confirm()` dialogs are non-themeable, vary by browser, and can be easily blocked. Replacing them with an `AlertDialog` component ensures a consistent design language, better accessibility (focus trapping, ARIA roles), and prevents "confirm fatigue" where users accidentally dismiss alerts.
 **Action:** Audit destructive actions (delete, remove) using `confirm()` and replace them with the `AlertDialog` UI component. Always add a loading state and guard against double-submissions in the confirmation action.
+
+## 2026-03-12 - Marketplace Product Accessibility
+**Learning:** Adding `aria-label` to icon-only quantity controls and `aria-live="polite"` to the value display ensures that screen reader users are informed of state changes during selection. Likewise, `aria-current` on image thumbnails helps users understand which view is active in a gallery.
+**Action:** Always wrap icon-only actions in `Tooltip` components and provide explicit ARIA labels. Use `aria-live` for numerical values that change via user interaction.
