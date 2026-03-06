@@ -26,6 +26,17 @@ import { useRouter } from "next/navigation";
 import { format } from "date-fns";
 import { toast } from "sonner";
 import { ReviewForm } from "@/components/reviews/ReviewForm";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface Booking {
   id: string;
@@ -77,6 +88,7 @@ export default function BookingsAndOrdersPage() {
   const [messageLoadingId, setMessageLoadingId] = useState<string | null>(null);
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const [selectedBookingForReview, setSelectedBookingForReview] = useState<{id: string, salonId: string} | null>(null);
+  const [bookingToCancel, setBookingToCancel] = useState<Booking | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -105,8 +117,6 @@ export default function BookingsAndOrdersPage() {
   }, []);
 
   const handleCancelBooking = async (bookingId: string) => {
-    if (!confirm("Are you sure you want to cancel this booking?")) return;
-
     setProcessingId(bookingId);
     try {
         const res = await fetch(`/api/bookings/${bookingId}`, {
@@ -118,6 +128,7 @@ export default function BookingsAndOrdersPage() {
         if (res.ok) {
             setBookings(prev => prev.map(b => b.id === bookingId ? { ...b, status: 'cancelled' } : b));
             toast.success("Booking cancelled successfully");
+            setBookingToCancel(null);
         } else {
             const error = await res.json();
             toast.error(error.error || "Failed to cancel booking");
@@ -292,14 +303,19 @@ export default function BookingsAndOrdersPage() {
                       Get Directions
                     </button>
 
-                    <button
-                        onClick={() => handleMessage(booking.salonId, booking.id)}
-                        disabled={messageLoadingId === booking.id}
-                        className="h-14 w-14 rounded-2xl border border-border flex items-center justify-center text-foreground hover:bg-muted transition-all"
-                        title="Message Salon"
-                    >
-                        {messageLoadingId === booking.id ? <Loader2 className="w-5 h-5 animate-spin" /> : <MessageCircle className="w-5 h-5" />}
-                    </button>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <button
+                                onClick={() => handleMessage(booking.salonId, booking.id)}
+                                disabled={messageLoadingId === booking.id}
+                                className="h-14 w-14 rounded-2xl border border-border flex items-center justify-center text-foreground hover:bg-muted transition-all"
+                                aria-label="Message Salon"
+                            >
+                                {messageLoadingId === booking.id ? <Loader2 className="w-5 h-5 animate-spin" /> : <MessageCircle className="w-5 h-5" />}
+                            </button>
+                        </TooltipTrigger>
+                        <TooltipContent>Message Salon</TooltipContent>
+                    </Tooltip>
 
                     {booking.status === 'completed' && (
                         <button
@@ -317,14 +333,19 @@ export default function BookingsAndOrdersPage() {
                         </button>
                     )}
                     {(booking.status === 'pending' || booking.status === 'confirmed') && (
-                        <button
-                            onClick={() => handleCancelBooking(booking.id)}
-                            disabled={processingId === booking.id}
-                            className="h-14 w-14 rounded-2xl border border-border flex items-center justify-center text-muted-foreground hover:text-rose-600 hover:bg-rose-500/10 transition-all group/cancel"
-                            title="Cancel Booking"
-                        >
-                            {processingId === booking.id ? <Loader2 className="w-6 h-6 animate-spin" /> : <XCircle className="w-6 h-6" />}
-                        </button>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <button
+                                    onClick={() => setBookingToCancel(booking)}
+                                    disabled={processingId === booking.id}
+                                    className="h-14 w-14 rounded-2xl border border-border flex items-center justify-center text-muted-foreground hover:text-rose-600 hover:bg-rose-500/10 transition-all group/cancel"
+                                    aria-label="Cancel Booking"
+                                >
+                                    {processingId === booking.id ? <Loader2 className="w-6 h-6 animate-spin" /> : <XCircle className="w-6 h-6" />}
+                                </button>
+                            </TooltipTrigger>
+                            <TooltipContent>Cancel Booking</TooltipContent>
+                        </Tooltip>
                     )}
                   </div>
                 </motion.div>
@@ -424,6 +445,26 @@ export default function BookingsAndOrdersPage() {
             }}
         />
       )}
+
+      <AlertDialog open={!!bookingToCancel} onOpenChange={(open) => !open && setBookingToCancel(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Cancel Booking?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to cancel your appointment at <span className="font-bold text-foreground">{bookingToCancel?.salon.name}</span>? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Keep Booking</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => bookingToCancel && handleCancelBooking(bookingToCancel.id)}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Cancel Appointment
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
