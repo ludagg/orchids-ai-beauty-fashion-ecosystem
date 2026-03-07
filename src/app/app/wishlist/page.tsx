@@ -8,7 +8,6 @@ import {
   ChevronRight,
   Star,
   ArrowRight,
-  TrendingUp,
   Share2,
   Plus,
   Loader2,
@@ -19,6 +18,20 @@ import {
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle
+} from "@/components/ui/empty";
+import { Button } from "@/components/ui/button";
 
 const PRICE_ALERTS_KEY = "wishlist-price-alerts";
 
@@ -144,11 +157,15 @@ export default function WishlistPage() {
             <button
               onClick={shareWishlist}
               className="flex items-center gap-2 px-5 py-3 rounded-2xl border border-border text-sm font-bold hover:bg-muted transition-all"
+              aria-label="Share Wishlist"
             >
                 <Link2 className="w-4 h-4" />
                 Share List
             </button>
-            <button className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-foreground text-white text-sm font-bold hover:bg-[#333] transition-all shadow-xl shadow-foreground/10">
+            <button
+              className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-foreground text-white text-sm font-bold hover:bg-[#333] transition-all shadow-xl shadow-foreground/10"
+              aria-label="Add all items to bag"
+            >
                 <ShoppingBag className="w-4 h-4" />
                 Add All to Bag
             </button>
@@ -190,33 +207,49 @@ export default function WishlistPage() {
 
                     {/* Actions */}
                     <div className="absolute top-4 right-4 flex flex-col gap-2">
-                    <button
-                        onClick={() => removeItem(item.id)}
-                        className="p-3 rounded-2xl bg-card/90 backdrop-blur-md text-rose-500 shadow-lg hover:bg-rose-500 hover:text-white transition-all"
-                        title="Remove from wishlist"
-                    >
-                        <Trash2 className="w-4 h-4" />
-                    </button>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <button
+                            onClick={() => removeItem(item.id)}
+                            className="p-3 rounded-2xl bg-card/90 backdrop-blur-md text-rose-500 shadow-lg hover:bg-rose-500 hover:text-white transition-all"
+                            aria-label={`Remove ${title} from wishlist`}
+                        >
+                            <Trash2 className="w-4 h-4" />
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent side="left">Remove from wishlist</TooltipContent>
+                    </Tooltip>
+
                     {isProduct && (
-                      <button
-                        onClick={() => toggleAlert(item.id)}
-                        className={`p-3 rounded-2xl bg-card/90 backdrop-blur-md shadow-lg transition-all ${
-                          priceAlerts[item.id]
-                            ? "text-amber-500 hover:bg-amber-500 hover:text-white"
-                            : "text-foreground hover:bg-foreground hover:text-white"
-                        }`}
-                        title={priceAlerts[item.id] ? "Disable price alert" : "Enable price alert"}
-                      >
-                        {priceAlerts[item.id] ? <Bell className="w-4 h-4" /> : <BellOff className="w-4 h-4" />}
-                      </button>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <button
+                            onClick={() => toggleAlert(item.id)}
+                            className={`p-3 rounded-2xl bg-card/90 backdrop-blur-md shadow-lg transition-all ${
+                              priceAlerts[item.id]
+                                ? "text-amber-500 hover:bg-amber-500 hover:text-white"
+                                : "text-foreground hover:bg-foreground hover:text-white"
+                            }`}
+                            aria-label={priceAlerts[item.id] ? `Disable price alert for ${title}` : `Enable price alert for ${title}`}
+                          >
+                            {priceAlerts[item.id] ? <Bell className="w-4 h-4" /> : <BellOff className="w-4 h-4" />}
+                          </button>
+                        </TooltipTrigger>
+                        <TooltipContent side="left">
+                          {priceAlerts[item.id] ? "Disable price alert" : "Enable price alert"}
+                        </TooltipContent>
+                      </Tooltip>
                     )}
                     </div>
 
                     {isProduct && (
-                    <div className="absolute bottom-4 left-4 right-4 p-3 rounded-2xl bg-foreground text-white opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 shadow-2xl flex items-center justify-between cursor-pointer hover:bg-rose-600">
-                        <p className="text-xs font-bold uppercase tracking-widest pl-2">Add to Bag</p>
+                    <button
+                      className="absolute bottom-4 left-4 right-4 p-3 rounded-2xl bg-foreground text-white opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 shadow-2xl flex items-center justify-between cursor-pointer hover:bg-rose-600 w-[calc(100%-2rem)]"
+                      aria-label={`Add ${title} to bag`}
+                    >
+                        <p className="text-xs font-bold uppercase tracking-widest pl-2 text-left">Add to Bag</p>
                         <Plus className="w-5 h-5" />
-                    </div>
+                    </button>
                     )}
                 </div>
 
@@ -244,19 +277,39 @@ export default function WishlistPage() {
         </AnimatePresence>
 
         {validItems.length === 0 && (
-          <div className="col-span-full py-32 text-center space-y-6">
-            <div className="w-24 h-24 rounded-[32px] bg-muted flex items-center justify-center mx-auto">
-              <Heart className="w-10 h-10 text-muted-foreground/50" />
-            </div>
-            <div>
-              <h3 className="text-2xl font-bold text-foreground">Your wishlist is empty</h3>
-              <p className="text-muted-foreground mt-2 max-w-xs mx-auto font-medium">Save items you love and they'll show up here for you to shop later.</p>
-            </div>
-            <Link href="/app/marketplace" className="inline-block">
-              <button className="px-8 py-4 rounded-2xl bg-foreground text-white font-bold hover:bg-[#333] transition-all shadow-xl shadow-foreground/10 flex items-center gap-2">
-                Explore Marketplace <ArrowRight className="w-4 h-4" />
-              </button>
-            </Link>
+          <div className="col-span-full py-32 flex flex-col items-center justify-center relative overflow-hidden rounded-[40px] border border-dashed bg-card/50 backdrop-blur-sm">
+             {/* Decorative Background */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#e5e5e5_1px,transparent_1px)] dark:bg-[radial-gradient(circle_at_center,#262626_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)] -z-10" />
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 0.1, scale: 1 }}
+              transition={{ duration: 2, repeat: Infinity, repeatType: "reverse" }}
+              className="absolute top-1/4 left-1/4 w-64 h-64 bg-rose-500 rounded-full blur-[100px] -z-10"
+            />
+
+            <Empty className="border-none bg-transparent shadow-none">
+              <EmptyHeader>
+                <EmptyMedia variant="icon" className="bg-rose-500/10 text-rose-500">
+                  <Heart className="w-6 h-6" />
+                </EmptyMedia>
+                <EmptyTitle className="text-2xl font-bold">Your wishlist is empty</EmptyTitle>
+                <EmptyDescription className="max-w-xs mx-auto font-medium">
+                  Save items you love and they'll show up here for you to shop later.
+                </EmptyDescription>
+              </EmptyHeader>
+              <EmptyContent>
+                <Button
+                  asChild
+                  size="lg"
+                  className="px-8 py-4 rounded-2xl bg-foreground text-white font-bold hover:bg-[#333] transition-all shadow-xl shadow-foreground/10 flex items-center gap-2"
+                >
+                  <Link href="/app/marketplace">
+                    Explore Marketplace <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </Button>
+              </EmptyContent>
+            </Empty>
           </div>
         )}
       </section>
