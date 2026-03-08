@@ -13,6 +13,16 @@ import {
   DialogTrigger,
   DialogFooter,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Trash2, Plus, User, Pencil, Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -45,6 +55,8 @@ export function StaffManager({ salonId }: StaffManagerProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingStaff, setEditingStaff] = useState<StaffMember | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [staffToDelete, setStaffToDelete] = useState<string | null>(null);
 
   // Form State
   const [formData, setFormData] = useState({
@@ -152,21 +164,31 @@ export function StaffManager({ salonId }: StaffManagerProps) {
     }
   };
 
-  const handleDelete = async (staffId: string) => {
-    if (!confirm("Are you sure you want to remove this staff member?")) return;
+  const handleDeleteClick = (staffId: string) => {
+    setStaffToDelete(staffId);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!staffToDelete) return;
+    setSubmitting(true);
 
     try {
-      const res = await fetch(`/api/salons/${salonId}/staff/${staffId}`, {
+      const res = await fetch(`/api/salons/${salonId}/staff/${staffToDelete}`, {
         method: "DELETE",
       });
 
       if (!res.ok) throw new Error("Failed to delete");
 
-      setStaffList(staffList.filter((s) => s.id !== staffId));
+      setStaffList(staffList.filter((s) => s.id !== staffToDelete));
       toast.success("Staff member removed");
+      setIsDeleteDialogOpen(false);
+      setStaffToDelete(null);
     } catch (error) {
       console.error(error);
       toast.error("Failed to delete staff");
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -206,7 +228,8 @@ export function StaffManager({ salonId }: StaffManagerProps) {
                 variant="ghost"
                 size="icon"
                 className="h-8 w-8 text-destructive hover:bg-destructive/10"
-                onClick={() => handleDelete(staff.id)}
+                onClick={() => handleDeleteClick(staff.id)}
+                aria-label={`Remove ${staff.name}`}
               >
                 <Trash2 className="w-4 h-4" />
               </Button>
@@ -343,6 +366,31 @@ export function StaffManager({ salonId }: StaffManagerProps) {
           </form>
         </DialogContent>
       </Dialog>
+
+      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently remove the staff member from your salon.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(e) => {
+                e.preventDefault();
+                confirmDelete();
+              }}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              disabled={submitting}
+            >
+              {submitting ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

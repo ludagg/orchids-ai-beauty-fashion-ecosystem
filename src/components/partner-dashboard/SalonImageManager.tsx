@@ -6,6 +6,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Trash2, Plus, Image as ImageIcon } from "lucide-react";
 import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface SalonImage {
   id: string;
@@ -23,6 +33,8 @@ export function SalonImageManager({ salonId }: SalonImageManagerProps) {
   const [loading, setLoading] = useState(true);
   const [newUrl, setNewUrl] = useState("");
   const [adding, setAdding] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [imageToDelete, setImageToDelete] = useState<string | null>(null);
 
   useEffect(() => {
     fetchImages();
@@ -71,21 +83,33 @@ export function SalonImageManager({ salonId }: SalonImageManagerProps) {
     }
   };
 
-  const handleDelete = async (imageId: string) => {
-    if (!confirm("Are you sure you want to delete this image?")) return;
+  const handleDeleteClick = (imageId: string) => {
+    setImageToDelete(imageId);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const confirmDelete = async () => {
+    if (!imageToDelete) return;
+    setIsDeleting(true);
 
     try {
-      const res = await fetch(`/api/salons/${salonId}/images/${imageId}`, {
+      const res = await fetch(`/api/salons/${salonId}/images/${imageToDelete}`, {
         method: "DELETE",
       });
 
       if (!res.ok) throw new Error("Failed to delete");
 
-      setImages(images.filter((img) => img.id !== imageId));
+      setImages(images.filter((img) => img.id !== imageToDelete));
       toast.success("Image deleted");
+      setIsDeleteDialogOpen(false);
+      setImageToDelete(null);
     } catch (error) {
       console.error(error);
       toast.error("Failed to delete image");
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -106,7 +130,8 @@ export function SalonImageManager({ salonId }: SalonImageManagerProps) {
               <Button
                 variant="destructive"
                 size="icon"
-                onClick={() => handleDelete(img.id)}
+                onClick={() => handleDeleteClick(img.id)}
+                aria-label="Delete image"
               >
                 <Trash2 className="w-4 h-4" />
               </Button>
@@ -136,6 +161,31 @@ export function SalonImageManager({ salonId }: SalonImageManagerProps) {
             {adding ? "Adding..." : <><Plus className="w-4 h-4 mr-2" /> Add Image</>}
         </Button>
       </form>
+
+      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the image from your salon's gallery.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(e) => {
+                e.preventDefault();
+                confirmDelete();
+              }}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              disabled={isDeleting}
+            >
+              {isDeleting ? <span className="w-4 h-4 mr-2 animate-spin border-2 border-current border-t-transparent rounded-full" /> : null}
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
