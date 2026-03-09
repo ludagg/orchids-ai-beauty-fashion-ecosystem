@@ -52,3 +52,7 @@
 ## 2026-03-15 - Themed Deletion Confirmation
 **Learning:** Replacing native browser `confirm()` with themed `AlertDialog` components not only improves visual consistency but also provides a better UX by allowing for integrated loading states (spinners) directly on the confirmation action. This prevents "double-click" issues and gives users clear feedback that their destructive action is being processed.
 **Action:** Replace `confirm()` with `AlertDialog`. Always include a `disabled` state and a loading indicator on the primary action button during asynchronous operations.
+
+## 2026-03-20 - Admin UX Standardization
+**Learning:** Admin interfaces often fall behind in UX polish. Standardizing confirmation flows using `AlertDialog` and providing visual feedback via `useTransition` and `Tooltip` on critical actions (Approve, Suspend, Reject) makes the administrative experience feel as premium as the customer-facing site. Ensuring semantic alignment between UI buttons and backend actions (e.g., using `rejectSalon` specifically for rejection) ensures accurate activity logging.
+**Action:** Audit admin-only routes for native browser dialogs. Implement unified confirmation states and use `useTransition` to handle route refreshes gracefully.

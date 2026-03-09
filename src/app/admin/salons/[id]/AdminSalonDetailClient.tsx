@@ -5,9 +5,21 @@ import { useRouter } from "next/navigation";
 import { approveSalon, rejectSalon, suspendSalon } from "@/app/admin/actions";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, CheckCircle2, XCircle, AlertCircle, MapPin, Globe, ExternalLink, FileText, Phone, Mail, User } from "lucide-react";
+import { ArrowLeft, CheckCircle2, XCircle, AlertCircle, MapPin, Globe, ExternalLink, FileText, Phone, Mail, User, AlertTriangle } from "lucide-react";
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { useTransition } from "react";
 
 interface Salon {
   id: string;
@@ -45,24 +57,32 @@ interface Salon {
 export default function AdminSalonDetailClient({ salon }: { salon: Salon }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [isTransitioning, startTransition] = useTransition();
+  const [confirm, setConfirm] = useState<{open: boolean, title: string, desc: string, action: () => Promise<void>, dest?: boolean}>({
+    open: false, title: "", desc: "", action: async () => {}
+  });
 
-  const handleAction = async (action: 'approve' | 'reject' | 'suspend') => {
-      if (!confirm(`Are you sure you want to ${action} this salon?`)) return;
+  const runAction = async (action: () => Promise<any>, successMsg: string, errorMsg: string) => {
+    setLoading(true);
+    try {
+      await action();
+      toast.success(successMsg);
+      startTransition(() => router.refresh());
+    } catch (error) {
+      toast.error(errorMsg);
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-      setLoading(true);
-      try {
-          if (action === 'approve') await approveSalon(salon.id);
-          if (action === 'reject') await rejectSalon(salon.id);
-          if (action === 'suspend') await suspendSalon(salon.id);
-
-          toast.success(`Salon ${action}ed successfully`);
-          router.refresh();
-      } catch (error) {
-          console.error(error);
-          toast.error(`Failed to ${action} salon`);
-      } finally {
-          setLoading(false);
-      }
+  const handleAction = (action: 'approve' | 'reject' | 'suspend') => {
+    const config = {
+      approve: { title: "Approve Salon", desc: "Make this salon visible to all users?", action: () => runAction(() => approveSalon(salon.id), "Salon approved", "Failed to approve") },
+      reject: { title: "Reject Salon", desc: "Reject this application?", action: () => runAction(() => rejectSalon(salon.id), "Salon rejected", "Failed to reject"), dest: true },
+      suspend: { title: "Suspend Salon", desc: "Hide this salon from the marketplace?", action: () => runAction(() => suspendSalon(salon.id), "Salon suspended", "Failed to suspend"), dest: true }
+    }[action];
+    setConfirm({ open: true, ...config });
   };
 
   return (
@@ -70,9 +90,14 @@ export default function AdminSalonDetailClient({ salon }: { salon: Salon }) {
       {/* Header */}
       <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-              <Link href="/admin/salons" className="p-2 hover:bg-secondary rounded-full transition-colors">
-                  <ArrowLeft className="w-5 h-5" />
-              </Link>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link href="/admin/salons" aria-label="Back to salons" className="p-2 hover:bg-secondary rounded-full transition-colors">
+                    <ArrowLeft className="w-5 h-5" />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>Back to Salons</TooltipContent>
+              </Tooltip>
               <div>
                   <h1 className="text-2xl font-bold">{salon.name}</h1>
                   <div className="flex items-center gap-2 mt-1">
@@ -134,10 +159,15 @@ export default function AdminSalonDetailClient({ salon }: { salon: Salon }) {
                           {salon.website && (
                               <div>
                                   <label className="text-xs font-medium text-muted-foreground uppercase">Website</label>
-                                  <a href={salon.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 mt-1 text-sm text-blue-600 hover:underline">
-                                      <Globe className="w-4 h-4" />
-                                      {salon.website}
-                                  </a>
+                                  <Tooltip>
+                                    <TooltipTrigger asChild>
+                                      <a href={salon.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 mt-1 text-sm text-blue-600 hover:underline" aria-label={`Visit website: ${salon.website}`}>
+                                        <Globe className="w-4 h-4" />
+                                        {salon.website}
+                                      </a>
+                                    </TooltipTrigger>
+                                    <TooltipContent>Visit Website</TooltipContent>
+                                  </Tooltip>
                               </div>
                           )}
                           {salon.category && (
@@ -321,6 +351,23 @@ export default function AdminSalonDetailClient({ salon }: { salon: Salon }) {
               </section>
           </div>
       </div>
+
+      <AlertDialog open={confirm.open} onOpenChange={(open) => setConfirm(v => ({ ...v, open }))}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2">
+              {confirm.dest && <AlertTriangle className="w-5 h-5 text-destructive" />}{confirm.title}
+            </AlertDialogTitle>
+            <AlertDialogDescription>{confirm.desc}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={loading || isTransitioning}>Cancel</AlertDialogCancel>
+            <AlertDialogAction disabled={loading || isTransitioning} onClick={async (e) => { e.preventDefault(); await confirm.action(); setConfirm(v => ({ ...v, open: false })); }} className={confirm.dest ? "bg-destructive text-destructive-foreground hover:bg-destructive/90" : ""}>
+              {(loading || isTransitioning) && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}Confirm
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
