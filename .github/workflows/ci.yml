@@ -1,0 +1,50 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install Dependencies
+        run: bun install
+
+      - name: Lint Code
+        run: bun run lint
+
+      - name: Run Tests
+        run: bun test
+
+      - name: Build
+        run: bun run build
+        env:
+          DATABASE_URL: postgres://dummy:dummy@localhost:5432/dummy
+          BETTER_AUTH_SECRET: dummy-secret
+          BETTER_AUTH_BASE_URL: http://localhost:3000
+          STRIPE_SECRET_KEY: dummy-stripe-key
+          STRIPE_WEBHOOK_SECRET: dummy-webhook-secret
+          NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: dummy-pub-key
+          CLOUDFLARE_ACCOUNT_ID: dummy-cf-id
+          R2_ACCESS_KEY_ID: dummy-r2-key
+          R2_SECRET_ACCESS_KEY: dummy-r2-secret
+          NEXT_PUBLIC_R2_PUBLIC_URL: http://localhost:3000
+          GOOGLE_CLIENT_ID: dummy-google-client
+          GOOGLE_CLIENT_SECRET: dummy-google-secret
+          RESEND_API_KEY: dummy-resend-key
+          GEMINI_API_KEY: dummy-gemini-key
+          CRON_SECRET: dummy-cron-secret
