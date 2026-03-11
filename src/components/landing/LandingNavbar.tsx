@@ -62,7 +62,7 @@ export default function LandingNavbar() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
               >
-                Rare
+                Priisme
               </motion.span>
             </Link>
 
@@ -118,7 +118,7 @@ export default function LandingNavbar() {
             <div className="flex flex-col h-full">
               <div className="flex items-center justify-between h-16 px-6 border-b border-border">
                 <div className="flex items-center gap-4">
-                  <span className="text-3xl font-script text-black dark:text-white">Rare</span>
+                  <span className="text-3xl font-script text-black dark:text-white">Priisme</span>
                   <ThemeSwitcher />
                 </div>
                 <button onClick={() => setMobileMenuOpen(false)} className="p-2 -mr-2">

@@ -30,7 +30,7 @@ const pinyon = Pinyon_Script({
 });
 
 export const metadata: Metadata = {
-  title: "Rare - India's First AI-Powered Beauty & Fashion Ecosystem",
+  title: "Priisme - India's First AI-Powered Beauty & Fashion Ecosystem",
   description: "Discover fashion, book salons, and shop via video commerce - all powered by AI. Virtual fit intelligence, personalized style, and verified beauty services in one platform.",
 };
 
@@ -42,7 +42,7 @@ export default function RootLayout({
   const jsonLdData = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "Rare",
+    name: "Priisme",
     url: process.env.NEXT_PUBLIC_APP_URL || "https://orchids.ai",
     description: "India's First AI-Powered Beauty & Fashion Ecosystem",
   };
