@@ -40,6 +40,14 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
 
 // Interface for User Data
 interface UserData {
@@ -233,7 +241,8 @@ export default function ProfileView({ user, isSalonOwner }: ProfileViewProps) {
                     const el = document.getElementById("profile-about");
                     el?.scrollIntoView({ behavior: "smooth" });
                   }}
-                  className="hover:opacity-70 transition-opacity text-left"
+                  className="hover:opacity-70 transition-opacity text-left rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  aria-label={`View ${stats.followers} followers`}
                 >
                   <StatItem value={stats.followers} label="Followers" trend="+12%" />
                 </button>
@@ -242,14 +251,23 @@ export default function ProfileView({ user, isSalonOwner }: ProfileViewProps) {
                     const el = document.getElementById("profile-about");
                     el?.scrollIntoView({ behavior: "smooth" });
                   }}
-                  className="hover:opacity-70 transition-opacity text-left"
+                  className="hover:opacity-70 transition-opacity text-left rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  aria-label="View following"
                 >
                   <StatItem value="482" label="Following" trend="+3%" />
                 </button>
-                <Link href="/app/videos-creations" className="hover:opacity-70 transition-opacity">
+                <Link
+                  href="/app/videos-creations"
+                  className="hover:opacity-70 transition-opacity rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  aria-label={`View ${stats.likes} likes`}
+                >
                   <StatItem value={stats.likes} label="Likes" trend="+8%" />
                 </Link>
-                <Link href="/app/videos-creations" className="hover:opacity-70 transition-opacity">
+                <Link
+                  href="/app/videos-creations"
+                  className="hover:opacity-70 transition-opacity rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  aria-label={`View ${stats.videos} videos`}
+                >
                   <StatItem value={stats.videos} label="Videos" />
                 </Link>
               </div>
@@ -377,7 +395,7 @@ export default function ProfileView({ user, isSalonOwner }: ProfileViewProps) {
                   ))}
                 </div>
                 {publishedVideos.length === 0 && (
-                  <EmptyState type="videos" onUpload={() => setIsVideoUploadModalOpen(true)} />
+                  <EmptyState onUpload={() => setIsVideoUploadModalOpen(true)} />
                 )}
               </>
             )}
@@ -504,26 +522,49 @@ function VideoCard({ video, index }: { video: VideoData, index: number }) {
 }
 
 // Empty State Component
-function EmptyState({ type, onUpload }: { type: string, onUpload?: () => void }) {
+function EmptyState({ onUpload }: { onUpload?: () => void }) {
   return (
-    <div className="flex flex-col items-center justify-center py-16 sm:py-24 text-center space-y-6">
-      <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center">
-        <Video className="w-8 h-8 text-muted-foreground" />
-      </div>
+    <div className="relative overflow-hidden rounded-[32px] border border-dashed bg-card/50 backdrop-blur-sm p-8 sm:p-12 md:p-24 flex flex-col items-center justify-center text-center">
+      {/* Decorative Background */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#e5e5e5_1px,transparent_1px)] dark:bg-[radial-gradient(circle_at_center,#262626_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)] -z-10" />
 
-      <div className="space-y-2 max-w-xs sm:max-w-sm px-4">
-        <h3 className="text-lg font-semibold text-foreground">No videos yet</h3>
-        <p className="text-sm text-muted-foreground">
-          Start sharing your style journey by uploading your first video.
-        </p>
-      </div>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 0.1, scale: 1 }}
+        transition={{ duration: 2, repeat: Infinity, repeatType: "reverse" }}
+        className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary rounded-full blur-[100px] -z-10"
+      />
 
-      {onUpload && (
-        <Button onClick={onUpload}>
-          <Upload className="w-4 h-4 mr-2" />
-          Upload Your First Video
-        </Button>
-      )}
+      <Empty className="border-none bg-transparent shadow-none p-0 gap-8">
+        <EmptyHeader className="gap-4">
+          <EmptyMedia
+            variant="icon"
+            className="bg-primary/10 text-primary size-14 rounded-2xl"
+          >
+            <Video className="w-7 h-7" />
+          </EmptyMedia>
+          <div className="space-y-2">
+            <EmptyTitle className="text-2xl font-bold tracking-tight">
+              No videos yet
+            </EmptyTitle>
+            <EmptyDescription className="max-w-xs mx-auto text-base font-medium">
+              Start sharing your style journey by uploading your first video.
+            </EmptyDescription>
+          </div>
+        </EmptyHeader>
+        {onUpload && (
+          <EmptyContent>
+            <Button
+              onClick={onUpload}
+              size="lg"
+              className="px-8 py-6 rounded-2xl shadow-xl shadow-primary/10 font-bold transition-all hover:scale-105 active:scale-95"
+            >
+              <Upload className="w-5 h-5 mr-2" />
+              Upload Your First Video
+            </Button>
+          </EmptyContent>
+        )}
+      </Empty>
     </div>
   );
 }
