@@ -45,7 +45,7 @@ export default function BusinessSection() {
               <span className="text-muted-foreground italic">with intelligence.</span>
             </h2>
             <p className="text-muted-foreground text-[17px] leading-relaxed mb-10 max-w-[480px]">
-              Join thousands of salons and creators using Rare to streamline operations,
+              Join thousands of salons and creators using Priisme to streamline operations,
               reach new customers, and increase revenue through AI-powered tools.
             </p>
 
@@ -118,7 +118,7 @@ export default function BusinessSection() {
                 </div>
 
                 <p className="text-white/90 text-sm italic border-l-2 border-primary pl-4">
-                  "Rare has completely transformed how we manage our salon. bookings are up 40% in just two months."
+                  "Priisme has completely transformed how we manage our salon. bookings are up 40% in just two months."
                 </p>
                 <div className="flex items-center gap-3 mt-4 pl-4">
                   <div className="relative w-8 h-8 rounded-full border-2 border-white/20 overflow-hidden">

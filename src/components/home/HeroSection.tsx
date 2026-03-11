@@ -170,7 +170,7 @@ export default function HeroSection() {
               <div className="w-20 h-20 mx-auto rounded-full bg-primary flex items-center justify-center cursor-pointer hover:scale-110 transition-transform shadow-xl">
                 <Play className="w-8 h-8 text-primary-foreground ml-1" />
               </div>
-              <p className="mt-4 text-muted-foreground text-sm">Watch how Rare works</p>
+              <p className="mt-4 text-muted-foreground text-sm">Watch how Priisme works</p>
             </div>
           </div>
           <Image
