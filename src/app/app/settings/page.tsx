@@ -48,9 +48,20 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
 const ThemeSwitcher = dynamic(
   () => import("@/components/ThemeSwitcher").then((mod) => mod.ThemeSwitcher),
@@ -225,6 +236,7 @@ function ChangePasswordDialog({ open, onOpenChange }: { open: boolean; onOpenCha
                   type="button"
                   onClick={() => setShow(prev => ({ ...prev, [field]: !prev[field] }))}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                  aria-label={`${show[field] ? 'Hide' : 'Show'} ${field.replace('current', 'current').replace('next', 'new').replace('confirm', 'confirmation')} password`}
                 >
                   {show[field] ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -254,7 +266,7 @@ function TwoFactorDialog({ open, onOpenChange }: { open: boolean; onOpenChange: 
   const [step, setStep] = useState<"intro" | "verify" | "done">("intro");
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
-  const mockSecret = "RARE2FA" + Math.random().toString(36).slice(2, 8).toUpperCase();
+  const mockSecret = useMemo(() => "RARE2FA" + Math.random().toString(36).slice(2, 8).toUpperCase(), []);
 
   const handleVerify = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -399,11 +411,19 @@ export default function SettingsPage() {
               icon={<Palette className="w-4 h-4" />}
             >
               <div className="flex items-center gap-2">
-                {["bg-rose-500", "bg-violet-500", "bg-blue-500", "bg-emerald-500", "bg-amber-500"].map((color) => (
+                {[
+                  { color: "bg-rose-500", name: "Rose" },
+                  { color: "bg-violet-500", name: "Violet" },
+                  { color: "bg-blue-500", name: "Blue" },
+                  { color: "bg-emerald-500", name: "Emerald" },
+                  { color: "bg-amber-500", name: "Amber" },
+                ].map((item) => (
                   <button
-                    key={color}
-                    className={`w-5 h-5 rounded-full ${color} ring-2 ring-offset-2 ring-offset-background ${
-                      color === "bg-rose-500" ? "ring-rose-500" : "ring-transparent"
+                    key={item.color}
+                    onClick={() => toast.success(`${item.name} accent selected`, { duration: 1500 })}
+                    aria-label={`Set ${item.name} accent color`}
+                    className={`w-5 h-5 rounded-full ${item.color} ring-2 ring-offset-2 ring-offset-background ${
+                      item.color === "bg-rose-500" ? "ring-rose-500" : "ring-transparent"
                     } hover:scale-110 transition-transform`}
                   />
                 ))}
@@ -798,9 +818,33 @@ export default function SettingsPage() {
                       </div>
                     </div>
                     <Separator className="bg-destructive/10" />
-                    <Button variant="destructive" size="sm" className="w-full sm:w-auto text-xs h-8">
-                      Delete My Account
-                    </Button>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button variant="destructive" size="sm" className="w-full sm:w-auto text-xs h-8">
+                          Delete My Account
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This action cannot be undone. This will permanently delete your account
+                            and remove all your data from our servers.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={() => {
+                              toast.error("Account deletion is disabled for demo purposes");
+                            }}
+                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                          >
+                            Delete Account
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </div>
                 </div>
               </CardContent>
