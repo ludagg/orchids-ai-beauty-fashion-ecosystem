@@ -8,7 +8,7 @@ const testimonials = [
   {
     name: "Ananya Sharma",
     role: "Fashion Blogger",
-    content: "Rare has completely changed how I discover new designers. The AI Stylist is surprisingly accurate and helps me find pieces I wouldn't have considered before.",
+    content: "Priisme has completely changed how I discover new designers. The AI Stylist is surprisingly accurate and helps me find pieces I wouldn't have considered before.",
     avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330",
     rating: 5
   },

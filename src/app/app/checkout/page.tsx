@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/tooltip";
 
 const PROMO_CODES: Record<string, number> = {
-  "RARE10": 10,
+  "PRIISME10": 10,
   "WELCOME20": 20,
   "BEAUTY15": 15,
 };
@@ -187,7 +187,7 @@ export default function CheckoutPage() {
                     ) : (
                       <div className="flex gap-2">
                         <Input
-                          placeholder="Promo code (e.g. RARE10)"
+                          placeholder="Promo code (e.g. PRIISME10)"
                           aria-label="Promo code"
                           value={promoCode}
                           onChange={e => setPromoCode(e.target.value.toUpperCase())}

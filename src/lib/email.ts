@@ -26,7 +26,7 @@ export async function sendEmail({ to, subject, html, text }: EmailOptions) {
   }
 
   try {
-    const from = process.env.RESEND_FROM_EMAIL || 'Rare <onboarding@resend.dev>';
+    const from = process.env.RESEND_FROM_EMAIL || 'Priisme <onboarding@resend.dev>';
     const data = await resend.emails.send({
       from,
       to,

@@ -254,7 +254,7 @@ function TwoFactorDialog({ open, onOpenChange }: { open: boolean; onOpenChange: 
   const [step, setStep] = useState<"intro" | "verify" | "done">("intro");
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
-  const mockSecret = "RARE2FA" + Math.random().toString(36).slice(2, 8).toUpperCase();
+  const mockSecret = "PRIISME2FA" + Math.random().toString(36).slice(2, 8).toUpperCase();
 
   const handleVerify = async (e: React.FormEvent) => {
     e.preventDefault();
