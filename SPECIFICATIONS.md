@@ -1,6 +1,6 @@
 # SPECIFICATIONS.md — PRIISME
 > Cahier des charges complet · Version finale · Référence officielle du projet
-> Ce fichier est lu automatiquement par Jules (via AGENTS.md) comme source de vérité du produit.
+> Ce fichier est lu automatiquement par Jules (via AGENTS.md) comme source de vérité du produit. On souligne que le nouveau nom choisit est Rare
 
 ---
 
