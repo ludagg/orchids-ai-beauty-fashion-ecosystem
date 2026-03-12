@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
               await db
                 .update(products)
                 .set({
-                  stock: sql`${products.stock} - ${item.quantity}`,
+                  totalStock: sql`${products.totalStock} - ${item.quantity}`,
                 })
                 .where(eq(products.id, item.productId));
             }
