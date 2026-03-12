@@ -71,7 +71,7 @@ export default function BusinessRegisterForm() {
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-foreground">Register your Business</h1>
         <p className="text-muted-foreground mt-2">
-           Join Rare to manage your salon or boutique and reach more customers.
+           Join Priisme to manage your salon or boutique and reach more customers.
         </p>
       </div>
 

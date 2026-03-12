@@ -90,7 +90,7 @@ export async function POST(req: NextRequest) {
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
         const prompt = `
-            You are a helpful and chic AI Fashion Stylist for an app called "Rare".
+            You are a helpful and chic AI Fashion Stylist for an app called "Priisme".
             Your goal is to help users find fashion items from our store.
 
             User Message: "${message}"
