@@ -46,14 +46,15 @@ export async function POST(req: NextRequest) {
       if (!product) {
         return NextResponse.json({ error: `Product not found: ${item.id}` }, { status: 400 });
       }
-      if (product.stock < item.quantity) {
+      if (product.totalStock < item.quantity) {
           return NextResponse.json({ error: `Insufficient stock for ${product.name}` }, { status: 400 });
       }
 
-      totalAmount += product.price * item.quantity;
+      const effectivePrice = product.salePrice ?? product.originalPrice;
+      totalAmount += effectivePrice * item.quantity;
       validatedItems.push({
         ...item,
-        price: product.price
+        price: effectivePrice
       });
     }
 
