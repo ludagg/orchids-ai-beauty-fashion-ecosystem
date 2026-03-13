@@ -22,6 +22,15 @@ export const auth = betterAuth({
       loyaltyPoints: {
         type: "number",
       },
+      phone: {
+        type: "string",
+      },
+      gender: {
+        type: "string",
+      },
+      location: {
+        type: "string",
+      },
     },
   },
   emailAndPassword: {
