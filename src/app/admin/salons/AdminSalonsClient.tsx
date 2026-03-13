@@ -19,8 +19,18 @@ import {
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { approveSalon, suspendSalon } from "../actions";
+import { approveSalon, suspendSalon, rejectSalon } from "../actions";
 import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import Link from "next/link";
 
 interface Salon {
@@ -50,6 +60,11 @@ export default function AdminSalonsClient({ data }: AdminSalonsClientProps) {
   const [search, setSearch] = useState(searchParams.get("search") || "");
   const [statusFilter, setStatusFilter] = useState(searchParams.get("status") || "All Status");
   const [isPending, setIsPending] = useState(false);
+  const [confirmAction, setConfirmAction] = useState<{
+    id: string;
+    name: string;
+    type: "approve" | "suspend" | "reject";
+  } | null>(null);
 
   useEffect(() => {
     setSearch(searchParams.get("search") || "");
@@ -79,51 +94,41 @@ export default function AdminSalonsClient({ data }: AdminSalonsClientProps) {
     updateFilters(search, newStatus);
   };
 
-  const handleApprove = async (id: string) => {
-    if (!confirm("Are you sure you want to approve this salon?")) return;
+  const executeAction = async () => {
+    if (!confirmAction) return;
     setIsPending(true);
+    const { id, type } = confirmAction;
     try {
-      await approveSalon(id);
-      toast.success("Salon approved successfully");
-      router.refresh();
-    } catch (error) {
-      toast.error("Failed to approve salon");
-      console.error(error);
-    } finally {
-      setIsPending(false);
-    }
-  };
-
-  const handleSuspend = async (id: string) => {
-    if (!confirm("Are you sure you want to suspend this salon?")) return;
-    setIsPending(true);
-    try {
-      await suspendSalon(id);
-      toast.success("Salon suspended");
-      router.refresh();
-    } catch (error) {
-      toast.error("Failed to suspend salon");
-      console.error(error);
-    } finally {
-      setIsPending(false);
-    }
-  };
-
-  const handleReject = async (id: string) => {
-      if (!confirm("Are you sure you want to reject this salon application?")) return;
-      setIsPending(true);
-      try {
-        // Assuming rejectSalon sets status to 'suspended' or 'rejected'
-        // Using suspendSalon logic as fallback if rejectSalon is just a wrapper
+      if (type === "approve") {
+        await approveSalon(id);
+        toast.success("Salon approved successfully");
+      } else if (type === "suspend") {
         await suspendSalon(id);
+        toast.success("Salon suspended");
+      } else if (type === "reject") {
+        await rejectSalon(id);
         toast.success("Salon application rejected");
-        router.refresh();
-      } catch (error) {
-        toast.error("Failed to reject salon");
-        console.error(error);
-      } finally {
-        setIsPending(false);
       }
+      router.refresh();
+    } catch (error) {
+      toast.error(`Failed to ${type} salon`);
+      console.error(error);
+    } finally {
+      setIsPending(false);
+      setConfirmAction(null);
+    }
+  };
+
+  const handleApprove = (id: string, name: string) => {
+    setConfirmAction({ id, name, type: "approve" });
+  };
+
+  const handleSuspend = (id: string, name: string) => {
+    setConfirmAction({ id, name, type: "suspend" });
+  };
+
+  const handleReject = (id: string, name: string) => {
+    setConfirmAction({ id, name, type: "reject" });
   };
 
   return (
@@ -241,14 +246,14 @@ export default function AdminSalonsClient({ data }: AdminSalonsClientProps) {
                     {s.status === 'pending' && (
                         <>
                             <button
-                                onClick={() => handleApprove(s.id)}
+                                onClick={() => handleApprove(s.id, s.name)}
                                 disabled={isPending}
                                 className="px-4 py-2 rounded-xl bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-700 transition-all flex items-center gap-2"
                             >
                                 Approve
                             </button>
                             <button
-                                onClick={() => handleReject(s.id)}
+                                onClick={() => handleReject(s.id, s.name)}
                                 disabled={isPending}
                                 className="px-4 py-2 rounded-xl bg-rose-50 text-rose-600 text-xs font-bold hover:bg-rose-100 transition-all flex items-center gap-2"
                             >
@@ -258,7 +263,7 @@ export default function AdminSalonsClient({ data }: AdminSalonsClientProps) {
                     )}
                     {s.status === 'active' && (
                         <button
-                            onClick={() => handleSuspend(s.id)}
+                            onClick={() => handleSuspend(s.id, s.name)}
                             disabled={isPending}
                             className="px-4 py-2 rounded-xl bg-rose-50 text-rose-600 text-xs font-bold hover:bg-rose-100 transition-all flex items-center gap-2"
                         >
@@ -267,7 +272,7 @@ export default function AdminSalonsClient({ data }: AdminSalonsClientProps) {
                     )}
                     {s.status === 'suspended' && (
                         <button
-                            onClick={() => handleApprove(s.id)} // Reactivate
+                            onClick={() => handleApprove(s.id, s.name)} // Reactivate
                             disabled={isPending}
                             className="px-4 py-2 rounded-xl bg-emerald-50 text-emerald-600 text-xs font-bold hover:bg-emerald-100 transition-all flex items-center gap-2"
                         >
@@ -319,6 +324,35 @@ export default function AdminSalonsClient({ data }: AdminSalonsClientProps) {
               </button>
           </div>
       </div>
+      <AlertDialog open={!!confirmAction} onOpenChange={(open) => !open && setConfirmAction(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {confirmAction?.type === "approve" ? "Approve Salon?" :
+               confirmAction?.type === "suspend" ? "Suspend Salon?" :
+               "Reject Salon Application?"}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {confirmAction?.type === "approve" ? (
+                <>Are you sure you want to approve <span className="font-bold text-foreground">{confirmAction.name}</span>? This will allow them to start accepting bookings.</>
+              ) : confirmAction?.type === "suspend" ? (
+                <>Are you sure you want to suspend <span className="font-bold text-foreground">{confirmAction.name}</span>? They will not be able to accept new bookings.</>
+              ) : (
+                <>Are you sure you want to reject the application for <span className="font-bold text-foreground">{confirmAction.name}</span>? This action can be reversed by manually activating them later.</>
+              )}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={executeAction}
+              className={confirmAction?.type === "approve" ? "bg-emerald-600 hover:bg-emerald-700" : "bg-destructive text-destructive-foreground hover:bg-destructive/90"}
+            >
+              {isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : "Confirm"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

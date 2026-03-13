@@ -8,6 +8,16 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, CheckCircle2, XCircle, AlertCircle, MapPin, Globe, ExternalLink, FileText, Phone, Mail, User } from "lucide-react";
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface Salon {
   id: string;
@@ -45,24 +55,30 @@ interface Salon {
 export default function AdminSalonDetailClient({ salon }: { salon: Salon }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [confirmAction, setConfirmAction] = useState<'approve' | 'reject' | 'suspend' | null>(null);
 
-  const handleAction = async (action: 'approve' | 'reject' | 'suspend') => {
-      if (!confirm(`Are you sure you want to ${action} this salon?`)) return;
+  const executeAction = async () => {
+    if (!confirmAction) return;
+    const action = confirmAction;
+    setLoading(true);
+    try {
+      if (action === 'approve') await approveSalon(salon.id);
+      if (action === 'reject') await rejectSalon(salon.id);
+      if (action === 'suspend') await suspendSalon(salon.id);
 
-      setLoading(true);
-      try {
-          if (action === 'approve') await approveSalon(salon.id);
-          if (action === 'reject') await rejectSalon(salon.id);
-          if (action === 'suspend') await suspendSalon(salon.id);
+      toast.success(`Salon ${action}ed successfully`);
+      router.refresh();
+    } catch (error) {
+      console.error(error);
+      toast.error(`Failed to ${action} salon`);
+    } finally {
+      setLoading(false);
+      setConfirmAction(null);
+    }
+  };
 
-          toast.success(`Salon ${action}ed successfully`);
-          router.refresh();
-      } catch (error) {
-          console.error(error);
-          toast.error(`Failed to ${action} salon`);
-      } finally {
-          setLoading(false);
-      }
+  const handleAction = (action: 'approve' | 'reject' | 'suspend') => {
+    setConfirmAction(action);
   };
 
   return (
@@ -321,6 +337,35 @@ export default function AdminSalonDetailClient({ salon }: { salon: Salon }) {
               </section>
           </div>
       </div>
+      <AlertDialog open={!!confirmAction} onOpenChange={(open) => !open && setConfirmAction(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {confirmAction === "approve" ? "Approve Salon?" :
+               confirmAction === "suspend" ? "Suspend Salon?" :
+               "Reject Salon Application?"}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {confirmAction === "approve" ? (
+                <>Are you sure you want to approve <span className="font-bold text-foreground">{salon.name}</span>? This will allow them to start accepting bookings.</>
+              ) : confirmAction === "suspend" ? (
+                <>Are you sure you want to suspend <span className="font-bold text-foreground">{salon.name}</span>? They will not be able to accept new bookings until reactivated.</>
+              ) : (
+                <>Are you sure you want to reject the application for <span className="font-bold text-foreground">{salon.name}</span>? This action can be reversed by manually activating them later.</>
+              )}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={executeAction}
+              className={confirmAction === "approve" ? "bg-emerald-600 hover:bg-emerald-700" : "bg-destructive text-destructive-foreground hover:bg-destructive/90"}
+            >
+              {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Confirm"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
