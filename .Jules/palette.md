@@ -49,6 +49,10 @@
 **Learning:** In high-stakes flows like checkout, static loading text ("Processing...") can feel disconnected. Replacing it with a synchronized 'Spinner' component provides a stronger visual cue of progress. Additionally, ensuring all secondary actions (like promo code removal) have both ARIA labels and visual tooltips prevents user hesitation and improves screen reader transparency.
 **Action:** Use the centralized 'Spinner' component for all primary async actions and wrap icon-only buttons in 'Tooltip' + 'aria-label' pairs consistently across the application.
 
+## 2026-03-14 - Semantic Notifications List
+**Learning:** For lists where items trigger actions (like marking as read or navigating), using semantic `<button>` elements instead of `div` with `onClick` is essential for keyboard accessibility. Combining this with a descriptive `aria-label` that includes the read status and content ensures a transparent experience for screen reader users.
+**Action:** Always refactor interactive list items to semantic `<button>` elements. Use a pattern like `aria-label="${isRead ? '' : 'Unread: '}${title}. ${message}"` for content-rich notification items.
+
 ## 2026-03-15 - Themed Deletion Confirmation
 **Learning:** Replacing native browser `confirm()` with themed `AlertDialog` components not only improves visual consistency but also provides a better UX by allowing for integrated loading states (spinners) directly on the confirmation action. This prevents "double-click" issues and gives users clear feedback that their destructive action is being processed.
 **Action:** Replace `confirm()` with `AlertDialog`. Always include a `disabled` state and a loading indicator on the primary action button during asynchronous operations.

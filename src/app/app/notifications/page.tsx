@@ -13,6 +13,8 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { formatDistanceToNow } from "date-fns";
+import { cn } from "@/lib/utils";
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 
 type Notification = {
   id: string;
@@ -120,27 +122,29 @@ export default function NotificationsPage() {
             <p>Loading notifications...</p>
           </div>
         ) : notifications.length === 0 ? (
-          <div className="flex flex-col items-center justify-center p-12 text-muted-foreground">
-            <Bell className="w-12 h-12 mb-4 opacity-20" />
-            <p className="text-lg font-medium">No notifications yet</p>
-            <p className="text-sm">We'll let you know when something important happens.</p>
-          </div>
+          <Empty className="border-none py-12">
+            <EmptyHeader>
+              <EmptyMedia variant="icon"><Bell className="w-6 h-6" /></EmptyMedia>
+              <EmptyTitle>No notifications yet</EmptyTitle>
+              <EmptyDescription>We'll let you know when something important happens.</EmptyDescription>
+            </EmptyHeader>
+          </Empty>
         ) : (
           <div className="divide-y divide-border">
             {notifications.map((notification) => {
               const style = getIcon(notification.type);
               return (
-                <div
+                <button
                   key={notification.id}
                   onClick={() => handleNotificationClick(notification)}
-                  className={`p-6 flex gap-4 hover:bg-secondary/50 transition-colors cursor-pointer ${
-                    !notification.isRead ? "bg-secondary/30" : ""
-                  }`}
+                  className={cn(
+                    "p-6 flex gap-4 hover:bg-secondary/50 transition-colors w-full text-left focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
+                    !notification.isRead && "bg-secondary/30"
+                  )}
+                  aria-label={`${notification.isRead ? '' : 'Unread: '}${notification.title}. ${notification.message}`}
                 >
-                  <div
-                    className={`w-12 h-12 rounded-full ${style.bg} dark:bg-primary/10 flex items-center justify-center flex-shrink-0`}
-                  >
-                    <style.icon className={`w-6 h-6 ${style.color}`} />
+                  <div className={cn("w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0", style.bg, "dark:bg-primary/10")}>
+                    <style.icon className={cn("w-6 h-6", style.color)} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-4">
@@ -160,7 +164,7 @@ export default function NotificationsPage() {
                       {formatDistanceToNow(new Date(notification.createdAt), { addSuffix: true })}
                     </p>
                   </div>
-                </div>
+                </button>
               );
             })}
           </div>
