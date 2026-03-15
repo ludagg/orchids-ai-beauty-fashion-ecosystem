@@ -30,6 +30,7 @@ import { useSession } from "@/lib/auth-client";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import dynamic from "next/dynamic";
 import { ReviewList } from "@/components/reviews/ReviewList";
 import { RatingSummary } from "@/components/reviews/RatingSummary";
@@ -379,6 +380,7 @@ export default function SalonDetailsPage() {
   }
 
   return (
+    <TooltipProvider>
     <div className="p-4 sm:p-6 lg:p-8 max-w-[1400px] mx-auto w-full">
       <Link
         href="/app/salons"
@@ -402,13 +404,18 @@ export default function SalonDetailsPage() {
             </div>
             <div className="grid grid-cols-4 gap-4">
               {(salon.images && salon.images.length > 0 ? salon.images : defaultGallery).slice(0, 4).map((img, i) => (
-                <div key={i} className="aspect-square rounded-2xl overflow-hidden border border-border hover:border-foreground transition-colors cursor-pointer group">
+                <button
+                  key={i}
+                  type="button"
+                  aria-label={`${typeof img === 'string' ? 'View interior image' : (img.caption || 'View interior image')} ${i + 1}`}
+                  className="aspect-square rounded-2xl overflow-hidden border border-border hover:border-foreground transition-colors cursor-pointer group"
+                >
                   <img
                     src={typeof img === 'string' ? img : img.url}
-                    alt="Interior"
+                    alt=""
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
-                </div>
+                </button>
               ))}
             </div>
           </section>
@@ -438,23 +445,55 @@ export default function SalonDetailsPage() {
                 </div>
               </div>
               <div className="flex gap-2">
-                <button
-                  onClick={handleMessage}
-                  disabled={messageLoading}
-                  className="p-3 rounded-2xl border border-border hover:bg-muted transition-all disabled:opacity-50"
-                  title="Message Salon"
-                >
-                  {messageLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <MessageCircle className="w-5 h-5 text-muted-foreground" />}
-                </button>
-                <button className="p-3 rounded-2xl border border-border hover:bg-muted transition-all">
-                  <Phone className="w-5 h-5 text-muted-foreground" />
-                </button>
-                <button className="p-3 rounded-2xl border border-border hover:bg-muted transition-all">
-                  <Globe className="w-5 h-5 text-muted-foreground" />
-                </button>
-                <button className="p-3 rounded-2xl border border-border hover:bg-muted transition-all">
-                  <Instagram className="w-5 h-5 text-muted-foreground" />
-                </button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      onClick={handleMessage}
+                      disabled={messageLoading}
+                      className="p-3 rounded-2xl border border-border hover:bg-muted transition-all disabled:opacity-50"
+                      aria-label="Message Salon"
+                    >
+                      {messageLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <MessageCircle className="w-5 h-5 text-muted-foreground" />}
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>Message Salon</TooltipContent>
+                </Tooltip>
+
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      className="p-3 rounded-2xl border border-border hover:bg-muted transition-all"
+                      aria-label="Call Salon"
+                    >
+                      <Phone className="w-5 h-5 text-muted-foreground" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>Call Salon</TooltipContent>
+                </Tooltip>
+
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      className="p-3 rounded-2xl border border-border hover:bg-muted transition-all"
+                      aria-label="Visit Website"
+                    >
+                      <Globe className="w-5 h-5 text-muted-foreground" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>Visit Website</TooltipContent>
+                </Tooltip>
+
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      className="p-3 rounded-2xl border border-border hover:bg-muted transition-all"
+                      aria-label="Follow on Instagram"
+                    >
+                      <Instagram className="w-5 h-5 text-muted-foreground" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>Follow on Instagram</TooltipContent>
+                </Tooltip>
               </div>
             </div>
 
@@ -528,10 +567,11 @@ export default function SalonDetailsPage() {
               ) : (
                 <div className="space-y-4">
                   {services.map((service) => (
-                    <div
+                    <button
                       key={service.id}
+                      type="button"
                       onClick={() => setSelectedServiceId(service.id)}
-                      className={`p-6 rounded-3xl border transition-all cursor-pointer group ${
+                      className={`w-full text-left p-6 rounded-3xl border transition-all cursor-pointer group ${
                         selectedServiceId === service.id
                           ? "border-blue-600 bg-blue-50/30"
                           : "border-border bg-card hover:border-blue-600"
@@ -557,7 +597,7 @@ export default function SalonDetailsPage() {
                           {selectedServiceId === service.id && <div className="w-2 h-2 rounded-full bg-card" />}
                         </div>
                       </div>
-                    </div>
+                    </button>
                   ))}
                 </div>
               )}
@@ -731,5 +771,6 @@ export default function SalonDetailsPage() {
         </div>
       </div>
     </div>
+    </TooltipProvider>
   );
 }
