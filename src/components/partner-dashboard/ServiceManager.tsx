@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Plus, Scissors, Trash2 } from "lucide-react"
+import { Plus, Scissors, Trash2, Loader2 } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {
@@ -13,6 +13,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 import { toast } from "sonner"
 import { Card, CardContent } from "@/components/ui/card"
 
@@ -36,6 +46,9 @@ export function ServiceManager({ salonId }: ServiceManagerProps) {
   const [loading, setLoading] = useState(true)
   const [isAddOpen, setIsAddOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+  const [serviceToDelete, setServiceToDelete] = useState<string | null>(null)
   const [newService, setNewService] = useState({ name: "", price: "", duration: "", description: "", category: "", image: "" })
 
   useEffect(() => {
@@ -102,20 +115,19 @@ export function ServiceManager({ salonId }: ServiceManagerProps) {
     }
   }
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async () => {
+    if (!serviceToDelete) return;
+    setIsDeleting(true);
     try {
-        const res = await fetch(`/api/services/${id}`, {
-            method: "DELETE"
-        });
-
-        if (!res.ok) {
-             throw new Error("Failed to delete service");
-        }
-
-        setServices(services.filter(s => s.id !== id))
-        toast.success("Service removed")
+        const res = await fetch(`/api/services/${serviceToDelete}`, { method: "DELETE" });
+        if (!res.ok) throw new Error("Failed to delete service");
+        setServices(services.filter(s => s.id !== serviceToDelete));
+        toast.success("Service removed");
+        setIsDeleteDialogOpen(false);
     } catch (error) {
         toast.error("Could not delete service");
+    } finally {
+        setIsDeleting(false);
     }
   }
 
@@ -237,7 +249,8 @@ export function ServiceManager({ salonId }: ServiceManagerProps) {
                     variant="ghost"
                     size="icon"
                     className="h-8 w-8 text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 transition-opacity absolute top-2 right-2 bg-background/80 backdrop-blur-sm"
-                    onClick={() => handleDelete(service.id)}
+                    onClick={() => { setServiceToDelete(service.id); setIsDeleteDialogOpen(true); }}
+                    aria-label={`Delete ${service.name}`}
                 >
                     <Trash2 className="w-4 h-4" />
                 </Button>
@@ -259,6 +272,26 @@ export function ServiceManager({ salonId }: ServiceManagerProps) {
             </div>
         )}
       </div>
+
+      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>This action cannot be undone. This will permanently delete the service.</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(e) => { e.preventDefault(); handleDelete(); }}
+              disabled={isDeleting}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {isDeleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }
