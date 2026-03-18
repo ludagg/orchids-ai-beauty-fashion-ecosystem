@@ -30,6 +30,11 @@ import CartIcon from "@/components/CartIcon";
 import NotificationBell from "@/components/NotificationBell";
 import UserAccount from "@/components/UserAccount";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { CartProvider } from "@/lib/cart-context";
@@ -81,40 +86,85 @@ export default function AppLayout({
               Rare
             </Link>
           )}
-          <button
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            className="p-1 rounded-full hover:bg-secondary text-muted-foreground transition-colors"
-            aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-          >
-            {isCollapsed ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5" />}
-          </button>
+          <Tooltip delayDuration={0}>
+            <TooltipTrigger asChild>
+              <button
+                onClick={() => setIsCollapsed(!isCollapsed)}
+                className="p-1 rounded-full hover:bg-secondary text-muted-foreground transition-colors"
+                aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+              >
+                {isCollapsed ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5" />}
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side="right">
+              <p>{isCollapsed ? "Expand sidebar" : "Collapse sidebar"}</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
 
         <nav className="flex-1 px-4 space-y-1">
           {session?.user?.role === "salon_owner" && (
-            <Link
-              href="/app/my-business"
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-[#D4AF37] hover:bg-secondary hover:text-[#D4AF37] ${isCollapsed ? "justify-center" : ""}`}
-            >
-              <Store className="w-5 h-5 flex-shrink-0" />
-              {!isCollapsed && <span>My Business</span>}
-            </Link>
+            isCollapsed ? (
+              <Tooltip delayDuration={0}>
+                <TooltipTrigger asChild>
+                  <Link
+                    href="/app/my-business"
+                    className="w-full flex items-center justify-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-[#D4AF37] hover:bg-secondary hover:text-[#D4AF37]"
+                    aria-label="My Business"
+                  >
+                    <Store className="w-5 h-5 flex-shrink-0" />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  <p>My Business</p>
+                </TooltipContent>
+              </Tooltip>
+            ) : (
+              <Link
+                href="/app/my-business"
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-[#D4AF37] hover:bg-secondary hover:text-[#D4AF37]"
+              >
+                <Store className="w-5 h-5 flex-shrink-0" />
+                <span>My Business</span>
+              </Link>
+            )
           )}
           {sidebarItems.map((item) => {
             const isActive = pathname === item.href;
             return (
-              <Link
-                key={item.label}
-                href={item.href}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
-                  isActive
-                    ? "bg-primary text-primary-foreground shadow-lg shadow-foreground/10"
-                    : "text-muted-foreground hover:bg-secondary hover:text-foreground"
-                } ${isCollapsed ? "justify-center" : ""}`}
-              >
-                <item.icon className="w-5 h-5 flex-shrink-0" />
-                {!isCollapsed && <span>{item.label}</span>}
-              </Link>
+              isCollapsed ? (
+                <Tooltip key={item.label} delayDuration={0}>
+                  <TooltipTrigger asChild>
+                    <Link
+                      href={item.href}
+                      className={`w-full flex items-center justify-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+                        isActive
+                          ? "bg-primary text-primary-foreground shadow-lg shadow-foreground/10"
+                          : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+                      }`}
+                      aria-label={item.label}
+                    >
+                      <item.icon className="w-5 h-5 flex-shrink-0" />
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    <p>{item.label}</p>
+                  </TooltipContent>
+                </Tooltip>
+              ) : (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+                    isActive
+                      ? "bg-primary text-primary-foreground shadow-lg shadow-foreground/10"
+                      : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+                  }`}
+                >
+                  <item.icon className="w-5 h-5 flex-shrink-0" />
+                  <span>{item.label}</span>
+                </Link>
+              )
             );
           })}
         </nav>
@@ -122,15 +172,34 @@ export default function AppLayout({
         
 
         <div className={`p-4 border-t border-border ${isCollapsed ? "flex justify-center" : ""}`}>
-          <Link
-            href="/app/settings"
-            className={`w-full flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors ${
-              pathname === "/app/settings" ? "text-foreground" : "text-muted-foreground hover:text-foreground"
-            } ${isCollapsed ? "justify-center" : ""}`}
-          >
-            <Settings className="w-5 h-5 flex-shrink-0" />
-            {!isCollapsed && <span>Settings</span>}
-          </Link>
+          {isCollapsed ? (
+            <Tooltip delayDuration={0}>
+              <TooltipTrigger asChild>
+                <Link
+                  href="/app/settings"
+                  className={`w-full flex items-center justify-center gap-3 px-4 py-3 text-sm font-medium transition-colors ${
+                    pathname === "/app/settings" ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+                  }`}
+                  aria-label="Settings"
+                >
+                  <Settings className="w-5 h-5 flex-shrink-0" />
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent side="right">
+                <p>Settings</p>
+              </TooltipContent>
+            </Tooltip>
+          ) : (
+            <Link
+              href="/app/settings"
+              className={`w-full flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors ${
+                pathname === "/app/settings" ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <Settings className="w-5 h-5 flex-shrink-0" />
+              <span>Settings</span>
+            </Link>
+          )}
         </div>
       </aside>
 
