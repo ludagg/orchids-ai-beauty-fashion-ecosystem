@@ -30,6 +30,11 @@ import CartIcon from "@/components/CartIcon";
 import NotificationBell from "@/components/NotificationBell";
 import UserAccount from "@/components/UserAccount";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { CartProvider } from "@/lib/cart-context";
@@ -102,7 +107,7 @@ export default function AppLayout({
           )}
           {sidebarItems.map((item) => {
             const isActive = pathname === item.href;
-            return (
+            const link = (
               <Link
                 key={item.label}
                 href={item.href}
@@ -116,21 +121,44 @@ export default function AppLayout({
                 {!isCollapsed && <span>{item.label}</span>}
               </Link>
             );
+
+            return isCollapsed ? (
+              <Tooltip key={item.label}>
+                <TooltipTrigger asChild>{link}</TooltipTrigger>
+                <TooltipContent side="right">{item.label}</TooltipContent>
+              </Tooltip>
+            ) : link;
           })}
         </nav>
 
         
 
         <div className={`p-4 border-t border-border ${isCollapsed ? "flex justify-center" : ""}`}>
-          <Link
-            href="/app/settings"
-            className={`w-full flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors ${
-              pathname === "/app/settings" ? "text-foreground" : "text-muted-foreground hover:text-foreground"
-            } ${isCollapsed ? "justify-center" : ""}`}
-          >
-            <Settings className="w-5 h-5 flex-shrink-0" />
-            {!isCollapsed && <span>Settings</span>}
-          </Link>
+          {isCollapsed ? (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link
+                  href="/app/settings"
+                  className={`w-full flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors justify-center ${
+                    pathname === "/app/settings" ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  <Settings className="w-5 h-5 flex-shrink-0" />
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent side="right">Settings</TooltipContent>
+            </Tooltip>
+          ) : (
+            <Link
+              href="/app/settings"
+              className={`w-full flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors ${
+                pathname === "/app/settings" ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <Settings className="w-5 h-5 flex-shrink-0" />
+              <span>Settings</span>
+            </Link>
+          )}
         </div>
       </aside>
 
