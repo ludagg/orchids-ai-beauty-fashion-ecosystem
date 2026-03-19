@@ -60,3 +60,7 @@
 ## 2026-03-13 - [Admin UX Consistency]
 **Learning:** Admin salon management actions (Approve, Suspend, Reject) were using native browser `confirm()` dialogs, which felt disconnected from the application's design system and lacked descriptive context or loading feedback.
 **Action:** Replace native `confirm()` with themed `AlertDialog` components. Ensure each action has a tailored title and description to provide clear context for destructive or critical operations. Include `Loader2` spinners in confirmation buttons to signal asynchronous processing.
+
+## 2026-03-20 - Collapsible Sidebar Tooltips
+**Learning:** For collapsible sidebars, icons alone are often insufficient for navigation discoverability. Wrapping navigation items in `Tooltip` components specifically during the collapsed state (`isCollapsed`) provides essential visual labeling without cluttering the UI when expanded.
+**Action:** Use conditional rendering or state-based logic to wrap sidebar links in `Tooltip` triggers only when labels are hidden. This maintains a lean DOM in the expanded state while ensuring accessibility in the collapsed state.
