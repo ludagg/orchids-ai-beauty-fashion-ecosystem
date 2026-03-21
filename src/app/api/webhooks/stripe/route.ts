@@ -51,10 +51,11 @@ export async function POST(req: NextRequest) {
 
           if (order && order.items) {
             for (const item of order.items) {
+              // [Jules - Update stock decrement logic to match commerce schema]
               await db
                 .update(products)
                 .set({
-                  stock: sql`${products.stock} - ${item.quantity}`,
+                  totalStock: sql`${products.totalStock} - ${item.quantity}`,
                 })
                 .where(eq(products.id, item.productId));
             }

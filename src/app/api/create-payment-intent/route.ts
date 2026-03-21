@@ -46,14 +46,16 @@ export async function POST(req: NextRequest) {
       if (!product) {
         return NextResponse.json({ error: `Product not found: ${item.id}` }, { status: 400 });
       }
-      if (product.stock < item.quantity) {
+      // [Jules - Update schema references and optimize batch inserts]
+      if (product.totalStock < item.quantity) {
           return NextResponse.json({ error: `Insufficient stock for ${product.name}` }, { status: 400 });
       }
 
-      totalAmount += product.price * item.quantity;
+      const effectivePrice = product.salePrice ?? product.originalPrice;
+      totalAmount += effectivePrice * item.quantity;
       validatedItems.push({
         ...item,
-        price: product.price
+        price: effectivePrice
       });
     }
 
@@ -83,14 +85,16 @@ export async function POST(req: NextRequest) {
             shippingAddress: shippingAddress ? JSON.stringify(shippingAddress) : null,
         });
 
-        for (const item of validatedItems) {
-            await tx.insert(orderItems).values({
+        // [Jules - Optimize batch inserts]
+        if (validatedItems.length > 0) {
+            const orderItemsData = validatedItems.map(item => ({
                 id: nanoid(),
                 orderId: orderId,
                 productId: item.id,
                 quantity: item.quantity,
                 priceAtPurchase: item.price
-            });
+            }));
+            await tx.insert(orderItems).values(orderItemsData);
         }
     });
 
