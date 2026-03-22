@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Plus, ShoppingBag, Trash2, Edit, ArrowLeft } from "lucide-react"
+import { Plus, ShoppingBag, Trash2, Edit, ArrowLeft, Loader2 } from "lucide-react"
 import { toast } from "sonner"
 import { Card, CardContent } from "@/components/ui/card"
 import { ProductForm } from "./product-form/ProductForm"
@@ -12,6 +12,16 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 
 interface ProductManagerProps {
     salonId: string;
@@ -22,6 +32,9 @@ export function ProductManager({ salonId }: ProductManagerProps) {
   const [loading, setLoading] = useState(true)
   const [view, setView] = useState<"list" | "form">("list")
   const [editingProduct, setEditingProduct] = useState<ProductFormValues & { id: string } | undefined>(undefined)
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+  const [productToDelete, setProductToDelete] = useState<string | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   useEffect(() => {
     if (salonId) {
@@ -43,9 +56,11 @@ export function ProductManager({ salonId }: ProductManagerProps) {
     }
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async () => {
+    if (!productToDelete) return;
+    setIsDeleting(true);
     try {
-        const res = await fetch(`/api/products/${id}`, {
+        const res = await fetch(`/api/products/${productToDelete}`, {
             method: "DELETE"
         });
 
@@ -53,10 +68,14 @@ export function ProductManager({ salonId }: ProductManagerProps) {
              throw new Error("Failed to delete product");
         }
 
-        setProducts(products.filter(p => p.id !== id))
+        setProducts(products.filter(p => p.id !== productToDelete))
         toast.success("Product removed")
+        setIsDeleteDialogOpen(false);
     } catch (error) {
         toast.error("Could not delete product");
+    } finally {
+        setIsDeleting(false);
+        setProductToDelete(null);
     }
   }
 
@@ -133,7 +152,7 @@ export function ProductManager({ salonId }: ProductManagerProps) {
             )}
 
             <CardContent className="p-5">
-              <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity bg-background/80 backdrop-blur-sm rounded-md p-1">
+              <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity bg-background/80 backdrop-blur-sm rounded-md p-1">
                  <Tooltip>
                     <TooltipTrigger asChild>
                         <Button
@@ -153,7 +172,11 @@ export function ProductManager({ salonId }: ProductManagerProps) {
                             variant="ghost"
                             size="icon"
                             className="h-8 w-8 hover:text-destructive"
-                            onClick={() => handleDelete(product.id)}
+                            onClick={() => {
+                                setProductToDelete(product.id);
+                                setIsDeleteDialogOpen(true);
+                            }}
+                            aria-label={`Delete ${product.name}`}
                         >
                             <Trash2 className="w-4 h-4" />
                         </Button>
@@ -205,6 +228,31 @@ export function ProductManager({ salonId }: ProductManagerProps) {
             </div>
         )}
       </div>
+
+      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the product from your inventory.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(e) => {
+                e.preventDefault();
+                handleDelete();
+              }}
+              disabled={isDeleting}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {isDeleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }
