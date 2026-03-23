@@ -95,6 +95,8 @@ export default function AppLayout({
             <Link
               href="/app/my-business"
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-[#D4AF37] hover:bg-secondary hover:text-[#D4AF37] ${isCollapsed ? "justify-center" : ""}`}
+              aria-label={isCollapsed ? "My Business" : undefined}
+              title={isCollapsed ? "My Business" : undefined}
             >
               <Store className="w-5 h-5 flex-shrink-0" />
               {!isCollapsed && <span>My Business</span>}
@@ -111,6 +113,8 @@ export default function AppLayout({
                     ? "bg-primary text-primary-foreground shadow-lg shadow-foreground/10"
                     : "text-muted-foreground hover:bg-secondary hover:text-foreground"
                 } ${isCollapsed ? "justify-center" : ""}`}
+                aria-label={isCollapsed ? item.label : undefined}
+                title={isCollapsed ? item.label : undefined}
               >
                 <item.icon className="w-5 h-5 flex-shrink-0" />
                 {!isCollapsed && <span>{item.label}</span>}
@@ -127,6 +131,8 @@ export default function AppLayout({
             className={`w-full flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors ${
               pathname === "/app/settings" ? "text-foreground" : "text-muted-foreground hover:text-foreground"
             } ${isCollapsed ? "justify-center" : ""}`}
+            aria-label={isCollapsed ? "Settings" : undefined}
+            title={isCollapsed ? "Settings" : undefined}
           >
             <Settings className="w-5 h-5 flex-shrink-0" />
             {!isCollapsed && <span>Settings</span>}

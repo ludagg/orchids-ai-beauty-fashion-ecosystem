@@ -108,6 +108,7 @@ export default function BusinessLayoutClient({
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
             className="p-1 rounded-full hover:bg-secondary text-muted-foreground transition-colors"
+            aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
             {isCollapsed ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5" />}
           </button>
@@ -117,6 +118,7 @@ export default function BusinessLayoutClient({
            <Link
               href="/app"
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-muted-foreground hover:bg-secondary hover:text-foreground mb-4 border-b border-border pb-4 ${isCollapsed ? "justify-center" : ""}`}
+              aria-label={isCollapsed ? "Back to App" : undefined}
             >
               <LogOut className="w-5 h-5 flex-shrink-0 rotate-180" />
               {!isCollapsed && <span>Back to App</span>}
@@ -133,6 +135,7 @@ export default function BusinessLayoutClient({
                     ? "bg-primary text-primary-foreground shadow-lg shadow-foreground/10"
                     : "text-muted-foreground hover:bg-secondary hover:text-foreground"
                 } ${isCollapsed ? "justify-center" : ""}`}
+                aria-label={isCollapsed ? item.label : undefined}
                 title={isCollapsed ? item.label : undefined}
               >
                 <item.icon className="w-5 h-5 flex-shrink-0" />
