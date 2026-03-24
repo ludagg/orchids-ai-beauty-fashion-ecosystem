@@ -1,7 +1,26 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { CreditCard, History, Download, CheckCircle2 } from "lucide-react";
+import { CreditCard, History, Download, CheckCircle2, Loader2, AlertCircle } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 const INVOICES = [
   { id: "INV-001", date: "Oct 24, 2024", plan: "Pro Plan (Monthly)", amount: "₹499.00", status: "Paid" },
@@ -10,6 +29,16 @@ const INVOICES = [
 ];
 
 export default function BillingPage() {
+  const [isCancelling, setIsCancelling] = useState(false);
+
+  const handleCancelSubscription = async () => {
+    setIsCancelling(true);
+    // Mock API call
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    setIsCancelling(false);
+    toast.success("Subscription cancellation request received. You will have access until the end of your billing cycle.");
+  };
+
   return (
     <div className="p-6 max-w-4xl mx-auto space-y-8">
       <div>
@@ -49,12 +78,45 @@ export default function BillingPage() {
             </div>
 
             <div className="flex gap-4">
-              <button className="px-5 py-2.5 rounded-xl bg-white text-violet-700 font-bold text-sm hover:bg-violet-50 transition-colors">
+              <button
+                className="px-5 py-2.5 rounded-xl bg-white text-violet-700 font-bold text-sm hover:bg-violet-50 transition-colors"
+                aria-label="Upgrade subscription plan"
+              >
                 Upgrade Plan
               </button>
-              <button className="px-5 py-2.5 rounded-xl bg-white/10 backdrop-blur-md text-white font-medium text-sm hover:bg-white/20 transition-colors border border-white/10">
-                Cancel Subscription
-              </button>
+
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <button
+                    disabled={isCancelling}
+                    className="px-5 py-2.5 rounded-xl bg-white/10 backdrop-blur-md text-white font-medium text-sm hover:bg-white/20 transition-colors border border-white/10 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                    aria-label="Cancel subscription"
+                  >
+                    {isCancelling && <Loader2 className="w-4 h-4 animate-spin" />}
+                    Cancel Subscription
+                  </button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle className="flex items-center gap-2">
+                      <AlertCircle className="w-5 h-5 text-destructive" />
+                      Cancel Subscription?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Are you sure you want to cancel your Pro membership? You will lose access to unlimited AI queries and priority bookings at the end of your current period.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Keep My Plan</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={handleCancelSubscription}
+                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                    >
+                      Yes, Cancel Subscription
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
           </div>
         </motion.div>
@@ -80,7 +142,10 @@ export default function BillingPage() {
               </div>
             </div>
           </div>
-          <button className="w-full mt-4 px-4 py-2 rounded-xl border border-border text-sm font-medium hover:bg-secondary transition-colors">
+          <button
+            className="w-full mt-4 px-4 py-2 rounded-xl border border-border text-sm font-medium hover:bg-secondary transition-colors"
+            aria-label="Update payment card details"
+          >
             Update Card
           </button>
         </motion.div>
@@ -123,9 +188,19 @@ export default function BillingPage() {
                     </span>
                   </td>
                   <td className="px-6 py-4 text-right">
-                    <button className="p-2 hover:bg-secondary rounded-full transition-colors text-muted-foreground hover:text-foreground">
-                      <Download className="w-4 h-4" />
-                    </button>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <button
+                          className="p-2 hover:bg-secondary rounded-full transition-colors text-muted-foreground hover:text-foreground"
+                          aria-label={`Download invoice ${invoice.id}`}
+                        >
+                          <Download className="w-4 h-4" />
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Download Invoice</p>
+                      </TooltipContent>
+                    </Tooltip>
                   </td>
                 </tr>
               ))}
