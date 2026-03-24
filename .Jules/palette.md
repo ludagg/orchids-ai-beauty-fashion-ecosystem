@@ -60,3 +60,7 @@
 ## 2026-03-13 - [Admin UX Consistency]
 **Learning:** Admin salon management actions (Approve, Suspend, Reject) were using native browser `confirm()` dialogs, which felt disconnected from the application's design system and lacked descriptive context or loading feedback.
 **Action:** Replace native `confirm()` with themed `AlertDialog` components. Ensure each action has a tailored title and description to provide clear context for destructive or critical operations. Include `Loader2` spinners in confirmation buttons to signal asynchronous processing.
+
+## 2026-03-24 - Subscription Cancellation Guard
+**Learning:** Protecting destructive subscription actions with themed `AlertDialog` components provides a consistent safety net, and integrating loading states (`isPending`) directly on the confirmation action prevents duplicate requests and gives immediate visual feedback during critical account transitions.
+**Action:** Always wrap subscription cancellations or high-stakes account changes in an `AlertDialog` and include a `Loader2` spinner on the confirmation button while disabling it during processing.
