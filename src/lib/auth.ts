@@ -24,6 +24,8 @@ export const auth = betterAuth({
       },
     },
   },
+  secret: process.env.BETTER_AUTH_SECRET || (process.env.NODE_ENV !== "production" ? "fallback_secret_for_dev_and_build" : undefined),
+  baseURL: process.env.BETTER_AUTH_BASE_URL || process.env.BETTER_AUTH_URL || (process.env.NODE_ENV !== "production" ? "http://localhost:3000" : undefined),
   emailAndPassword: {
     enabled: true,
   },
