@@ -28,6 +28,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
+import {
+  Empty,
+  EmptyHeader,
+  EmptyTitle,
+  EmptyDescription,
+  EmptyMedia,
+} from "@/components/ui/empty";
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -234,6 +241,7 @@ export default function ProfileView({ user, isSalonOwner }: ProfileViewProps) {
                     el?.scrollIntoView({ behavior: "smooth" });
                   }}
                   className="hover:opacity-70 transition-opacity text-left"
+                  aria-label="Scroll to followers details"
                 >
                   <StatItem value={stats.followers} label="Followers" trend="+12%" />
                 </button>
@@ -243,13 +251,22 @@ export default function ProfileView({ user, isSalonOwner }: ProfileViewProps) {
                     el?.scrollIntoView({ behavior: "smooth" });
                   }}
                   className="hover:opacity-70 transition-opacity text-left"
+                  aria-label="Scroll to following details"
                 >
                   <StatItem value="482" label="Following" trend="+3%" />
                 </button>
-                <Link href="/app/videos-creations" className="hover:opacity-70 transition-opacity">
+                <Link
+                  href="/app/videos-creations"
+                  className="hover:opacity-70 transition-opacity"
+                  aria-label="View likes details"
+                >
                   <StatItem value={stats.likes} label="Likes" trend="+8%" />
                 </Link>
-                <Link href="/app/videos-creations" className="hover:opacity-70 transition-opacity">
+                <Link
+                  href="/app/videos-creations"
+                  className="hover:opacity-70 transition-opacity"
+                  aria-label="View videos details"
+                >
                   <StatItem value={stats.videos} label="Videos" />
                 </Link>
               </div>
@@ -506,24 +523,52 @@ function VideoCard({ video, index }: { video: VideoData, index: number }) {
 // Empty State Component
 function EmptyState({ type, onUpload }: { type: string, onUpload?: () => void }) {
   return (
-    <div className="flex flex-col items-center justify-center py-16 sm:py-24 text-center space-y-6">
-      <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center">
-        <Video className="w-8 h-8 text-muted-foreground" />
-      </div>
+    <div className="relative overflow-hidden rounded-3xl border border-dashed border-border/50 bg-card/50">
+      {/* Background patterns */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#e5e5e5_1px,transparent_1px)] dark:bg-[radial-gradient(circle_at_center,#333_1px,transparent_1px)] bg-[size:32px_32px] opacity-20" />
+      <motion.div
+        animate={{
+          scale: [1, 1.2, 1],
+          opacity: [0.1, 0.15, 0.1],
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        className="absolute -top-24 -left-24 w-64 h-64 bg-primary/20 rounded-full blur-3xl"
+      />
+      <motion.div
+        animate={{
+          scale: [1, 1.1, 1],
+          opacity: [0.05, 0.1, 0.05],
+        }}
+        transition={{
+          duration: 10,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 1,
+        }}
+        className="absolute -bottom-24 -right-24 w-80 h-80 bg-rose-500/20 rounded-full blur-3xl"
+      />
 
-      <div className="space-y-2 max-w-xs sm:max-w-sm px-4">
-        <h3 className="text-lg font-semibold text-foreground">No videos yet</h3>
-        <p className="text-sm text-muted-foreground">
-          Start sharing your style journey by uploading your first video.
-        </p>
-      </div>
-
-      {onUpload && (
-        <Button onClick={onUpload}>
-          <Upload className="w-4 h-4 mr-2" />
-          Upload Your First Video
-        </Button>
-      )}
+      <Empty className="relative z-10 py-16 sm:py-24 border-none bg-transparent">
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <Video className="w-6 h-6 text-primary" />
+          </EmptyMedia>
+          <EmptyTitle>No videos yet</EmptyTitle>
+          <EmptyDescription>
+            Start sharing your style journey by uploading your first video.
+          </EmptyDescription>
+        </EmptyHeader>
+        {onUpload && (
+          <Button onClick={onUpload} className="mt-4 shadow-lg shadow-primary/20">
+            <Upload className="w-4 h-4 mr-2" />
+            Upload Your First Video
+          </Button>
+        )}
+      </Empty>
     </div>
   );
 }
@@ -579,6 +624,7 @@ function RewardsSection({ user }: { user: UserData }) {
                     className="h-2 bg-primary-foreground/20"
                     // @ts-ignore
                     indicatorClassName="bg-primary-foreground"
+                    aria-label="Loyalty points progress"
                 />
                 <div className="flex justify-between text-xs text-primary-foreground/80 font-medium">
                     <span>{points} pts</span>
