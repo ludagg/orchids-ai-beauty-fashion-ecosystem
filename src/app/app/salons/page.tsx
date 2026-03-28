@@ -16,6 +16,7 @@ import {
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
+import SearchBar from "@/components/SearchBar";
 
 const categories = ["All", "Hair", "Skin", "Spa", "Nails", "Grooming"];
 
@@ -48,6 +49,7 @@ export default function SalonsPage() {
   const [salons, setSalons] = useState<Salon[]>([]);
   const [loading, setLoading] = useState(true);
   const [mobileView, setMobileView] = useState<"list" | "map">("list");
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     async function fetchSalons() {
@@ -68,7 +70,14 @@ export default function SalonsPage() {
 
   const filteredSalons = salons
     .filter(
-      (salon) => selectedCategory === "All" || salon.type === selectedCategory
+      (salon) => {
+        const matchesCategory = selectedCategory === "All" || salon.type === selectedCategory;
+        const matchesSearch = !searchQuery ||
+          salon.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          salon.address.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          salon.city.toLowerCase().includes(searchQuery.toLowerCase());
+        return matchesCategory && matchesSearch;
+      }
     )
     .sort((a, b) => {
       if (sortBy === "rating") return (b.rating || 0) - (a.rating || 0);
@@ -134,11 +143,11 @@ export default function SalonsPage() {
 
       {/* Search Bar */}
       <section className="relative">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-        <input
-          type="text"
+        <SearchBar
+          value={searchQuery}
+          onChange={setSearchQuery}
           placeholder="Search for services or salon names..."
-          className="w-full pl-12 pr-4 py-4 rounded-2xl bg-card border border-border focus:border-primary shadow-sm transition-all outline-none text-base sm:text-lg text-foreground"
+          className="w-full"
         />
       </section>
 
