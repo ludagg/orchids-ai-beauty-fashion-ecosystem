@@ -565,7 +565,7 @@ export default function AIStylistPage() {
               </button>
             </div>
             <p className="text-center text-[11px] text-muted-foreground/50 mt-3 sm:mt-4 font-bold uppercase tracking-[0.2em]">
-              Powered by Rare Style Engine v2.0
+              Powered by Priisme Style Engine v2.0
             </p>
           </div>
         </main>

@@ -15,7 +15,7 @@ export default function PartnerLanding({ onStart }: PartnerLandingProps) {
         <div className="container mx-auto px-4 text-center">
           <div className="max-w-3xl mx-auto space-y-6">
             <h1 className="text-4xl font-display font-bold tracking-tight sm:text-6xl">
-              Partner with Rare & Grow Your Business
+              Partner with Priisme & Grow Your Business
             </h1>
             <p className="text-xl text-muted-foreground">
               Join the premier platform for beauty and wellness professionals.
@@ -47,7 +47,7 @@ export default function PartnerLanding({ onStart }: PartnerLandingProps) {
       <section className="py-20 bg-background">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">Why Professionals Choose Rare</h2>
+            <h2 className="text-3xl font-bold mb-4">Why Professionals Choose Priisme</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               We provide the tools you need to succeed in the modern beauty industry.
             </p>
@@ -116,7 +116,7 @@ export default function PartnerLanding({ onStart }: PartnerLandingProps) {
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold mb-6">Ready to Transform Your Business?</h2>
           <p className="text-primary-foreground/80 max-w-2xl mx-auto mb-8 text-lg">
-            Join thousands of top-rated salons and stylists on Rare today.
+            Join thousands of top-rated salons and stylists on Priisme today.
           </p>
           <Button
             size="lg"
