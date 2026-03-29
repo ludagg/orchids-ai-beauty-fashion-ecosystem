@@ -14,6 +14,11 @@ export const auth = betterAuth({
         verification: schema.verifications,
     }
   }),
+  // [Jules - Reason for modification] Adding required additionalFields (phone, gender, location) as per memory and conditional secret/baseURL for non-production environments
+  ...(process.env.NODE_ENV !== 'production' && {
+    secret: process.env.BETTER_AUTH_SECRET || "dummy-secret-for-build",
+    baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
+  }),
   user: {
     additionalFields: {
       role: {
@@ -21,6 +26,15 @@ export const auth = betterAuth({
       },
       loyaltyPoints: {
         type: "number",
+      },
+      phone: {
+        type: "string",
+      },
+      gender: {
+        type: "string",
+      },
+      location: {
+        type: "string",
       },
     },
   },
