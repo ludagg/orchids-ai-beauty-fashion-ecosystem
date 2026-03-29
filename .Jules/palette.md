@@ -60,3 +60,7 @@
 ## 2026-03-13 - [Admin UX Consistency]
 **Learning:** Admin salon management actions (Approve, Suspend, Reject) were using native browser `confirm()` dialogs, which felt disconnected from the application's design system and lacked descriptive context or loading feedback.
 **Action:** Replace native `confirm()` with themed `AlertDialog` components. Ensure each action has a tailored title and description to provide clear context for destructive or critical operations. Include `Loader2` spinners in confirmation buttons to signal asynchronous processing.
+
+## 2026-03-20 - Standardized Conversation Inbox Empty State
+**Learning:** Standardizing empty states across the application using the `Empty` UI primitives combined with branded background patterns (radial grid + animated blobs) provides a cohesive "premium" feel. Adding a `Tooltip` and explicit `aria-label` to the primary call-to-action button in these states ensures they are both discoverable and accessible to all users.
+**Action:** Use `Empty` components for all placeholder/empty states. Always include the branded background patterns and wrap primary action buttons in `Tooltip` components with descriptive `aria-label` attributes.
