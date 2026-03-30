@@ -4,6 +4,9 @@ import { db } from "./db";
 import * as schema from "@/db/schema";
 
 export const auth = betterAuth({
+  // [Jules - Ajout des fallback pour le build CI/CD selon la mémoire et best practices]
+  secret: process.env.BETTER_AUTH_SECRET || (process.env.NODE_ENV !== "production" ? "dummy-secret-for-dev" : undefined),
+  baseURL: process.env.BETTER_AUTH_URL || (process.env.NODE_ENV !== "production" ? "http://localhost:3000" : undefined),
   database: drizzleAdapter(db, {
     provider: "pg",
     schema: {
