@@ -69,7 +69,11 @@ export function LevelProgress({ currentPoints, currentLevel, nextLevel }: LevelP
       </div>
 
       <div className="relative pt-2">
-        <Progress value={progress} className="h-3" />
+        <Progress
+          value={progress}
+          className="h-3"
+          aria-label={`Progress toward ${nextLevel?.name || 'max level'}: ${Math.round(progress)}%`}
+        />
         <motion.div
             className="absolute top-0 transform -translate-x-1/2 -mt-1"
             style={{ left: `${progress}%` }}

@@ -3,7 +3,7 @@
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Ticket, ShoppingBag, Percent, Tag, Store } from "lucide-react";
+import { Ticket, ShoppingBag, Percent, Tag, Store, Loader2 } from "lucide-react";
 import Image from "next/image";
 
 interface Reward {
@@ -91,8 +91,9 @@ export function RewardCard({ reward, onRedeem, isLoading, canAfford = true }: Re
                 size="sm"
                 onClick={() => onRedeem?.(reward.id)}
                 disabled={!canAfford || isLoading || (reward.quantity != null && reward.quantity <= 0)}
+                aria-label={isLoading ? "Redeeming..." : (reward.quantity != null && reward.quantity <= 0) ? "Out of Stock" : `Redeem ${reward.name} for ${reward.cost} points`}
             >
-                {isLoading ? "..." : (reward.quantity != null && reward.quantity <= 0) ? "Out of Stock" : "Redeem"}
+                {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : (reward.quantity != null && reward.quantity <= 0) ? "Out of Stock" : "Redeem"}
             </Button>
         </div>
       </CardFooter>
