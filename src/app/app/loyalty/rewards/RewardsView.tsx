@@ -4,6 +4,14 @@ import { RewardCard } from "@/components/loyalty/RewardCard";
 import { useState } from "react";
 import { toast } from "sonner";
 import { GamificationPopup } from "@/components/loyalty/GamificationPopup";
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
+import { ShoppingBag } from "lucide-react";
 
 interface Reward {
   id: string;
@@ -84,9 +92,17 @@ export function RewardsView({ initialRewards, userPoints }: RewardsViewProps) {
           />
         ))}
         {rewards.length === 0 && (
-            <p className="col-span-full text-center text-muted-foreground py-12">
-                No rewards available at the moment.
-            </p>
+            <Empty className="col-span-full py-12">
+                <EmptyHeader>
+                    <EmptyMedia variant="icon">
+                        <ShoppingBag className="h-8 w-8 opacity-50" />
+                    </EmptyMedia>
+                    <EmptyTitle>No rewards available</EmptyTitle>
+                    <EmptyDescription>
+                        Check back later for new rewards in the shop.
+                    </EmptyDescription>
+                </EmptyHeader>
+            </Empty>
         )}
       </div>
 

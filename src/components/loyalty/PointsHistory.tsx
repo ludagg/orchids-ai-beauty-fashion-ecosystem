@@ -3,6 +3,14 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { format } from "date-fns";
 import { ArrowUpRight, ArrowDownLeft, Clock } from "lucide-react";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
 
 interface PointTransaction {
   id: string;
@@ -17,17 +25,24 @@ interface PointsHistoryProps {
 }
 
 const getTypeIcon = (type: string, amount: number) => {
-    if (amount > 0) return <ArrowUpRight className="h-4 w-4 text-green-500" />;
-    return <ArrowDownLeft className="h-4 w-4 text-red-500" />;
+    if (amount > 0) return <ArrowUpRight className="h-4 w-4 text-green-500" aria-hidden="true" />;
+    return <ArrowDownLeft className="h-4 w-4 text-red-500" aria-hidden="true" />;
 };
 
 export function PointsHistory({ transactions }: PointsHistoryProps) {
   if (transactions.length === 0) {
       return (
-          <div className="flex flex-col items-center justify-center p-8 text-muted-foreground border border-dashed rounded-lg bg-muted/20">
-              <Clock className="h-8 w-8 mb-2 opacity-50" />
-              <p>No transactions yet</p>
-          </div>
+          <Empty className="border-none p-0 md:p-0">
+              <EmptyHeader>
+                  <EmptyMedia variant="icon">
+                      <Clock className="h-8 w-8 opacity-50" />
+                  </EmptyMedia>
+                  <EmptyTitle>No transactions yet</EmptyTitle>
+                  <EmptyDescription>
+                      Your points activity will appear here.
+                  </EmptyDescription>
+              </EmptyHeader>
+          </Empty>
       );
   }
 
@@ -37,7 +52,10 @@ export function PointsHistory({ transactions }: PointsHistoryProps) {
         {transactions.map((tx) => (
           <div key={tx.id} className="flex items-center justify-between p-3 border rounded-lg bg-card hover:bg-muted/50 transition-colors">
             <div className="flex items-center gap-3">
-              <div className={`p-2 rounded-full ${tx.amount > 0 ? 'bg-green-100/50 dark:bg-green-900/20' : 'bg-red-100/50 dark:bg-red-900/20'}`}>
+              <div
+                className={`p-2 rounded-full ${tx.amount > 0 ? 'bg-green-100/50 dark:bg-green-900/20' : 'bg-red-100/50 dark:bg-red-900/20'}`}
+                aria-label={tx.amount > 0 ? "Points earned" : "Points spent"}
+              >
                 {getTypeIcon(tx.type, tx.amount)}
               </div>
               <div>
