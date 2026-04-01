@@ -69,13 +69,14 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "Product not found" }, { status: 404 });
         }
 
-        if (product.stock < quantity) {
+        // [Jules - Updated to use correct schema fields for price and stock]
+        if (product.totalStock < quantity) {
             return NextResponse.json({ error: "Insufficient stock" }, { status: 400 });
         }
 
         // 2. Create Order
         const orderId = nanoid();
-        const totalAmount = product.price * quantity;
+        const totalAmount = (product.salePrice ?? product.originalPrice) * quantity;
 
         // Start transaction (implicitly handled if single operations, but better safe)
         // Drizzle transaction:
@@ -95,12 +96,12 @@ export async function POST(req: NextRequest) {
                 orderId: orderId,
                 productId: productId,
                 quantity: quantity,
-                priceAtPurchase: product.price
+                priceAtPurchase: product.salePrice ?? product.originalPrice
             });
 
             // Update Stock
             await tx.update(products)
-                .set({ stock: product.stock - quantity })
+                .set({ totalStock: product.totalStock - quantity })
                 .where(eq(products.id, productId));
 
             // Award Loyalty Points (1 point per 1 unit currency i.e. 100 cents)
