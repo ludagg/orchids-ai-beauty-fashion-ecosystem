@@ -45,10 +45,15 @@ if (!isVercel) {
 
 // ✅ Disable Turbopack on Vercel
 if (!isVercel) {
-  (nextConfig as any).turbopack = {
-    rules: {
-      "src/**/*.{jsx,tsx}": {
-        loaders: [LOADER],
+  (nextConfig as any).experimental = {
+    ...((nextConfig as any).experimental || {}),
+    turbo: {
+      ...(((nextConfig as any).experimental && (nextConfig as any).experimental.turbo) || {}),
+      rules: {
+        ...((((nextConfig as any).experimental && (nextConfig as any).experimental.turbo) && ((nextConfig as any).experimental as any).turbo.rules) || {}),
+        "src/**/*.{jsx,tsx}": {
+          loaders: [LOADER],
+        },
       },
     },
   };
