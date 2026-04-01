@@ -4,7 +4,9 @@ import { useState } from "react";
 import { ReviewCard } from "./ReviewCard";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { CheckCircle2, Image as ImageIcon } from "lucide-react";
+import { CheckCircle2, Image as ImageIcon, Search } from "lucide-react";
+import { Empty, EmptyHeader, EmptyTitle, EmptyDescription, EmptyMedia } from "@/components/ui/empty";
+import { motion } from "framer-motion";
 
 interface Review {
   id: string;
@@ -78,7 +80,27 @@ export function ReviewList({ reviews }: ReviewListProps) {
 
       <div className="space-y-4">
         {filteredReviews.length === 0 ? (
-          <p className="text-center text-muted-foreground py-8">No reviews match your filters.</p>
+          <Empty className="min-h-[300px] bg-muted/30 border-none relative overflow-hidden">
+            <div className="absolute inset-0 z-0">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
+                <div className="absolute bottom-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full blur-2xl" />
+            </div>
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="relative z-10"
+            >
+                <EmptyHeader>
+                    <EmptyMedia variant="icon">
+                        <Search className="w-6 h-6" />
+                    </EmptyMedia>
+                    <EmptyTitle>No matching reviews</EmptyTitle>
+                    <EmptyDescription>
+                        We couldn't find any reviews that match your current filters. Try adjusting your selection to see more results.
+                    </EmptyDescription>
+                </EmptyHeader>
+            </motion.div>
+          </Empty>
         ) : (
           filteredReviews.map((review) => (
             <ReviewCard key={review.id} review={review} />

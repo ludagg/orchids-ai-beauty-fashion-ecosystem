@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Star, Loader2, Upload, X } from "lucide-react";
 import { toast } from "sonner";
 import Image from "next/image";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface ReviewFormProps {
   isOpen: boolean;
@@ -128,6 +129,7 @@ export function ReviewForm({ isOpen, onOpenChange, salonId, bookingId, onSuccess
                 onMouseLeave={() => setHoverRating(0)}
                 onClick={() => setRating(star)}
                 className="focus:outline-none transition-transform active:scale-95"
+                aria-label={`Rate ${star} star${star > 1 ? 's' : ''}`}
               >
                 <Star
                   className={`w-8 h-8 ${
@@ -161,13 +163,19 @@ export function ReviewForm({ isOpen, onOpenChange, salonId, bookingId, onSuccess
               {previews.map((src, i) => (
                 <div key={i} className="relative aspect-square rounded-lg overflow-hidden border border-border group">
                   <Image src={src} alt="Preview" fill className="object-cover" />
-                  <button
-                    type="button"
-                    onClick={() => removeImage(i)}
-                    className="absolute top-1 right-1 p-1 rounded-full bg-black/50 text-white opacity-0 group-hover:opacity-100 transition-opacity"
-                  >
-                    <X className="w-3 h-3" />
-                  </button>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        type="button"
+                        onClick={() => removeImage(i)}
+                        className="absolute top-1 right-1 p-1 rounded-full bg-black/50 text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                        aria-label="Remove image"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>Remove image</TooltipContent>
+                  </Tooltip>
                 </div>
               ))}
               {previews.length < 4 && (
@@ -180,6 +188,7 @@ export function ReviewForm({ isOpen, onOpenChange, salonId, bookingId, onSuccess
                     multiple
                     className="hidden"
                     onChange={handleImageChange}
+                    aria-label="Upload review photos"
                   />
                 </label>
               )}

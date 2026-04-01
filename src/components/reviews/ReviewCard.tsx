@@ -67,7 +67,12 @@ export function ReviewCard({ review }: ReviewCardProps) {
             <div className="flex items-center gap-2">
               <p className="font-bold text-foreground text-sm">{review.user.name}</p>
               {review.isVerified && (
-                <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 border border-emerald-500/20" title="Verified Visit">
+                <div
+                  className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 border border-emerald-500/20"
+                  title="Verified Visit"
+                  role="img"
+                  aria-label="Verified Visit"
+                >
                   <CheckCircle2 className="w-3 h-3" />
                   <span className="text-[10px] font-bold uppercase tracking-wide">Verified</span>
                 </div>
@@ -102,7 +107,12 @@ export function ReviewCard({ review }: ReviewCardProps) {
             <Dialog key={i}>
               <DialogTrigger asChild>
                 <div className="relative w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden border border-border cursor-pointer hover:opacity-90 transition-opacity">
-                  <Image src={img} alt="Review photo" fill className="object-cover" />
+                  <Image
+                    src={img}
+                    alt={`Review photo ${i + 1} of ${review.images?.length}`}
+                    fill
+                    className="object-cover"
+                  />
                 </div>
               </DialogTrigger>
               <DialogContent className="max-w-3xl p-0 overflow-hidden bg-black/90 border-none">
@@ -122,6 +132,7 @@ export function ReviewCard({ review }: ReviewCardProps) {
           className={`h-8 gap-1.5 text-xs ${hasVoted ? "text-primary" : "text-muted-foreground hover:text-foreground"}`}
           onClick={handleHelpful}
           disabled={hasVoted}
+          aria-label={hasVoted ? `Helpful. Current count: ${helpfulCount}` : `Mark as helpful. Current count: ${helpfulCount}`}
         >
           <ThumbsUp className={`w-3.5 h-3.5 ${hasVoted ? "fill-current" : ""}`} />
           Helpful ({helpfulCount})
