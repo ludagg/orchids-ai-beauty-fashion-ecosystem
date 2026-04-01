@@ -1,6 +1,13 @@
 "use client";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
 import { format } from "date-fns";
 import { ArrowUpRight, ArrowDownLeft, Clock } from "lucide-react";
 
@@ -17,18 +24,37 @@ interface PointsHistoryProps {
 }
 
 const getTypeIcon = (type: string, amount: number) => {
-    if (amount > 0) return <ArrowUpRight className="h-4 w-4 text-green-500" />;
-    return <ArrowDownLeft className="h-4 w-4 text-red-500" />;
+  if (amount > 0)
+    return (
+      <ArrowUpRight
+        className="h-4 w-4 text-green-500"
+        aria-label="Points earned"
+      />
+    );
+  return (
+    <ArrowDownLeft
+      className="h-4 w-4 text-red-500"
+      aria-label="Points spent"
+    />
+  );
 };
 
 export function PointsHistory({ transactions }: PointsHistoryProps) {
   if (transactions.length === 0) {
-      return (
-          <div className="flex flex-col items-center justify-center p-8 text-muted-foreground border border-dashed rounded-lg bg-muted/20">
-              <Clock className="h-8 w-8 mb-2 opacity-50" />
-              <p>No transactions yet</p>
-          </div>
-      );
+    return (
+      <Empty className="p-8">
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <Clock className="h-8 w-8 opacity-50" />
+          </EmptyMedia>
+          <EmptyTitle>No transactions yet</EmptyTitle>
+          <EmptyDescription>
+            Your points history will appear here once you start earning or
+            spending points.
+          </EmptyDescription>
+        </EmptyHeader>
+      </Empty>
+    );
   }
 
   return (
