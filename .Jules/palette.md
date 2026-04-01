@@ -60,3 +60,7 @@
 ## 2026-03-13 - [Admin UX Consistency]
 **Learning:** Admin salon management actions (Approve, Suspend, Reject) were using native browser `confirm()` dialogs, which felt disconnected from the application's design system and lacked descriptive context or loading feedback.
 **Action:** Replace native `confirm()` with themed `AlertDialog` components. Ensure each action has a tailored title and description to provide clear context for destructive or critical operations. Include `Loader2` spinners in confirmation buttons to signal asynchronous processing.
+
+## 2026-04-01 - Standardized Loyalty UX
+**Learning:** Standardizing empty states in secondary modules like Loyalty using established UI primitives (`Empty` component) maintains visual consistency and reduces cognitive load. Providing descriptive ARIA labels for progress bars (including target and percentage) and async buttons (including the specific action target) is essential for a polished, accessible experience in gamified features.
+**Action:** Use `Empty` component for all list-based views without data. Always include target context in `aria-label` for progress indicators and asynchronous primary actions.
