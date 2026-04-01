@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Ticket, ShoppingBag, Percent, Tag, Store } from "lucide-react";
 import Image from "next/image";
+import { Spinner } from "@/components/ui/spinner";
 
 interface Reward {
   id: string;
@@ -91,8 +92,9 @@ export function RewardCard({ reward, onRedeem, isLoading, canAfford = true }: Re
                 size="sm"
                 onClick={() => onRedeem?.(reward.id)}
                 disabled={!canAfford || isLoading || (reward.quantity != null && reward.quantity <= 0)}
+                aria-label={`Redeem ${reward.name} for ${reward.cost} points`}
             >
-                {isLoading ? "..." : (reward.quantity != null && reward.quantity <= 0) ? "Out of Stock" : "Redeem"}
+                {isLoading ? <Spinner className="size-4" /> : (reward.quantity != null && reward.quantity <= 0) ? "Out of Stock" : "Redeem"}
             </Button>
         </div>
       </CardFooter>

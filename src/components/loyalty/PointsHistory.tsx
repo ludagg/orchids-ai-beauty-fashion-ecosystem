@@ -3,6 +3,7 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { format } from "date-fns";
 import { ArrowUpRight, ArrowDownLeft, Clock } from "lucide-react";
+import { Empty, EmptyHeader, EmptyTitle, EmptyDescription, EmptyMedia } from "@/components/ui/empty";
 
 interface PointTransaction {
   id: string;
@@ -17,17 +18,22 @@ interface PointsHistoryProps {
 }
 
 const getTypeIcon = (type: string, amount: number) => {
-    if (amount > 0) return <ArrowUpRight className="h-4 w-4 text-green-500" />;
-    return <ArrowDownLeft className="h-4 w-4 text-red-500" />;
+    if (amount > 0) return <ArrowUpRight className="h-4 w-4 text-green-500" aria-label="Points earned" />;
+    return <ArrowDownLeft className="h-4 w-4 text-red-500" aria-label="Points spent" />;
 };
 
 export function PointsHistory({ transactions }: PointsHistoryProps) {
   if (transactions.length === 0) {
       return (
-          <div className="flex flex-col items-center justify-center p-8 text-muted-foreground border border-dashed rounded-lg bg-muted/20">
-              <Clock className="h-8 w-8 mb-2 opacity-50" />
-              <p>No transactions yet</p>
-          </div>
+          <Empty className="py-8">
+              <EmptyHeader>
+                  <EmptyMedia variant="icon">
+                      <Clock className="h-8 w-8" />
+                  </EmptyMedia>
+                  <EmptyTitle>No transactions yet</EmptyTitle>
+                  <EmptyDescription>Your points history will appear here once you start earning or spending.</EmptyDescription>
+              </EmptyHeader>
+          </Empty>
       );
   }
 
