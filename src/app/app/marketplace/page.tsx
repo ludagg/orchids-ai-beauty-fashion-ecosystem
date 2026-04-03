@@ -105,9 +105,10 @@ export default function MarketplacePage() {
 
         <div className="flex items-center gap-3">
           <div className="relative group hidden sm:block">
-             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" aria-hidden="true" />
              <input
                type="text"
+               aria-label="Search products"
                placeholder="Search products..."
                className="pl-9 pr-4 py-2.5 rounded-xl border border-border bg-card text-sm focus:ring-2 focus:ring-primary/5 transition-all outline-none w-48 text-foreground"
                value={searchQuery}
@@ -115,7 +116,7 @@ export default function MarketplacePage() {
              />
           </div>
           <button className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-border bg-card text-foreground text-sm font-medium hover:bg-secondary transition-all">
-            <Filter className="w-4 h-4" />
+            <Filter className="w-4 h-4" aria-hidden="true" />
             Filters
           </button>
         </div>
@@ -170,7 +171,7 @@ export default function MarketplacePage() {
                     {product.rating > 4.5 && (
                         <div className="absolute top-4 left-4 flex flex-col gap-2">
                         <div className="px-3 py-1 rounded-full bg-background/90 backdrop-blur-md text-[10px] font-bold uppercase tracking-wider shadow-sm flex items-center gap-1.5 text-foreground">
-                            <Tag className="w-3 h-3 text-rose-500" />
+                            <Tag className="w-3 h-3 text-rose-500" aria-hidden="true" />
                             Featured
                         </div>
                         </div>
@@ -181,8 +182,12 @@ export default function MarketplacePage() {
                     <div className="flex items-center justify-between mb-0.5 sm:mb-1">
                     <h3 className="font-semibold text-sm sm:text-[15px] truncate text-foreground pr-2">{product.name}</h3>
                     {product.rating > 0 && (
-                        <div className="hidden sm:flex items-center gap-1 text-xs font-bold bg-secondary px-2 py-0.5 rounded-full text-foreground flex-shrink-0">
-                            <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+                        <div
+                          className="hidden sm:flex items-center gap-1 text-xs font-bold bg-secondary px-2 py-0.5 rounded-full text-foreground flex-shrink-0"
+                          aria-label={`${product.rating.toFixed(1)} star rating`}
+                          role="img"
+                        >
+                            <Star className="w-3 h-3 fill-amber-400 text-amber-400" aria-hidden="true" />
                             {product.rating.toFixed(1)}
                         </div>
                     )}
