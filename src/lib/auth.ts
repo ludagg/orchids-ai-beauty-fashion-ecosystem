@@ -37,5 +37,8 @@ export const auth = betterAuth({
           clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
       }
   },
-  trustedOrigins: [process.env.BETTER_AUTH_URL || "http://localhost:3000"]
+  trustedOrigins: [process.env.BETTER_AUTH_URL || "http://localhost:3000"],
+  // [Jules - Adding secret and baseURL fallbacks for non-production environments to allow CI/CD builds to succeed]
+  secret: process.env.BETTER_AUTH_SECRET || (process.env.NODE_ENV === "production" ? undefined : "dummy-secret-for-build"),
+  baseURL: process.env.BETTER_AUTH_URL || (process.env.NODE_ENV === "production" ? undefined : "http://localhost:3000"),
 });
