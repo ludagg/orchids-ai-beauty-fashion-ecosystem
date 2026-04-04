@@ -60,3 +60,7 @@
 ## 2026-03-13 - [Admin UX Consistency]
 **Learning:** Admin salon management actions (Approve, Suspend, Reject) were using native browser `confirm()` dialogs, which felt disconnected from the application's design system and lacked descriptive context or loading feedback.
 **Action:** Replace native `confirm()` with themed `AlertDialog` components. Ensure each action has a tailored title and description to provide clear context for destructive or critical operations. Include `Loader2` spinners in confirmation buttons to signal asynchronous processing.
+
+## 2026-03-20 - Standardizing Search & Empty States
+**Learning:** Inconsistent search implementations (like raw HTML inputs) break power-user expectations (e.g., the global `/` shortcut) and lack polished UX features like clear buttons and keyboard hints. Likewise, basic text-based empty states provide no recovery path for users. Standardizing these with `SearchBar` and `Empty` UI primitives ensures a cohesive, accessible experience across the entire marketplace.
+**Action:** Replace all remaining raw search inputs with the unified `SearchBar` component. Use the `Empty` component library for all zero-result states, ensuring they include a "Clear All Filters" action to help users reset their search context effortlessly.

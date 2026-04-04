@@ -3,19 +3,28 @@
 import { motion } from "framer-motion";
 import {
   Scissors,
-  Search,
   MapPin,
   Star,
   ChevronRight,
-  Filter,
   Navigation,
   Loader2,
   Map as MapIcon,
   List,
+  SearchX,
 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
+import SearchBar from "@/components/SearchBar";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
+import { Button } from "@/components/ui/button";
 
 const categories = ["All", "Hair", "Skin", "Spa", "Nails", "Grooming"];
 
@@ -48,6 +57,7 @@ export default function SalonsPage() {
   const [salons, setSalons] = useState<Salon[]>([]);
   const [loading, setLoading] = useState(true);
   const [mobileView, setMobileView] = useState<"list" | "map">("list");
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     async function fetchSalons() {
@@ -67,9 +77,16 @@ export default function SalonsPage() {
   }, []);
 
   const filteredSalons = salons
-    .filter(
-      (salon) => selectedCategory === "All" || salon.type === selectedCategory
-    )
+    .filter((salon) => {
+      const matchesCategory =
+        selectedCategory === "All" || salon.type === selectedCategory;
+      const matchesSearch =
+        salon.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        salon.address.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        salon.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        salon.type.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchesCategory && matchesSearch;
+    })
     .sort((a, b) => {
       if (sortBy === "rating") return (b.rating || 0) - (a.rating || 0);
       if (sortBy === "price")
@@ -113,6 +130,7 @@ export default function SalonsPage() {
                   ? "border-primary bg-primary text-primary-foreground"
                   : "border-border bg-card text-foreground"
               }`}
+              aria-label={sortBy === "rating" ? "Clear rating sort" : "Sort by rating"}
             >
               <Star className="w-4 h-4" />
               <span className="hidden sm:inline">Rating</span>
@@ -124,6 +142,7 @@ export default function SalonsPage() {
                   ? "border-primary bg-primary text-primary-foreground"
                   : "border-border bg-card text-foreground"
               }`}
+              aria-label={sortBy === "price" ? "Clear price sort" : "Sort by price"}
             >
               <span className="font-bold">₹</span>
               <span className="hidden sm:inline">Price</span>
@@ -134,11 +153,11 @@ export default function SalonsPage() {
 
       {/* Search Bar */}
       <section className="relative">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-        <input
-          type="text"
+        <SearchBar
+          value={searchQuery}
+          onChange={setSearchQuery}
           placeholder="Search for services or salon names..."
-          className="w-full pl-12 pr-4 py-4 rounded-2xl bg-card border border-border focus:border-primary shadow-sm transition-all outline-none text-base sm:text-lg text-foreground"
+          className="w-full shadow-sm"
         />
       </section>
 
@@ -218,7 +237,28 @@ export default function SalonsPage() {
                 <SalonCard key={salon.id} salon={salon} index={i} />
               ))}
               {filteredSalons.length === 0 && (
-                <p className="text-muted-foreground">No salons found.</p>
+                <Empty className="bg-card/50 backdrop-blur-sm border-dashed">
+                  <EmptyHeader>
+                    <EmptyMedia variant="icon" className="bg-secondary text-muted-foreground">
+                      <SearchX className="w-6 h-6" />
+                    </EmptyMedia>
+                    <EmptyTitle>No salons found</EmptyTitle>
+                    <EmptyDescription>
+                      We couldn't find any salons matching your current search or category.
+                    </EmptyDescription>
+                  </EmptyHeader>
+                  <EmptyContent>
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setSearchQuery("");
+                        setSelectedCategory("All");
+                      }}
+                    >
+                      Clear All Filters
+                    </Button>
+                  </EmptyContent>
+                </Empty>
               )}
             </div>
 
@@ -240,7 +280,28 @@ export default function SalonsPage() {
               <SalonCard key={salon.id} salon={salon} index={i} />
             ))}
             {filteredSalons.length === 0 && (
-              <p className="text-muted-foreground">No salons found.</p>
+              <Empty className="bg-card/50 backdrop-blur-sm border-dashed">
+                <EmptyHeader>
+                  <EmptyMedia variant="icon" className="bg-secondary text-muted-foreground">
+                    <SearchX className="w-6 h-6" />
+                  </EmptyMedia>
+                  <EmptyTitle>No salons found</EmptyTitle>
+                  <EmptyDescription>
+                    Try adjusting your search or filters.
+                  </EmptyDescription>
+                </EmptyHeader>
+                <EmptyContent>
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setSearchQuery("");
+                      setSelectedCategory("All");
+                    }}
+                  >
+                    Clear All Filters
+                  </Button>
+                </EmptyContent>
+              </Empty>
             )}
           </div>
         </section>
