@@ -113,21 +113,23 @@ export async function POST(req: NextRequest) {
                      throw new Error("No staff members available for this service");
                 }
 
-                // Check availability for each until one is found
-                for (const s of qualifiedStaff) {
-                     const conflict = await tx.query.bookings.findFirst({
-                        where: and(
-                            eq(bookings.staffId, s.id),
-                            or(
-                                eq(bookings.status, 'confirmed'),
-                                eq(bookings.status, 'pending')
-                            ),
-                            lt(bookings.startTime, end),
-                            gt(bookings.endTime, start)
-                        )
-                    });
+                // [Jules - Fix N+1 Query: Batch conflict lookup using inArray]
+                const staffIds = qualifiedStaff.map((s) => s.id);
+                const conflicts = await tx.query.bookings.findMany({
+                    where: and(
+                        inArray(bookings.staffId, staffIds),
+                        or(
+                            eq(bookings.status, 'confirmed'),
+                            eq(bookings.status, 'pending')
+                        ),
+                        lt(bookings.startTime, end),
+                        gt(bookings.endTime, start)
+                    )
+                });
 
-                    if (!conflict) {
+                const bookedStaffIds = new Set(conflicts.map((c) => c.staffId));
+                for (const s of qualifiedStaff) {
+                    if (!bookedStaffIds.has(s.id)) {
                         assignedStaffId = s.id;
                         break;
                     }
