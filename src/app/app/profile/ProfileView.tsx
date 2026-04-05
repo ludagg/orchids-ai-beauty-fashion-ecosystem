@@ -9,7 +9,6 @@ import {
   Video,
   Share2,
   LayoutDashboard,
-  Loader2,
   Gift,
   Award,
   TrendingUp,
@@ -40,6 +39,15 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  Empty,
+  EmptyHeader,
+  EmptyTitle,
+  EmptyDescription,
+  EmptyContent,
+  EmptyMedia,
+} from "@/components/ui/empty";
+import { Spinner } from "@/components/ui/spinner";
 
 // Interface for User Data
 interface UserData {
@@ -234,6 +242,7 @@ export default function ProfileView({ user, isSalonOwner }: ProfileViewProps) {
                     el?.scrollIntoView({ behavior: "smooth" });
                   }}
                   className="hover:opacity-70 transition-opacity text-left"
+                  aria-label={`View ${stats.followers} followers`}
                 >
                   <StatItem value={stats.followers} label="Followers" trend="+12%" />
                 </button>
@@ -243,6 +252,7 @@ export default function ProfileView({ user, isSalonOwner }: ProfileViewProps) {
                     el?.scrollIntoView({ behavior: "smooth" });
                   }}
                   className="hover:opacity-70 transition-opacity text-left"
+                  aria-label="View following"
                 >
                   <StatItem value="482" label="Following" trend="+3%" />
                 </button>
@@ -367,7 +377,7 @@ export default function ProfileView({ user, isSalonOwner }: ProfileViewProps) {
           <TabsContent value="videos" className="mt-0 focus-visible:outline-none">
             {isLoadingVideos ? (
               <div className="flex justify-center py-20">
-                <Loader2 className="w-10 h-10 animate-spin text-muted-foreground" />
+                <Spinner className="w-10 h-10 text-muted-foreground" />
               </div>
             ) : (
               <>
@@ -377,7 +387,23 @@ export default function ProfileView({ user, isSalonOwner }: ProfileViewProps) {
                   ))}
                 </div>
                 {publishedVideos.length === 0 && (
-                  <EmptyState type="videos" onUpload={() => setIsVideoUploadModalOpen(true)} />
+                  <Empty className="py-12 border-none bg-transparent">
+                    <EmptyHeader>
+                      <EmptyMedia variant="icon">
+                        <Video className="w-6 h-6" />
+                      </EmptyMedia>
+                      <EmptyTitle>No videos yet</EmptyTitle>
+                      <EmptyDescription>
+                        Start sharing your style journey by uploading your first video.
+                      </EmptyDescription>
+                    </EmptyHeader>
+                    <EmptyContent>
+                      <Button onClick={() => setIsVideoUploadModalOpen(true)}>
+                        <Upload className="w-4 h-4 mr-2" />
+                        Upload Video
+                      </Button>
+                    </EmptyContent>
+                  </Empty>
                 )}
               </>
             )}
@@ -500,31 +526,6 @@ function VideoCard({ video, index }: { video: VideoData, index: number }) {
         </div>
       </Link>
     </motion.div>
-  );
-}
-
-// Empty State Component
-function EmptyState({ type, onUpload }: { type: string, onUpload?: () => void }) {
-  return (
-    <div className="flex flex-col items-center justify-center py-16 sm:py-24 text-center space-y-6">
-      <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center">
-        <Video className="w-8 h-8 text-muted-foreground" />
-      </div>
-
-      <div className="space-y-2 max-w-xs sm:max-w-sm px-4">
-        <h3 className="text-lg font-semibold text-foreground">No videos yet</h3>
-        <p className="text-sm text-muted-foreground">
-          Start sharing your style journey by uploading your first video.
-        </p>
-      </div>
-
-      {onUpload && (
-        <Button onClick={onUpload}>
-          <Upload className="w-4 h-4 mr-2" />
-          Upload Your First Video
-        </Button>
-      )}
-    </div>
   );
 }
 
