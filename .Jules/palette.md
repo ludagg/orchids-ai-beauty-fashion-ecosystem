@@ -60,3 +60,7 @@
 ## 2026-03-13 - [Admin UX Consistency]
 **Learning:** Admin salon management actions (Approve, Suspend, Reject) were using native browser `confirm()` dialogs, which felt disconnected from the application's design system and lacked descriptive context or loading feedback.
 **Action:** Replace native `confirm()` with themed `AlertDialog` components. Ensure each action has a tailored title and description to provide clear context for destructive or critical operations. Include `Loader2` spinners in confirmation buttons to signal asynchronous processing.
+
+## 2026-03-20 - Fixing Nested Interactivity in Cards
+**Learning:** Nesting interactive elements like `<button>` inside a `<Link>` is invalid HTML and breaks keyboard accessibility and event bubbling. Moving secondary actions (like "Like") outside the link while maintaining visual position using absolute positioning and `z-index` ensures both validity and a delightful user experience.
+**Action:** Audit complex cards for nested interactive elements. Refactor secondary actions as absolute-positioned siblings of the primary navigation link, using `pointer-events-none` on informational overlays and `z-index` or `pointer-events-auto` for the buttons.
