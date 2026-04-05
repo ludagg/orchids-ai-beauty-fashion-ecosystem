@@ -43,12 +43,15 @@ if (!isVercel) {
   (nextConfig as any).outputFileTracingRoot = path.resolve(__dirname, "../../");
 }
 
-// ✅ Disable Turbopack on Vercel
+// [Jules - Fix turbopack config for Next.js 15]
 if (!isVercel) {
-  (nextConfig as any).turbopack = {
-    rules: {
-      "src/**/*.{jsx,tsx}": {
-        loaders: [LOADER],
+  nextConfig.experimental = {
+    ...nextConfig.experimental,
+    turbo: {
+      rules: {
+        "src/**/*.{jsx,tsx}": {
+          loaders: [LOADER],
+        },
       },
     },
   };
