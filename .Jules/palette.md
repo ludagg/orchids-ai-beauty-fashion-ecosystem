@@ -60,3 +60,7 @@
 ## 2026-03-13 - [Admin UX Consistency]
 **Learning:** Admin salon management actions (Approve, Suspend, Reject) were using native browser `confirm()` dialogs, which felt disconnected from the application's design system and lacked descriptive context or loading feedback.
 **Action:** Replace native `confirm()` with themed `AlertDialog` components. Ensure each action has a tailored title and description to provide clear context for destructive or critical operations. Include `Loader2` spinners in confirmation buttons to signal asynchronous processing.
+
+## 2026-04-06 - Standardizing Marketplace UX
+**Learning:** Standardizing empty states with actionable recovery buttons (like "Clear All Filters") and using unified search components across the application significantly reduces user friction and cognitive load. Providing a clear path back from a zero-results state is a critical micro-UX win.
+**Action:** Always implement a recovery action in `Empty` states when filters or search are involved. Ensure the unified `SearchBar` is used for consistent keyboard shortcuts and interaction patterns.
