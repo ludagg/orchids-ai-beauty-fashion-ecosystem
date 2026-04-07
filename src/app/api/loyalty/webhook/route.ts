@@ -1,10 +1,18 @@
+// [Jules - Updated webhook route to enforce HMAC-SHA256 signature verification and properly format point calculation based on smallest currency unit]
 import { NextRequest, NextResponse } from "next/server";
 import { LoyaltyEngine } from "@/lib/loyalty";
-import { headers } from "next/headers";
+import { verifyWebhookSignature } from "@/lib/crypto";
 
 export async function POST(req: NextRequest) {
     try {
-        const body = await req.json();
+        const rawBody = await req.text();
+        const signature = req.headers.get("x-signature");
+
+        if (!verifyWebhookSignature(signature, rawBody, process.env.WEBHOOK_SECRET)) {
+            return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
+        }
+
+        const body = JSON.parse(rawBody);
         const { type, userId, data } = body;
 
         // Basic validation
@@ -12,16 +20,12 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
         }
 
-        // Ideally verify signature here
-        // const signature = req.headers.get("x-signature");
-        // verify(signature, body, process.env.WEBHOOK_SECRET);
-
         if (type === 'booking.completed') {
-            const { bookingId, amount } = data; // amount in cents/smallest unit? or currency?
-            // Assuming amount is in currency (e.g. INR 1500)
-            // Rules: 10 pts / 100 spent
+            const { bookingId, amount } = data;
 
-            const pointsBase = Math.floor((amount || 0) / 100) * 10;
+            // Amount is in smallest unit (e.g. paise), so amount/100 is currency unit (e.g. INR).
+            // 10 pts / 100 spent (INR) -> pointsBase = Math.floor((amount / 100) / 100) * 10
+            const pointsBase = Math.floor((amount || 0) / 10000) * 10;
 
             if (pointsBase > 0) {
                  await LoyaltyEngine.addPoints(
