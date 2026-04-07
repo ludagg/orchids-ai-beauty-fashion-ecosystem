@@ -60,3 +60,7 @@
 ## 2026-03-13 - [Admin UX Consistency]
 **Learning:** Admin salon management actions (Approve, Suspend, Reject) were using native browser `confirm()` dialogs, which felt disconnected from the application's design system and lacked descriptive context or loading feedback.
 **Action:** Replace native `confirm()` with themed `AlertDialog` components. Ensure each action has a tailored title and description to provide clear context for destructive or critical operations. Include `Loader2` spinners in confirmation buttons to signal asynchronous processing.
+
+## 2026-03-20 - [Sidebar Navigation Tooltips]
+**Learning:** For collapsible sidebars, icon-only navigation states (collapsed) are inaccessible and prone to "mystery meat navigation" if they lack tooltips. Wrapping navigation items in Radix `Tooltip` components conditionally based on the collapsed state ensures discoverability without adding DOM weight when the sidebar is expanded.
+**Action:** Conditionally wrap sidebar items in `Tooltip` components when `isCollapsed` is true. Ensure each link also has a dynamic `aria-label` matching its label property to provide clear context for screen reader users in the icon-only state.
