@@ -1,5 +1,7 @@
+// [Jules - Update middleware logging to use pino]
 import { NextResponse, type NextRequest } from "next/server";
 import rateLimit from "@/lib/rate-limit";
+import { logger } from "@/lib/logger";
 
 const limiter = rateLimit({
   interval: 60 * 1000, // 60 seconds
@@ -25,12 +27,13 @@ export async function middleware(request: NextRequest) {
   }
 
   // Log request for observability
-  console.log(JSON.stringify({
-    timestamp: new Date().toISOString(),
+  logger.info({
+    ip: request.headers.get("x-forwarded-for") || "unknown",
+    url: request.url,
     method: request.method,
     path: pathname,
     userAgent: request.headers.get('user-agent'),
-  }));
+  });
 
   // Define paths that do not require authentication
   const isPublicPath =

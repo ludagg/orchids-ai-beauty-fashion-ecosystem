@@ -1,3 +1,4 @@
+// [Jules - Secure auth configuration and add missing user fields]
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "./db";
@@ -14,6 +15,8 @@ export const auth = betterAuth({
         verification: schema.verifications,
     }
   }),
+  secret: process.env.BETTER_AUTH_SECRET || (process.env.NODE_ENV !== 'production' ? 'development-secret-only' : undefined),
+  baseURL: process.env.BETTER_AUTH_URL || (process.env.NODE_ENV !== 'production' ? 'http://localhost:3000' : undefined),
   user: {
     additionalFields: {
       role: {
@@ -21,6 +24,39 @@ export const auth = betterAuth({
       },
       loyaltyPoints: {
         type: "number",
+      },
+      phone: {
+        type: "string",
+      },
+      bio: {
+        type: "string",
+      },
+      isSuspended: {
+        type: "boolean",
+      },
+      onboardingCompleted: {
+        type: "boolean",
+      },
+      gender: {
+        type: "string",
+      },
+      location: {
+        type: "string",
+      },
+      style: {
+        type: "string",
+      },
+      budget: {
+        type: "string",
+      },
+      height: {
+        type: "string",
+      },
+      weight: {
+        type: "string",
+      },
+      bodyType: {
+        type: "string",
       },
     },
   },
@@ -37,5 +73,5 @@ export const auth = betterAuth({
           clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
       }
   },
-  trustedOrigins: [process.env.BETTER_AUTH_URL || "http://localhost:3000"]
+  trustedOrigins: [process.env.BETTER_AUTH_URL || (process.env.NODE_ENV !== 'production' ? "http://localhost:3000" : "")]
 });
