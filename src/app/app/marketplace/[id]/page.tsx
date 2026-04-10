@@ -1,5 +1,7 @@
 "use client";
 
+// [Jules - Updated product.stock references to product.totalStock]
+
 import { motion } from "framer-motion";
 import {
   ShoppingBag,
@@ -36,7 +38,7 @@ interface Product {
   name: string;
   description: string | null;
   price: number;
-  stock: number;
+  totalStock: number;
   images: string[] | null;
   category: string | null;
   brand: string | null;
@@ -317,10 +319,10 @@ export default function ProductDetailsPage() {
           </div>
 
           <div className="flex items-center gap-4 py-6 border-y border-border">
-             {product.stock > 0 ? (
+             {product.totalStock > 0 ? (
                  <div className="flex items-center gap-2 text-emerald-600 font-medium">
                      <CheckCircle2 className="w-5 h-5" />
-                     In Stock ({product.stock} available)
+                     In Stock ({product.totalStock} available)
                  </div>
              ) : (
                  <div className="flex items-center gap-2 text-rose-600 font-medium">
@@ -355,10 +357,10 @@ export default function ProductDetailsPage() {
                         {quantity}
                      </span>
                      <button
-                        onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
+                        onClick={() => setQuantity(Math.min(product.totalStock, quantity + 1))}
                         className="w-8 h-8 flex items-center justify-center rounded-lg bg-card shadow-sm hover:bg-muted transition-colors disabled:opacity-50"
                         aria-label="Increase quantity"
-                        disabled={quantity >= product.stock}
+                        disabled={quantity >= product.totalStock}
                      >
                          <Plus className="w-4 h-4" />
                      </button>
@@ -368,7 +370,7 @@ export default function ProductDetailsPage() {
             <div className="flex gap-3">
                 <button
                     onClick={handleAddToBag}
-                    disabled={product.stock === 0}
+                    disabled={product.totalStock === 0}
                     className="flex-1 h-16 rounded-2xl bg-secondary text-foreground font-bold text-lg hover:bg-secondary/80 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                     <ShoppingBag className="w-5 h-5" />
@@ -376,7 +378,7 @@ export default function ProductDetailsPage() {
                 </button>
                 <button
                     onClick={handleBuyNow}
-                    disabled={product.stock === 0}
+                    disabled={product.totalStock === 0}
                     className="flex-1 h-16 rounded-2xl bg-foreground text-background font-bold text-lg hover:bg-foreground/90 transition-all shadow-xl shadow-foreground/10 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                     Buy Now

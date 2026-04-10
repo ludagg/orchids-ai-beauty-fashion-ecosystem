@@ -107,8 +107,14 @@ export async function GET(
         orderBy: [desc(products.rating)]
     });
 
-    return NextResponse.json({
+    // [Jules - Added price to match frontend expectations]
+    const mappedProduct = {
         ...product,
+        price: product.salePrice ?? product.originalPrice,
+    };
+
+    return NextResponse.json({
+        ...mappedProduct,
         reviews: productReviews,
         similarProducts
     });
