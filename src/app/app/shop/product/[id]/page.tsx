@@ -1,5 +1,5 @@
 "use client";
-
+// [Jules - Update AI Fit Check to fetch real recommendations from API]
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
@@ -30,6 +30,9 @@ export default function ProductDetailPage() {
   const [quantity, setQuantity] = useState(1);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+
+  const [fitRecommendation, setFitRecommendation] = useState<any>(null);
+  const [fitLoading, setFitLoading] = useState(false);
 
   const toggleWishlist = async () => {
     const newState = !isWishlisted;
@@ -70,6 +73,30 @@ export default function ProductDetailPage() {
             if (data.colors && data.colors.length > 0) setSelectedColor(data.colors[0]);
             if (data.sizes && data.sizes.length > 0) setSelectedSize(data.sizes[0]);
             setLoading(false);
+
+            // Fetch AI Fit Check
+            if (data.sizes && data.sizes.length > 0) {
+                setFitLoading(true);
+                fetch('/api/ai-fit-check', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ productId: data.id })
+                })
+                .then(res => res.json())
+                .then(fitData => {
+                    if (!fitData.error && fitData.recommendation !== "Not Applicable") {
+                        setFitRecommendation(fitData);
+                        // Auto-select recommended size if found
+                        const recSize = data.sizes.find((s: any) => s.name === fitData.recommendation);
+                        if (recSize) setSelectedSize(recSize);
+                    }
+                    setFitLoading(false);
+                })
+                .catch(err => {
+                    console.error("Fit Check error", err);
+                    setFitLoading(false);
+                });
+            }
         })
         .catch(err => {
             console.error(err);
@@ -216,37 +243,46 @@ export default function ProductDetailPage() {
         </div>
 
         {/* AI Fit Check */}
-        <Dialog>
-            <DialogTrigger asChild>
-                <div className="flex items-center justify-between rounded-lg border border-yellow-500/30 bg-yellow-500/10 p-3 cursor-pointer">
-                    <div className="flex items-center gap-3">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-500 text-white">
-                            <Ruler className="h-4 w-4" />
-                        </div>
-                        <div>
-                            <div className="text-sm font-semibold text-yellow-700 dark:text-yellow-400">
-                                AI recommends size M for you
+        {product.sizes && product.sizes.length > 0 && (
+            <Dialog>
+                <DialogTrigger asChild>
+                    <div className="flex items-center justify-between rounded-lg border border-yellow-500/30 bg-yellow-500/10 p-3 cursor-pointer">
+                        <div className="flex items-center gap-3">
+                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-500 text-white">
+                                <Ruler className="h-4 w-4" />
                             </div>
-                            <div className="text-xs text-muted-foreground">Based on your profile</div>
+                            <div>
+                                <div className="text-sm font-semibold text-yellow-700 dark:text-yellow-400">
+                                    {fitLoading ? "Analyzing your fit..." : (fitRecommendation ? `AI recommends size ${fitRecommendation.recommendation} for you` : "AI Fit Check available")}
+                                </div>
+                                <div className="text-xs text-muted-foreground">Based on your profile</div>
+                            </div>
                         </div>
+                        <ChevronRight className="h-4 w-4 text-muted-foreground" />
                     </div>
-                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                </div>
-            </DialogTrigger>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>AI Fit Analysis</DialogTitle>
-                    <DialogDescription>
-                        We analyzed your previous purchases and profile measurements.
-                        This brand typically runs true to size.
-                    </DialogDescription>
-                </DialogHeader>
-                {/* Mock chart or details */}
-                <div className="h-40 bg-muted rounded-md flex items-center justify-center text-muted-foreground">
-                    Fit Graph Placeholder
-                </div>
-            </DialogContent>
-        </Dialog>
+                </DialogTrigger>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>AI Fit Analysis</DialogTitle>
+                        <DialogDescription>
+                            {fitLoading ? "Our AI is currently analyzing this product's fit based on your measurements..." :
+                             (fitRecommendation ? fitRecommendation.description : "We analyze your previous purchases and profile measurements. This brand typically runs true to size.")}
+                        </DialogDescription>
+                    </DialogHeader>
+                    {/* Mock chart or details */}
+                    <div className="h-40 bg-muted rounded-md flex flex-col items-center justify-center text-muted-foreground">
+                        {fitRecommendation && (
+                            <>
+                                <div className="text-2xl font-bold text-yellow-500 mb-2">{fitRecommendation.confidence}% Match</div>
+                                <p className="text-sm text-center px-4">Size {fitRecommendation.recommendation} is your best fit for a regular look.</p>
+                            </>
+                        )}
+                        {!fitRecommendation && !fitLoading && "Fit Graph Placeholder"}
+                        {fitLoading && "Analyzing..."}
+                    </div>
+                </DialogContent>
+            </Dialog>
+        )}
 
         {/* Variants */}
         <div className="space-y-4">
@@ -286,7 +322,7 @@ export default function ProductDetailPage() {
                                 )}
                             >
                                 {size.name}
-                                {size.name === 'M' && (
+                                {fitRecommendation?.recommendation === size.name && (
                                      <span className="absolute -top-1 -right-1 flex h-2 w-2">
                                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
                                         <span className="relative inline-flex rounded-full h-2 w-2 bg-yellow-500"></span>
