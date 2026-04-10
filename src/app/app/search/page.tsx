@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { Search, MapPin, Star, ShoppingBag, Video, Scissors, Sparkles, Users, Filter, X, Loader2, Play } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
+import SearchBar from "@/components/SearchBar";
 
 const TABS = [
   { id: "all", label: "All Results" },
@@ -43,6 +44,12 @@ function SearchContent() {
   const [userLoc, setUserLoc] = useState<{lat: number, lng: number} | null>(
       latParam && lngParam ? { lat: parseFloat(latParam), lng: parseFloat(lngParam) } : null
   );
+
+  // Sync state FROM URL when it changes externally (e.g. from header search)
+  useEffect(() => {
+    const q = searchParams.get("q") || "";
+    if (q !== query) setQuery(q);
+  }, [searchParams]);
 
   // Sync URL with state (debounced)
   useEffect(() => {
@@ -175,23 +182,15 @@ function SearchContent() {
       <div className="sticky top-0 z-30 bg-background/80 backdrop-blur-md border-b border-border">
         <div className="max-w-7xl mx-auto p-4 sm:p-6 space-y-4">
             <div className="flex flex-col md:flex-row gap-4">
-                <div className="relative flex-1">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                    <input
-                        type="text"
-                        placeholder="Search salons, services, products..."
-                        value={query}
-                        onChange={(e) => setQuery(e.target.value)}
-                        className="w-full pl-10 pr-4 py-3 rounded-2xl bg-secondary border-transparent focus:bg-background focus:border-foreground transition-all outline-none"
-                    />
-                    {query && (
-                        <button onClick={() => setQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-full hover:bg-muted text-muted-foreground">
-                            <X className="w-4 h-4" />
-                        </button>
-                    )}
-                </div>
+                <SearchBar
+                    value={query}
+                    onChange={setQuery}
+                    placeholder="Search salons, services, products..."
+                    className="flex-1"
+                />
                 <button
                     onClick={() => setShowFilters(!showFilters)}
+                    aria-label={showFilters ? "Hide filters" : "Show filters"}
                     className={`flex items-center gap-2 px-5 py-3 rounded-2xl font-medium transition-all ${showFilters || (city || type || userLoc) ? 'bg-primary text-primary-foreground' : 'bg-secondary text-foreground hover:bg-secondary/80'}`}
                 >
                     <Filter className="w-5 h-5" />
@@ -261,6 +260,7 @@ function SearchContent() {
                         <div className="col-span-1 sm:col-span-3 lg:col-span-3 flex justify-end pt-2">
                             <button
                                 onClick={clearFilters}
+                                aria-label="Clear all search filters"
                                 className="px-6 py-2 rounded-xl border border-dashed border-muted-foreground/50 text-muted-foreground text-sm hover:text-foreground hover:border-foreground transition-colors"
                             >
                                 Clear All Filters
