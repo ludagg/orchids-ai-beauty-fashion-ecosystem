@@ -7,6 +7,11 @@ import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { useSession } from "@/lib/auth-client";
 import { toast } from "sonner";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface Video {
   id: string;
@@ -104,8 +109,8 @@ export function VideoCard({ video }: VideoCardProps) {
             {/* Overlay Gradient - Bottom Only */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 pointer-events-none" />
 
-            {/* Content */}
-            <div className="absolute bottom-0 left-0 right-0 p-3 text-white flex items-end justify-between z-10">
+            {/* Content (Informative) */}
+            <div className="absolute bottom-0 left-0 right-0 p-3 text-white flex items-end justify-between z-10 pointer-events-none">
                 <div className="flex flex-col gap-0.5 max-w-[75%]">
                     <span className="text-[10px] font-medium text-white/80 truncate">
                         @{video.user.name.replace(/\s+/g, '')}
@@ -114,18 +119,29 @@ export function VideoCard({ video }: VideoCardProps) {
                         {video.title}
                     </h3>
                 </div>
-
-                <button
-                    onClick={handleLike}
-                    className="flex items-center gap-1 hover:scale-110 transition-transform mb-0.5"
-                >
-                    <Heart
-                        className={cn("w-4 h-4 drop-shadow-sm", isLiked ? "fill-red-500 text-red-500" : "text-white")}
-                    />
-                    <span className="text-xs font-medium">{likesCount}</span>
-                </button>
             </div>
         </Link>
+
+        {/* Interactive Secondary Action */}
+        <div className="absolute bottom-3 right-3 z-20">
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <button
+                        onClick={handleLike}
+                        className="flex items-center gap-1 hover:scale-110 transition-transform mb-0.5 text-white"
+                        aria-label={isLiked ? "Unlike video" : "Like video"}
+                    >
+                        <Heart
+                            className={cn("w-4 h-4 drop-shadow-sm", isLiked ? "fill-red-500 text-red-500" : "text-white")}
+                        />
+                        <span className="text-xs font-medium">{likesCount}</span>
+                    </button>
+                </TooltipTrigger>
+                <TooltipContent>
+                    <p>{isLiked ? "Unlike" : "Like"}</p>
+                </TooltipContent>
+            </Tooltip>
+        </div>
     </div>
   );
 }

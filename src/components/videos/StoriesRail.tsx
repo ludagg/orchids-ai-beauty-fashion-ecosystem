@@ -104,11 +104,14 @@ export function StoriesRail() {
 
         {/* Create Story Button (Always first if logged in) */}
         {session?.user && (
-           <div className="flex flex-col items-center justify-center gap-1.5 cursor-pointer shrink-0 snap-start group relative">
+           <div className="flex flex-col items-center justify-center gap-1.5 shrink-0 snap-start group relative">
                 {hasMyStory ? (
-                  <>
+                  <button
+                    onClick={handleMyStoryClick}
+                    className="flex flex-col items-center gap-1.5 group"
+                    aria-label="View your story"
+                  >
                     <div
-                        onClick={handleMyStoryClick}
                         className={cn(
                         "relative w-[72px] h-[72px] rounded-full p-[2px] transition-transform active:scale-95 bg-gradient-to-tr from-yellow-400 to-red-600"
                         )}
@@ -123,11 +126,12 @@ export function StoriesRail() {
                     <span className="text-xs font-medium truncate w-[72px] text-center text-muted-foreground group-hover:text-foreground transition-colors">
                       Your Story
                     </span>
-                  </>
+                  </button>
                 ) : (
                   <button
                       onClick={() => setIsCreateOpen(true)}
                       className="flex items-center gap-2 px-4 py-2 h-[50px] rounded-full border border-primary text-primary font-medium hover:bg-primary/5 transition-colors mb-5"
+                      aria-label="Create a story"
                   >
                       <Plus className="w-5 h-5" />
                       Your Story
@@ -178,6 +182,7 @@ export function StoriesRail() {
                     key={us.user.id}
                     onClick={() => setSelectedUserIndex(index)}
                     className="flex flex-col items-center gap-1.5 cursor-pointer shrink-0 snap-start group"
+                    aria-label={`View ${us.user.name}'s story`}
                 >
                     <div className="w-[72px] h-[72px] rounded-full p-[2px] bg-gradient-to-tr from-yellow-400 to-red-600 transition-transform group-hover:scale-105">
                         <div className="w-full h-full rounded-full border-2 border-background overflow-hidden relative">
