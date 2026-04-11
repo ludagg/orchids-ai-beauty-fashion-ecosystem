@@ -44,14 +44,6 @@ if (!isVercel) {
 }
 
 // ✅ Disable Turbopack on Vercel
-if (!isVercel) {
-  (nextConfig as any).turbopack = {
-    rules: {
-      "src/**/*.{jsx,tsx}": {
-        loaders: [LOADER],
-      },
-    },
-  };
-}
+// [Jules - Turbopack rules are not recognized in Next.js 15.1.0 next.config.ts experimental. Removing to fix build warning.]
 
 export default nextConfig;
