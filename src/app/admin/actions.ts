@@ -155,16 +155,9 @@ export async function approveSalon(salonId: string) {
 
 export async function rejectSalon(salonId: string) {
   const session = await checkAdmin();
-  // Using 'rejected' if enum supports it, otherwise 'suspended' or delete pending
-  // The schema usually has 'active' | 'pending' | 'suspended'. Let's check schema first.
-  // Assuming 'rejected' is valid or we use 'suspended' as proxy for now.
-  // Based on previous code, 'rejected' was cast as any, implying it might not be in enum.
-  // Let's stick to 'suspended' if 'rejected' fails, but for now we'll set it to 'suspended'
-  // with a note or just use 'suspended' to be safe with strict enums.
-  // However, for a proper "Reject" flow, we might want to delete the pending salon or mark as suspended.
 
   await db.update(salons)
-    .set({ status: 'suspended' })
+    .set({ status: 'rejected' }) // [Jules - Corrected salon rejection to use 'rejected' status as defined in schema]
     .where(eq(salons.id, salonId));
 
   await logActivity(session.user.id, 'reject_salon', salonId, 'salon');
