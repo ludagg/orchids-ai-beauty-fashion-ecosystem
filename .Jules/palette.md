@@ -58,5 +58,9 @@
 **Action:** Replace `confirm()` with `AlertDialog`. Always include a `disabled` state and a loading indicator on the primary action button during asynchronous operations.
 
 ## 2026-03-13 - [Admin UX Consistency]
-**Learning:** Admin salon management actions (Approve, Suspend, Reject) were using native browser `confirm()` dialogs, which felt disconnected from the application's design system and lacked descriptive context or loading feedback.
+**Learning:** Admin salon management actions (Approve, Suspend, Reject) were using senior native browser `confirm()` dialogs, which felt disconnected from the application's design system and lacked descriptive context or loading feedback.
 **Action:** Replace native `confirm()` with themed `AlertDialog` components. Ensure each action has a tailored title and description to provide clear context for destructive or critical operations. Include `Loader2` spinners in confirmation buttons to signal asynchronous processing.
+
+## 2026-04-12 - [Cart Accessibility & Feedback]
+**Learning:** Interactive quantity controls and promo code actions often lack descriptive labels or state change announcements. Adding Tooltips to +/- buttons and `aria-live="polite"` to the value display ensures screen reader users are kept in the loop. Integrating a `Spinner` into destructive action confirmations (like item removal) provides critical visual feedback for background operations.
+**Action:** Wrap icon-only quantity controls in `Tooltip` components. Add `aria-live="polite"` to dynamic text values. Always use a `Spinner` for async actions in `AlertDialog` to signal processing state.
