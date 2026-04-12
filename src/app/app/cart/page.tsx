@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Minus, Plus, Trash2, ArrowRight, ShoppingCart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Spinner } from '@/components/ui/spinner';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
@@ -224,29 +225,43 @@ export default function CartPage() {
                                     </div>
                                     <div className="flex items-center justify-between mt-2">
                                         <div className="flex items-center border rounded-md overflow-hidden">
-                                            <Button
-                                              variant="ghost"
-                                              size="icon"
-                                              className="h-8 w-8 rounded-none border-r"
-                                              onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                                              disabled={updating}
-                                              aria-label={`Decrease quantity of ${item.product.name}`}
+                                            <Tooltip>
+                                              <TooltipTrigger asChild>
+                                                <Button
+                                                  variant="ghost"
+                                                  size="icon"
+                                                  className="h-8 w-8 rounded-none border-r"
+                                                  onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                                                  disabled={updating}
+                                                  aria-label={`Decrease quantity of ${item.product.name}`}
+                                                >
+                                                    <Minus className="h-3 w-3" />
+                                                </Button>
+                                              </TooltipTrigger>
+                                              <TooltipContent side="top">Decrease quantity</TooltipContent>
+                                            </Tooltip>
+                                            <span
+                                              className="w-8 text-center text-sm font-medium"
+                                              aria-label={`Quantity: ${item.quantity}`}
+                                              aria-live="polite"
                                             >
-                                                <Minus className="h-3 w-3" />
-                                            </Button>
-                                            <span className="w-8 text-center text-sm font-medium" aria-label={`Quantity: ${item.quantity}`}>
                                               {item.quantity}
                                             </span>
-                                            <Button
-                                              variant="ghost"
-                                              size="icon"
-                                              className="h-8 w-8 rounded-none border-l"
-                                              onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                                              disabled={updating}
-                                              aria-label={`Increase quantity of ${item.product.name}`}
-                                            >
-                                                <Plus className="h-3 w-3" />
-                                            </Button>
+                                            <Tooltip>
+                                              <TooltipTrigger asChild>
+                                                <Button
+                                                  variant="ghost"
+                                                  size="icon"
+                                                  className="h-8 w-8 rounded-none border-l"
+                                                  onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                                                  disabled={updating}
+                                                  aria-label={`Increase quantity of ${item.product.name}`}
+                                                >
+                                                    <Plus className="h-3 w-3" />
+                                                </Button>
+                                              </TooltipTrigger>
+                                              <TooltipContent side="top">Increase quantity</TooltipContent>
+                                            </Tooltip>
                                         </div>
                                         <Tooltip>
                                           <TooltipTrigger asChild>
@@ -281,7 +296,7 @@ export default function CartPage() {
         </div>
         <div className="flex gap-2">
             <Input placeholder="Enter promo code" className="bg-background" />
-            <Button variant="outline">Apply</Button>
+            <Button variant="outline" aria-label="Apply promo code">Apply</Button>
         </div>
         <div className="border-t pt-4 flex justify-between font-bold text-lg">
             <span>Total</span>
@@ -307,7 +322,12 @@ export default function CartPage() {
               disabled={updating}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              {updating ? "Removing..." : "Remove"}
+              {updating ? (
+                <>
+                  <Spinner className="mr-2 h-4 w-4" />
+                  Removing...
+                </>
+              ) : "Remove"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
