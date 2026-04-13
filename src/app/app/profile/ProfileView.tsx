@@ -9,7 +9,6 @@ import {
   Video,
   Share2,
   LayoutDashboard,
-  Loader2,
   Gift,
   Award,
   TrendingUp,
@@ -40,6 +39,15 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Spinner } from "@/components/ui/spinner";
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+  EmptyContent,
+} from "@/components/ui/empty";
 
 // Interface for User Data
 interface UserData {
@@ -234,6 +242,7 @@ export default function ProfileView({ user, isSalonOwner }: ProfileViewProps) {
                     el?.scrollIntoView({ behavior: "smooth" });
                   }}
                   className="hover:opacity-70 transition-opacity text-left"
+                  aria-label={`${stats.followers} Followers`}
                 >
                   <StatItem value={stats.followers} label="Followers" trend="+12%" />
                 </button>
@@ -243,13 +252,22 @@ export default function ProfileView({ user, isSalonOwner }: ProfileViewProps) {
                     el?.scrollIntoView({ behavior: "smooth" });
                   }}
                   className="hover:opacity-70 transition-opacity text-left"
+                  aria-label="482 Following"
                 >
                   <StatItem value="482" label="Following" trend="+3%" />
                 </button>
-                <Link href="/app/videos-creations" className="hover:opacity-70 transition-opacity">
+                <Link
+                  href="/app/videos-creations"
+                  className="hover:opacity-70 transition-opacity"
+                  aria-label={`${stats.likes} Likes`}
+                >
                   <StatItem value={stats.likes} label="Likes" trend="+8%" />
                 </Link>
-                <Link href="/app/videos-creations" className="hover:opacity-70 transition-opacity">
+                <Link
+                  href="/app/videos-creations"
+                  className="hover:opacity-70 transition-opacity"
+                  aria-label={`${stats.videos} Videos`}
+                >
                   <StatItem value={stats.videos} label="Videos" />
                 </Link>
               </div>
@@ -367,7 +385,7 @@ export default function ProfileView({ user, isSalonOwner }: ProfileViewProps) {
           <TabsContent value="videos" className="mt-0 focus-visible:outline-none">
             {isLoadingVideos ? (
               <div className="flex justify-center py-20">
-                <Loader2 className="w-10 h-10 animate-spin text-muted-foreground" />
+                <Spinner className="size-10 text-muted-foreground" />
               </div>
             ) : (
               <>
@@ -506,25 +524,26 @@ function VideoCard({ video, index }: { video: VideoData, index: number }) {
 // Empty State Component
 function EmptyState({ type, onUpload }: { type: string, onUpload?: () => void }) {
   return (
-    <div className="flex flex-col items-center justify-center py-16 sm:py-24 text-center space-y-6">
-      <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center">
-        <Video className="w-8 h-8 text-muted-foreground" />
-      </div>
-
-      <div className="space-y-2 max-w-xs sm:max-w-sm px-4">
-        <h3 className="text-lg font-semibold text-foreground">No videos yet</h3>
-        <p className="text-sm text-muted-foreground">
+    <Empty className="py-16 sm:py-24">
+      <EmptyHeader>
+        <EmptyMedia variant="icon">
+          <Video className="w-6 h-6" />
+        </EmptyMedia>
+        <EmptyTitle>No videos yet</EmptyTitle>
+        <EmptyDescription>
           Start sharing your style journey by uploading your first video.
-        </p>
-      </div>
+        </EmptyDescription>
+      </EmptyHeader>
 
       {onUpload && (
-        <Button onClick={onUpload}>
-          <Upload className="w-4 h-4 mr-2" />
-          Upload Your First Video
-        </Button>
+        <EmptyContent>
+          <Button onClick={onUpload}>
+            <Upload className="w-4 h-4 mr-2" />
+            Upload Your First Video
+          </Button>
+        </EmptyContent>
       )}
-    </div>
+    </Empty>
   );
 }
 
