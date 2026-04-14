@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { notifications } from "@/db/schema";
+import { logger } from "@/lib/logger"; // [Jules - Use pino logger instead of console.log]
 import { eq, desc } from "drizzle-orm";
 import { headers } from "next/headers";
 
@@ -21,10 +22,10 @@ export async function GET(req: NextRequest) {
       limit: 50, // Limit to 50 recent notifications
     });
 
-    console.log(`Fetched ${userNotifications.length} notifications for user ${session.user.id}`);
+    logger.info({ userId: session.user.id, count: userNotifications.length }, "Fetched notifications");
     return NextResponse.json(userNotifications);
   } catch (error) {
-    console.error("Error fetching notifications:", error);
+    logger.error({ error }, "Error fetching notifications:");
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
@@ -46,7 +47,7 @@ export async function PATCH(req: NextRequest) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Error marking notifications as read:", error);
+    logger.error({ error }, "Error marking notifications as read:");
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
