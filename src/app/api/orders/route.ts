@@ -4,6 +4,9 @@ import { db } from "@/lib/db";
 import { orders, orderItems, products } from "@/db/schema/commerce";
 import { users } from "@/db/schema/auth";
 import { eq, desc, sql } from "drizzle-orm";
+import { logger } from "@/lib/logger";
+
+// [Jules - Refactoring schema properties and structured logging]
 import { nanoid } from "nanoid";
 import { headers } from "next/headers";
 import { sendEmail } from "@/lib/email";
@@ -38,7 +41,7 @@ export async function GET(req: NextRequest) {
         return NextResponse.json(userOrders);
 
     } catch (error) {
-        console.error("Error fetching orders:", error);
+        logger.error({ err: error }, "Error fetching orders");
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }
@@ -69,13 +72,14 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "Product not found" }, { status: 404 });
         }
 
-        if (product.stock < quantity) {
+        if (product.totalStock < quantity) {
             return NextResponse.json({ error: "Insufficient stock" }, { status: 400 });
         }
 
         // 2. Create Order
         const orderId = nanoid();
-        const totalAmount = product.price * quantity;
+        const productPrice = product.salePrice ?? product.originalPrice;
+        const totalAmount = productPrice * quantity;
 
         // Start transaction (implicitly handled if single operations, but better safe)
         // Drizzle transaction:
@@ -95,12 +99,12 @@ export async function POST(req: NextRequest) {
                 orderId: orderId,
                 productId: productId,
                 quantity: quantity,
-                priceAtPurchase: product.price
+                priceAtPurchase: productPrice
             });
 
             // Update Stock
             await tx.update(products)
-                .set({ stock: product.stock - quantity })
+                .set({ totalStock: product.totalStock - quantity })
                 .where(eq(products.id, productId));
 
             // Award Loyalty Points (1 point per 1 unit currency i.e. 100 cents)
@@ -135,14 +139,14 @@ export async function POST(req: NextRequest) {
                     });
                 }
             } catch (emailError) {
-                console.error("Failed to send order confirmation email", emailError);
+                logger.error({ err: emailError }, "Failed to send order confirmation email");
             }
         })();
 
         return NextResponse.json({ success: true, orderId }, { status: 201 });
 
     } catch (error) {
-        console.error("Error creating order:", error);
+        logger.error({ err: error }, "Error creating order");
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }
