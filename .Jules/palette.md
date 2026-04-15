@@ -64,3 +64,7 @@
 ## 2026-04-13 - Profile UX Standardization
 **Learning:** For high-traffic profile pages, standardizing on unified `Empty` and `Spinner` primitives ensures a consistent brand voice across all tabs. Additionally, adding explicit `aria-label` attributes to numerical statistics (Followers, Following, etc.) provides essential context for screen reader users who might otherwise hear only the number or a truncated label.
 **Action:** Always refactor custom loading/empty states to use the standard UI library. Audit interactive statistics and ensured they have descriptive `aria-label` attributes that combine the value and the metric name.
+
+## 2026-04-15 - Salons Page UX Standardization
+**Learning:** Standardizing the Salons page with the unified `SearchBar` and `Empty` UI primitives ensures a consistent brand experience and provides power-user features like the '/' shortcut. Implementing client-side filtering via `useMemo` allows for a responsive search experience even with limited datasets, and adding explicit ARIA labels to sort buttons and destructive actions ensures WCAG compliance.
+**Action:** Always refactor static search inputs to the unified `SearchBar` and use `Empty` components for zero-result states. Ensure all interactive icons have descriptive `aria-label` attributes and are wrapped in `Tooltip` components when labels are not visible.
