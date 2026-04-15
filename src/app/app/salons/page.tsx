@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import {
   Scissors,
-  Search,
   MapPin,
   Star,
   ChevronRight,
@@ -12,10 +11,27 @@ import {
   Loader2,
   Map as MapIcon,
   List,
+  Search as SearchIcon,
+  X,
 } from "lucide-react";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import dynamic from "next/dynamic";
+import SearchBar from "@/components/SearchBar";
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+  EmptyContent,
+} from "@/components/ui/empty";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Button } from "@/components/ui/button";
 
 const categories = ["All", "Hair", "Skin", "Spa", "Nails", "Grooming"];
 
@@ -37,7 +53,7 @@ const Map = dynamic(() => import("@/components/ui/Map"), {
   ssr: false,
   loading: () => (
     <div className="w-full h-full bg-secondary/50 animate-pulse rounded-2xl flex items-center justify-center text-muted-foreground">
-      <Loader2 className="animate-spin w-6 h-6" />
+      <Loader2 className="animate-spin w-6 h-6" aria-hidden="true" />
     </div>
   ),
 });
@@ -48,6 +64,7 @@ export default function SalonsPage() {
   const [salons, setSalons] = useState<Salon[]>([]);
   const [loading, setLoading] = useState(true);
   const [mobileView, setMobileView] = useState<"list" | "map">("list");
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     async function fetchSalons() {
@@ -66,21 +83,37 @@ export default function SalonsPage() {
     fetchSalons();
   }, []);
 
-  const filteredSalons = salons
-    .filter(
-      (salon) => selectedCategory === "All" || salon.type === selectedCategory
-    )
-    .sort((a, b) => {
-      if (sortBy === "rating") return (b.rating || 0) - (a.rating || 0);
-      if (sortBy === "price")
-        return (a.priceRange || "").localeCompare(b.priceRange || "");
-      return 0;
-    });
+  const filteredSalons = useMemo(() => {
+    return salons
+      .filter((salon) => {
+        const matchesCategory =
+          selectedCategory === "All" || salon.type === selectedCategory;
+        const matchesSearch =
+          !searchQuery ||
+          salon.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          salon.address.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          salon.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          salon.type.toLowerCase().includes(searchQuery.toLowerCase());
+        return matchesCategory && matchesSearch;
+      })
+      .sort((a, b) => {
+        if (sortBy === "rating") return (b.rating || 0) - (a.rating || 0);
+        if (sortBy === "price")
+          return (a.priceRange || "").localeCompare(b.priceRange || "");
+        return 0;
+      });
+  }, [salons, selectedCategory, searchQuery, sortBy]);
 
   const mapCenter =
     filteredSalons.length > 0 && filteredSalons[0].lat
       ? { lat: filteredSalons[0].lat, lng: filteredSalons[0].lng! }
       : { lat: 12.9716, lng: 77.5946 };
+
+  const clearFilters = () => {
+    setSelectedCategory("All");
+    setSortBy(null);
+    setSearchQuery("");
+  };
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-6 max-w-[1400px] mx-auto w-full">
@@ -97,48 +130,73 @@ export default function SalonsPage() {
 
         <div className="flex items-center gap-3">
           <div className="relative hidden sm:block">
-            <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <MapPin
+              className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground"
+              aria-hidden="true"
+            />
             <input
               type="text"
               placeholder="Your Location"
+              aria-label="Location"
               className="pl-9 pr-4 py-2.5 rounded-xl border border-border bg-card text-sm focus:ring-2 focus:ring-primary/5 transition-all outline-none w-48 text-foreground"
               defaultValue="Bangalore"
             />
           </div>
           <div className="flex items-center gap-2">
-            <button
-              onClick={() => setSortBy(sortBy === "rating" ? null : "rating")}
-              className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 rounded-xl border text-sm font-medium hover:bg-secondary transition-all ${
-                sortBy === "rating"
-                  ? "border-primary bg-primary text-primary-foreground"
-                  : "border-border bg-card text-foreground"
-              }`}
-            >
-              <Star className="w-4 h-4" />
-              <span className="hidden sm:inline">Rating</span>
-            </button>
-            <button
-              onClick={() => setSortBy(sortBy === "price" ? null : "price")}
-              className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 rounded-xl border text-sm font-medium hover:bg-secondary transition-all ${
-                sortBy === "price"
-                  ? "border-primary bg-primary text-primary-foreground"
-                  : "border-border bg-card text-foreground"
-              }`}
-            >
-              <span className="font-bold">₹</span>
-              <span className="hidden sm:inline">Price</span>
-            </button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={() =>
+                    setSortBy(sortBy === "rating" ? null : "rating")
+                  }
+                  aria-label="Sort by Rating"
+                  className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 rounded-xl border text-sm font-medium hover:bg-secondary transition-all ${
+                    sortBy === "rating"
+                      ? "border-primary bg-primary text-primary-foreground"
+                      : "border-border bg-card text-foreground"
+                  }`}
+                >
+                  <Star
+                    className="w-4 h-4"
+                    aria-hidden="true"
+                    fill={sortBy === "rating" ? "currentColor" : "none"}
+                  />
+                  <span className="hidden sm:inline">Rating</span>
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>Sort by Rating</TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={() => setSortBy(sortBy === "price" ? null : "price")}
+                  aria-label="Sort by Price"
+                  className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 rounded-xl border text-sm font-medium hover:bg-secondary transition-all ${
+                    sortBy === "price"
+                      ? "border-primary bg-primary text-primary-foreground"
+                      : "border-border bg-card text-foreground"
+                  }`}
+                >
+                  <span className="font-bold" aria-hidden="true">
+                    ₹
+                  </span>
+                  <span className="hidden sm:inline">Price</span>
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>Sort by Price</TooltipContent>
+            </Tooltip>
           </div>
         </div>
       </section>
 
       {/* Search Bar */}
       <section className="relative">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-        <input
-          type="text"
+        <SearchBar
+          value={searchQuery}
+          onChange={setSearchQuery}
           placeholder="Search for services or salon names..."
-          className="w-full pl-12 pr-4 py-4 rounded-2xl bg-card border border-border focus:border-primary shadow-sm transition-all outline-none text-base sm:text-lg text-foreground"
+          className="w-full"
         />
       </section>
 
@@ -150,8 +208,8 @@ export default function SalonsPage() {
             onClick={() => setSelectedCategory(category)}
             className={`px-5 py-2.5 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
               selectedCategory === category
-                ? "bg-blue-600 text-white shadow-lg shadow-blue-600/20"
-                : "bg-card border border-border text-muted-foreground hover:border-blue-600 hover:text-blue-600"
+                ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+                : "bg-card border border-border text-muted-foreground hover:border-primary hover:text-primary"
             }`}
           >
             {category}
@@ -163,24 +221,26 @@ export default function SalonsPage() {
       <div className="flex sm:hidden items-center gap-2 p-1 bg-secondary rounded-xl w-fit">
         <button
           onClick={() => setMobileView("list")}
+          aria-label="List view"
           className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
             mobileView === "list"
               ? "bg-card text-foreground shadow-sm"
               : "text-muted-foreground"
           }`}
         >
-          <List className="w-4 h-4" />
+          <List className="w-4 h-4" aria-hidden="true" />
           List
         </button>
         <button
           onClick={() => setMobileView("map")}
+          aria-label="Map view"
           className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
             mobileView === "map"
               ? "bg-card text-foreground shadow-sm"
               : "text-muted-foreground"
           }`}
         >
-          <MapIcon className="w-4 h-4" />
+          <MapIcon className="w-4 h-4" aria-hidden="true" />
           Map
         </button>
       </div>
@@ -204,9 +264,34 @@ export default function SalonsPage() {
 
       {/* Salon List (hidden on mobile when map is active) */}
       {loading ? (
-        <div className="flex justify-center py-20">
-          <Loader2 className="w-10 h-10 animate-spin text-primary" />
+        <div className="flex justify-center py-20" role="status">
+          <Loader2
+            className="w-10 h-10 animate-spin text-primary"
+            aria-hidden="true"
+          />
+          <span className="sr-only">Loading salons...</span>
         </div>
+      ) : filteredSalons.length === 0 ? (
+        <section className="py-20">
+          <Empty className="max-w-md mx-auto">
+            <EmptyMedia variant="icon">
+              <SearchIcon className="w-10 h-10" />
+            </EmptyMedia>
+            <EmptyHeader>
+              <EmptyTitle>No salons found</EmptyTitle>
+              <EmptyDescription>
+                We couldn't find any salons matching your current search or
+                filters. Try adjusting your search term or category.
+              </EmptyDescription>
+            </EmptyHeader>
+            <EmptyContent>
+              <Button onClick={clearFilters} variant="outline" className="gap-2">
+                <X className="w-4 h-4" />
+                Clear All Filters
+              </Button>
+            </EmptyContent>
+          </Empty>
+        </section>
       ) : (
         <section
           className={`${mobileView === "map" ? "hidden" : "block"} sm:block`}
@@ -217,9 +302,6 @@ export default function SalonsPage() {
               {filteredSalons.map((salon, i) => (
                 <SalonCard key={salon.id} salon={salon} index={i} />
               ))}
-              {filteredSalons.length === 0 && (
-                <p className="text-muted-foreground">No salons found.</p>
-              )}
             </div>
 
             {/* Sticky Map Sidebar */}
@@ -239,9 +321,6 @@ export default function SalonsPage() {
             {filteredSalons.map((salon, i) => (
               <SalonCard key={salon.id} salon={salon} index={i} />
             ))}
-            {filteredSalons.length === 0 && (
-              <p className="text-muted-foreground">No salons found.</p>
-            )}
           </div>
         </section>
       )}
@@ -253,7 +332,10 @@ export default function SalonsPage() {
       >
         <div className="relative z-10 max-w-lg">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-card/20 backdrop-blur-md text-[10px] font-bold uppercase tracking-widest mb-6">
-            <span className="w-1.5 h-1.5 rounded-full bg-card animate-pulse" />
+            <span
+              className="w-1.5 h-1.5 rounded-full bg-card animate-pulse"
+              aria-hidden="true"
+            />
             Limited Offer
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold font-display mb-6 leading-tight">
@@ -266,7 +348,7 @@ export default function SalonsPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <button className="px-8 py-4 rounded-2xl bg-card text-blue-600 font-bold hover:bg-card/90 transition-all flex items-center justify-center gap-2">
-              Claim Offer <ChevronRight className="w-4 h-4" />
+              Claim Offer <ChevronRight className="w-4 h-4" aria-hidden="true" />
             </button>
             <button className="px-8 py-4 rounded-2xl bg-card/10 backdrop-blur-md border border-white/20 text-white font-bold hover:bg-card/20 transition-all">
               Learn More
@@ -274,8 +356,14 @@ export default function SalonsPage() {
           </div>
         </div>
 
-        <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[70%] bg-card/10 blur-[80px] rounded-full rotate-12" />
-        <div className="absolute bottom-[-20%] right-[10%] w-[30%] h-[40%] bg-blue-400/20 blur-[60px] rounded-full" />
+        <div
+          className="absolute top-[-10%] right-[-10%] w-[50%] h-[70%] bg-card/10 blur-[80px] rounded-full rotate-12"
+          aria-hidden="true"
+        />
+        <div
+          className="absolute bottom-[-20%] right-[10%] w-[30%] h-[40%] bg-blue-400/20 blur-[60px] rounded-full"
+          aria-hidden="true"
+        />
       </motion.div>
     </div>
   );
@@ -299,11 +387,11 @@ function SalonCard({ salon, index }: { salon: Salon; index: number }) {
               salon.image ||
               "https://images.unsplash.com/photo-1600948836101-f9ffda59d250?w=400&h=300&fit=crop"
             }
-            alt={salon.name}
+            alt=""
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
           />
           <div className="absolute top-3 left-3 px-2 py-1 rounded-lg bg-background/90 backdrop-blur-md text-[10px] font-bold flex items-center gap-1 shadow-sm text-foreground">
-            <Navigation className="w-3 h-3 text-blue-600" />
+            <Navigation className="w-3 h-3 text-blue-600" aria-hidden="true" />
             2.0 km
           </div>
         </div>
@@ -315,13 +403,16 @@ function SalonCard({ salon, index }: { salon: Salon; index: number }) {
                 {salon.name}
               </h3>
               <div className="flex items-center gap-1 text-sm font-bold bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-400 px-2 py-0.5 rounded-lg border border-amber-100 dark:border-amber-900/30 shrink-0">
-                <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
+                <Star
+                  className="w-3.5 h-3.5 fill-amber-500 text-amber-500"
+                  aria-hidden="true"
+                />
                 5.0
               </div>
             </div>
 
             <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
-              <MapPin className="w-4 h-4 shrink-0" />
+              <MapPin className="w-4 h-4 shrink-0" aria-hidden="true" />
               {salon.address}, {salon.city}
             </div>
 
@@ -344,8 +435,11 @@ function SalonCard({ salon, index }: { salon: Salon; index: number }) {
               </p>
               <p className="font-bold text-foreground">$$</p>
             </div>
-            <button className="px-5 py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-bold hover:bg-blue-600 transition-all flex items-center gap-2 shadow-lg shadow-foreground/5">
-              Book Now <ChevronRight className="w-4 h-4" />
+            <button
+              className="px-5 py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-bold hover:bg-blue-600 transition-all flex items-center gap-2 shadow-lg shadow-foreground/5"
+              aria-label={`Book now at ${salon.name}`}
+            >
+              Book Now <ChevronRight className="w-4 h-4" aria-hidden="true" />
             </button>
           </div>
         </div>

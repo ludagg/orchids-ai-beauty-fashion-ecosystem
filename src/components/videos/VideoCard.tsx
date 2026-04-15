@@ -117,10 +117,12 @@ export function VideoCard({ video }: VideoCardProps) {
 
                 <button
                     onClick={handleLike}
+                    aria-label={isLiked ? "Unlike video" : "Like video"}
                     className="flex items-center gap-1 hover:scale-110 transition-transform mb-0.5"
                 >
                     <Heart
                         className={cn("w-4 h-4 drop-shadow-sm", isLiked ? "fill-red-500 text-red-500" : "text-white")}
+                        aria-hidden="true"
                     />
                     <span className="text-xs font-medium">{likesCount}</span>
                 </button>
