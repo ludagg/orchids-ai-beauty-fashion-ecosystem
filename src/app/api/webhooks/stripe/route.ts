@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { db } from "@/lib/db";
 import { orders, orderItems, products } from "@/db/schema/commerce";
+import { logger } from "@/lib/logger"; // [Jules - Use pino logger instead of console.log]
 import { eq, sql, and, ne } from "drizzle-orm";
 
 export async function POST(req: NextRequest) {
@@ -17,7 +18,7 @@ export async function POST(req: NextRequest) {
       process.env.STRIPE_WEBHOOK_SECRET!
     );
   } catch (err: any) {
-    console.error("Webhook signature verification failed.", err.message);
+    logger.error({ err: err.message }, "Webhook signature verification failed.");
     return NextResponse.json({ error: `Webhook Error: ${err.message}` }, { status: 400 });
   }
 
@@ -37,7 +38,7 @@ export async function POST(req: NextRequest) {
             .returning({ id: orders.id });
 
           if (updatedOrders.length === 0) {
-            console.log(`Order ${orderId} already paid or not found. Skipping.`);
+            logger.info({ orderId }, "Order already paid or not found. Skipping.");
             return NextResponse.json({ received: true });
           }
 
@@ -54,22 +55,22 @@ export async function POST(req: NextRequest) {
               await db
                 .update(products)
                 .set({
-                  stock: sql`${products.stock} - ${item.quantity}`,
+                  totalStock: sql`${products.totalStock} - ${item.quantity}`, // [Jules - Use totalStock instead of stock]
                 })
                 .where(eq(products.id, item.productId));
             }
           }
 
-          console.log(`Order ${orderId} marked as paid.`);
+          logger.info({ orderId }, "Order marked as paid.");
         } catch (dbError) {
-          console.error("Error updating order/stock:", dbError);
+          logger.error({ dbError }, "Error updating order/stock:");
           return NextResponse.json({ error: "Database update failed" }, { status: 500 });
         }
       }
       break;
     default:
       // Unexpected event type
-      console.log(`Unhandled event type ${event.type}`);
+      logger.info({ eventType: event.type }, "Unhandled event type");
   }
 
   return NextResponse.json({ received: true });

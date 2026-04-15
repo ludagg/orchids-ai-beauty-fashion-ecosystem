@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { orders, orderItems, products } from "@/db/schema/commerce";
+import { logger } from "@/lib/logger"; // [Jules - Use pino logger instead of console.log]
 import { users } from "@/db/schema/auth"; // Import users for loyalty points update later
 import { eq, inArray } from "drizzle-orm";
 import { nanoid } from "nanoid";
@@ -46,14 +47,15 @@ export async function POST(req: NextRequest) {
       if (!product) {
         return NextResponse.json({ error: `Product not found: ${item.id}` }, { status: 400 });
       }
-      if (product.stock < item.quantity) {
+      const currentPrice = product.salePrice ?? product.originalPrice; // [Jules - Correct price mapping based on schema]
+      if (product.totalStock < item.quantity) { // [Jules - Use totalStock instead of stock]
           return NextResponse.json({ error: `Insufficient stock for ${product.name}` }, { status: 400 });
       }
 
-      totalAmount += product.price * item.quantity;
+      totalAmount += currentPrice * item.quantity;
       validatedItems.push({
         ...item,
-        price: product.price
+        price: currentPrice
       });
     }
 
@@ -83,14 +85,16 @@ export async function POST(req: NextRequest) {
             shippingAddress: shippingAddress ? JSON.stringify(shippingAddress) : null,
         });
 
-        for (const item of validatedItems) {
-            await tx.insert(orderItems).values({
+        // [Jules - Use batch insertion for order items]
+        if (validatedItems.length > 0) {
+            const orderItemsData = validatedItems.map(item => ({
                 id: nanoid(),
                 orderId: orderId,
                 productId: item.id,
                 quantity: item.quantity,
                 priceAtPurchase: item.price
-            });
+            }));
+            await tx.insert(orderItems).values(orderItemsData);
         }
     });
 
@@ -118,7 +122,7 @@ export async function POST(req: NextRequest) {
     });
 
   } catch (error: any) {
-    console.error("Error creating payment intent:", error);
+    logger.error({ error }, "Error creating payment intent"); // [Jules - Replace console.error with logger.error]
     return NextResponse.json(
       { error: error.message || "Internal Server Error" },
       { status: 500 }
