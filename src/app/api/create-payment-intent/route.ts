@@ -7,7 +7,9 @@ import { eq, inArray } from "drizzle-orm";
 import { nanoid } from "nanoid";
 import { headers } from "next/headers";
 import { stripe } from "@/lib/stripe";
+import { logger } from "@/lib/logger";
 
+// [Jules - Reason for modification] Fixed schema references (totalStock, salePrice/originalPrice), improved db performance with map and batch insert, changed console.error to logger.
 export async function POST(req: NextRequest) {
   try {
     const session = await auth.api.getSession({
@@ -41,19 +43,25 @@ export async function POST(req: NextRequest) {
     let totalAmount = 0;
     const validatedItems = [];
 
+    // Performance improvement: use Map for O(1) lookups instead of O(N) array find
+    const productMap = new Map(dbProducts.map(p => [p.id, p]));
+
     for (const item of items) {
-      const product = dbProducts.find((p) => p.id === item.id);
+      const product = productMap.get(item.id);
       if (!product) {
         return NextResponse.json({ error: `Product not found: ${item.id}` }, { status: 400 });
       }
-      if (product.stock < item.quantity) {
+      if (product.totalStock < item.quantity) {
           return NextResponse.json({ error: `Insufficient stock for ${product.name}` }, { status: 400 });
       }
 
-      totalAmount += product.price * item.quantity;
+      // Map salePrice/originalPrice to price scalar as expected
+      const price = product.salePrice ?? product.originalPrice;
+
+      totalAmount += price * item.quantity;
       validatedItems.push({
         ...item,
-        price: product.price
+        price: price
       });
     }
 
@@ -83,14 +91,15 @@ export async function POST(req: NextRequest) {
             shippingAddress: shippingAddress ? JSON.stringify(shippingAddress) : null,
         });
 
-        for (const item of validatedItems) {
-            await tx.insert(orderItems).values({
+        if (validatedItems.length > 0) {
+            const valuesToInsert = validatedItems.map(item => ({
                 id: nanoid(),
                 orderId: orderId,
                 productId: item.id,
                 quantity: item.quantity,
                 priceAtPurchase: item.price
-            });
+            }));
+            await tx.insert(orderItems).values(valuesToInsert);
         }
     });
 
@@ -118,7 +127,7 @@ export async function POST(req: NextRequest) {
     });
 
   } catch (error: any) {
-    console.error("Error creating payment intent:", error);
+    logger.error("Error creating payment intent:", error);
     return NextResponse.json(
       { error: error.message || "Internal Server Error" },
       { status: 500 }
