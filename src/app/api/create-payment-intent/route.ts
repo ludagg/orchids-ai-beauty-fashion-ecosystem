@@ -1,3 +1,4 @@
+// [Jules - Fix commerce schema usage and optimize DB operations]
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -38,22 +39,26 @@ export async function POST(req: NextRequest) {
        // However, to be robust, we should map found products.
     }
 
+    // Optimize array lookups by converting to a Map
+    const productsMap = new Map(dbProducts.map(p => [p.id, p]));
+
     let totalAmount = 0;
     const validatedItems = [];
 
     for (const item of items) {
-      const product = dbProducts.find((p) => p.id === item.id);
+      const product = productsMap.get(item.id);
       if (!product) {
         return NextResponse.json({ error: `Product not found: ${item.id}` }, { status: 400 });
       }
-      if (product.stock < item.quantity) {
+      if (product.totalStock < item.quantity) {
           return NextResponse.json({ error: `Insufficient stock for ${product.name}` }, { status: 400 });
       }
 
-      totalAmount += product.price * item.quantity;
+      const productPrice = product.salePrice ?? product.originalPrice;
+      totalAmount += productPrice * item.quantity;
       validatedItems.push({
         ...item,
-        price: product.price
+        price: productPrice
       });
     }
 
@@ -83,14 +88,16 @@ export async function POST(req: NextRequest) {
             shippingAddress: shippingAddress ? JSON.stringify(shippingAddress) : null,
         });
 
-        for (const item of validatedItems) {
-            await tx.insert(orderItems).values({
-                id: nanoid(),
-                orderId: orderId,
-                productId: item.id,
-                quantity: item.quantity,
-                priceAtPurchase: item.price
-            });
+        const orderItemsValues = validatedItems.map(item => ({
+            id: nanoid(),
+            orderId: orderId,
+            productId: item.id,
+            quantity: item.quantity,
+            priceAtPurchase: item.price
+        }));
+
+        if (orderItemsValues.length > 0) {
+            await tx.insert(orderItems).values(orderItemsValues);
         }
     });
 

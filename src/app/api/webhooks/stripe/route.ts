@@ -1,10 +1,17 @@
+// [Jules - Fix commerce schema usage and enforce webhook security]
 import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { db } from "@/lib/db";
+import { logger } from "@/lib/logger";
 import { orders, orderItems, products } from "@/db/schema/commerce";
 import { eq, sql, and, ne } from "drizzle-orm";
 
 export async function POST(req: NextRequest) {
+  if (!process.env.STRIPE_WEBHOOK_SECRET) {
+    logger.error("STRIPE_WEBHOOK_SECRET is not set in the environment variables.");
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+  }
+
   const body = await req.text();
   const signature = req.headers.get("Stripe-Signature") as string;
 
@@ -14,10 +21,10 @@ export async function POST(req: NextRequest) {
     event = stripe.webhooks.constructEvent(
       body,
       signature,
-      process.env.STRIPE_WEBHOOK_SECRET!
+      process.env.STRIPE_WEBHOOK_SECRET
     );
   } catch (err: any) {
-    console.error("Webhook signature verification failed.", err.message);
+    logger.error({ err }, "Webhook signature verification failed.");
     return NextResponse.json({ error: `Webhook Error: ${err.message}` }, { status: 400 });
   }
 
@@ -54,7 +61,7 @@ export async function POST(req: NextRequest) {
               await db
                 .update(products)
                 .set({
-                  stock: sql`${products.stock} - ${item.quantity}`,
+                  totalStock: sql`${products.totalStock} - ${item.quantity}`,
                 })
                 .where(eq(products.id, item.productId));
             }
@@ -62,7 +69,7 @@ export async function POST(req: NextRequest) {
 
           console.log(`Order ${orderId} marked as paid.`);
         } catch (dbError) {
-          console.error("Error updating order/stock:", dbError);
+          logger.error({ dbError }, "Error updating order/stock");
           return NextResponse.json({ error: "Database update failed" }, { status: 500 });
         }
       }
