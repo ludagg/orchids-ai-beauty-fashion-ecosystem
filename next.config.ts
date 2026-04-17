@@ -36,22 +36,22 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  ...(isVercel ? {} : {
+    experimental: {
+      turbo: {
+        rules: {
+          "src/**/*.{jsx,tsx}": {
+            loaders: [LOADER],
+          },
+        },
+      },
+    },
+  }),
 };
 
 // Only set outputFileTracingRoot outside of Vercel builds
 if (!isVercel) {
   (nextConfig as any).outputFileTracingRoot = path.resolve(__dirname, "../../");
-}
-
-// ✅ Disable Turbopack on Vercel
-if (!isVercel) {
-  (nextConfig as any).turbopack = {
-    rules: {
-      "src/**/*.{jsx,tsx}": {
-        loaders: [LOADER],
-      },
-    },
-  };
 }
 
 export default nextConfig;

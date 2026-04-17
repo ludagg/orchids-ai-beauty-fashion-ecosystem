@@ -14,6 +14,8 @@ export const auth = betterAuth({
         verification: schema.verifications,
     }
   }),
+  secret: process.env.BETTER_AUTH_SECRET || (process.env.NODE_ENV !== "production" ? "fallback_secret_for_dev_only" : undefined),
+  baseURL: process.env.BETTER_AUTH_BASE_URL || (process.env.NODE_ENV !== "production" ? "http://localhost:3000" : undefined),
   user: {
     additionalFields: {
       role: {
@@ -21,6 +23,15 @@ export const auth = betterAuth({
       },
       loyaltyPoints: {
         type: "number",
+      },
+      phone: {
+        type: "string",
+      },
+      gender: {
+        type: "string",
+      },
+      location: {
+        type: "string",
       },
     },
   },
