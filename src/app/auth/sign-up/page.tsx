@@ -83,9 +83,9 @@ export default function SignUpPage() {
         email: formData.email,
         password: formData.password,
         name: `${formData.firstName} ${formData.lastName}`,
-        // Note: Extra fields (sex, phone, etc.) are captured in UI but might need schema update to be stored.
-        // Assuming the backend handles them or we just send name/email/pass for now.
-        // If better-auth supports extra fields in metadata or similar, they should be passed here.
+        phone: formData.phone,
+        gender: formData.sex,
+        location: `${formData.city}, ${formData.country}`,
       })
 
       if (error) {

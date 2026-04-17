@@ -85,6 +85,13 @@
       "when": 1771657915960,
       "tag": "0011_slimy_morgan_stark",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1773359830469,
+      "tag": "0012_secret_valkyrie",
+      "breakpoints": true
     }
   ]
 }
