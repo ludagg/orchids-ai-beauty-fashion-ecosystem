@@ -37,17 +37,6 @@ const partnerSchema = z.object({
   gallery: z.array(z.string().url()).min(2).max(10),
 });
 
-// Legacy schema for backward compatibility (if needed)
-const legacySchema = z.object({
-  name: z.string().min(2),
-  description: z.string().min(10),
-  address: z.string().min(5),
-  city: z.string().min(2),
-  zipCode: z.string().min(3),
-  type: z.enum(["SALON", "BOUTIQUE", "BOTH"]),
-  image: z.string().optional(),
-});
-
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
@@ -153,6 +142,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
+// [Jules - Remove legacy salon schema support to enforce new partnerSchema requirements for MVP completion and scale]
 export async function POST(req: NextRequest) {
   try {
     const session = await auth.api.getSession({
@@ -275,25 +265,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json(newSalon[0], { status: 201 });
 
     } else {
-        // Fallback for Legacy Request
-        const result = legacySchema.safeParse(body);
-        if (!result.success) return NextResponse.json({ error: "Invalid data" }, { status: 400 });
-
-        const { name, description, address, city, zipCode, type, image } = result.data;
-        // ... (Keep existing logic if needed, or just redirect to new flow error)
-        // I'll implement minimal legacy support just in case
-        const salonId = nanoid();
-        const slug = `${name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${nanoid(6)}`;
-
-        const newSalon = await db.insert(salons).values({
-            id: salonId,
-            ownerId: session.user.id,
-            name, slug, description, address, city, zipCode, type,
-            image: image || "/images/partner-placeholder.png",
-            status: "pending"
-        }).returning();
-
-        return NextResponse.json(newSalon[0], { status: 201 });
+        return NextResponse.json({ error: "Legacy schema is no longer supported" }, { status: 400 });
     }
 
   } catch (error) {
