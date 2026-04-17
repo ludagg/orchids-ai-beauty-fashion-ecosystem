@@ -15,7 +15,7 @@ const faqs = [
   },
   {
     question: "Are the salons verified?",
-    answer: "Yes, every salon on Rare undergoes a strict verification process. We check their licenses, visit their premises, and ensure they meet our high standards for hygiene and service quality."
+    answer: "Yes, every salon on Priisme undergoes a strict verification process. We check their licenses, visit their premises, and ensure they meet our high standards for hygiene and service quality."
   },
   {
     question: "Can I return items bought from the marketplace?",

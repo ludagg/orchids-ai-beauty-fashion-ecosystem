@@ -25,7 +25,7 @@ export default function MobileAppSection() {
                 <span className="text-gradient-color italic">pocket.</span>
               </h2>
               <p className="text-muted-foreground text-[17px] leading-relaxed mb-8 max-w-[480px] mx-auto md:mx-0">
-                Experience the full power of Rare on iOS and Android.
+                Experience the full power of Priisme on iOS and Android.
                 Watch live streams, try on clothes virtually, and book salons on the go.
               </p>
 

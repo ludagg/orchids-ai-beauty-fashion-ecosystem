@@ -179,7 +179,7 @@ export default function ErrorReporter({ error, reset }: ReporterProps) {
           </div>
 
           <p className="text-center mt-8 text-sm text-muted-foreground/50 font-medium">
-            Error Reporting by Rare Intelligence Engine
+            Error Reporting by Priisme Intelligence Engine
           </p>
         </motion.div>
       </body>
