@@ -1,3 +1,4 @@
+// [Jules - Fixed schema inconsistencies: changed product.stock to totalStock and product.price to salePrice/originalPrice. Updated to Pino logger.]
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -7,6 +8,7 @@ import { eq, inArray } from "drizzle-orm";
 import { nanoid } from "nanoid";
 import { headers } from "next/headers";
 import { stripe } from "@/lib/stripe";
+import { logger } from "@/lib/logger";
 
 export async function POST(req: NextRequest) {
   try {
@@ -41,19 +43,23 @@ export async function POST(req: NextRequest) {
     let totalAmount = 0;
     const validatedItems = [];
 
+    // Memory optimization: Convert inner Array.find() to Map lookup O(N*M) -> O(N+M)
+    const productMap = new Map(dbProducts.map(p => [p.id, p]));
+
     for (const item of items) {
-      const product = dbProducts.find((p) => p.id === item.id);
+      const product = productMap.get(item.id);
       if (!product) {
         return NextResponse.json({ error: `Product not found: ${item.id}` }, { status: 400 });
       }
-      if (product.stock < item.quantity) {
+      if (product.totalStock < item.quantity) {
           return NextResponse.json({ error: `Insufficient stock for ${product.name}` }, { status: 400 });
       }
 
-      totalAmount += product.price * item.quantity;
+      const effectivePrice = product.salePrice ?? product.originalPrice;
+      totalAmount += effectivePrice * item.quantity;
       validatedItems.push({
         ...item,
-        price: product.price
+        price: effectivePrice
       });
     }
 
@@ -83,14 +89,15 @@ export async function POST(req: NextRequest) {
             shippingAddress: shippingAddress ? JSON.stringify(shippingAddress) : null,
         });
 
-        for (const item of validatedItems) {
-            await tx.insert(orderItems).values({
+        if (validatedItems.length > 0) {
+            const batchItems = validatedItems.map((item) => ({
                 id: nanoid(),
                 orderId: orderId,
                 productId: item.id,
                 quantity: item.quantity,
                 priceAtPurchase: item.price
-            });
+            }));
+            await tx.insert(orderItems).values(batchItems);
         }
     });
 
@@ -118,7 +125,7 @@ export async function POST(req: NextRequest) {
     });
 
   } catch (error: any) {
-    console.error("Error creating payment intent:", error);
+    logger.error({ err: error }, "Error creating payment intent");
     return NextResponse.json(
       { error: error.message || "Internal Server Error" },
       { status: 500 }
