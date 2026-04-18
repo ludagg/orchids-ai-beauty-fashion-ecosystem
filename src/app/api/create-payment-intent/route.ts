@@ -46,14 +46,15 @@ export async function POST(req: NextRequest) {
       if (!product) {
         return NextResponse.json({ error: `Product not found: ${item.id}` }, { status: 400 });
       }
-      if (product.stock < item.quantity) {
+      // [Jules - Fixed price and stock field mismatch]
+      if (product.totalStock < item.quantity) {
           return NextResponse.json({ error: `Insufficient stock for ${product.name}` }, { status: 400 });
       }
 
-      totalAmount += product.price * item.quantity;
+      totalAmount += (product.salePrice ?? product.originalPrice) * item.quantity;
       validatedItems.push({
         ...item,
-        price: product.price
+        price: product.salePrice ?? product.originalPrice
       });
     }
 
