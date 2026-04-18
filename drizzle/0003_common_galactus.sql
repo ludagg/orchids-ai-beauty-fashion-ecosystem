@@ -1,1 +1,0 @@
-ALTER TABLE "salons" ADD COLUMN "image" text;
