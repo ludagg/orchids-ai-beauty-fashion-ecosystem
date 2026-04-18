@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -52,7 +53,7 @@ export async function DELETE(
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Error deleting service:", error);
+    logger.error("Error deleting service:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }

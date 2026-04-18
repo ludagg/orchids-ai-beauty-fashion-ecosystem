@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
@@ -40,7 +41,7 @@ export async function GET(
 
     return NextResponse.json(salonServices);
   } catch (error) {
-    console.error("Error fetching services:", error);
+    logger.error("Error fetching services:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }
@@ -109,7 +110,7 @@ export async function POST(
 
     return NextResponse.json(newService[0], { status: 201 });
   } catch (error) {
-    console.error("Error creating service:", error);
+    logger.error("Error creating service:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }

@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { staff, staffServices, salons } from "@/db/schema";
@@ -66,7 +67,7 @@ export async function PUT(
 
     return NextResponse.json(updatedStaff);
   } catch (error) {
-    console.error("Error updating staff:", error);
+    logger.error("Error updating staff:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
@@ -105,7 +106,7 @@ export async function DELETE(
 
     return NextResponse.json(deletedStaff);
   } catch (error) {
-    console.error("Error deleting staff:", error);
+    logger.error("Error deleting staff:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -37,7 +38,7 @@ export async function GET(req: NextRequest) {
         return NextResponse.json(userFavorites);
 
     } catch (error) {
-        console.error("Error fetching favorites:", error);
+        logger.error("Error fetching favorites:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }
@@ -72,7 +73,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ success: true, id }, { status: 201 });
 
     } catch (error) {
-        console.error("Error adding favorite:", error);
+        logger.error("Error adding favorite:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }
@@ -117,7 +118,7 @@ export async function DELETE(req: NextRequest) {
         return NextResponse.json({ success: true });
 
     } catch (error) {
-        console.error("Error removing favorite:", error);
+        logger.error("Error removing favorite:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }

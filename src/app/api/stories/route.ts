@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { stories, storyMediaType } from "@/db/schema";
@@ -43,7 +44,7 @@ export async function GET(req: Request) {
 
     return NextResponse.json(Object.values(groupedStories));
   } catch (error) {
-    console.error("Error fetching stories:", error);
+    logger.error("Error fetching stories:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
@@ -78,7 +79,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json(newStory);
   } catch (error) {
-    console.error("Error creating story:", error);
+    logger.error("Error creating story:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
@@ -30,7 +31,7 @@ export async function GET(req: NextRequest) {
         return NextResponse.json(badgesWithStatus);
 
     } catch (error) {
-        console.error("Error fetching badges:", error);
+        logger.error("Error fetching badges:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }

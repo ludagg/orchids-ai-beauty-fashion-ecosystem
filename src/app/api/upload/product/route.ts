@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { uploadFile } from "@/lib/upload";
 import { auth } from "@/lib/auth";
@@ -90,7 +91,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ url });
   } catch (error) {
-    console.error("Product upload error:", error);
+    logger.error("Product upload error:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }

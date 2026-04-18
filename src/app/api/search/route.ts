@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { products } from "@/db/schema/commerce";
@@ -85,7 +86,7 @@ export async function GET(req: NextRequest) {
         });
 
     } catch (error) {
-        console.error("Error performing global search:", error);
+        logger.error("Error performing global search:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }

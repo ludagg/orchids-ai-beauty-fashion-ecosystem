@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -40,7 +41,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
         }
 
     } catch (error) {
-        console.error("Error toggling follow:", error);
+        logger.error("Error toggling follow:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }

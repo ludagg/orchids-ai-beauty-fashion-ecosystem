@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -21,10 +22,10 @@ export async function GET(req: NextRequest) {
       limit: 50, // Limit to 50 recent notifications
     });
 
-    console.log(`Fetched ${userNotifications.length} notifications for user ${session.user.id}`);
+    logger.info(`Fetched ${userNotifications.length} notifications for user ${session.user.id}`);
     return NextResponse.json(userNotifications);
   } catch (error) {
-    console.error("Error fetching notifications:", error);
+    logger.error("Error fetching notifications:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
@@ -46,7 +47,7 @@ export async function PATCH(req: NextRequest) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Error marking notifications as read:", error);
+    logger.error("Error marking notifications as read:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

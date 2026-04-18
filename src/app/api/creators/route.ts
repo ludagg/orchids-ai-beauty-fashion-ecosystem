@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { users } from "@/db/schema/auth";
@@ -50,7 +51,7 @@ export async function GET(req: NextRequest) {
         return NextResponse.json(sortedCreators);
 
     } catch (error) {
-        console.error("Error fetching creators:", error);
+        logger.error("Error fetching creators:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }

@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -118,7 +119,7 @@ export async function POST(req: NextRequest) {
     });
 
   } catch (error: any) {
-    console.error("Error creating payment intent:", error);
+    logger.error("Error creating payment intent:", error);
     return NextResponse.json(
       { error: error.message || "Internal Server Error" },
       { status: 500 }

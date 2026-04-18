@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { db } from "@/lib/db";
@@ -37,7 +38,7 @@ export async function PATCH(req: Request) {
 
     return NextResponse.json(updatedUser[0]);
   } catch (error) {
-    console.error("Error updating profile:", error);
+    logger.error("Error updating profile:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

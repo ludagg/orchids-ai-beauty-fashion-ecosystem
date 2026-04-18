@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -88,7 +89,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
         });
 
     } catch (error) {
-        console.error("Error fetching user profile:", error);
+        logger.error("Error fetching user profile:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }

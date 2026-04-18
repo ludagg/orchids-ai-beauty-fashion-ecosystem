@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { products } from "@/db/schema/commerce";
@@ -69,7 +70,7 @@ export async function GET() {
     });
 
   } catch (error) {
-    console.error("Error fetching shop home data:", error);
+    logger.error("Error fetching shop home data:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

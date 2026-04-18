@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { users, userLevels } from "@/db/schema";
@@ -33,7 +34,7 @@ export async function GET(req: NextRequest) {
         return NextResponse.json(leaderboard);
 
     } catch (error) {
-        console.error("Error fetching leaderboard:", error);
+        logger.error("Error fetching leaderboard:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }

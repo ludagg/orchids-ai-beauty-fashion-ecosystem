@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -62,7 +63,7 @@ export async function GET(
         return NextResponse.json(msgs.reverse()); // Return oldest first for chat UI
 
     } catch (error) {
-        console.error("Error fetching messages:", error);
+        logger.error("Error fetching messages:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }
@@ -143,7 +144,7 @@ export async function POST(
         return NextResponse.json({ success: true, messageId }, { status: 201 });
 
     } catch (error) {
-        console.error("Error sending message:", error);
+        logger.error("Error sending message:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }

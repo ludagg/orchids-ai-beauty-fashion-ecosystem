@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { reviews } from "@/db/schema/reviews";
@@ -25,7 +26,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     return NextResponse.json({ success: true });
 
   } catch (error) {
-    console.error("Error voting helpful:", error);
+    logger.error("Error voting helpful:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

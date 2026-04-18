@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { reviews } from "@/db/schema/reviews";
@@ -70,7 +71,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(data);
   } catch (error) {
-    console.error("Error fetching reviews:", error);
+    logger.error("Error fetching reviews:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
@@ -194,13 +195,13 @@ export async function POST(req: NextRequest) {
             hasPhotos: images && images.length > 0
         });
     } catch (err) {
-        console.error("Loyalty error in reviews:", err);
+        logger.error("Loyalty error in reviews:", err);
     }
 
     return NextResponse.json(newReview[0], { status: 201 });
 
   } catch (error) {
-    console.error("Error creating review:", error);
+    logger.error("Error creating review:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

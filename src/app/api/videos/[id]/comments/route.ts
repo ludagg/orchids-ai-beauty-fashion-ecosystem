@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -28,7 +29,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
         return NextResponse.json(comments);
 
     } catch (error) {
-        console.error("Error fetching comments:", error);
+        logger.error("Error fetching comments:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }
@@ -77,7 +78,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
         }, { status: 201 });
 
     } catch (error) {
-        console.error("Error creating comment:", error);
+        logger.error("Error creating comment:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }

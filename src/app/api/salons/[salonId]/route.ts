@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { salons } from "@/db/schema/salons";
@@ -28,7 +29,7 @@ export async function GET(
 
     return NextResponse.json(salon);
   } catch (error) {
-    console.error("Error fetching salon:", error);
+    logger.error("Error fetching salon:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }
