@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
@@ -28,7 +29,7 @@ export async function POST(req: NextRequest) {
             const url = await uploadReviewImage(file);
             uploadedUrls.push(url);
         } catch (e) {
-            console.error("Failed to upload file:", file.name, e);
+            logger.error("Failed to upload file:", file.name, e);
             // Continue with other files or fail?
             // Let's verify we got at least one.
         }
@@ -41,7 +42,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ urls: uploadedUrls });
   } catch (error) {
-    console.error("Upload error:", error);
+    logger.error("Upload error:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }

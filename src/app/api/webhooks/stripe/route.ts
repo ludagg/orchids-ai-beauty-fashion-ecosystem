@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { db } from "@/lib/db";
@@ -17,7 +18,7 @@ export async function POST(req: NextRequest) {
       process.env.STRIPE_WEBHOOK_SECRET!
     );
   } catch (err: any) {
-    console.error("Webhook signature verification failed.", err.message);
+    logger.error("Webhook signature verification failed.", err.message);
     return NextResponse.json({ error: `Webhook Error: ${err.message}` }, { status: 400 });
   }
 
@@ -37,7 +38,7 @@ export async function POST(req: NextRequest) {
             .returning({ id: orders.id });
 
           if (updatedOrders.length === 0) {
-            console.log(`Order ${orderId} already paid or not found. Skipping.`);
+            logger.info(`Order ${orderId} already paid or not found. Skipping.`);
             return NextResponse.json({ received: true });
           }
 
@@ -60,16 +61,16 @@ export async function POST(req: NextRequest) {
             }
           }
 
-          console.log(`Order ${orderId} marked as paid.`);
+          logger.info(`Order ${orderId} marked as paid.`);
         } catch (dbError) {
-          console.error("Error updating order/stock:", dbError);
+          logger.error("Error updating order/stock:", dbError);
           return NextResponse.json({ error: "Database update failed" }, { status: 500 });
         }
       }
       break;
     default:
       // Unexpected event type
-      console.log(`Unhandled event type ${event.type}`);
+      logger.info(`Unhandled event type ${event.type}`);
   }
 
   return NextResponse.json({ received: true });

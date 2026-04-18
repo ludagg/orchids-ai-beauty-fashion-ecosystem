@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -219,7 +220,7 @@ export async function POST(req: NextRequest) {
                         }
                     }
                 } catch (emailError) {
-                    console.error("Failed to send confirmation email or notification", emailError);
+                    logger.error("Failed to send confirmation email or notification", emailError);
                 }
             })();
 
@@ -229,7 +230,7 @@ export async function POST(req: NextRequest) {
         }
 
     } catch (error: any) {
-        console.error("Error creating booking:", error);
+        logger.error("Error creating booking:", error);
         return NextResponse.json({ error: error.message || "Internal Server Error" }, { status: 500 });
     }
 }
@@ -257,7 +258,7 @@ export async function GET(req: NextRequest) {
         return NextResponse.json(userBookings);
 
     } catch (error) {
-        console.error("Error fetching bookings:", error);
+        logger.error("Error fetching bookings:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }

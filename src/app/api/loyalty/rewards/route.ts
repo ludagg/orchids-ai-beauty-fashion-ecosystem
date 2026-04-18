@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
@@ -65,7 +66,7 @@ export async function GET(req: NextRequest) {
         return NextResponse.json(availableRewards);
 
     } catch (error) {
-        console.error("Error fetching rewards:", error);
+        logger.error("Error fetching rewards:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }
@@ -97,7 +98,7 @@ export async function POST(req: NextRequest) {
         }
 
     } catch (error) {
-        console.error("Error redeeming reward:", error);
+        logger.error("Error redeeming reward:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }

@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { carts, cartItems } from "@/db/schema/cart";
@@ -39,7 +40,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(activeCart);
   } catch (error) {
-    console.error("Error fetching cart:", error);
+    logger.error("Error fetching cart:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
@@ -137,7 +138,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(updatedCart);
 
   } catch (error) {
-    console.error("Error adding to cart:", error);
+    logger.error("Error adding to cart:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

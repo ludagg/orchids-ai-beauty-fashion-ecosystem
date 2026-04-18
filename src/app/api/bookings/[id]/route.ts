@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -102,7 +103,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
                      isFirstBooking: bookingCount === 1
                  });
              } catch (loyaltyError) {
-                 console.error("Loyalty error:", loyaltyError);
+                 logger.error("Loyalty error:", loyaltyError);
              }
         }
 
@@ -119,7 +120,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
                         });
                     }
                 } catch (emailError) {
-                    console.error("Failed to send cancellation email", emailError);
+                    logger.error("Failed to send cancellation email", emailError);
                 }
             })();
         }
@@ -139,7 +140,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
                         });
                     }
                 } catch (emailError) {
-                    console.error("Failed to send confirmation email", emailError);
+                    logger.error("Failed to send confirmation email", emailError);
                 }
             })();
         }
@@ -147,7 +148,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
         return NextResponse.json({ success: true, status });
 
     } catch (error) {
-        console.error("Error updating booking:", error);
+        logger.error("Error updating booking:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }

@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { reviews } from "@/db/schema/reviews";
@@ -71,7 +72,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     return NextResponse.json(updatedReview[0]);
 
   } catch (error) {
-    console.error("Error updating review:", error);
+    logger.error("Error updating review:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
@@ -126,7 +127,7 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
     return NextResponse.json({ message: "Review deleted" });
 
   } catch (error) {
-    console.error("Error deleting review:", error);
+    logger.error("Error deleting review:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

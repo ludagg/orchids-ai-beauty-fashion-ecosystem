@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { products, salons } from "@/db/schema";
@@ -113,7 +114,7 @@ export async function GET(
         similarProducts
     });
   } catch (error) {
-    console.error("Error fetching product:", error);
+    logger.error("Error fetching product:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }
@@ -203,7 +204,7 @@ export async function PATCH(
     return NextResponse.json(updatedProduct[0]);
 
   } catch (error) {
-    console.error("Error updating product:", error);
+    logger.error("Error updating product:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }
@@ -259,7 +260,7 @@ export async function DELETE(
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Error deleting product:", error);
+    logger.error("Error deleting product:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }

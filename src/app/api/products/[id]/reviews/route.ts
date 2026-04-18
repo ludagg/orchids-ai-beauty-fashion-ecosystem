@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -29,7 +30,7 @@ export async function GET(
 
         return NextResponse.json(productReviews);
     } catch (error) {
-        console.error("Error fetching reviews:", error);
+        logger.error("Error fetching reviews:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }
@@ -86,7 +87,7 @@ export async function POST(
         return NextResponse.json(newReview[0], { status: 201 });
 
     } catch (error) {
-        console.error("Error posting review:", error);
+        logger.error("Error posting review:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }

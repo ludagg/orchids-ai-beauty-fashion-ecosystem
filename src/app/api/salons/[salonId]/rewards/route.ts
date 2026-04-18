@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
@@ -46,7 +47,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ salo
 
         return NextResponse.json(salonRewards);
     } catch (error) {
-        console.error("Error fetching salon rewards:", error);
+        logger.error("Error fetching salon rewards:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }
@@ -98,7 +99,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ sal
         return NextResponse.json(newReward[0], { status: 201 });
 
     } catch (error) {
-        console.error("Error creating reward:", error);
+        logger.error("Error creating reward:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }

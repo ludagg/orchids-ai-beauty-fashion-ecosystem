@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
@@ -145,7 +146,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(results);
   } catch (error) {
-    console.error("Error fetching salons:", error);
+    logger.error("Error fetching salons:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }
@@ -201,7 +202,7 @@ export async function POST(req: NextRequest) {
                  formattedAddress = geoData[0].display_name;
              }
         } catch (err) {
-            console.error("Geocoding failed:", err);
+            logger.error("Geocoding failed:", err);
             // Proceed without coords, or fail? Prompt says "Store lat/lng...".
             // We'll proceed with null and maybe retry later or admin can fix.
         }
@@ -297,7 +298,7 @@ export async function POST(req: NextRequest) {
     }
 
   } catch (error) {
-    console.error("Error creating salon:", error);
+    logger.error("Error creating salon:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }

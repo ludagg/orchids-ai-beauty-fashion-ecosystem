@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { cartItems } from "@/db/schema/cart";
@@ -27,7 +28,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ it
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Error updating cart item:", error);
+    logger.error("Error updating cart item:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
@@ -47,7 +48,7 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Error deleting cart item:", error);
+    logger.error("Error deleting cart item:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -138,7 +139,7 @@ export async function GET(req: NextRequest) {
         return NextResponse.json(formatted);
 
     } catch (error) {
-        console.error("Error fetching videos:", error);
+        logger.error("Error fetching videos:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }
@@ -192,7 +193,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ success: true, id }, { status: 201 });
 
     } catch (error) {
-        console.error("Error creating video:", error);
+        logger.error("Error creating video:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }

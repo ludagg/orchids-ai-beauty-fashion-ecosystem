@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { LoyaltyEngine } from "@/lib/loyalty";
 import { headers } from "next/headers";
@@ -39,7 +40,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ message: "Event ignored" });
 
     } catch (error) {
-        console.error("Webhook error:", error);
+        logger.error("Webhook error:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }

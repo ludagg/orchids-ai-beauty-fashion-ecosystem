@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { bookings, services, openingHours, staff, staffServices } from '@/db/schema';
@@ -140,7 +141,7 @@ export async function GET(req: Request) {
 
     return NextResponse.json(slots);
   } catch (error) {
-    console.error('Error checking availability:', error);
+    logger.error('Error checking availability:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

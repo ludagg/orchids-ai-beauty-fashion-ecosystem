@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -38,7 +39,7 @@ export async function GET(req: NextRequest) {
         return NextResponse.json(userOrders);
 
     } catch (error) {
-        console.error("Error fetching orders:", error);
+        logger.error("Error fetching orders:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }
@@ -135,14 +136,14 @@ export async function POST(req: NextRequest) {
                     });
                 }
             } catch (emailError) {
-                console.error("Failed to send order confirmation email", emailError);
+                logger.error("Failed to send order confirmation email", emailError);
             }
         })();
 
         return NextResponse.json({ success: true, orderId }, { status: 201 });
 
     } catch (error) {
-        console.error("Error creating order:", error);
+        logger.error("Error creating order:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }

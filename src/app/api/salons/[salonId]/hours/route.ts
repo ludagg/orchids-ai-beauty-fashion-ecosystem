@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { openingHours, salons } from "@/db/schema/salons";
@@ -20,7 +21,7 @@ export async function GET(
 
     return NextResponse.json(hours);
   } catch (error) {
-    console.error("Error fetching hours:", error);
+    logger.error("Error fetching hours:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }
@@ -77,7 +78,7 @@ export async function PUT(
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Error updating hours:", error);
+    logger.error("Error updating hours:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }

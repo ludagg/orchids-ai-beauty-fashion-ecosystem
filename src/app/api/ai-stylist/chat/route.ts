@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { products } from "@/db/schema/commerce";
@@ -82,7 +83,7 @@ export async function POST(req: NextRequest) {
         const apiKey = process.env.GEMINI_API_KEY;
 
         if (!apiKey) {
-             console.warn("GEMINI_API_KEY is not set. Falling back to keyword matching.");
+             logger.warn("GEMINI_API_KEY is not set. Falling back to keyword matching.");
              return fallbackKeywordMatching(message);
         }
 
@@ -121,7 +122,7 @@ export async function POST(req: NextRequest) {
         try {
             result = await model.generateContent(prompt);
         } catch (geminiError) {
-            console.error("Gemini API Error:", geminiError);
+            logger.error("Gemini API Error:", geminiError);
             return fallbackKeywordMatching(message);
         }
 
@@ -133,7 +134,7 @@ export async function POST(req: NextRequest) {
         try {
             parsedResponse = JSON.parse(jsonString);
         } catch (e) {
-            console.error("Failed to parse Gemini response:", text);
+            logger.error("Failed to parse Gemini response:", text);
             return fallbackKeywordMatching(message);
         }
 
@@ -227,7 +228,7 @@ export async function POST(req: NextRequest) {
         });
 
     } catch (error) {
-        console.error("AI Stylist Error:", error);
+        logger.error("AI Stylist Error:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }

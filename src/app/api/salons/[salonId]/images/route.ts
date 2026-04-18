@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { salonImages, salons } from "@/db/schema/salons";
@@ -51,7 +52,7 @@ export async function POST(
 
     return NextResponse.json(newImage[0]);
   } catch (error) {
-    console.error("Error adding image:", error);
+    logger.error("Error adding image:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }

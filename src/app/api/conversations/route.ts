@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -114,7 +115,7 @@ export async function GET(req: NextRequest) {
         return NextResponse.json(enrichedConversations);
 
     } catch (error) {
-        console.error("Error fetching conversations:", error);
+        logger.error("Error fetching conversations:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }
@@ -195,7 +196,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ id: conversationId }, { status: 201 });
 
     } catch (error) {
-        console.error("Error creating conversation:", error);
+        logger.error("Error creating conversation:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }

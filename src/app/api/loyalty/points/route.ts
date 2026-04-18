@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
@@ -56,7 +57,7 @@ export async function GET(req: NextRequest) {
         });
 
     } catch (error) {
-        console.error("Error fetching loyalty points:", error);
+        logger.error("Error fetching loyalty points:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }
