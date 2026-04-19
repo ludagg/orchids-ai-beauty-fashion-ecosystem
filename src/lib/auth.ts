@@ -3,7 +3,14 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "./db";
 import * as schema from "@/db/schema";
 
+// [Jules - Added fallbacks for better-auth secret and baseURL in development mode to avoid runtime warnings]
 export const auth = betterAuth({
+  ...(process.env.NODE_ENV !== "production"
+    ? {
+        secret: process.env.BETTER_AUTH_SECRET || "development-secret",
+        baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
+      }
+    : {}),
   database: drizzleAdapter(db, {
     provider: "pg",
     schema: {
