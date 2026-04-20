@@ -3,7 +3,13 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "./db";
 import * as schema from "@/db/schema";
 
+const isProd = process.env.NODE_ENV === "production";
+const fallbackSecret = !isProd ? "fallback-secret-for-dev-and-ci" : undefined;
+const fallbackBaseURL = !isProd ? "http://localhost:3000" : undefined;
+
 export const auth = betterAuth({
+  secret: process.env.BETTER_AUTH_SECRET || fallbackSecret,
+  baseURL: process.env.BETTER_AUTH_URL || process.env.BETTER_AUTH_BASE_URL || fallbackBaseURL,
   database: drizzleAdapter(db, {
     provider: "pg",
     schema: {
@@ -37,5 +43,5 @@ export const auth = betterAuth({
           clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
       }
   },
-  trustedOrigins: [process.env.BETTER_AUTH_URL || "http://localhost:3000"]
+  trustedOrigins: [process.env.BETTER_AUTH_URL || process.env.BETTER_AUTH_BASE_URL || "http://localhost:3000"]
 });
