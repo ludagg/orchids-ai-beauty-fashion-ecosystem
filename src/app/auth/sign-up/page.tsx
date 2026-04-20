@@ -194,7 +194,7 @@ export default function SignUpPage() {
             Create an account
           </CardTitle>
           <CardDescription className="text-base text-muted-foreground">
-            Join Rare today to discover your unique style
+            Join Priisme today to discover your unique style
           </CardDescription>
         </CardHeader>
         <CardContent className="px-0">

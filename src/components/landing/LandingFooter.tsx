@@ -6,7 +6,7 @@ export default function LandingFooter() {
       <div className="max-w-[1100px] mx-auto px-6">
         <div className="grid grid-cols-2 md:grid-cols-6 gap-8 mb-12">
           <div className="col-span-2 md:col-span-1">
-            <p className="text-3xl mb-4 font-script text-black dark:text-white">Rare</p>
+            <p className="text-3xl mb-4 font-script text-black dark:text-white">Priisme</p>
             <p className="text-sm text-muted-foreground leading-relaxed">
               India&apos;s first AI-powered beauty & fashion ecosystem.
             </p>
@@ -76,7 +76,7 @@ export default function LandingFooter() {
         </div>
         <div className="pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            © 2026 Rare. All rights reserved.
+            © 2026 Priisme. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
             <Link href="/privacy" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Privacy</Link>

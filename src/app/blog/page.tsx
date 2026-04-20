@@ -6,7 +6,7 @@ export default function BlogPage() {
     <div className="min-h-screen bg-background text-foreground">
       <LandingNavbar />
       <main className="pt-32 pb-16 px-6 max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold font-display mb-6">The Rare Blog</h1>
+        <h1 className="text-4xl font-bold font-display mb-6">The Priisme Blog</h1>
         <p className="text-lg text-muted-foreground mb-12">Stories about fashion, beauty, and technology.</p>
 
         <div className="grid md:grid-cols-2 gap-8">

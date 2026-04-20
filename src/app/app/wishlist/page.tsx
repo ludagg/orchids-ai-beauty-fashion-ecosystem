@@ -109,7 +109,7 @@ export default function WishlistPage() {
   const shareWishlist = async () => {
     const url = window.location.href;
     if (navigator.share) {
-      await navigator.share({ title: "My Wishlist on Rare", url });
+      await navigator.share({ title: "My Wishlist on Priisme", url });
     } else {
       await navigator.clipboard.writeText(url);
       toast.success("Wishlist link copied to clipboard!");

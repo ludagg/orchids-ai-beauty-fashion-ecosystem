@@ -78,7 +78,7 @@ export default function AppLayout({
         <div className={`p-6 flex items-center ${isCollapsed ? "justify-center" : "justify-between"}`}>
           {!isCollapsed && (
             <Link href="/" className="text-3xl font-script text-black dark:text-white">
-              Rare
+              Priisme
             </Link>
           )}
           <button
@@ -138,7 +138,7 @@ export default function AppLayout({
       <header className="lg:hidden bg-card/80 backdrop-blur-md sticky top-0 z-40 border-b border-border">
         <div className="h-16 px-4 flex items-center justify-between">
           <Link href="/" className="text-2xl font-script text-black dark:text-white">
-            Rare
+            Priisme
           </Link>
           <div className="flex items-center gap-1">
             <ThemeSwitcher />
@@ -165,7 +165,7 @@ export default function AppLayout({
         <div className="fixed inset-0 z-[50] bg-background lg:hidden">
           <div className="flex flex-col h-full">
             <div className="flex items-center justify-between h-16 px-6 border-b border-border">
-              <span className="text-3xl font-script text-black dark:text-white">Rare</span>
+              <span className="text-3xl font-script text-black dark:text-white">Priisme</span>
               <button
                 onClick={() => setMobileMenuOpen(false)}
                 className="p-2"

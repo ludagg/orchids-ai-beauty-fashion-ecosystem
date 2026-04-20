@@ -21,7 +21,7 @@ export default function AuthLayout({
 
         <div className="relative z-10">
           <Link href="/" className="flex items-center gap-2 text-2xl font-serif font-bold tracking-tight">
-            Rare
+            Priisme
           </Link>
         </div>
 
@@ -35,7 +35,7 @@ export default function AuthLayout({
         </div>
 
         <div className="relative z-10 text-sm text-zinc-500">
-          &copy; {new Date().getFullYear()} Rare Inc. All rights reserved.
+          &copy; {new Date().getFullYear()} Priisme Inc. All rights reserved.
         </div>
       </div>
 

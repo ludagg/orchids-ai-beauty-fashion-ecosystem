@@ -191,7 +191,7 @@ export async function POST(req: NextRequest) {
              const query = encodeURIComponent(formattedAddress);
              const geoRes = await fetch(`https://nominatim.openstreetmap.org/search?q=${query}&format=json&limit=1`, {
                  headers: {
-                     'User-Agent': 'RareApp/1.0' // Nominatim requires User-Agent
+                     'User-Agent': 'PriismeApp/1.0' // Nominatim requires User-Agent
                  }
              });
              const geoData = await geoRes.json();
