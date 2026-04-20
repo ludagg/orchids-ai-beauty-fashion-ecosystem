@@ -10,23 +10,15 @@ const iconUrl = 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png';
 const iconRetinaUrl = 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png';
 const shadowUrl = 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png';
 
-// Create the icon instance outside component to avoid recreation
-let DefaultIcon: L.Icon | null = null;
-
+// [Jules - standard Leaflet default icon fix]
 if (typeof window !== 'undefined') {
-    DefaultIcon = L.icon({
-        iconUrl,
-        iconRetinaUrl,
-        shadowUrl,
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        tooltipAnchor: [16, -28],
-        shadowSize: [41, 41]
-    });
+    delete (L.Icon.Default.prototype as any)._getIconUrl;
 
-    // Apply default icon globally if not already set
-    L.Marker.prototype.options.icon = DefaultIcon;
+    L.Icon.Default.mergeOptions({
+        iconRetinaUrl,
+        iconUrl,
+        shadowUrl,
+    });
 }
 
 interface MapProps {
@@ -39,13 +31,6 @@ interface MapProps {
 }
 
 export default function Map({ lat, lng, popupText, className, style, interactive = true }: MapProps) {
-    useEffect(() => {
-        // Ensure icon is set on mount just in case
-        if (DefaultIcon) {
-             L.Marker.prototype.options.icon = DefaultIcon;
-        }
-    }, []);
-
     return (
         <MapContainer
             center={[lat, lng]}

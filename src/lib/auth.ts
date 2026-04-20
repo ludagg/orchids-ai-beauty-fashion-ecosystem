@@ -14,6 +14,8 @@ export const auth = betterAuth({
         verification: schema.verifications,
     }
   }),
+  secret: process.env.NODE_ENV !== "production" ? process.env.BETTER_AUTH_SECRET || "fallback_secret" : process.env.BETTER_AUTH_SECRET,
+  baseURL: process.env.NODE_ENV !== "production" ? process.env.BETTER_AUTH_URL || "http://localhost:3000" : process.env.BETTER_AUTH_URL,
   user: {
     additionalFields: {
       role: {
@@ -21,6 +23,15 @@ export const auth = betterAuth({
       },
       loyaltyPoints: {
         type: "number",
+      },
+      phone: {
+        type: "string",
+      },
+      gender: {
+        type: "string",
+      },
+      location: {
+        type: "string",
       },
     },
   },
@@ -39,3 +50,4 @@ export const auth = betterAuth({
   },
   trustedOrigins: [process.env.BETTER_AUTH_URL || "http://localhost:3000"]
 });
+// [Jules - Fix Better Auth fallback config & adding additionalFields]
