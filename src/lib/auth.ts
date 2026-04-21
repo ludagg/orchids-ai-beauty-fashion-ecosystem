@@ -1,9 +1,12 @@
+// [Jules - Fix Better Auth configuration warnings by conditionally adding fallbacks for dev]
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "./db";
 import * as schema from "@/db/schema";
 
 export const auth = betterAuth({
+  secret: process.env.BETTER_AUTH_SECRET || (process.env.NODE_ENV !== "production" ? "fallback-dev-secret" : undefined),
+  baseURL: process.env.BETTER_AUTH_URL || (process.env.NODE_ENV !== "production" ? "http://localhost:3000" : undefined),
   database: drizzleAdapter(db, {
     provider: "pg",
     schema: {
