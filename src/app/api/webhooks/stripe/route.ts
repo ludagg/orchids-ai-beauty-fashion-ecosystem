@@ -1,3 +1,4 @@
+// [Jules - Fix webhook using totalStock instead of stock to match commerce schema]
 import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { db } from "@/lib/db";
@@ -54,7 +55,7 @@ export async function POST(req: NextRequest) {
               await db
                 .update(products)
                 .set({
-                  stock: sql`${products.stock} - ${item.quantity}`,
+                  totalStock: sql`${products.totalStock} - ${item.quantity}`,
                 })
                 .where(eq(products.id, item.productId));
             }
