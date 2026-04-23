@@ -46,14 +46,16 @@ export async function POST(req: NextRequest) {
       if (!product) {
         return NextResponse.json({ error: `Product not found: ${item.id}` }, { status: 400 });
       }
-      if (product.stock < item.quantity) {
+      // [Jules - Use totalStock and salePrice/originalPrice to match commerce.ts schema]
+      if (product.totalStock < item.quantity) {
           return NextResponse.json({ error: `Insufficient stock for ${product.name}` }, { status: 400 });
       }
 
-      totalAmount += product.price * item.quantity;
+      const itemPrice = product.salePrice ?? product.originalPrice;
+      totalAmount += itemPrice * item.quantity;
       validatedItems.push({
         ...item,
-        price: product.price
+        price: itemPrice
       });
     }
 
@@ -83,14 +85,17 @@ export async function POST(req: NextRequest) {
             shippingAddress: shippingAddress ? JSON.stringify(shippingAddress) : null,
         });
 
-        for (const item of validatedItems) {
-            await tx.insert(orderItems).values({
-                id: nanoid(),
-                orderId: orderId,
-                productId: item.id,
-                quantity: item.quantity,
-                priceAtPurchase: item.price
-            });
+        // [Jules - Optimize bulk insertion using Drizzle ORM batch approach to avoid N+1 query]
+        if (validatedItems.length > 0) {
+            await tx.insert(orderItems).values(
+                validatedItems.map(item => ({
+                    id: nanoid(),
+                    orderId: orderId,
+                    productId: item.id,
+                    quantity: item.quantity,
+                    priceAtPurchase: item.price
+                }))
+            );
         }
     });
 
