@@ -43,15 +43,7 @@ if (!isVercel) {
   (nextConfig as any).outputFileTracingRoot = path.resolve(__dirname, "../../");
 }
 
-// ✅ Disable Turbopack on Vercel
-if (!isVercel) {
-  (nextConfig as any).turbopack = {
-    rules: {
-      "src/**/*.{jsx,tsx}": {
-        loaders: [LOADER],
-      },
-    },
-  };
-}
+// ❌ Disable Turbopack entirely in next.config.ts as it causes build warnings
+// It is enabled via CLI flags instead.
 
 export default nextConfig;
