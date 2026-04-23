@@ -9,6 +9,8 @@ import { headers } from "next/headers";
 import { sendEmail } from "@/lib/email";
 import { EmailTemplates } from "@/lib/email-templates";
 
+// [Jules - Updated to use totalStock and salePrice/originalPrice]
+
 export async function GET(req: NextRequest) {
     try {
         const session = await auth.api.getSession({
@@ -69,13 +71,14 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "Product not found" }, { status: 404 });
         }
 
-        if (product.stock < quantity) {
+        if (product.totalStock < quantity) {
             return NextResponse.json({ error: "Insufficient stock" }, { status: 400 });
         }
 
         // 2. Create Order
         const orderId = nanoid();
-        const totalAmount = product.price * quantity;
+        const effectivePrice = product.salePrice ?? product.originalPrice;
+        const totalAmount = effectivePrice * quantity;
 
         // Start transaction (implicitly handled if single operations, but better safe)
         // Drizzle transaction:
@@ -95,12 +98,12 @@ export async function POST(req: NextRequest) {
                 orderId: orderId,
                 productId: productId,
                 quantity: quantity,
-                priceAtPurchase: product.price
+                priceAtPurchase: effectivePrice
             });
 
             // Update Stock
             await tx.update(products)
-                .set({ stock: product.stock - quantity })
+                .set({ totalStock: product.totalStock - quantity })
                 .where(eq(products.id, productId));
 
             // Award Loyalty Points (1 point per 1 unit currency i.e. 100 cents)
