@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+/* [Jules - Standardized search and empty state for better UX and accessibility] */
 import {
   ShoppingBag,
   Search,
@@ -11,10 +12,15 @@ import {
   ArrowRight,
   TrendingUp,
   Tag,
-  Loader2
+  Loader2,
+  X
 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import SearchBar from "@/components/SearchBar";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Button } from "@/components/ui/button";
+import { Empty, EmptyHeader, EmptyTitle, EmptyDescription, EmptyContent, EmptyMedia } from "@/components/ui/empty";
 
 const CATEGORIES = ["All", "Clothing", "Beauty & Skincare", "Hair Care", "Nail Care", "Fragrances", "Accessories", "Wellness"];
 
@@ -104,20 +110,28 @@ export default function MarketplacePage() {
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="relative group hidden sm:block">
-             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-             <input
-               type="text"
-               placeholder="Search products..."
-               className="pl-9 pr-4 py-2.5 rounded-xl border border-border bg-card text-sm focus:ring-2 focus:ring-primary/5 transition-all outline-none w-48 text-foreground"
-               value={searchQuery}
-               onChange={(e) => setSearchQuery(e.target.value)}
-             />
+          <div className="hidden sm:block">
+            <SearchBar
+              value={searchQuery}
+              onChange={setSearchQuery}
+              placeholder="Search products..."
+              className="w-64"
+            />
           </div>
-          <button className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-border bg-card text-foreground text-sm font-medium hover:bg-secondary transition-all">
-            <Filter className="w-4 h-4" />
-            Filters
-          </button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-border bg-card text-foreground text-sm font-medium hover:bg-secondary transition-all"
+                aria-label="Toggle filters"
+              >
+                <Filter className="w-4 h-4" />
+                <span className="hidden sm:inline">Filters</span>
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Filter products</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
       </section>
 
@@ -144,8 +158,57 @@ export default function MarketplacePage() {
             <Loader2 className="w-10 h-10 animate-spin text-primary" />
         </div>
       ) : products.length === 0 ? (
-        <div className="text-center py-20 text-muted-foreground">
-            <p>No products found.</p>
+        <div className="relative min-h-[400px] flex items-center justify-center overflow-hidden rounded-3xl border border-dashed border-border bg-card/50">
+          {/* Branded Background Decorations */}
+          <div className="absolute inset-0 -z-10">
+            <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:20px_20px] opacity-30" />
+            <motion.div
+              animate={{
+                scale: [1, 1.2, 1],
+                opacity: [0.3, 0.5, 0.3],
+              }}
+              transition={{
+                duration: 8,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-primary/10 blur-[80px] rounded-full"
+            />
+          </div>
+
+          <Empty className="border-none bg-transparent">
+            <EmptyMedia>
+              <div className="relative">
+                <ShoppingBag className="w-12 h-12 text-muted-foreground/40" />
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  className="absolute -bottom-1 -right-1 w-5 h-5 bg-background rounded-full flex items-center justify-center"
+                >
+                  <Search className="w-3 h-3 text-primary" />
+                </motion.div>
+              </div>
+            </EmptyMedia>
+            <EmptyHeader>
+              <EmptyTitle className="text-2xl font-bold">No products found</EmptyTitle>
+              <EmptyDescription className="max-w-xs mx-auto">
+                We couldn&apos;t find any products matching your search criteria. Try adjusting your filters.
+              </EmptyDescription>
+            </EmptyHeader>
+            <EmptyContent>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setSearchQuery("");
+                  setSelectedCategory("All");
+                }}
+                className="rounded-full px-6"
+                aria-label="Clear all filters"
+              >
+                Clear All Filters
+              </Button>
+            </EmptyContent>
+          </Empty>
         </div>
       ) : (
         <section className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
