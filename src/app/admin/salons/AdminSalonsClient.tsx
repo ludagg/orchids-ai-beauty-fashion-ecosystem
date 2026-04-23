@@ -1,3 +1,4 @@
+// [Jules - Added "rejected" status handling in AdminSalonsClient]
 "use client";
 
 import { motion } from "framer-motion";
@@ -178,6 +179,7 @@ export default function AdminSalonsClient({ data }: AdminSalonsClientProps) {
             <option value="pending">Pending</option>
             <option value="active">Active</option>
             <option value="suspended">Suspended</option>
+            <option value="rejected">Rejected</option>
           </select>
         </div>
       </div>
@@ -219,6 +221,7 @@ export default function AdminSalonsClient({ data }: AdminSalonsClientProps) {
                     <span className={`px-2 py-0.5 rounded-lg text-[10px] font-bold uppercase tracking-widest ${
                         s.status === 'active' ? 'bg-emerald-50 text-emerald-600' :
                         s.status === 'pending' ? 'bg-amber-50 text-amber-600' :
+                        s.status === 'rejected' ? 'bg-red-50 text-red-600' :
                         'bg-rose-50 text-rose-600'
                     }`}>
                         {s.status}
