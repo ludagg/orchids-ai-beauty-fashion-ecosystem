@@ -596,8 +596,8 @@ function RewardsSection({ user }: { user: UserData }) {
                 <Progress
                     value={progress}
                     className="h-2 bg-primary-foreground/20"
-                    // @ts-ignore
                     indicatorClassName="bg-primary-foreground"
+                    aria-label="Loyalty points progress"
                 />
                 <div className="flex justify-between text-xs text-primary-foreground/80 font-medium">
                     <span>{points} pts</span>

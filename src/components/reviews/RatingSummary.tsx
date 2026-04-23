@@ -51,7 +51,12 @@ export function RatingSummary({ averageRating, totalReviews, distribution, revie
                   <span>{star}</span>
                   <Star className="w-3 h-3 text-muted-foreground" />
                 </div>
-                <Progress value={percentage} className="h-2 flex-1" indicatorClassName="bg-amber-500" />
+                <Progress
+                  value={percentage}
+                  className="h-2 flex-1"
+                  indicatorClassName="bg-amber-500"
+                  aria-label={`${star} ${star === 1 ? 'star' : 'stars'}`}
+                />
                 <span className="w-8 text-right text-muted-foreground">{count}</span>
               </div>
             );
