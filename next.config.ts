@@ -45,10 +45,12 @@ if (!isVercel) {
 
 // ✅ Disable Turbopack on Vercel
 if (!isVercel) {
-  (nextConfig as any).turbopack = {
-    rules: {
-      "src/**/*.{jsx,tsx}": {
-        loaders: [LOADER],
+  (nextConfig as any).experimental = {
+    turbo: {
+      rules: {
+        "src/**/*.{jsx,tsx}": {
+          loaders: [LOADER],
+        },
       },
     },
   };
