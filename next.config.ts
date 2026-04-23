@@ -44,11 +44,15 @@ if (!isVercel) {
 }
 
 // ✅ Disable Turbopack on Vercel
+// [Jules - Use experimental.turbo.rules for Turbopack configuration in Next.js 15]
 if (!isVercel) {
-  (nextConfig as any).turbopack = {
-    rules: {
-      "src/**/*.{jsx,tsx}": {
-        loaders: [LOADER],
+  nextConfig.experimental = {
+    ...nextConfig.experimental,
+    turbo: {
+      rules: {
+        "src/**/*.{jsx,tsx}": {
+          loaders: [LOADER],
+        },
       },
     },
   };
