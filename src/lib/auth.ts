@@ -37,5 +37,8 @@ export const auth = betterAuth({
           clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
       }
   },
-  trustedOrigins: [process.env.BETTER_AUTH_URL || "http://localhost:3000"]
+  trustedOrigins: [process.env.BETTER_AUTH_URL || "http://localhost:3000"],
+  // [Jules - Reason for modification] Prevent Better Auth crash on build due to missing secrets in CI/CD environments
+  secret: process.env.BETTER_AUTH_SECRET || (process.env.NODE_ENV !== "production" ? "dummy-secret-for-build" : undefined),
+  baseURL: process.env.BETTER_AUTH_URL || (process.env.NODE_ENV !== "production" ? "http://localhost:3000" : undefined),
 });
