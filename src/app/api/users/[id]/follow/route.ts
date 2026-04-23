@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { follows } from "@/db/schema/auth";
+import { follows } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import { headers } from "next/headers";
 import { nanoid } from "nanoid";
@@ -17,27 +17,44 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
-        const followerId = session.user.id;
+        const currentUserId = session.user.id;
 
-        if (followerId === targetUserId) {
-             return NextResponse.json({ error: "Cannot follow yourself" }, { status: 400 });
+        if (currentUserId === targetUserId) {
+            return NextResponse.json({ error: "Cannot follow yourself" }, { status: 400 });
         }
 
-        const existingFollow = await db.query.follows.findFirst({
-            where: and(eq(follows.followerId, followerId), eq(follows.followingId, targetUserId))
-        });
+        const body = await req.json();
+        const { action } = body; // 'follow' | 'unfollow'
 
-        if (existingFollow) {
-            await db.delete(follows).where(eq(follows.id, existingFollow.id));
-            return NextResponse.json({ following: false });
-        } else {
-            await db.insert(follows).values({
-                id: nanoid(),
-                followerId,
-                followingId: targetUserId
+        if (action === 'follow') {
+            // Check if already following
+            const existingFollow = await db.query.follows.findFirst({
+                where: and(
+                    eq(follows.followerId, currentUserId),
+                    eq(follows.followingId, targetUserId)
+                )
             });
-            return NextResponse.json({ following: true });
+
+            if (!existingFollow) {
+                await db.insert(follows).values({
+                    id: nanoid(),
+                    followerId: currentUserId,
+                    followingId: targetUserId
+                });
+            }
+            return NextResponse.json({ success: true, isFollowing: true });
+
+        } else if (action === 'unfollow') {
+            await db.delete(follows).where(
+                and(
+                    eq(follows.followerId, currentUserId),
+                    eq(follows.followingId, targetUserId)
+                )
+            );
+            return NextResponse.json({ success: true, isFollowing: false });
         }
+
+        return NextResponse.json({ error: "Invalid action" }, { status: 400 });
 
     } catch (error) {
         console.error("Error toggling follow:", error);
