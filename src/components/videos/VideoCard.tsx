@@ -6,6 +6,11 @@ import { Heart, Play } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { useSession } from "@/lib/auth-client";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { toast } from "sonner";
 
 interface Video {
@@ -104,8 +109,8 @@ export function VideoCard({ video }: VideoCardProps) {
             {/* Overlay Gradient - Bottom Only */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 pointer-events-none" />
 
-            {/* Content */}
-            <div className="absolute bottom-0 left-0 right-0 p-3 text-white flex items-end justify-between z-10">
+            {/* Content Overlay - Text and Gradient */}
+            <div className="absolute bottom-0 left-0 right-0 p-3 text-white z-10">
                 <div className="flex flex-col gap-0.5 max-w-[75%]">
                     <span className="text-[10px] font-medium text-white/80 truncate">
                         @{video.user.name.replace(/\s+/g, '')}
@@ -114,18 +119,30 @@ export function VideoCard({ video }: VideoCardProps) {
                         {video.title}
                     </h3>
                 </div>
-
-                <button
-                    onClick={handleLike}
-                    className="flex items-center gap-1 hover:scale-110 transition-transform mb-0.5"
-                >
-                    <Heart
-                        className={cn("w-4 h-4 drop-shadow-sm", isLiked ? "fill-red-500 text-red-500" : "text-white")}
-                    />
-                    <span className="text-xs font-medium">{likesCount}</span>
-                </button>
             </div>
         </Link>
+
+        {/* Floating Actions - Separated from Link for accessibility [Jules - Fix nested interactive elements and add accessibility] */}
+        <div className="absolute bottom-3 right-3 z-20">
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <button
+                        onClick={handleLike}
+                        className="flex items-center gap-1 hover:scale-110 transition-transform text-white bg-black/20 backdrop-blur-md px-2 py-1.5 rounded-full border border-white/10"
+                        aria-label={isLiked ? "Unlike video" : "Like video"}
+                    >
+                        <Heart
+                            aria-hidden="true"
+                            className={cn("w-4 h-4 drop-shadow-sm", isLiked ? "fill-red-500 text-red-500" : "text-white")}
+                        />
+                        <span className="text-xs font-medium">{likesCount}</span>
+                    </button>
+                </TooltipTrigger>
+                <TooltipContent side="top">
+                    <p>{isLiked ? "Unlike" : "Like"}</p>
+                </TooltipContent>
+            </Tooltip>
+        </div>
     </div>
   );
 }
