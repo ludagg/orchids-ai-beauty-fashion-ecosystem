@@ -7,6 +7,13 @@ import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
+/* [Jules - Improve accessibility for story viewer controls] */
 
 // Define types based on what we expect from the API
 interface User {
@@ -139,8 +146,12 @@ export function StoryViewer({ initialUserIndex, userStories, onClose }: StoryVie
       className="fixed inset-0 z-[100] bg-black flex items-center justify-center"
     >
         {/* Desktop close button */}
-        <button onClick={onClose} className="absolute top-4 right-4 z-50 text-white p-2 hover:bg-white/10 rounded-full hidden md:block">
-            <X className="w-8 h-8" />
+        <button
+            onClick={onClose}
+            className="absolute top-4 right-4 z-50 text-white p-2 hover:bg-white/10 rounded-full hidden md:block"
+            aria-label="Close story viewer"
+        >
+            <X className="w-8 h-8" aria-hidden="true" />
         </button>
 
         {/* Previous Button (Desktop) */}
@@ -148,16 +159,18 @@ export function StoryViewer({ initialUserIndex, userStories, onClose }: StoryVie
             onClick={goToPrevStory}
             className="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white z-50 p-2"
             disabled={currentUserIndex === 0 && currentStoryIndex === 0}
+            aria-label="Previous story"
         >
-            <ChevronLeft className="w-12 h-12" />
+            <ChevronLeft className="w-12 h-12" aria-hidden="true" />
         </button>
 
          {/* Next Button (Desktop) */}
          <button
             onClick={goToNextStory}
             className="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white z-50 p-2"
+            aria-label="Next story"
         >
-            <ChevronRight className="w-12 h-12" />
+            <ChevronRight className="w-12 h-12" aria-hidden="true" />
         </button>
 
       {/* Main Container - Mobile Fullscreen, Desktop Aspect Ratio */}
@@ -194,8 +207,12 @@ export function StoryViewer({ initialUserIndex, userStories, onClose }: StoryVie
             </div>
 
             {/* Mobile Close Button */}
-            <button onClick={onClose} className="md:hidden text-white drop-shadow-md">
-                <X className="w-6 h-6" />
+            <button
+                onClick={onClose}
+                className="md:hidden text-white drop-shadow-md"
+                aria-label="Close story viewer"
+            >
+                <X className="w-6 h-6" aria-hidden="true" />
             </button>
         </div>
 
@@ -238,15 +255,30 @@ export function StoryViewer({ initialUserIndex, userStories, onClose }: StoryVie
                  <input
                     type="text"
                     placeholder="Send a message..."
+                    aria-label="Send a message"
                     className="w-full bg-transparent border border-white/50 rounded-full px-4 py-2 text-white placeholder-white/70 focus:outline-none focus:border-white text-sm backdrop-blur-sm"
                  />
              </div>
-             <button className="text-white hover:scale-110 transition-transform">
-                 <Heart className="w-6 h-6" />
-             </button>
-             <button className="text-white hover:scale-110 transition-transform">
-                 <Send className="w-6 h-6" />
-             </button>
+             <Tooltip>
+                <TooltipTrigger asChild>
+                    <button className="text-white hover:scale-110 transition-transform" aria-label="Like story">
+                        <Heart className="w-6 h-6" aria-hidden="true" />
+                    </button>
+                </TooltipTrigger>
+                <TooltipContent>
+                    <p>Like story</p>
+                </TooltipContent>
+             </Tooltip>
+             <Tooltip>
+                <TooltipTrigger asChild>
+                    <button className="text-white hover:scale-110 transition-transform" aria-label="Send message">
+                        <Send className="w-6 h-6" aria-hidden="true" />
+                    </button>
+                </TooltipTrigger>
+                <TooltipContent>
+                    <p>Send message</p>
+                </TooltipContent>
+             </Tooltip>
         </div>
 
       </div>

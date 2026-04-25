@@ -7,6 +7,13 @@ import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { useSession } from "@/lib/auth-client";
 import { toast } from "sonner";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
+/* [Jules - Fix invalid HTML nesting and improve accessibility] */
 
 interface Video {
   id: string;
@@ -74,13 +81,13 @@ export function VideoCard({ video }: VideoCardProps) {
             {video.thumbnailUrl ? (
                 <Image
                     src={video.thumbnailUrl}
-                    alt={video.title}
+                    alt="" // Redundant with title below
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
             ) : (
                 <div className="w-full h-full flex items-center justify-center bg-gray-900 text-white/20">
-                    <Play className="w-12 h-12" />
+                    <Play className="w-12 h-12" aria-hidden="true" />
                 </div>
             )}
 
@@ -98,34 +105,43 @@ export function VideoCard({ video }: VideoCardProps) {
 
             {/* Play Icon - Top Right */}
             <div className="absolute top-3 right-3 p-1.5 bg-black/20 backdrop-blur-md rounded-full border border-white/10 pointer-events-none">
-                <Play className="w-3 h-3 text-white fill-white" />
+                <Play className="w-3 h-3 text-white fill-white" aria-hidden="true" />
             </div>
 
             {/* Overlay Gradient - Bottom Only */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 pointer-events-none" />
-
-            {/* Content */}
-            <div className="absolute bottom-0 left-0 right-0 p-3 text-white flex items-end justify-between z-10">
-                <div className="flex flex-col gap-0.5 max-w-[75%]">
-                    <span className="text-[10px] font-medium text-white/80 truncate">
-                        @{video.user.name.replace(/\s+/g, '')}
-                    </span>
-                    <h3 className="font-bold text-sm leading-tight line-clamp-2 drop-shadow-sm">
-                        {video.title}
-                    </h3>
-                </div>
-
-                <button
-                    onClick={handleLike}
-                    className="flex items-center gap-1 hover:scale-110 transition-transform mb-0.5"
-                >
-                    <Heart
-                        className={cn("w-4 h-4 drop-shadow-sm", isLiked ? "fill-red-500 text-red-500" : "text-white")}
-                    />
-                    <span className="text-xs font-medium">{likesCount}</span>
-                </button>
-            </div>
         </Link>
+
+        {/* Content & Actions - Positioned over the link but separate to avoid nested interactive elements */}
+        <div className="absolute bottom-0 left-0 right-0 p-3 text-white flex items-end justify-between z-10 pointer-events-none">
+            <div className="flex flex-col gap-0.5 max-w-[75%]">
+                <span className="text-[10px] font-medium text-white/80 truncate">
+                    @{video.user.name.replace(/\s+/g, '')}
+                </span>
+                <h3 className="font-bold text-sm leading-tight line-clamp-2 drop-shadow-sm">
+                    {video.title}
+                </h3>
+            </div>
+
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <button
+                        onClick={handleLike}
+                        className="flex items-center gap-1 hover:scale-110 transition-transform mb-0.5 pointer-events-auto"
+                        aria-label={isLiked ? "Unlike video" : "Like video"}
+                    >
+                        <Heart
+                            aria-hidden="true"
+                            className={cn("w-4 h-4 drop-shadow-sm", isLiked ? "fill-red-500 text-red-500" : "text-white")}
+                        />
+                        <span className="text-xs font-medium">{likesCount}</span>
+                    </button>
+                </TooltipTrigger>
+                <TooltipContent>
+                    <p>{isLiked ? "Unlike video" : "Like video"}</p>
+                </TooltipContent>
+            </Tooltip>
+        </div>
     </div>
   );
 }
