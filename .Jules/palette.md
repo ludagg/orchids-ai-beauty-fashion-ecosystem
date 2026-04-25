@@ -64,3 +64,7 @@
 ## 2026-04-13 - Profile UX Standardization
 **Learning:** For high-traffic profile pages, standardizing on unified `Empty` and `Spinner` primitives ensures a consistent brand voice across all tabs. Additionally, adding explicit `aria-label` attributes to numerical statistics (Followers, Following, etc.) provides essential context for screen reader users who might otherwise hear only the number or a truncated label.
 **Action:** Always refactor custom loading/empty states to use the standard UI library. Audit interactive statistics and ensured they have descriptive `aria-label` attributes that combine the value and the metric name.
+
+## 2026-04-25 - Interactive Card Accessibility & Validity
+**Learning:** To fix invalid HTML nesting (e.g., `<button>` inside `<Link>`) in complex cards like `VideoCard.tsx`, secondary interactive elements should be implemented as absolute-positioned siblings to the primary `Link`. Using `pointer-events-none` on the content overlay allows clicks to pass to the background link, while specific buttons re-enable interaction via `pointer-events-auto`.
+**Action:** Audit complex cards for nested interactive elements. Use absolute positioning and pointer-event orchestration to maintain accessibility and HTML validity while preserving UX.
