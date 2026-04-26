@@ -183,7 +183,7 @@ export default function WishlistPage() {
             const title = isProduct ? item.product?.name : item.salon?.name;
             const subtitle = isProduct ? item.product?.salon?.name : item.salon?.city;
             const image = isProduct ? item.product?.images?.[0] : item.salon?.image;
-            const price = isProduct && item.product ? (item.product.price / 100).toLocaleString('en-IN', { style: 'currency', currency: 'INR' }) : null;
+            const price = isProduct && item.product ? ((item.product.salePrice ?? item.product.originalPrice) / 100).toLocaleString('en-IN', { style: 'currency', currency: 'INR' }) : null;
             const link = isProduct ? `/app/marketplace/${item.product?.id}` : `/app/salons/${item.salon?.id}`;
             const rating = 4.8;
 

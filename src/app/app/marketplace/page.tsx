@@ -189,7 +189,7 @@ export default function MarketplacePage() {
                     </div>
                     <p className="text-xs sm:text-sm text-muted-foreground mb-1 sm:mb-2 truncate">{product.brand || product.salon?.name}</p>
                     <div className="mt-auto flex items-center justify-between">
-                    <p className="font-bold text-base sm:text-lg text-rose-600">{formatPrice(product.price)}</p>
+                    <p className="font-bold text-base sm:text-lg text-rose-600">{formatPrice((product.salePrice ?? product.originalPrice))}</p>
                     {product.reviewCount > 0 && (
                          <p className="text-[10px] sm:text-[11px] text-muted-foreground hidden sm:block">{product.reviewCount} reviews</p>
                     )}

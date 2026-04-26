@@ -257,7 +257,7 @@ export default function VideoDetailPage() {
                                         <p className="font-bold text-sm line-clamp-2 mb-1 group-hover:text-primary transition-colors">{product.name}</p>
                                         <p className="text-xs text-muted-foreground mb-2">{product.brand || "Generic"}</p>
                                         <div className="flex items-center justify-between mt-auto">
-                                            <span className="font-bold">{(product.price / 100).toLocaleString('en-IN', { style: 'currency', currency: 'INR' })}</span>
+                                            <span className="font-bold">{((product.salePrice ?? product.originalPrice) / 100).toLocaleString('en-IN', { style: 'currency', currency: 'INR' })}</span>
                                             <div className="w-8 h-8 rounded-full bg-foreground text-background flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                                 <ShoppingBag className="w-4 h-4" />
                                             </div>
