@@ -107,6 +107,11 @@ export default function ProfileView({ user, isSalonOwner }: ProfileViewProps) {
 
   const [videos, setVideos] = useState<VideoData[]>([]);
   const [isLoadingVideos, setIsLoadingVideos] = useState(true);
+  const [userStats, setUserStats] = useState({
+    followers: "0",
+    likes: "0",
+    following: "0"
+  });
 
   // Fetch Videos
   const fetchVideos = useCallback(async () => {
@@ -127,9 +132,27 @@ export default function ProfileView({ user, isSalonOwner }: ProfileViewProps) {
     }
   }, [user.id]);
 
+  // [Jules - Modification to replace mocked stats with actual user stats from API]
+  const fetchUserStats = useCallback(async () => {
+    try {
+        const res = await fetch(`/api/users/${user.id}`, { cache: 'no-store' });
+        if (res.ok) {
+            const data = await res.json();
+            setUserStats({
+                followers: data.stats?.followers?.toString() || "0",
+                likes: data.stats?.likes?.toString() || "0",
+                following: data.stats?.following?.toString() || "0"
+            });
+        }
+    } catch (error) {
+        console.error("Failed to fetch user stats", error);
+    }
+  }, [user.id]);
+
   useEffect(() => {
     fetchVideos();
-  }, [fetchVideos]);
+    fetchUserStats();
+  }, [fetchVideos, fetchUserStats]);
 
   const publishedVideos = videos.filter(v => v.status === 'published');
 
@@ -139,12 +162,12 @@ export default function ProfileView({ user, isSalonOwner }: ProfileViewProps) {
   const displayAvatar = user.image || "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop";
   const displayBio = user.bio || "Fashion enthusiast & style curator. Bringing you the latest trends.";
 
-  // Mock stats
+  // Profile stats combining real db values with some defaults for non-tracked stats yet
   const stats = {
-    followers: "12.5K",
-    likes: "45.2K",
-    views: "1.2M",
-    engagement: "4.8%",
+    followers: userStats.followers,
+    likes: userStats.likes,
+    views: "1.2M", // Still mocked as views aren't aggregated yet
+    engagement: "4.8%", // Mocked engagement
     videos: publishedVideos.length
   };
 

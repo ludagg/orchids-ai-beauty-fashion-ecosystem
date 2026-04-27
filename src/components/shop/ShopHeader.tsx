@@ -11,8 +11,21 @@ export function ShopHeader() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [query, setQuery] = useState(searchParams.get('search') || '');
-  // Mock cart count for now, will connect to API later
+  // [Jules - Remove mock cart count and replace with real API call]
   const [cartCount, setCartCount] = useState(0);
+
+  useEffect(() => {
+    fetch('/api/cart')
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.items) {
+          // The quantity of each item is stored in data.items array, but let's just count total items or total quantity
+          const totalItems = data.items.reduce((acc: number, item: any) => acc + item.quantity, 0);
+          setCartCount(totalItems);
+        }
+      })
+      .catch(err => console.error("Failed to fetch cart for header", err));
+  }, []);
 
   // Debounce search update
   useEffect(() => {
