@@ -11,6 +11,7 @@ interface RatingSummaryProps {
 }
 
 export function RatingSummary({ averageRating, totalReviews, distribution, reviews }: RatingSummaryProps) {
+  /* [Jules - Improve accessibility of rating summary and distribution bars] */
   // Parse average rating to number if string
   const avg = typeof averageRating === 'string' ? parseFloat(averageRating) : (averageRating || 0);
 
@@ -33,9 +34,13 @@ export function RatingSummary({ averageRating, totalReviews, distribution, revie
     <div className="p-6 rounded-3xl bg-secondary/20 border border-border">
       <div className="flex flex-col md:flex-row items-center gap-8">
         <div className="text-center md:text-left">
-           <div className="flex items-center justify-center md:justify-start gap-2 mb-1">
+           <div
+             className="flex items-center justify-center md:justify-start gap-2 mb-1"
+             role="img"
+             aria-label={`Average rating: ${avg.toFixed(1)} out of 5 stars`}
+           >
              <span className="text-5xl font-bold font-display text-foreground">{avg.toFixed(1)}</span>
-             <Star className="w-8 h-8 fill-amber-500 text-amber-500" />
+             <Star className="w-8 h-8 fill-amber-500 text-amber-500" aria-hidden="true" />
            </div>
            <p className="text-sm text-muted-foreground font-medium">{totalReviews} verified reviews</p>
         </div>
@@ -47,12 +52,17 @@ export function RatingSummary({ averageRating, totalReviews, distribution, revie
 
             return (
               <div key={star} className="flex items-center gap-3 text-xs font-medium">
-                <div className="flex items-center gap-1 w-8 flex-shrink-0">
+                <div className="flex items-center gap-1 w-8 flex-shrink-0" aria-hidden="true">
                   <span>{star}</span>
                   <Star className="w-3 h-3 text-muted-foreground" />
                 </div>
-                <Progress value={percentage} className="h-2 flex-1" indicatorClassName="bg-amber-500" />
-                <span className="w-8 text-right text-muted-foreground">{count}</span>
+                <Progress
+                  value={percentage}
+                  className="h-2 flex-1"
+                  indicatorClassName="bg-amber-500"
+                  aria-label={`${star} ${star === 1 ? "star" : "stars"}: ${count} ${count === 1 ? "review" : "reviews"}`}
+                />
+                <span className="w-8 text-right text-muted-foreground" aria-hidden="true">{count}</span>
               </div>
             );
           })}
