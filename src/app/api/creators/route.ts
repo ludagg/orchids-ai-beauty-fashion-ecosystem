@@ -4,6 +4,8 @@ import { users } from "@/db/schema/auth";
 import { videos } from "@/db/schema/content";
 import { eq, desc, count, inArray, and } from "drizzle-orm";
 
+// [Jules - Avoid N+1 queries for live status]
+
 export async function GET(req: NextRequest) {
     try {
         const topCreators = await db.select({
@@ -25,17 +27,23 @@ export async function GET(req: NextRequest) {
             where: inArray(users.id, userIds),
         });
 
-        const creatorsWithStatus = await Promise.all(creators.map(async (creator) => {
-            const liveVideo = await db.query.videos.findFirst({
-                where: and(eq(videos.userId, creator.id), eq(videos.isLive, true))
-            });
+        const liveVideos = await db.query.videos.findMany({
+            where: and(
+                inArray(videos.userId, userIds),
+                eq(videos.isLive, true)
+            ),
+        });
+
+        const liveUserIds = new Set(liveVideos.map(v => v.userId));
+
+        const creatorsWithStatus = creators.map((creator) => {
             return {
                 id: creator.id,
                 name: creator.name,
                 avatar: creator.image,
-                isLive: !!liveVideo
+                isLive: liveUserIds.has(creator.id)
             };
-        }));
+        });
 
         // Sort by live first, then by video count (original order)
         const sortedCreators = creatorsWithStatus.sort((a, b) => {

@@ -7,6 +7,8 @@ import { headers } from "next/headers";
 import { eq, desc, asc, and, inArray, notInArray, sql } from "drizzle-orm";
 import { nanoid } from "nanoid";
 
+// [Jules - Optimize bulk insert]
+
 export async function GET(req: NextRequest) {
     try {
         const session = await auth.api.getSession({
@@ -179,13 +181,13 @@ export async function POST(req: NextRequest) {
             });
 
             if (productIds && Array.isArray(productIds) && productIds.length > 0) {
-                for (const productId of productIds) {
-                    await tx.insert(videoProducts).values({
+                await tx.insert(videoProducts).values(
+                    productIds.map((productId: string) => ({
                         id: nanoid(),
                         videoId: id,
                         productId
-                    });
-                }
+                    }))
+                );
             }
         });
 
