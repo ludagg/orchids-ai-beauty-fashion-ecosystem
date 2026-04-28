@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Checkbox } from "@/components/ui/checkbox"
 import { Mail, Lock, User, Eye, EyeOff, Chrome, Github, Phone, MapPin, Globe } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { authClient } from '@/lib/auth-client'
@@ -356,7 +357,9 @@ export default function SignUpPage() {
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                     disabled={isLoading}
+                    aria-label={showPassword ? "Hide password" : "Show password"}
                   >
+                    {/* [Jules - Enhanced accessibility with aria-label] */}
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
                 </div>
@@ -398,7 +401,9 @@ export default function SignUpPage() {
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                     disabled={isLoading}
+                    aria-label={showConfirmPassword ? "Hide password confirmation" : "Show password confirmation"}
                   >
+                    {/* [Jules - Enhanced accessibility with aria-label] */}
                     {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
                 </div>
@@ -408,16 +413,15 @@ export default function SignUpPage() {
 
             {/* Terms and Conditions */}
             <div className="flex items-start space-x-2">
-              <input
-                type="checkbox"
+              {/* [Jules - Replaced native checkbox with standardized UI component for consistency] */}
+              <Checkbox
                 id="terms"
                 name="terms"
                 checked={formData.terms || false}
-                onChange={(e) => setFormData(prev => ({ ...prev, terms: e.target.checked }))}
-                className="mt-0.5 h-4 w-4 rounded border-border text-primary focus:ring-primary"
+                onCheckedChange={(checked) => setFormData(prev => ({ ...prev, terms: !!checked }))}
                 required
               />
-              <label htmlFor="terms" className="text-sm text-muted-foreground">
+              <Label htmlFor="terms" className="text-sm text-muted-foreground font-normal cursor-pointer leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                 I agree to the{' '}
                 <Link href="/terms" className="text-primary hover:underline font-medium">
                   Terms of Service
@@ -426,7 +430,7 @@ export default function SignUpPage() {
                 <Link href="/privacy" className="text-primary hover:underline font-medium">
                   Privacy Policy
                 </Link>
-              </label>
+              </Label>
             </div>
             {errors.terms && <p className="text-xs text-red-500">{errors.terms}</p>}
 

@@ -1,0 +1,20 @@
+
+> app@0.1.0 dev /app
+> next dev --turbopack
+
+   ▲ Next.js 15.5.12 (Turbopack)
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.0.2:3000
+   - Environments: .env
+
+ ✓ Starting...
+ ✓ Compiled middleware in 356ms
+ ✓ Ready in 2.1s
+{"timestamp":"2026-04-28T16:08:00.493Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+ ○ Compiling /auth/sign-in ...
+ ✓ Compiled /auth/sign-in in 6.8s
+ GET /auth/sign-in 200 in 7886ms
+{"timestamp":"2026-04-28T16:08:11.206Z","method":"GET","path":"/auth/sign-up","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+ ○ Compiling /auth/sign-up ...
+ ✓ Compiled /auth/sign-up in 1934ms
+ GET /auth/sign-up 200 in 2368ms
