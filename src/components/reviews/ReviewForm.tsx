@@ -5,10 +5,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Star, Loader2, Upload, X } from "lucide-react";
+import { Star, Upload, X } from "lucide-react";
 import { toast } from "sonner";
 import Image from "next/image";
+import { Spinner } from "@/components/ui/spinner";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
+/* [Jules - Standardize UI with Spinner and improve accessibility with ARIA labels and Tooltips] */
 interface ReviewFormProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
@@ -127,9 +130,11 @@ export function ReviewForm({ isOpen, onOpenChange, salonId, bookingId, onSuccess
                 onMouseEnter={() => setHoverRating(star)}
                 onMouseLeave={() => setHoverRating(0)}
                 onClick={() => setRating(star)}
+                aria-label={`Rate ${star} star${star > 1 ? "s" : ""}`}
                 className="focus:outline-none transition-transform active:scale-95"
               >
                 <Star
+                  aria-hidden="true"
                   className={`w-8 h-8 ${
                     star <= (hoverRating || rating)
                       ? "fill-amber-500 text-amber-500"
@@ -161,13 +166,19 @@ export function ReviewForm({ isOpen, onOpenChange, salonId, bookingId, onSuccess
               {previews.map((src, i) => (
                 <div key={i} className="relative aspect-square rounded-lg overflow-hidden border border-border group">
                   <Image src={src} alt="Preview" fill className="object-cover" />
-                  <button
-                    type="button"
-                    onClick={() => removeImage(i)}
-                    className="absolute top-1 right-1 p-1 rounded-full bg-black/50 text-white opacity-0 group-hover:opacity-100 transition-opacity"
-                  >
-                    <X className="w-3 h-3" />
-                  </button>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        type="button"
+                        onClick={() => removeImage(i)}
+                        aria-label="Remove photo"
+                        className="absolute top-1 right-1 p-1 rounded-full bg-black/50 text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>Remove photo</TooltipContent>
+                  </Tooltip>
                 </div>
               ))}
               {previews.length < 4 && (
@@ -180,6 +191,7 @@ export function ReviewForm({ isOpen, onOpenChange, salonId, bookingId, onSuccess
                     multiple
                     className="hidden"
                     onChange={handleImageChange}
+                    aria-label="Upload photos"
                   />
                 </label>
               )}
@@ -194,7 +206,7 @@ export function ReviewForm({ isOpen, onOpenChange, salonId, bookingId, onSuccess
               Cancel
             </Button>
             <Button type="submit" disabled={isSubmitting || rating === 0}>
-              {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {isSubmitting && <Spinner className="mr-2 h-4 w-4" />}
               Post Review
             </Button>
           </DialogFooter>
