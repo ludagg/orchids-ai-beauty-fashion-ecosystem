@@ -25,6 +25,17 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface ChatWindowProps {
   chatId: number | string;
@@ -390,9 +401,39 @@ export default function ChatWindow({ chatId }: ChatWindowProps) {
             <section>
               <h4 className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-4">Settings</h4>
               <div className="space-y-2">
-                <button type="button" className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-rose-500/10 text-rose-500 transition-all group">
-                  <span className="text-sm font-bold">Block Business</span>
-                </button>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <button
+                      type="button"
+                      className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-rose-500/10 text-rose-500 transition-all group"
+                    >
+                      <span className="text-sm font-bold">Block Business</span>
+                    </button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Block Business?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        {/* [Jules - Add confirmation for blocking business] */}
+                        You will no longer receive messages from{" "}
+                        {conversation.otherParty.name}. This action can be
+                        undone in your settings.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction
+                        className="bg-rose-500 hover:bg-rose-600"
+                        onClick={() => {
+                          /* Logic to block business would go here */
+                          console.log("Blocking business:", conversation.otherParty.id);
+                        }}
+                      >
+                        Block
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
                 <button type="button" className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-muted text-muted-foreground transition-all">
                   <span className="text-sm font-bold">Mute Notifications</span>
                   <div className="w-8 h-4 bg-muted-foreground/30 rounded-full relative">
