@@ -69,7 +69,7 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "Product not found" }, { status: 404 });
         }
 
-        if (product.stock < quantity) {
+        if (product.totalStock < quantity) {
             return NextResponse.json({ error: "Insufficient stock" }, { status: 400 });
         }
 
@@ -100,7 +100,7 @@ export async function POST(req: NextRequest) {
 
             // Update Stock
             await tx.update(products)
-                .set({ stock: product.stock - quantity })
+                .set({ totalStock: product.totalStock - quantity })
                 .where(eq(products.id, productId));
 
             // Award Loyalty Points (1 point per 1 unit currency i.e. 100 cents)
