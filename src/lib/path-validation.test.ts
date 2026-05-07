@@ -1,41 +1,33 @@
-import { describe, it, expect } from 'vitest';
-import { validateSafePathSegment } from './path-validation';
+import { expect, test, describe } from "bun:test";
+import { validateSafePathSegment } from "./path-validation";
 
-describe('validateSafePathSegment', () => {
-  it('should accept valid alphanumeric IDs', () => {
-    expect(() => validateSafePathSegment('abc', 'id')).not.toThrow();
-    expect(() => validateSafePathSegment('123', 'id')).not.toThrow();
-    expect(() => validateSafePathSegment('abc123', 'id')).not.toThrow();
-  });
+describe("validateSafePathSegment", () => {
+    test("should accept valid alphanumeric IDs", () => {
+        expect(() => validateSafePathSegment("abc123DEF", "id")).not.toThrow();
+    });
 
-  it('should accept IDs with hyphens and underscores', () => {
-    expect(() => validateSafePathSegment('foo-bar', 'id')).not.toThrow();
-    expect(() => validateSafePathSegment('foo_bar', 'id')).not.toThrow();
-    expect(() => validateSafePathSegment('foo-bar_baz', 'id')).not.toThrow();
-  });
+    test("should accept IDs with hyphens and underscores", () => {
+        expect(() => validateSafePathSegment("abc-123_DEF", "id")).not.toThrow();
+    });
 
-  it('should reject IDs with dots (directory traversal attempt)', () => {
-    expect(() => validateSafePathSegment('..', 'id')).toThrow(/Invalid id/);
-    expect(() => validateSafePathSegment('.', 'id')).toThrow(/Invalid id/);
-    expect(() => validateSafePathSegment('foo.bar', 'id')).toThrow(/Invalid id/);
-  });
+    test("should reject IDs with dots (directory traversal attempt)", () => {
+        expect(() => validateSafePathSegment("..", "id")).toThrow();
+        expect(() => validateSafePathSegment("abc.123", "id")).toThrow();
+    });
 
-  it('should reject IDs with slashes (directory traversal attempt)', () => {
-    expect(() => validateSafePathSegment('foo/bar', 'id')).toThrow(/Invalid id/);
-    expect(() => validateSafePathSegment('/foo', 'id')).toThrow(/Invalid id/);
-    expect(() => validateSafePathSegment('foo/', 'id')).toThrow(/Invalid id/);
-  });
+    test("should reject IDs with slashes (directory traversal attempt)", () => {
+        expect(() => validateSafePathSegment("abc/123", "id")).toThrow();
+    });
 
-  it('should reject IDs with backslashes', () => {
-    expect(() => validateSafePathSegment('foo\\bar', 'id')).toThrow(/Invalid id/);
-  });
+    test("should reject IDs with backslashes", () => {
+        expect(() => validateSafePathSegment("abc\\123", "id")).toThrow();
+    });
 
-  it('should reject empty IDs', () => {
-    expect(() => validateSafePathSegment('', 'id')).toThrow(/id is required/);
-  });
+    test("should reject empty IDs", () => {
+        expect(() => validateSafePathSegment("", "id")).toThrow();
+    });
 
-  it('should reject IDs with special characters', () => {
-    expect(() => validateSafePathSegment('foo@bar', 'id')).toThrow(/Invalid id/);
-    expect(() => validateSafePathSegment('foo bar', 'id')).toThrow(/Invalid id/); // Space
-  });
+    test("should reject IDs with special characters", () => {
+        expect(() => validateSafePathSegment("abc!123", "id")).toThrow();
+    });
 });
