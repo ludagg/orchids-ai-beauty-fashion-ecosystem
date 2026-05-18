@@ -64,3 +64,7 @@
 ## 2026-04-13 - Profile UX Standardization
 **Learning:** For high-traffic profile pages, standardizing on unified `Empty` and `Spinner` primitives ensures a consistent brand voice across all tabs. Additionally, adding explicit `aria-label` attributes to numerical statistics (Followers, Following, etc.) provides essential context for screen reader users who might otherwise hear only the number or a truncated label.
 **Action:** Always refactor custom loading/empty states to use the standard UI library. Audit interactive statistics and ensured they have descriptive `aria-label` attributes that combine the value and the metric name.
+
+## 2026-04-14 - Premium Empty States & Action Accessibility
+**Learning:** Enhancing empty states with "premium" decorations (radial grid and animated blobs) significantly improves the perceived value of an application, especially in critical sections like Bookings and Orders. Standardizing these states using unified `Empty` primitives while adding accessibility touches like `aria-label` and `Tooltip` to action buttons ensures the experience is both delightful and inclusive.
+**Action:** Use the `Empty` UI component library for all zero-result states. Combine them with a `radial-gradient` background and `framer-motion` for a professional, high-end aesthetic. Always wrap icon-only action buttons in `Tooltip` components with explicit `aria-label` attributes.
