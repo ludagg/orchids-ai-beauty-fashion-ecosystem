@@ -176,8 +176,10 @@ export function StoriesRail() {
             return (
                 <button
                     key={us.user.id}
+                    type="button"
                     onClick={() => setSelectedUserIndex(index)}
-                    className="flex flex-col items-center gap-1.5 cursor-pointer shrink-0 snap-start group"
+                    aria-label={`View ${us.user.name}'s story`}
+                    className="flex flex-col items-center gap-1.5 shrink-0 snap-start group outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-lg p-0.5"
                 >
                     <div className="w-[72px] h-[72px] rounded-full p-[2px] bg-gradient-to-tr from-yellow-400 to-red-600 transition-transform group-hover:scale-105">
                         <div className="w-full h-full rounded-full border-2 border-background overflow-hidden relative">
