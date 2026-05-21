@@ -22,7 +22,7 @@
 **Action:** Always check dynamic inputs for visible labels; if missing, add descriptive `aria-label` attributes. Wrap icon-only delete actions in Tooltips for clarity.
 
 ## 2026-02-22 - Semantic Buttons for Interactive Avatars
-**Learning:** Wrapping a decorative avatar component in a semantic `<button>` instead of a `div` instantly makes it accessible to keyboard and screen reader users, transforming a static image into a functional "Change Profile Picture" control without complex custom event handlers.
+**Learning:** Wrapping a decorative avatar component in a semantic `<button>` instead of a `div` instead of a static image instantly makes it accessible to keyboard and screen reader users.
 **Action:** Always check if "clickable" divs (like avatars, cards) should be semantic `<button>` elements to get native focus and keyboard support for free.
 
 ## 2026-02-21 - Accessible Icon-Only Actions
@@ -64,3 +64,7 @@
 ## 2026-04-13 - Profile UX Standardization
 **Learning:** For high-traffic profile pages, standardizing on unified `Empty` and `Spinner` primitives ensures a consistent brand voice across all tabs. Additionally, adding explicit `aria-label` attributes to numerical statistics (Followers, Following, etc.) provides essential context for screen reader users who might otherwise hear only the number or a truncated label.
 **Action:** Always refactor custom loading/empty states to use the standard UI library. Audit interactive statistics and ensured they have descriptive `aria-label` attributes that combine the value and the metric name.
+
+## 2026-05-21 - Decoupling Nested Interactive Elements
+**Learning:** Nesting a `<button>` inside a `<Link>` (anchor) is invalid HTML and breaks screen reader navigation, as the link often "swallows" the button's focus or click events. Moving the button to be a sibling of the link using absolute positioning while making the link's overlay content non-interactive (`pointer-events-none`) maintains the visual layout while restoring full accessibility and spec compliance.
+**Action:** Audit complex cards for nested interactivity. Use a shared relative container, make secondary actions absolute siblings with a higher z-index, and ensure the primary link uses descriptive `aria-label` while its children (images, text) are marked as decorative or non-interactive for the screen reader.
