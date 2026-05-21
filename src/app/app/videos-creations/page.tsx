@@ -3,6 +3,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { StoriesRail } from "@/components/videos/StoriesRail";
 import { MasonryVideoGrid } from "@/components/videos/MasonryVideoGrid";
+import LiveHero from "@/components/videos-creations/LiveHero";
+import CreatorRail from "@/components/videos-creations/CreatorRail";
 import { useSession } from "@/lib/auth-client";
 import { Loader2 } from "lucide-react";
 import { useInView } from "react-intersection-observer";
@@ -10,6 +12,7 @@ import { useInView } from "react-intersection-observer";
 export default function VideosCreationsPage() {
   const { data: session } = useSession();
   const [videos, setVideos] = useState<any[]>([]);
+  const [creators, setCreators] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -17,7 +20,20 @@ export default function VideosCreationsPage() {
 
   useEffect(() => {
     fetchVideos(1, true);
+    fetchCreators();
   }, []);
+
+  const fetchCreators = async () => {
+    try {
+      const res = await fetch("/api/creators");
+      if (res.ok) {
+        const data = await res.json();
+        setCreators(data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch creators", error);
+    }
+  };
 
   const fetchVideos = useCallback(async (pageNum: number, isReset = false) => {
     setLoading(true);
@@ -76,23 +92,36 @@ export default function VideosCreationsPage() {
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
-      {/* Stories Rail */}
-      <div className="pt-2">
-        <StoriesRail />
-      </div>
+      <div className="p-4 sm:p-6 lg:p-8 space-y-8 max-w-[1600px] mx-auto w-full">
+        {/* Live Hero */}
+        <LiveHero />
 
-      {/* Masonry Grid */}
-      <div className="flex-1 max-w-[2000px] mx-auto w-full pt-4">
-        <MasonryVideoGrid videos={videos} />
+        {/* Creator Rail */}
+        <section>
+            <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-bold text-foreground">Top Creators</h2>
+            </div>
+            <CreatorRail creators={creators} />
+        </section>
 
-        {loading && (
-          <div className="flex justify-center py-8">
-            <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
-          </div>
-        )}
+        {/* Stories Rail */}
+        <div className="pt-2">
+          <StoriesRail />
+        </div>
 
-        {/* Infinite Scroll Sentinel */}
-        <div ref={ref} className="h-4" />
+        {/* Masonry Grid */}
+        <div className="flex-1 w-full pt-4">
+          <MasonryVideoGrid videos={videos} />
+
+          {loading && (
+            <div className="flex justify-center py-8">
+              <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
+            </div>
+          )}
+
+          {/* Infinite Scroll Sentinel */}
+          <div ref={ref} className="h-4" />
+        </div>
       </div>
     </div>
   );
