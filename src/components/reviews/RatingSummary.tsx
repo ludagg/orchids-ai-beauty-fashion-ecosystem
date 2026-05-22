@@ -33,9 +33,13 @@ export function RatingSummary({ averageRating, totalReviews, distribution, revie
     <div className="p-6 rounded-3xl bg-secondary/20 border border-border">
       <div className="flex flex-col md:flex-row items-center gap-8">
         <div className="text-center md:text-left">
-           <div className="flex items-center justify-center md:justify-start gap-2 mb-1">
+           <div
+             className="flex items-center justify-center md:justify-start gap-2 mb-1"
+             role="img"
+             aria-label={`Average rating ${avg.toFixed(1)} out of 5 stars`}
+           >
              <span className="text-5xl font-bold font-display text-foreground">{avg.toFixed(1)}</span>
-             <Star className="w-8 h-8 fill-amber-500 text-amber-500" />
+             <Star className="w-8 h-8 fill-amber-500 text-amber-500" aria-hidden="true" />
            </div>
            <p className="text-sm text-muted-foreground font-medium">{totalReviews} verified reviews</p>
         </div>
@@ -46,13 +50,23 @@ export function RatingSummary({ averageRating, totalReviews, distribution, revie
             const percentage = totalReviews > 0 ? (count / totalReviews) * 100 : 0;
 
             return (
-              <div key={star} className="flex items-center gap-3 text-xs font-medium">
-                <div className="flex items-center gap-1 w-8 flex-shrink-0">
+              <div
+                key={star}
+                className="flex items-center gap-3 text-xs font-medium"
+                role="img"
+                aria-label={`${star} star${star > 1 ? 's' : ''}: ${count} review${count !== 1 ? 's' : ''}`}
+              >
+                <div className="flex items-center gap-1 w-8 flex-shrink-0" aria-hidden="true">
                   <span>{star}</span>
                   <Star className="w-3 h-3 text-muted-foreground" />
                 </div>
-                <Progress value={percentage} className="h-2 flex-1" indicatorClassName="bg-amber-500" />
-                <span className="w-8 text-right text-muted-foreground">{count}</span>
+                <Progress
+                  value={percentage}
+                  className="h-2 flex-1"
+                  indicatorClassName="bg-amber-500"
+                  aria-hidden="true"
+                />
+                <span className="w-8 text-right text-muted-foreground" aria-hidden="true">{count}</span>
               </div>
             );
           })}
