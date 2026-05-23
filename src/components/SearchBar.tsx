@@ -1,8 +1,9 @@
 "use client";
 
-import { Search, X } from "lucide-react";
-import { useRef, useEffect } from "react";
+import { Search, X, Camera, Loader2 } from "lucide-react";
+import { useRef, useEffect, useState } from "react";
 import { Kbd } from "@/components/ui/kbd";
+import { toast } from "sonner";
 
 interface SearchBarProps {
   value: string;
@@ -14,6 +15,8 @@ interface SearchBarProps {
 
 export default function SearchBar({ value, onChange, onSubmit, placeholder = "Search fashion, salons, styles...", className = "" }: SearchBarProps) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -47,6 +50,54 @@ export default function SearchBar({ value, onChange, onSubmit, placeholder = "Se
     inputRef.current?.focus();
   };
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      toast.error('Veuillez sélectionner une image valide.');
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('L\'image ne doit pas dépasser 5 Mo.');
+      return;
+    }
+
+    setIsUploading(true);
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+      const response = await fetch('/api/search/image', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Erreur lors de l\'analyse de l\'image');
+      }
+
+      const data = await response.json();
+      if (data.query) {
+        onChange(data.query);
+        if (onSubmit) {
+          onSubmit(data.query);
+        }
+      } else {
+         toast.error("Aucun objet reconnaissable trouvé dans l'image.");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Une erreur s'est produite lors de la recherche par image.");
+    } finally {
+      setIsUploading(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
+
   return (
     <div className={`relative group ${className}`} role="search">
       <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors" aria-hidden="true" />
@@ -76,6 +127,24 @@ export default function SearchBar({ value, onChange, onSubmit, placeholder = "Se
             /
           </Kbd>
         </div>
+        <div className="h-4 w-[1px] bg-border mx-1"></div>
+        <input
+          type="file"
+          accept="image/*"
+          className="hidden"
+          ref={fileInputRef}
+          onChange={handleImageUpload}
+        />
+        <button
+          type="button"
+          onClick={() => fileInputRef.current?.click()}
+          disabled={isUploading}
+          className="p-1.5 rounded-full hover:bg-muted text-muted-foreground hover:text-primary transition-colors disabled:opacity-50"
+          aria-label="Recherche par image"
+          title="Recherche par image"
+        >
+          {isUploading ? <Loader2 className="w-4 h-4 animate-spin text-primary" /> : <Camera className="w-4 h-4" />}
+        </button>
       </div>
     </div>
   );
