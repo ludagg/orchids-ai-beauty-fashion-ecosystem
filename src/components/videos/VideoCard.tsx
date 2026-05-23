@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Heart, Play } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useSession } from "@/lib/auth-client";
 import { toast } from "sonner";
 
@@ -69,7 +70,11 @@ export function VideoCard({ video }: VideoCardProps) {
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
     >
-        <Link href={`/app/videos-creations/${video.id}`} className="block relative aspect-[9/16] w-full bg-black">
+        <Link
+            href={`/app/videos-creations/${video.id}`}
+            className="block relative aspect-[9/16] w-full bg-black"
+            aria-label={`Watch video: ${video.title}`}
+        >
             {/* Thumbnail */}
             {video.thumbnailUrl ? (
                 <Image
@@ -103,29 +108,40 @@ export function VideoCard({ video }: VideoCardProps) {
 
             {/* Overlay Gradient - Bottom Only */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 pointer-events-none" />
-
-            {/* Content */}
-            <div className="absolute bottom-0 left-0 right-0 p-3 text-white flex items-end justify-between z-10">
-                <div className="flex flex-col gap-0.5 max-w-[75%]">
-                    <span className="text-[10px] font-medium text-white/80 truncate">
-                        @{video.user.name.replace(/\s+/g, '')}
-                    </span>
-                    <h3 className="font-bold text-sm leading-tight line-clamp-2 drop-shadow-sm">
-                        {video.title}
-                    </h3>
-                </div>
-
-                <button
-                    onClick={handleLike}
-                    className="flex items-center gap-1 hover:scale-110 transition-transform mb-0.5"
-                >
-                    <Heart
-                        className={cn("w-4 h-4 drop-shadow-sm", isLiked ? "fill-red-500 text-red-500" : "text-white")}
-                    />
-                    <span className="text-xs font-medium">{likesCount}</span>
-                </button>
-            </div>
         </Link>
+
+        {/* Content - Moved outside Link to avoid nesting button inside a */}
+        <div className="absolute bottom-0 left-0 right-0 p-3 text-white flex items-end justify-between z-10 pointer-events-none">
+            <div className="flex flex-col gap-0.5 max-w-[75%]">
+                <span className="text-[10px] font-medium text-white/80 truncate">
+                    @{video.user.name.replace(/\s+/g, '')}
+                </span>
+                <h3 className="font-bold text-sm leading-tight line-clamp-2 drop-shadow-sm">
+                    {video.title}
+                </h3>
+            </div>
+
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <button
+                        onClick={handleLike}
+                        className="flex items-center gap-1 hover:scale-110 transition-transform mb-0.5 pointer-events-auto"
+                        aria-label={`${isLiked ? "Unlike" : "Like"} video. ${likesCount} likes`}
+                    >
+                        <Heart
+                            className={cn(
+                                "w-4 h-4 drop-shadow-sm",
+                                isLiked ? "fill-red-500 text-red-500" : "text-white"
+                            )}
+                        />
+                        <span className="text-xs font-medium">{likesCount}</span>
+                    </button>
+                </TooltipTrigger>
+                <TooltipContent side="top">
+                    {isLiked ? "Unlike" : "Like"}
+                </TooltipContent>
+            </Tooltip>
+        </div>
     </div>
   );
 }
