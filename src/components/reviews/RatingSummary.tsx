@@ -32,27 +32,42 @@ export function RatingSummary({ averageRating, totalReviews, distribution, revie
   return (
     <div className="p-6 rounded-3xl bg-secondary/20 border border-border">
       <div className="flex flex-col md:flex-row items-center gap-8">
-        <div className="text-center md:text-left">
+        <div
+          className="text-center md:text-left"
+          role="img"
+          aria-label={`Average rating ${avg.toFixed(1)} out of 5 stars based on ${totalReviews} verified reviews`}
+        >
            <div className="flex items-center justify-center md:justify-start gap-2 mb-1">
-             <span className="text-5xl font-bold font-display text-foreground">{avg.toFixed(1)}</span>
-             <Star className="w-8 h-8 fill-amber-500 text-amber-500" />
+             <span className="text-5xl font-bold font-display text-foreground" aria-hidden="true">{avg.toFixed(1)}</span>
+             <Star className="w-8 h-8 fill-amber-500 text-amber-500" aria-hidden="true" />
            </div>
-           <p className="text-sm text-muted-foreground font-medium">{totalReviews} verified reviews</p>
+           <p className="text-sm text-muted-foreground font-medium" aria-hidden="true">{totalReviews} verified reviews</p>
         </div>
 
-        <div className="flex-1 w-full space-y-2">
+        <div className="flex-1 w-full space-y-2" role="group" aria-label="Rating distribution">
           {[5, 4, 3, 2, 1].map((star) => {
             const count = starCounts[star as keyof typeof starCounts];
             const percentage = totalReviews > 0 ? (count / totalReviews) * 100 : 0;
 
             return (
-              <div key={star} className="flex items-center gap-3 text-xs font-medium">
-                <div className="flex items-center gap-1 w-8 flex-shrink-0">
+              <div
+                key={star}
+                className="flex items-center gap-3 text-xs font-medium"
+                role="img"
+                aria-label={`${star} star${star > 1 ? 's' : ''}: ${count} review${count !== 1 ? 's' : ''} (${Math.round(percentage)}%)`}
+              >
+                <div className="flex items-center gap-1 w-8 flex-shrink-0" aria-hidden="true">
                   <span>{star}</span>
                   <Star className="w-3 h-3 text-muted-foreground" />
                 </div>
-                <Progress value={percentage} className="h-2 flex-1" indicatorClassName="bg-amber-500" />
-                <span className="w-8 text-right text-muted-foreground">{count}</span>
+                <Progress
+                  value={percentage}
+                  className="h-2 flex-1"
+                  indicatorClassName="bg-amber-500"
+                  aria-label={`${star} star rating progress`}
+                  aria-hidden="true"
+                />
+                <span className="w-8 text-right text-muted-foreground" aria-hidden="true">{count}</span>
               </div>
             );
           })}
