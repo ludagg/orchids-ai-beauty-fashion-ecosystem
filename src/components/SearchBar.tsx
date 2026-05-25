@@ -3,6 +3,11 @@
 import { Search, X } from "lucide-react";
 import { useRef, useEffect } from "react";
 import { Kbd } from "@/components/ui/kbd";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface SearchBarProps {
   value: string;
@@ -62,14 +67,19 @@ export default function SearchBar({ value, onChange, onSubmit, placeholder = "Se
       />
       <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
         {value && (
-          <button
-            type="button"
-            onClick={handleClear}
-            className="p-0.5 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            aria-label="Clear search"
-          >
-            <X className="w-3.5 h-3.5" />
-          </button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                type="button"
+                onClick={handleClear}
+                className="p-0.5 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                aria-label="Clear search"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side="top">Clear search</TooltipContent>
+          </Tooltip>
         )}
         <div className="hidden md:block pointer-events-none">
           <Kbd className="bg-background/50 border-none shadow-none text-[10px] h-5 min-w-5 opacity-60">
