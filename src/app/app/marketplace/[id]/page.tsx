@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import {
+  motion } from "framer-motion";
 import {
   ShoppingBag,
   Heart,
@@ -15,7 +16,8 @@ import {
   Clock,
   MessageCircle,
   Minus,
-  Plus
+  Plus,
+  ScanFace
 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
@@ -380,6 +382,15 @@ export default function ProductDetailsPage() {
                     className="flex-1 h-16 rounded-2xl bg-foreground text-background font-bold text-lg hover:bg-foreground/90 transition-all shadow-xl shadow-foreground/10 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                     Buy Now
+                </button>
+            </div>
+            <div className="flex gap-3">
+                <button
+                  onClick={() => toast.success("Virtual AR Try-On launched (coming soon)")}
+                  className="flex-1 h-16 rounded-2xl bg-indigo-50 text-indigo-600 font-bold text-lg hover:bg-indigo-100 transition-all shadow-xl shadow-indigo-500/10 border border-indigo-200 flex items-center justify-center gap-2"
+                >
+                  <ScanFace className="w-5 h-5" />
+                  Virtual AR Try-On
                 </button>
                 <Tooltip>
                     <TooltipTrigger asChild>
