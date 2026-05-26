@@ -445,7 +445,7 @@ export default function AIStylistPage() {
                           >
                             <div className="aspect-[3/4] bg-muted relative overflow-hidden">
                               <img
-                                src={product.images?.[0]}
+                                src={(product.galleryUrls?.[0] ?? product.mainImageUrl)}
                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                 alt={product.name}
                               />
@@ -453,7 +453,7 @@ export default function AIStylistPage() {
                             <div className="p-2 sm:p-3">
                               <p className="font-bold text-xs truncate mb-1">{product.name}</p>
                               <p className="text-xs text-muted-foreground">
-                                {(product.price / 100).toLocaleString("en-IN", {
+                                {((product.salePrice ?? product.originalPrice) / 100).toLocaleString("en-IN", {
                                   style: "currency",
                                   currency: "INR",
                                 })}
@@ -590,7 +590,7 @@ export default function AIStylistPage() {
                   <Link href={`/app/marketplace/${product.id}`} className="block">
                     <div className="aspect-[4/5] rounded-3xl overflow-hidden mb-3 relative shadow-md border border-border">
                       <img
-                        src={product.images?.[0]}
+                        src={(product.galleryUrls?.[0] ?? product.mainImageUrl)}
                         alt="Suggestion"
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       />
@@ -600,7 +600,7 @@ export default function AIStylistPage() {
                     </div>
                     <h4 className="font-bold text-sm text-foreground truncate">{product.name}</h4>
                     <p className="text-xs text-muted-foreground mt-0.5 font-medium">
-                      {(product.price / 100).toLocaleString("en-IN", {
+                      {((product.salePrice ?? product.originalPrice) / 100).toLocaleString("en-IN", {
                         style: "currency",
                         currency: "INR",
                       })}
