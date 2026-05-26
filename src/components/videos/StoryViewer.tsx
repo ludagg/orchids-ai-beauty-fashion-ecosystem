@@ -7,6 +7,13 @@ import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
+/* [Jules - Enhance StoryViewer with accessibility features and tooltips] */
 
 // Define types based on what we expect from the API
 interface User {
@@ -139,26 +146,47 @@ export function StoryViewer({ initialUserIndex, userStories, onClose }: StoryVie
       className="fixed inset-0 z-[100] bg-black flex items-center justify-center"
     >
         {/* Desktop close button */}
-        <button onClick={onClose} className="absolute top-4 right-4 z-50 text-white p-2 hover:bg-white/10 rounded-full hidden md:block">
-            <X className="w-8 h-8" />
-        </button>
+        <Tooltip>
+            <TooltipTrigger asChild>
+                <button
+                    onClick={onClose}
+                    className="absolute top-4 right-4 z-50 text-white p-2 hover:bg-white/10 rounded-full hidden md:block"
+                    aria-label="Close story viewer"
+                >
+                    <X className="w-8 h-8" />
+                </button>
+            </TooltipTrigger>
+            <TooltipContent>Close (Esc)</TooltipContent>
+        </Tooltip>
 
         {/* Previous Button (Desktop) */}
-        <button
-            onClick={goToPrevStory}
-            className="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white z-50 p-2"
-            disabled={currentUserIndex === 0 && currentStoryIndex === 0}
-        >
-            <ChevronLeft className="w-12 h-12" />
-        </button>
+        <Tooltip>
+            <TooltipTrigger asChild>
+                <button
+                    onClick={goToPrevStory}
+                    className="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white z-50 p-2"
+                    disabled={currentUserIndex === 0 && currentStoryIndex === 0}
+                    aria-label="Previous story"
+                >
+                    <ChevronLeft className="w-12 h-12" />
+                </button>
+            </TooltipTrigger>
+            <TooltipContent>Previous (←)</TooltipContent>
+        </Tooltip>
 
          {/* Next Button (Desktop) */}
-         <button
-            onClick={goToNextStory}
-            className="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white z-50 p-2"
-        >
-            <ChevronRight className="w-12 h-12" />
-        </button>
+         <Tooltip>
+            <TooltipTrigger asChild>
+                <button
+                    onClick={goToNextStory}
+                    className="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white z-50 p-2"
+                    aria-label="Next story"
+                >
+                    <ChevronRight className="w-12 h-12" />
+                </button>
+            </TooltipTrigger>
+            <TooltipContent>Next (→)</TooltipContent>
+        </Tooltip>
 
       {/* Main Container - Mobile Fullscreen, Desktop Aspect Ratio */}
       <div className="relative w-full h-full md:w-[400px] md:h-[80vh] md:rounded-2xl overflow-hidden bg-gray-900 shadow-2xl">
@@ -166,7 +194,15 @@ export function StoryViewer({ initialUserIndex, userStories, onClose }: StoryVie
         {/* Progress Bars */}
         <div className="absolute top-0 left-0 right-0 z-20 flex gap-1 p-2">
             {currentUser.stories.map((story, idx) => (
-                <div key={story.id} className="h-1 flex-1 bg-white/30 rounded-full overflow-hidden">
+                <div
+                    key={story.id}
+                    className="h-1 flex-1 bg-white/30 rounded-full overflow-hidden"
+                    role="progressbar"
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    aria-valuenow={idx < currentStoryIndex ? 100 : idx === currentStoryIndex ? Math.round(progress) : 0}
+                    aria-label={`Story ${idx + 1} of ${currentUser.stories.length}`}
+                >
                     <div
                         className="h-full bg-white transition-all duration-100 ease-linear"
                         style={{
@@ -238,15 +274,26 @@ export function StoryViewer({ initialUserIndex, userStories, onClose }: StoryVie
                  <input
                     type="text"
                     placeholder="Send a message..."
+                    aria-label="Send a message"
                     className="w-full bg-transparent border border-white/50 rounded-full px-4 py-2 text-white placeholder-white/70 focus:outline-none focus:border-white text-sm backdrop-blur-sm"
                  />
              </div>
-             <button className="text-white hover:scale-110 transition-transform">
-                 <Heart className="w-6 h-6" />
-             </button>
-             <button className="text-white hover:scale-110 transition-transform">
-                 <Send className="w-6 h-6" />
-             </button>
+             <Tooltip>
+                <TooltipTrigger asChild>
+                    <button className="text-white hover:scale-110 transition-transform" aria-label="Like story">
+                        <Heart className="w-6 h-6" />
+                    </button>
+                </TooltipTrigger>
+                <TooltipContent>Like</TooltipContent>
+             </Tooltip>
+             <Tooltip>
+                <TooltipTrigger asChild>
+                    <button className="text-white hover:scale-110 transition-transform" aria-label="Send message">
+                        <Send className="w-6 h-6" />
+                    </button>
+                </TooltipTrigger>
+                <TooltipContent>Send</TooltipContent>
+             </Tooltip>
         </div>
 
       </div>
