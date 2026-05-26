@@ -10,7 +10,6 @@ import {
   ArrowRight,
   Share2,
   Plus,
-  Loader2,
   Bell,
   BellOff,
   Link2,
@@ -32,6 +31,7 @@ import {
   EmptyTitle
 } from "@/components/ui/empty";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 
 const PRICE_ALERTS_KEY = "wishlist-price-alerts";
 
@@ -135,7 +135,7 @@ export default function WishlistPage() {
   if (loading) {
       return (
         <div className="flex justify-center items-center h-screen">
-            <Loader2 className="w-10 h-10 animate-spin text-primary" />
+            <Spinner className="w-10 h-10 text-primary" />
         </div>
       )
   }
