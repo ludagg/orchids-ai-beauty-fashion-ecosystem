@@ -9,12 +9,12 @@ import {
   Calendar,
   Info,
   Check,
-  Loader2
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { formatDistanceToNow } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
+import { Spinner } from "@/components/ui/spinner";
 
 type Notification = {
   id: string;
@@ -117,9 +117,9 @@ export default function NotificationsPage() {
 
       <div className="bg-card border border-border rounded-xl overflow-hidden shadow-sm">
         {loading ? (
-          <div className="flex flex-col items-center justify-center p-12 text-muted-foreground">
-            <Loader2 className="w-8 h-8 animate-spin mb-4" />
-            <p>Loading notifications...</p>
+          <div className="flex flex-col items-center justify-center p-12 text-muted-foreground gap-4">
+            <Spinner className="size-8" />
+            <p className="text-sm font-medium">Loading notifications...</p>
           </div>
         ) : notifications.length === 0 ? (
           <Empty className="border-none py-12">

@@ -7,6 +7,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Spinner } from "@/components/ui/spinner";
 import {
   Tooltip,
   TooltipContent,
@@ -135,8 +136,8 @@ export default function NotificationBell() {
         </div>
         <div className="max-h-[400px] overflow-y-auto">
           {loading ? (
-            <div className="p-4 text-center text-sm text-muted-foreground" role="status">
-              Loading...
+            <div className="p-8 flex items-center justify-center">
+              <Spinner className="size-6 text-muted-foreground" />
             </div>
           ) : notifications.length === 0 ? (
             <div className="p-4 text-center text-sm text-muted-foreground" role="status">
@@ -154,6 +155,7 @@ export default function NotificationBell() {
                       className={`w-full text-left p-4 flex gap-3 hover:bg-secondary transition-colors cursor-pointer border-b border-border last:border-0 ${
                         !notification.isRead ? "bg-secondary/30" : ""
                       }`}
+                      aria-label={`${notification.isRead ? '' : 'Unread: '}${notification.title}. ${notification.message}`}
                     >
                       <div
                         className={`w-10 h-10 rounded-full ${style.bg} dark:bg-primary/10 flex items-center justify-center flex-shrink-0`}
