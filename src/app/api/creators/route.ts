@@ -25,17 +25,24 @@ export async function GET(req: NextRequest) {
             where: inArray(users.id, userIds),
         });
 
-        const creatorsWithStatus = await Promise.all(creators.map(async (creator) => {
-            const liveVideo = await db.query.videos.findFirst({
-                where: and(eq(videos.userId, creator.id), eq(videos.isLive, true))
-            });
+        // Resolve N+1 query: Fetch live status for all these users in one go
+        const liveVideos = await db.query.videos.findMany({
+            where: and(inArray(videos.userId, userIds), eq(videos.isLive, true)),
+            columns: {
+                userId: true
+            }
+        });
+
+        const liveUsersSet = new Set(liveVideos.map(v => v.userId));
+
+        const creatorsWithStatus = creators.map((creator) => {
             return {
                 id: creator.id,
                 name: creator.name,
                 avatar: creator.image,
-                isLive: !!liveVideo
+                isLive: liveUsersSet.has(creator.id)
             };
-        }));
+        });
 
         // Sort by live first, then by video count (original order)
         const sortedCreators = creatorsWithStatus.sort((a, b) => {
