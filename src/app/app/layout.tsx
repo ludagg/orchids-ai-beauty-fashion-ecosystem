@@ -41,7 +41,7 @@ const sidebarItems = [
   { icon: User, label: "Profile", href: "/app/profile" },
   { icon: ShoppingBag, label: "Marketplace", href: "/app/marketplace" },
   { icon: Award, label: "Loyalty Program", href: "/app/loyalty" },
-  //{ icon: Sparkles, label: "AI Stylist", href: "/app/ai-stylist" },
+  { icon: Sparkles, label: "AI Stylist", href: "/app/ai-stylist" },
   { icon: Scissors, label: "Salons", href: "/app/salons" },
   { icon: Video, label: "Videos & Creations", href: "/app/videos-creations" },
   { icon: MessageSquare, label: "Conversations", href: "/app/conversations" },
@@ -187,7 +187,7 @@ export default function AppLayout({
                   <ChevronRight className="w-5 h-5" />
                 </Link>
               )}
-              {sidebarItems.filter(item => item.label !== "AI Stylist").map((item) => {
+              {sidebarItems.map((item) => {
                 const isActive = pathname === item.href;
                 return (
                   <Link
