@@ -64,3 +64,7 @@
 ## 2026-04-13 - Profile UX Standardization
 **Learning:** For high-traffic profile pages, standardizing on unified `Empty` and `Spinner` primitives ensures a consistent brand voice across all tabs. Additionally, adding explicit `aria-label` attributes to numerical statistics (Followers, Following, etc.) provides essential context for screen reader users who might otherwise hear only the number or a truncated label.
 **Action:** Always refactor custom loading/empty states to use the standard UI library. Audit interactive statistics and ensured they have descriptive `aria-label` attributes that combine the value and the metric name.
+
+## 2026-05-28 - Loading Feedback for Critical Actions
+**Learning:** In high-stakes interactive elements like reward redemption buttons, static loading indicators (e.g., "...") can feel unresponsive. Replacing them with a synchronized 'Spinner' component and providing a descriptive 'aria-label' that includes the reward's name and cost ensures that all users, including those using screen readers, receive immediate and clear feedback during asynchronous operations.
+**Action:** Use the centralized 'Spinner' component for primary async actions and always pair it with an explicit, descriptive ARIA label for accessibility.
