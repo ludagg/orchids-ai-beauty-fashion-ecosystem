@@ -15,6 +15,8 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { formatDistanceToNow } from "date-fns";
+import { Spinner } from "@/components/ui/spinner";
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 
 type Notification = {
   id: string;
@@ -135,13 +137,18 @@ export default function NotificationBell() {
         </div>
         <div className="max-h-[400px] overflow-y-auto">
           {loading ? (
-            <div className="p-4 text-center text-sm text-muted-foreground" role="status">
-              Loading...
+            <div className="flex flex-col items-center justify-center p-8 text-muted-foreground">
+              <Spinner className="w-6 h-6" />
+              <p className="text-xs mt-2">Loading...</p>
             </div>
           ) : notifications.length === 0 ? (
-            <div className="p-4 text-center text-sm text-muted-foreground" role="status">
-              No notifications
-            </div>
+            <Empty className="border-none py-8 rounded-none">
+              <EmptyHeader className="gap-1">
+                <EmptyMedia variant="icon"><Bell className="w-5 h-5" /></EmptyMedia>
+                <EmptyTitle className="text-sm">No notifications yet</EmptyTitle>
+                <EmptyDescription className="text-xs">We'll let you know when something important happens.</EmptyDescription>
+              </EmptyHeader>
+            </Empty>
           ) : (
             <ul role="list" className="m-0 p-0 list-none">
               {notifications.map((notification) => {
@@ -154,6 +161,7 @@ export default function NotificationBell() {
                       className={`w-full text-left p-4 flex gap-3 hover:bg-secondary transition-colors cursor-pointer border-b border-border last:border-0 ${
                         !notification.isRead ? "bg-secondary/30" : ""
                       }`}
+                      aria-label={`${notification.isRead ? '' : 'Unread: '}${notification.title}. ${notification.message}`}
                     >
                       <div
                         className={`w-10 h-10 rounded-full ${style.bg} dark:bg-primary/10 flex items-center justify-center flex-shrink-0`}
