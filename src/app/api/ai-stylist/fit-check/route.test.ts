@@ -26,7 +26,9 @@ vi.mock('@/lib/db', () => ({
 }));
 
 vi.mock('@/lib/rate-limit', () => ({
-    rateLimit: vi.fn().mockResolvedValue(false)
+    default: vi.fn().mockReturnValue({
+        check: vi.fn().mockResolvedValue(undefined)
+    })
 }));
 
 // Mock GoogleGenerativeAI

@@ -5,14 +5,19 @@ import { db } from "@/lib/db";
 import { products } from "@/db/schema/commerce";
 import { eq } from "drizzle-orm";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { rateLimit } from "@/lib/rate-limit";
+import rateLimit from "@/lib/rate-limit";
+
+const limiter = rateLimit({
+    interval: 60000,
+    uniqueTokenPerInterval: 500,
+});
 
 export async function POST(req: NextRequest) {
     try {
         const ip = req.headers.get("x-forwarded-for") || "127.0.0.1";
-        const isRateLimited = await rateLimit(`ai-fit-check-${ip}`, 5, 60);
-
-        if (isRateLimited) {
+        try {
+            await limiter.check(5, `ai-fit-check-${ip}`);
+        } catch {
             return NextResponse.json({ error: "Too many requests" }, { status: 429 });
         }
 
