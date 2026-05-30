@@ -15,7 +15,7 @@ vi.mock('@/lib/db', () => ({
 }));
 
 vi.mock('drizzle-orm', async (importOriginal) => {
-    const mod = await importOriginal<typeof import('drizzle-orm')>();
+    const mod = await vi.importActual('drizzle-orm');
     return {
         ...mod,
         eq: vi.fn(),
