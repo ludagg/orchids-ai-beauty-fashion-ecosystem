@@ -30,6 +30,11 @@ import CartIcon from "@/components/CartIcon";
 import NotificationBell from "@/components/NotificationBell";
 import UserAccount from "@/components/UserAccount";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { CartProvider } from "@/lib/cart-context";
@@ -92,45 +97,75 @@ export default function AppLayout({
 
         <nav className="flex-1 px-4 space-y-1">
           {session?.user?.role === "salon_owner" && (
-            <Link
-              href="/app/my-business"
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-[#D4AF37] hover:bg-secondary hover:text-[#D4AF37] ${isCollapsed ? "justify-center" : ""}`}
-            >
-              <Store className="w-5 h-5 flex-shrink-0" />
-              {!isCollapsed && <span>My Business</span>}
-            </Link>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link
+                  href="/app/my-business"
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-[#D4AF37] hover:bg-secondary hover:text-[#D4AF37] ${isCollapsed ? "justify-center" : ""}`}
+                  aria-current={pathname === "/app/my-business" ? "page" : undefined}
+                  aria-label={isCollapsed ? "My Business" : undefined}
+                >
+                  <Store className="w-5 h-5 flex-shrink-0" />
+                  {!isCollapsed && <span>My Business</span>}
+                </Link>
+              </TooltipTrigger>
+              {isCollapsed && (
+                <TooltipContent side="right">
+                  <p>My Business</p>
+                </TooltipContent>
+              )}
+            </Tooltip>
           )}
           {sidebarItems.map((item) => {
             const isActive = pathname === item.href;
             return (
-              <Link
-                key={item.label}
-                href={item.href}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
-                  isActive
-                    ? "bg-primary text-primary-foreground shadow-lg shadow-foreground/10"
-                    : "text-muted-foreground hover:bg-secondary hover:text-foreground"
-                } ${isCollapsed ? "justify-center" : ""}`}
-              >
-                <item.icon className="w-5 h-5 flex-shrink-0" />
-                {!isCollapsed && <span>{item.label}</span>}
-              </Link>
+              <Tooltip key={item.label}>
+                <TooltipTrigger asChild>
+                  <Link
+                    href={item.href}
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+                      isActive
+                        ? "bg-primary text-primary-foreground shadow-lg shadow-foreground/10"
+                        : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+                    } ${isCollapsed ? "justify-center" : ""}`}
+                    aria-current={isActive ? "page" : undefined}
+                    aria-label={isCollapsed ? item.label : undefined}
+                  >
+                    <item.icon className="w-5 h-5 flex-shrink-0" />
+                    {!isCollapsed && <span>{item.label}</span>}
+                  </Link>
+                </TooltipTrigger>
+                {isCollapsed && (
+                  <TooltipContent side="right">
+                    <p>{item.label}</p>
+                  </TooltipContent>
+                )}
+              </Tooltip>
             );
           })}
         </nav>
 
-        
-
         <div className={`p-4 border-t border-border ${isCollapsed ? "flex justify-center" : ""}`}>
-          <Link
-            href="/app/settings"
-            className={`w-full flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors ${
-              pathname === "/app/settings" ? "text-foreground" : "text-muted-foreground hover:text-foreground"
-            } ${isCollapsed ? "justify-center" : ""}`}
-          >
-            <Settings className="w-5 h-5 flex-shrink-0" />
-            {!isCollapsed && <span>Settings</span>}
-          </Link>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Link
+                href="/app/settings"
+                className={`w-full flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors ${
+                  pathname === "/app/settings" ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+                } ${isCollapsed ? "justify-center" : ""}`}
+                aria-current={pathname === "/app/settings" ? "page" : undefined}
+                aria-label={isCollapsed ? "Settings" : undefined}
+              >
+                <Settings className="w-5 h-5 flex-shrink-0" />
+                {!isCollapsed && <span>Settings</span>}
+              </Link>
+            </TooltipTrigger>
+            {isCollapsed && (
+              <TooltipContent side="right">
+                <p>Settings</p>
+              </TooltipContent>
+            )}
+          </Tooltip>
         </div>
       </aside>
 
