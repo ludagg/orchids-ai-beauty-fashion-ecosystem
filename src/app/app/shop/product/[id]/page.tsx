@@ -30,6 +30,8 @@ export default function ProductDetailPage() {
   const [quantity, setQuantity] = useState(1);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+  const [fitData, setFitData] = useState<any>(null);
+  const [isFitLoading, setIsFitLoading] = useState(false);
 
   const toggleWishlist = async () => {
     const newState = !isWishlisted;
@@ -70,6 +72,37 @@ export default function ProductDetailPage() {
             if (data.colors && data.colors.length > 0) setSelectedColor(data.colors[0]);
             if (data.sizes && data.sizes.length > 0) setSelectedSize(data.sizes[0]);
             setLoading(false);
+
+            // Fetch Fit Data
+            setIsFitLoading(true);
+            fetch('/api/ai-stylist/fit-check', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    productId: data.id,
+                    userProfile: {
+                        height: 170, // Mocked for now, would come from user profile in a real app
+                        weight: 65,
+                        bodyType: 'average'
+                    }
+                })
+            })
+            .then(res => {
+                if (res.ok) return res.json();
+                throw new Error("Failed to load fit data");
+            })
+            .then(fit => {
+                setFitData(fit);
+                if (fit.recommendedSize && data.sizes) {
+                    const recSize = data.sizes.find((s: any) => s.name === fit.recommendedSize);
+                    if (recSize) setSelectedSize(recSize);
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                // Graceful fallback: do nothing, leave fitData null
+            })
+            .finally(() => setIsFitLoading(false));
         })
         .catch(err => {
             console.error(err);
@@ -216,37 +249,56 @@ export default function ProductDetailPage() {
         </div>
 
         {/* AI Fit Check */}
-        <Dialog>
-            <DialogTrigger asChild>
-                <div className="flex items-center justify-between rounded-lg border border-yellow-500/30 bg-yellow-500/10 p-3 cursor-pointer">
-                    <div className="flex items-center gap-3">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-500 text-white">
-                            <Ruler className="h-4 w-4" />
-                        </div>
-                        <div>
-                            <div className="text-sm font-semibold text-yellow-700 dark:text-yellow-400">
-                                AI recommends size M for you
+        {isFitLoading ? (
+            <div className="flex items-center justify-between rounded-lg border border-border p-3">
+                 <div className="flex items-center gap-3 w-full">
+                     <Skeleton className="h-8 w-8 rounded-full" />
+                     <div className="w-full space-y-2">
+                         <Skeleton className="h-4 w-1/2" />
+                         <Skeleton className="h-3 w-1/3" />
+                     </div>
+                 </div>
+            </div>
+        ) : fitData ? (
+            <Dialog>
+                <DialogTrigger asChild>
+                    <div className="flex items-center justify-between rounded-lg border border-yellow-500/30 bg-yellow-500/10 p-3 cursor-pointer hover:bg-yellow-500/20 transition-colors">
+                        <div className="flex items-center gap-3">
+                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-500 text-white">
+                                <Ruler className="h-4 w-4" />
                             </div>
-                            <div className="text-xs text-muted-foreground">Based on your profile</div>
+                            <div>
+                                <div className="text-sm font-semibold text-yellow-700 dark:text-yellow-400">
+                                    AI recommends size {fitData.recommendedSize}
+                                </div>
+                                <div className="text-xs text-yellow-600/80 dark:text-yellow-400/80">
+                                    {fitData.confidenceScore}% match based on your profile
+                                </div>
+                            </div>
+                        </div>
+                        <ChevronRight className="h-4 w-4 text-yellow-700 dark:text-yellow-400" />
+                    </div>
+                </DialogTrigger>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>AI Fit Analysis</DialogTitle>
+                        <DialogDescription>
+                            We analyzed your profile measurements to find the best fit.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className="space-y-4 pt-4">
+                        <div className="p-4 bg-muted rounded-lg">
+                            <h4 className="font-semibold text-sm mb-1">Fit Details</h4>
+                            <p className="text-sm text-muted-foreground">{fitData.explanation}</p>
+                            <div className="mt-3 flex items-center justify-between text-sm">
+                                <span>Expected Fit:</span>
+                                <Badge variant="secondary" className="capitalize">{fitData.fitType}</Badge>
+                            </div>
                         </div>
                     </div>
-                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                </div>
-            </DialogTrigger>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>AI Fit Analysis</DialogTitle>
-                    <DialogDescription>
-                        We analyzed your previous purchases and profile measurements.
-                        This brand typically runs true to size.
-                    </DialogDescription>
-                </DialogHeader>
-                {/* Mock chart or details */}
-                <div className="h-40 bg-muted rounded-md flex items-center justify-center text-muted-foreground">
-                    Fit Graph Placeholder
-                </div>
-            </DialogContent>
-        </Dialog>
+                </DialogContent>
+            </Dialog>
+        ) : null}
 
         {/* Variants */}
         <div className="space-y-4">
