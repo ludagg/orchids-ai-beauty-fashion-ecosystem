@@ -19,9 +19,12 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import useEmblaCarousel from 'embla-carousel-react';
+import { useSession } from '@/lib/auth-client';
+import { Sparkles, Bot } from 'lucide-react';
 
 export default function ProductDetailPage() {
-  const { id } = useParams();
+  const params = useParams();
+  const id = params?.id as string;
   const router = useRouter();
   const [product, setProduct] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -30,6 +33,9 @@ export default function ProductDetailPage() {
   const [quantity, setQuantity] = useState(1);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+  const { data: session } = useSession();
+  const [fitCheckData, setFitCheckData] = useState<any>(null);
+  const [fitCheckLoading, setFitCheckLoading] = useState(false);
 
   const toggleWishlist = async () => {
     const newState = !isWishlisted;
@@ -78,6 +84,26 @@ export default function ProductDetailPage() {
         });
     }
   }, [id, router]);
+
+
+  useEffect(() => {
+    if (product && session?.user && !fitCheckData && !fitCheckLoading) {
+      setFitCheckLoading(true);
+      fetch('/api/ai-fit-check', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ productId: product.id })
+      })
+      .then(res => res.json())
+      .then(data => {
+         if (!data.error) {
+             setFitCheckData(data);
+         }
+      })
+      .catch(err => console.error("Fit Check error:", err))
+      .finally(() => setFitCheckLoading(false));
+    }
+  }, [product, session]);
 
   const handleAddToCart = async (goToCheckout = false) => {
     if (!product) return;
@@ -215,38 +241,67 @@ export default function ProductDetailPage() {
              </div>
         </div>
 
-        {/* AI Fit Check */}
-        <Dialog>
-            <DialogTrigger asChild>
-                <div className="flex items-center justify-between rounded-lg border border-yellow-500/30 bg-yellow-500/10 p-3 cursor-pointer">
-                    <div className="flex items-center gap-3">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-500 text-white">
-                            <Ruler className="h-4 w-4" />
-                        </div>
-                        <div>
-                            <div className="text-sm font-semibold text-yellow-700 dark:text-yellow-400">
-                                AI recommends size M for you
+                {/* AI Fit Check */}
+        {session?.user && (
+            <Dialog>
+                <DialogTrigger asChild>
+                    <div className="flex items-center justify-between rounded-lg border border-yellow-500/30 bg-yellow-500/10 p-3 cursor-pointer hover:bg-yellow-500/20 transition-colors">
+                        <div className="flex items-center gap-3">
+                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-500 text-white">
+                                {fitCheckLoading ? <Sparkles className="h-4 w-4 animate-spin" /> : <Ruler className="h-4 w-4" />}
                             </div>
-                            <div className="text-xs text-muted-foreground">Based on your profile</div>
+                            <div>
+                                <div className="text-sm font-semibold text-yellow-700 dark:text-yellow-400">
+                                    {fitCheckLoading ? "Analyzing your fit..." : (fitCheckData?.recommendedSize ? `AI recommends size ${fitCheckData.recommendedSize} for you` : "Get your AI Fit Recommendation")}
+                                </div>
+                                <div className="text-xs text-muted-foreground">
+                                    {fitCheckLoading ? "Using your measurements" : "Based on your profile"}
+                                </div>
+                            </div>
                         </div>
+                        <ChevronRight className="h-4 w-4 text-muted-foreground" />
                     </div>
-                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                </div>
-            </DialogTrigger>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>AI Fit Analysis</DialogTitle>
-                    <DialogDescription>
-                        We analyzed your previous purchases and profile measurements.
-                        This brand typically runs true to size.
-                    </DialogDescription>
-                </DialogHeader>
-                {/* Mock chart or details */}
-                <div className="h-40 bg-muted rounded-md flex items-center justify-center text-muted-foreground">
-                    Fit Graph Placeholder
-                </div>
-            </DialogContent>
-        </Dialog>
+                </DialogTrigger>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle className="flex items-center gap-2"><Bot className="h-5 w-5 text-yellow-500"/> AI Fit Analysis</DialogTitle>
+                        <DialogDescription>
+                            We analyzed your measurements and the brand's typical sizing chart.
+                        </DialogDescription>
+                    </DialogHeader>
+                    {fitCheckLoading ? (
+                         <div className="h-40 bg-muted rounded-md flex items-center justify-center text-muted-foreground">
+                             Loading your personalized fit data...
+                         </div>
+                    ) : fitCheckData ? (
+                        <div className="space-y-4 pt-4">
+                            <div className="p-4 bg-muted/50 rounded-lg border border-border">
+                                <h4 className="font-semibold text-lg flex items-center gap-2">
+                                     <Sparkles className="h-4 w-4 text-yellow-500" />
+                                     Recommended Size: {fitCheckData.recommendedSize}
+                                </h4>
+                                <p className="text-sm text-muted-foreground mt-2">{fitCheckData.explanation}</p>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="p-3 border rounded-md">
+                                     <p className="text-xs text-muted-foreground mb-1">Expected Fit</p>
+                                     <p className="font-medium capitalize">{fitCheckData.fitType || "Regular"}</p>
+                                </div>
+                                <div className="p-3 border rounded-md">
+                                     <p className="text-xs text-muted-foreground mb-1">Confidence Score</p>
+                                     <p className="font-medium">{fitCheckData.confidence || 85}%</p>
+                                </div>
+                            </div>
+                        </div>
+                    ) : (
+                         <div className="h-40 bg-muted rounded-md flex items-center justify-center text-muted-foreground">
+                             Please complete your profile measurements for an accurate fit check.
+                         </div>
+                    )}
+                </DialogContent>
+            </Dialog>
+        )}
 
         {/* Variants */}
         <div className="space-y-4">
