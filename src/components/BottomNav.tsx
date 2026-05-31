@@ -27,6 +27,7 @@ export default function BottomNav() {
               key={item.href}
               href={item.href}
               className="flex flex-col items-center gap-1 py-1 group relative"
+              aria-current={isActive ? "page" : undefined}
             >
               <div className={`p-1.5 rounded-xl transition-all ${
                 isActive ? "text-foreground bg-secondary" : "text-muted-foreground hover:text-foreground"
