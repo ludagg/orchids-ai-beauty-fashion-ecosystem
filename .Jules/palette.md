@@ -53,6 +53,10 @@
 **Learning:** For lists where items trigger actions (like marking as read or navigating), using semantic `<button>` elements instead of `div` with `onClick` is essential for keyboard accessibility. Combining this with a descriptive `aria-label` that includes the read status and content ensures a transparent experience for screen reader users.
 **Action:** Always refactor interactive list items to semantic `<button>` elements. Use a pattern like `aria-label="${isRead ? '' : 'Unread: '}${title}. ${message}"` for content-rich notification items.
 
+## 2026-06-01 - Accessible Card Interactions
+**Learning:** Nesting interactive elements like buttons inside a card-wide `Link` is invalid HTML and breaks keyboard/screen reader navigation. The "stretched link" pattern—using a relative container with an absolute-positioned primary link and sibling interactive elements—allows for a fully clickable card while maintaining accessible nested actions.
+**Action:** Use the `group relative` container pattern for cards. Implement the primary navigation as an absolute `Link` with `inset-0`. Wrap secondary interactive elements in `pointer-events-auto` and higher `z-index`, while marking non-interactive content with `pointer-events-none`.
+
 ## 2026-03-15 - Themed Deletion Confirmation
 **Learning:** Replacing native browser `confirm()` with themed `AlertDialog` components not only improves visual consistency but also provides a better UX by allowing for integrated loading states (spinners) directly on the confirmation action. This prevents "double-click" issues and gives users clear feedback that their destructive action is being processed.
 **Action:** Replace `confirm()` with `AlertDialog`. Always include a `disabled` state and a loading indicator on the primary action button during asynchronous operations.
