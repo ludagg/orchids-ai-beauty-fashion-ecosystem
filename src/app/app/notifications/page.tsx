@@ -8,9 +8,9 @@ import {
   MessageSquare,
   Calendar,
   Info,
-  Check,
-  Loader2
+  Check
 } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
 import { useRouter } from "next/navigation";
 import { formatDistanceToNow } from "date-fns";
 import { cn } from "@/lib/utils";
@@ -118,7 +118,7 @@ export default function NotificationsPage() {
       <div className="bg-card border border-border rounded-xl overflow-hidden shadow-sm">
         {loading ? (
           <div className="flex flex-col items-center justify-center p-12 text-muted-foreground">
-            <Loader2 className="w-8 h-8 animate-spin mb-4" />
+            <Spinner className="size-8 mb-4" />
             <p>Loading notifications...</p>
           </div>
         ) : notifications.length === 0 ? (
@@ -141,7 +141,7 @@ export default function NotificationsPage() {
                     "p-6 flex gap-4 hover:bg-secondary/50 transition-colors w-full text-left focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
                     !notification.isRead && "bg-secondary/30"
                   )}
-                  aria-label={`${notification.isRead ? '' : 'Unread: '}${notification.title}. ${notification.message}`}
+                  aria-label={`${notification.isRead ? '' : 'Unread: '}${notification.title}. ${notification.message}. ${formatDistanceToNow(new Date(notification.createdAt), { addSuffix: true })}`}
                 >
                   <div className={cn("w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0", style.bg, "dark:bg-primary/10")}>
                     <style.icon className={cn("w-6 h-6", style.color)} />
