@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Bell, Package, Sparkles, Heart, MessageSquare, Calendar, Info, Check } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
 import {
   Popover,
   PopoverContent,
@@ -135,8 +136,9 @@ export default function NotificationBell() {
         </div>
         <div className="max-h-[400px] overflow-y-auto">
           {loading ? (
-            <div className="p-4 text-center text-sm text-muted-foreground" role="status">
-              Loading...
+            <div className="p-8 flex flex-col items-center justify-center gap-2" role="status">
+              <Spinner className="size-6 text-muted-foreground" />
+              <span className="sr-only">Loading notifications...</span>
             </div>
           ) : notifications.length === 0 ? (
             <div className="p-4 text-center text-sm text-muted-foreground" role="status">
@@ -154,6 +156,7 @@ export default function NotificationBell() {
                       className={`w-full text-left p-4 flex gap-3 hover:bg-secondary transition-colors cursor-pointer border-b border-border last:border-0 ${
                         !notification.isRead ? "bg-secondary/30" : ""
                       }`}
+                      aria-label={`${notification.isRead ? '' : 'Unread: '}${notification.title}. ${notification.message}. ${formatDistanceToNow(new Date(notification.createdAt), { addSuffix: true })}`}
                     >
                       <div
                         className={`w-10 h-10 rounded-full ${style.bg} dark:bg-primary/10 flex items-center justify-center flex-shrink-0`}

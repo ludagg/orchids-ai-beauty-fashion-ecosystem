@@ -64,3 +64,7 @@
 ## 2026-04-13 - Profile UX Standardization
 **Learning:** For high-traffic profile pages, standardizing on unified `Empty` and `Spinner` primitives ensures a consistent brand voice across all tabs. Additionally, adding explicit `aria-label` attributes to numerical statistics (Followers, Following, etc.) provides essential context for screen reader users who might otherwise hear only the number or a truncated label.
 **Action:** Always refactor custom loading/empty states to use the standard UI library. Audit interactive statistics and ensured they have descriptive `aria-label` attributes that combine the value and the metric name.
+
+## 2026-06-02 - Accessible Notification State Parity
+**Learning:** When using `aria-label` to provide context for interactive items (like notifications), it completely overrides the element's internal text content. Omitting dynamic data like timestamps from the label creates an information gap for screen reader users. Additionally, providing visually hidden `sr-only` text next to `Spinner` components ensures that loading states are programmatically announced even when visually represented by an icon.
+**Action:** Always include all critical information (title, message, timestamp) in `aria-label` when overriding element content. Use `role="status"` and `sr-only` text for accessible loading indicators.
