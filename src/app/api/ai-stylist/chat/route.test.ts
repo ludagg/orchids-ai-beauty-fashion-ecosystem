@@ -36,10 +36,21 @@ vi.mock('@google/generative-ai', () => {
 });
 
 // Mock next/server response
-vi.mock('next/server', async () => {
-  const actual = await vi.importActual<typeof import('next/server')>('next/server');
+vi.mock('next/server', () => {
   return {
-    ...actual,
+    NextRequest: class MockNextRequest {
+      url: string;
+      method: string;
+      bodyText: string;
+      constructor(url: string, init: any) {
+        this.url = url;
+        this.method = init.method;
+        this.bodyText = init.body;
+      }
+      async json() {
+        return JSON.parse(this.bodyText);
+      }
+    },
     NextResponse: {
       json: vi.fn((data, options) => ({ ...data, ...options }))
     }
