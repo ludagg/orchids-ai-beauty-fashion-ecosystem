@@ -36,8 +36,8 @@ vi.mock('@google/generative-ai', () => {
 });
 
 // Mock next/server response
-vi.mock('next/server', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('next/server')>();
+vi.mock('next/server', async () => {
+  const actual = await vi.importActual<typeof import('next/server')>('next/server');
   return {
     ...actual,
     NextResponse: {
