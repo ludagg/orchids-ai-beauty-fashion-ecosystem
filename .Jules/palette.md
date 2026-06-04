@@ -64,3 +64,7 @@
 ## 2026-04-13 - Profile UX Standardization
 **Learning:** For high-traffic profile pages, standardizing on unified `Empty` and `Spinner` primitives ensures a consistent brand voice across all tabs. Additionally, adding explicit `aria-label` attributes to numerical statistics (Followers, Following, etc.) provides essential context for screen reader users who might otherwise hear only the number or a truncated label.
 **Action:** Always refactor custom loading/empty states to use the standard UI library. Audit interactive statistics and ensured they have descriptive `aria-label` attributes that combine the value and the metric name.
+
+## 2026-06-04 - Accessible Star Rating Displays
+**Learning:** Informative star rating displays are often invisible to screen readers if they only use icons. Wrapping the entire rating group in a container with `role="img"` and a descriptive `aria-label` (e.g., "4.5 out of 5 stars") provides immediate and clear context, while `aria-hidden="true"` on the individual icons prevents redundant announcements.
+**Action:** Always wrap star rating groups in a `role="img"` container with a clear `aria-label`. Ensure individual decorative icons within the group are hidden from assistive technology.
