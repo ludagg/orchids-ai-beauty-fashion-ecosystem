@@ -29,8 +29,10 @@ export default function CheckoutPage() {
   const [loading, setLoading] = useState(false);
   const [cartTotal, setCartTotal] = useState(0);
   const [promoCode, setPromoCode] = useState('');
+  const [isApplying, setIsApplying] = useState(false);
   const [appliedPromo, setAppliedPromo] = useState<{ code: string; discount: number } | null>(null);
 
+  /* [Jules - Enhance Checkout page with promo code loading feedback] */
   // Fetch cart total
   useEffect(() => {
       fetch('/api/cart')
@@ -46,16 +48,25 @@ export default function CheckoutPage() {
         });
   }, []);
 
-  const handleApplyPromo = () => {
+  const handleApplyPromo = async () => {
     const upper = promoCode.trim().toUpperCase();
     if (!upper) return;
-    if (appliedPromo?.code === upper) { toast.error("Promo code already applied"); return; }
+    if (appliedPromo?.code === upper) {
+      toast.error("Promo code already applied");
+      return;
+    }
+
+    setIsApplying(true);
+    // Mock delay for UX feedback
+    await new Promise(resolve => setTimeout(resolve, 800));
+
     if (PROMO_CODES[upper]) {
       setAppliedPromo({ code: upper, discount: PROMO_CODES[upper] });
       toast.success(`Promo code applied — ${PROMO_CODES[upper]}% off!`);
     } else {
       toast.error("Invalid promo code");
     }
+    setIsApplying(false);
   };
 
   const removePromo = () => {
@@ -194,7 +205,14 @@ export default function CheckoutPage() {
                           onKeyDown={e => e.key === "Enter" && handleApplyPromo()}
                           className="bg-background font-mono uppercase text-sm"
                         />
-                        <Button variant="outline" onClick={handleApplyPromo} className="shrink-0">Apply</Button>
+                        <Button
+                          variant="outline"
+                          onClick={handleApplyPromo}
+                          disabled={isApplying || !promoCode.trim()}
+                          className="shrink-0"
+                        >
+                          {isApplying ? <Spinner className="h-4 w-4" /> : "Apply"}
+                        </Button>
                       </div>
                     )}
 
