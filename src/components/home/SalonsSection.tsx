@@ -35,8 +35,12 @@ export default function SalonsSection() {
                     <p className="font-semibold text-lg text-foreground">Luxe Beauty Lounge</p>
                     <p className="text-muted-foreground text-sm">Koramangala, Bangalore</p>
                   </div>
-                  <div className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary">
-                    <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+                  <div
+                    className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary"
+                    role="img"
+                    aria-label="4.9 out of 5 stars"
+                  >
+                    <Star className="w-4 h-4 fill-amber-400 text-amber-400" aria-hidden="true" />
                     <span className="text-sm font-medium">4.9</span>
                   </div>
                 </div>

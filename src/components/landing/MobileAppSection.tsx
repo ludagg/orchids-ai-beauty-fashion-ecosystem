@@ -52,9 +52,13 @@ export default function MobileAppSection() {
               </div>
 
               <div className="flex items-center gap-2 mt-8 justify-center md:justify-start">
-                <div className="flex">
+                <div
+                  className="flex"
+                  role="img"
+                  aria-label="4.9 out of 5 stars"
+                >
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 text-amber-400 fill-amber-400" />
+                    <Star key={i} className="w-4 h-4 text-amber-400 fill-amber-400" aria-hidden="true" />
                   ))}
                 </div>
                 <p className="text-sm font-medium">4.9/5 rating on App Store</p>

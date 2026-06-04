@@ -58,9 +58,13 @@ export default function TestimonialsSection() {
               transition={{ delay: i * 0.1 }}
               className="p-8 rounded-3xl bg-background border border-border relative group hover:shadow-xl hover:shadow-foreground/5 transition-all duration-300"
             >
-              <div className="flex gap-1 mb-6">
+              <div
+                className="flex gap-1 mb-6"
+                role="img"
+                aria-label={`${testimonial.rating} out of 5 stars`}
+              >
                 {[...Array(testimonial.rating)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" aria-hidden="true" />
                 ))}
               </div>
               <p className="text-foreground text-lg leading-relaxed mb-8">
