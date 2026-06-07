@@ -55,7 +55,7 @@ export default function SearchBar({ value, onChange, onSubmit, placeholder = "Se
         type="search"
         aria-label="Search"
         placeholder={placeholder}
-        className="w-full pl-10 pr-14 py-2 bg-secondary border-transparent focus:bg-card focus:border-border focus-visible:ring-2 focus-visible:ring-ring rounded-full text-sm transition-all outline-none text-foreground"
+        className="w-full pl-12 pr-14 py-2 bg-secondary border-transparent focus:bg-card focus:border-border focus-visible:ring-2 focus-visible:ring-ring rounded-full text-sm transition-all outline-none text-foreground"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         onKeyDown={handleKeyDown}
