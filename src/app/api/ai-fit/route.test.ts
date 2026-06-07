@@ -65,8 +65,11 @@ class MockNextRequest extends Request {
 
 describe('POST /api/ai-fit', () => {
 
-    beforeEach(() => {
+    beforeEach(async () => {
         vi.clearAllMocks();
+        // Reset rate limiter mock check explicitly
+        const rateLimitMock = await import('@/lib/rate-limit');
+        rateLimitMock.default().check = vi.fn().mockResolvedValue(true);
     });
 
     test('should return 401 if unauthorized', async () => {
