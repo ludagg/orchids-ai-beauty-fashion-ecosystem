@@ -8,11 +8,13 @@ vi.mock('next/headers', () => ({
 }));
 
 // 2. Mock Rate Limit
-vi.mock('@/lib/rate-limit', () => ({
-    default: () => ({
-        check: vi.fn().mockResolvedValue(true),
-    })
-}));
+vi.mock('@/lib/rate-limit', () => {
+    return {
+        default: () => ({
+            check: () => Promise.resolve(), // In our actual rateLimit, it rejects on failure, resolves void on success
+        })
+    }
+});
 
 // 3. Mock Better Auth
 const mockGetSession = vi.fn();
@@ -65,11 +67,8 @@ class MockNextRequest extends Request {
 
 describe('POST /api/ai-fit', () => {
 
-    beforeEach(async () => {
+    beforeEach(() => {
         vi.clearAllMocks();
-        // Reset rate limiter mock check explicitly
-        const rateLimitMock = await import('@/lib/rate-limit');
-        rateLimitMock.default().check = vi.fn().mockResolvedValue(true);
     });
 
     test('should return 401 if unauthorized', async () => {
