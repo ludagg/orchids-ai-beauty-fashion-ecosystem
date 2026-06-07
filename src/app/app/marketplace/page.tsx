@@ -3,18 +3,23 @@
 import { motion } from "framer-motion";
 import {
   ShoppingBag,
-  Search,
   Filter,
-  Heart,
-  ChevronRight,
   Star,
-  ArrowRight,
-  TrendingUp,
   Tag,
   Loader2
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { useState, useEffect } from "react";
+import { cn } from "@/lib/utils";
+import SearchBar from "@/components/SearchBar";
+import {
+  Empty,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+  EmptyDescription,
+} from "@/components/ui/empty";
 
 const CATEGORIES = ["All", "Clothing", "Beauty & Skincare", "Hair Care", "Nail Care", "Fragrances", "Accessories", "Wellness"];
 
@@ -40,15 +45,17 @@ const ProductImage = ({ src, alt, className }: { src?: string | null, alt: strin
   }, [src]);
 
   return (
-    <img
+    <Image
       src={imgSrc}
       alt={alt}
-      className={className}
+      fill
+      className={cn("object-cover transition-transform duration-700 ease-out", className)}
       onError={() => {
         if (imgSrc !== "/images/product-placeholder.png") {
           setImgSrc("/images/product-placeholder.png");
         }
       }}
+      sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
     />
   );
 };
@@ -104,17 +111,16 @@ export default function MarketplacePage() {
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="relative group hidden sm:block">
-             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-             <input
-               type="text"
-               placeholder="Search products..."
-               className="pl-9 pr-4 py-2.5 rounded-xl border border-border bg-card text-sm focus:ring-2 focus:ring-primary/5 transition-all outline-none w-48 text-foreground"
-               value={searchQuery}
-               onChange={(e) => setSearchQuery(e.target.value)}
-             />
-          </div>
-          <button className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-border bg-card text-foreground text-sm font-medium hover:bg-secondary transition-all">
+          <SearchBar
+            value={searchQuery}
+            onChange={setSearchQuery}
+            placeholder="Search products..."
+            className="hidden sm:block w-64"
+          />
+          <button
+            aria-label="Filter products"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-border bg-card text-foreground text-sm font-medium hover:bg-secondary transition-all"
+          >
             <Filter className="w-4 h-4" />
             Filters
           </button>
@@ -127,6 +133,7 @@ export default function MarketplacePage() {
           <button
             key={category}
             onClick={() => setSelectedCategory(category)}
+            aria-pressed={selectedCategory === category}
             className={`px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
               selectedCategory === category
                 ? "bg-primary text-primary-foreground shadow-md"
@@ -144,8 +151,18 @@ export default function MarketplacePage() {
             <Loader2 className="w-10 h-10 animate-spin text-primary" />
         </div>
       ) : products.length === 0 ? (
-        <div className="text-center py-20 text-muted-foreground">
-            <p>No products found.</p>
+        <div className="py-20">
+          <Empty>
+            <EmptyHeader>
+              <EmptyMedia>
+                <ShoppingBag className="w-12 h-12 text-muted-foreground" />
+              </EmptyMedia>
+              <EmptyTitle>No products found</EmptyTitle>
+              <EmptyDescription>
+                We couldn&apos;t find any products matching your current filters or search query.
+              </EmptyDescription>
+            </EmptyHeader>
+          </Empty>
         </div>
       ) : (
         <section className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
