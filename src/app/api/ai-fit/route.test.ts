@@ -9,9 +9,11 @@ vi.mock('next/headers', () => ({
 
 // 2. Mock Rate Limit
 vi.mock('@/lib/rate-limit', () => {
+    const mockCheckFn = vi.fn().mockResolvedValue(undefined);
     return {
+        __mockCheck: mockCheckFn,
         default: () => ({
-            check: () => Promise.resolve(), // In our actual rateLimit, it rejects on failure, resolves void on success
+            check: mockCheckFn,
         })
     }
 });
@@ -67,8 +69,10 @@ class MockNextRequest extends Request {
 
 describe('POST /api/ai-fit', () => {
 
-    beforeEach(() => {
+    beforeEach(async () => {
         vi.clearAllMocks();
+        const rateLimitMod = await import('@/lib/rate-limit');
+        (rateLimitMod as any).__mockCheck.mockResolvedValue(undefined); // Explicitly reset resolution to success
     });
 
     test('should return 401 if unauthorized', async () => {
