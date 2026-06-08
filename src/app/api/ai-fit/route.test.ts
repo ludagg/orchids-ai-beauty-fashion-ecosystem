@@ -63,14 +63,14 @@ describe('POST /api/ai-fit', () => {
   };
 
   it('should return 401 if user is not authenticated', async () => {
-    vi.mocked(auth.api.getSession).mockResolvedValueOnce(null);
+    (vi as any).mocked(auth.api.getSession).mockResolvedValueOnce(null);
     const req = createRequest({ productId: mockProductId });
     const res = await POST(req);
     expect(res.status).toBe(401);
   });
 
   it('should return 400 if productId is missing', async () => {
-    vi.mocked(auth.api.getSession).mockResolvedValueOnce({
+    (vi as any).mocked(auth.api.getSession).mockResolvedValueOnce({
       user: { id: mockUserId, email: 'test@example.com', emailVerified: true, name: 'Test', createdAt: new Date(), updatedAt: new Date() },
       session: { id: 'sess_1', userId: mockUserId, expiresAt: new Date(), ipAddress: '127.0.0.1', userAgent: 'test', token: 'test' }
     });
@@ -80,11 +80,11 @@ describe('POST /api/ai-fit', () => {
   });
 
   it('should return 400 with MISSING_MEASUREMENTS code if user has no profile data', async () => {
-    vi.mocked(auth.api.getSession).mockResolvedValueOnce({
+    (vi as any).mocked(auth.api.getSession).mockResolvedValueOnce({
       user: { id: mockUserId, email: 'test@example.com', emailVerified: true, name: 'Test', createdAt: new Date(), updatedAt: new Date() },
       session: { id: 'sess_1', userId: mockUserId, expiresAt: new Date(), ipAddress: '127.0.0.1', userAgent: 'test', token: 'test' }
     });
-    vi.mocked(db.query.products.findFirst).mockResolvedValueOnce({
+    (vi as any).mocked(db.query.products.findFirst).mockResolvedValueOnce({
       id: mockProductId,
       name: 'Test Shirt',
       brand: 'BrandX',
@@ -92,7 +92,7 @@ describe('POST /api/ai-fit', () => {
       subcategory: 'Shirts',
       description: 'A nice shirt',
     } as any);
-    vi.mocked(db.query.users.findFirst).mockResolvedValueOnce({
+    (vi as any).mocked(db.query.users.findFirst).mockResolvedValueOnce({
       id: mockUserId,
       height: null,
       weight: null,
@@ -109,11 +109,11 @@ describe('POST /api/ai-fit', () => {
   });
 
   it('should call Gemini API and return recommendation if profile data exists', async () => {
-    vi.mocked(auth.api.getSession).mockResolvedValueOnce({
+    (vi as any).mocked(auth.api.getSession).mockResolvedValueOnce({
       user: { id: mockUserId, email: 'test@example.com', emailVerified: true, name: 'Test', createdAt: new Date(), updatedAt: new Date() },
       session: { id: 'sess_1', userId: mockUserId, expiresAt: new Date(), ipAddress: '127.0.0.1', userAgent: 'test', token: 'test' }
     });
-    vi.mocked(db.query.products.findFirst).mockResolvedValueOnce({
+    (vi as any).mocked(db.query.products.findFirst).mockResolvedValueOnce({
       id: mockProductId,
       name: 'Test Shirt',
       brand: 'BrandX',
@@ -121,7 +121,7 @@ describe('POST /api/ai-fit', () => {
       subcategory: 'Shirts',
       description: 'A nice shirt',
     } as any);
-    vi.mocked(db.query.users.findFirst).mockResolvedValueOnce({
+    (vi as any).mocked(db.query.users.findFirst).mockResolvedValueOnce({
       id: mockUserId,
       height: '180cm',
       weight: '75kg',
