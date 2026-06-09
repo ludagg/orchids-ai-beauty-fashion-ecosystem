@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Star, Heart, Share2, MapPin, ChevronRight, Check, ShieldCheck, Ruler } from 'lucide-react';
@@ -30,6 +30,23 @@ export default function ProductDetailPage() {
   const [quantity, setQuantity] = useState(1);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setSelectedIndex(emblaApi.selectedScrollSnap());
+  }, [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    onSelect();
+    emblaApi.on('select', onSelect);
+    emblaApi.on('reInit', onSelect);
+  }, [emblaApi, onSelect]);
+
+  const scrollTo = useCallback((index: number) => {
+    if (emblaApi) emblaApi.scrollTo(index);
+  }, [emblaApi]);
 
   const toggleWishlist = async () => {
     const newState = !isWishlisted;
@@ -181,9 +198,18 @@ export default function ProductDetailPage() {
                 </div>
             ))}
         </div>
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1">
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5">
              {[product.mainImageUrl, ...(product.galleryUrls || [])].map((_, index) => (
-                 <div key={index} className="h-1.5 w-1.5 rounded-full bg-white/50" />
+                 <button
+                  key={index}
+                  onClick={() => scrollTo(index)}
+                  className={cn(
+                    "h-1.5 rounded-full transition-all duration-300",
+                    selectedIndex === index ? "w-4 bg-white" : "w-1.5 bg-white/50 hover:bg-white/80"
+                  )}
+                  aria-label={`Go to slide ${index + 1}`}
+                  aria-current={selectedIndex === index}
+                />
              ))}
         </div>
       </div>
