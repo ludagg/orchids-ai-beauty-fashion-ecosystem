@@ -64,3 +64,7 @@
 ## 2026-04-13 - Profile UX Standardization
 **Learning:** For high-traffic profile pages, standardizing on unified `Empty` and `Spinner` primitives ensures a consistent brand voice across all tabs. Additionally, adding explicit `aria-label` attributes to numerical statistics (Followers, Following, etc.) provides essential context for screen reader users who might otherwise hear only the number or a truncated label.
 **Action:** Always refactor custom loading/empty states to use the standard UI library. Audit interactive statistics and ensured they have descriptive `aria-label` attributes that combine the value and the metric name.
+
+## 2026-04-14 - Product Detail Page UX Standard
+**Learning:** `src/app/app/shop/product/[id]/page.tsx` incorporates Tooltip-wrapped icon buttons in the sticky header (Back, Share, Wishlist) with explicit `aria-label` attributes. The image gallery features interactive `<button type="button">` pagination dots that use `aria-current` and dynamic width styling to indicate the active slide, synchronized via `emblaApi.selectedScrollSnap()` and 'select'/'reInit' event listeners. Using `@number-flow/react` for prices adds an accessible, high-quality animation that delights users during price transitions.
+**Action:** Always wrap header icon-only actions in `Tooltip` + `aria-label` pairs. Ensure image galleries use semantic, interactive pagination triggers with clear active states.
