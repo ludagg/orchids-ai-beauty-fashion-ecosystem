@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Minus, Plus, Trash2, ArrowRight, ShoppingCart } from 'lucide-react';
+import NumberFlow from '@number-flow/react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -179,12 +180,14 @@ export default function CartPage() {
     return sum + (price * item.quantity);
   }, 0);
 
+  const CURRENCY_FORMAT = {
+    style: 'currency',
+    currency: 'INR',
+    maximumFractionDigits: 0,
+  };
+
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 0,
-    }).format(price / 100);
+    return new Intl.NumberFormat('en-IN', CURRENCY_FORMAT).format(price / 100);
   };
 
   return (
@@ -220,7 +223,11 @@ export default function CartPage() {
                                                 {item.selectedOptions?.size && `Size: ${item.selectedOptions.size.name}`}
                                             </p>
                                         </div>
-                                        <p className="font-semibold">{formatPrice(price * item.quantity)}</p>
+                                        <NumberFlow
+                                          value={(price * item.quantity) / 100}
+                                          format={CURRENCY_FORMAT}
+                                          className="font-semibold"
+                                        />
                                     </div>
                                     <div className="flex items-center justify-between mt-2">
                                         <div className="flex items-center border rounded-md overflow-hidden">
@@ -234,9 +241,11 @@ export default function CartPage() {
                                             >
                                                 <Minus className="h-3 w-3" />
                                             </Button>
-                                            <span className="w-8 text-center text-sm font-medium" aria-label={`Quantity: ${item.quantity}`}>
-                                              {item.quantity}
-                                            </span>
+                                            <NumberFlow
+                                              value={item.quantity}
+                                              className="w-8 text-center text-sm font-medium"
+                                              aria-label={`Quantity: ${item.quantity}`}
+                                            />
                                             <Button
                                               variant="ghost"
                                               size="icon"
@@ -277,15 +286,25 @@ export default function CartPage() {
       <div className="mt-8 space-y-4 rounded-lg border bg-card p-4 shadow-sm">
         <div className="flex justify-between text-sm">
             <span>Subtotal</span>
-            <span>{formatPrice(subtotal)}</span>
+            <NumberFlow
+              value={subtotal / 100}
+              format={CURRENCY_FORMAT}
+            />
         </div>
         <div className="flex gap-2">
-            <Input placeholder="Enter promo code" className="bg-background" />
-            <Button variant="outline">Apply</Button>
+            <Input
+              placeholder="Enter promo code"
+              className="bg-background"
+              aria-label="Promo code"
+            />
+            <Button variant="outline" aria-label="Apply promo code">Apply</Button>
         </div>
         <div className="border-t pt-4 flex justify-between font-bold text-lg">
             <span>Total</span>
-            <span>{formatPrice(subtotal)}</span>
+            <NumberFlow
+              value={subtotal / 100}
+              format={CURRENCY_FORMAT}
+            />
         </div>
         <Button className="w-full bg-yellow-500 text-black hover:bg-yellow-600 font-bold h-12" onClick={() => router.push('/app/checkout')}>
             Proceed to Booking <ArrowRight className="ml-2 h-4 w-4" />
