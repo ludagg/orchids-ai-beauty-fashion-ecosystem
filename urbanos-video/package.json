@@ -1,0 +1,13 @@
+{
+  "name": "urbanos-video",
+  "private": true,
+  "type": "module",
+  "description": "Renders the UrbanOS 'Vidéo Utilisateur' animation prototype to MP4.",
+  "scripts": {
+    "setup": "bash setup.sh",
+    "render": "node render.mjs"
+  },
+  "devDependencies": {
+    "playwright-core": "1.58.2"
+  }
+}

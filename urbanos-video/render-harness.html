@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<title>UrbanOS · render harness</title>
+<link rel="stylesheet" href="fonts/fonts.css" />
+<style>
+  html, body { margin:0; padding:0; background:#f5f1e8; }
+  /* Authored canvas at 1:1 — no scaling, no playback chrome. */
+  #frame { position:relative; width:1920px; height:1080px; background:#f5f1e8; overflow:hidden; }
+</style>
+<script>
+  // video-kit.jsx injects a Google-Fonts <link> at runtime; that CDN may be
+  // unreachable in the render sandbox, so pre-register the id to make the
+  // injection a no-op — the fonts are already vendored locally above.
+  if (document.head) {
+    var s = document.createElement('span'); s.id = 'vid-fonts'; s.style.display='none';
+    document.head.appendChild(s);
+  }
+</script>
+</head>
+<body>
+<div id="frame"></div>
+
+<script src="vendor/react.js"></script>
+<script src="vendor/react-dom.js"></script>
+<script src="vendor/babel.js"></script>
+
+<script type="text/babel" src="src/animations.jsx"></script>
+<script type="text/babel" src="src/video-kit.jsx"></script>
+<script type="text/babel" src="src/video-kit-light.jsx"></script>
+<script type="text/babel" src="src/video-user-scenes.jsx"></script>
+
+<script type="text/babel" data-presets="env,react">
+// Deterministic renderer: drives the scene tree at an externally supplied
+// time by supplying our own TimelineContext value instead of Stage's rAF loop.
+// Every animation in the kit is a pure function of the timeline `time`, so
+// stepping `time` frame-by-frame reproduces the film exactly.
+(function(){
+  const DURATION = 74;
+  let root = null;
+  let ready = false;
+
+  function mount(){
+    const { TimelineContext } = window;
+    const { USceneVille, USceneBenefices, USceneOutro } = window;
+    if (!TimelineContext || !USceneVille || !USceneBenefices || !USceneOutro) return false;
+
+    root = ReactDOM.createRoot(document.getElementById('frame'));
+
+    window.__DURATION = DURATION;
+    window.__renderFrame = function(t){
+      const value = { time: t, duration: DURATION, playing: false, setTime(){}, setPlaying(){} };
+      root.render(
+        React.createElement(TimelineContext.Provider, { value },
+          React.createElement(React.Fragment, null,
+            React.createElement(USceneVille, null),
+            React.createElement(USceneBenefices, null),
+            React.createElement(USceneOutro, null)
+          )
+        )
+      );
+    };
+    window.__renderFrame(0);
+    ready = true;
+    window.__harnessReady = true;
+    return true;
+  }
+
+  // Babel compiles the external .jsx scripts asynchronously; poll until the
+  // scene components register on window, then mount.
+  const iv = setInterval(function(){
+    if (ready) { clearInterval(iv); return; }
+    if (mount()) clearInterval(iv);
+  }, 50);
+})();
+</script>
+</body>
+</html>
