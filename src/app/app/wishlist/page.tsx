@@ -10,7 +10,6 @@ import {
   ArrowRight,
   Share2,
   Plus,
-  Loader2,
   Bell,
   BellOff,
   Link2,
@@ -32,6 +31,9 @@ import {
   EmptyTitle
 } from "@/components/ui/empty";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
+
+/* [Jules - Standardizing loading state and enhancing accessibility/UX] */
 
 const PRICE_ALERTS_KEY = "wishlist-price-alerts";
 
@@ -135,7 +137,7 @@ export default function WishlistPage() {
   if (loading) {
       return (
         <div className="flex justify-center items-center h-screen">
-            <Loader2 className="w-10 h-10 animate-spin text-primary" />
+            <Spinner className="w-10 h-10 text-primary" />
         </div>
       )
   }
@@ -154,21 +156,32 @@ export default function WishlistPage() {
 
         {validItems.length > 0 && (
             <div className="flex items-center gap-3">
-            <button
-              onClick={shareWishlist}
-              className="flex items-center gap-2 px-5 py-3 rounded-2xl border border-border text-sm font-bold hover:bg-muted transition-all"
-              aria-label="Share Wishlist"
-            >
-                <Link2 className="w-4 h-4" />
-                Share List
-            </button>
-            <button
-              className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-foreground text-white text-sm font-bold hover:bg-[#333] transition-all shadow-xl shadow-foreground/10"
-              aria-label="Add all items to bag"
-            >
-                <ShoppingBag className="w-4 h-4" />
-                Add All to Bag
-            </button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={shareWishlist}
+                  className="flex items-center gap-2 px-5 py-3 rounded-2xl border border-border text-sm font-bold hover:bg-muted transition-all"
+                  aria-label="Share Wishlist"
+                >
+                    <Link2 className="w-4 h-4" />
+                    Share List
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>Share your wishlist</TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-foreground text-white text-sm font-bold hover:bg-[#333] transition-all shadow-xl shadow-foreground/10"
+                  aria-label="Add all items to bag"
+                >
+                    <ShoppingBag className="w-4 h-4" />
+                    Add All to Bag
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>Add all items to your shopping bag</TooltipContent>
+            </Tooltip>
             </div>
         )}
       </section>
@@ -258,8 +271,12 @@ export default function WishlistPage() {
                     <Link href={link}>
                         <h3 className="font-semibold text-[15px] truncate text-foreground hover:text-rose-600 transition-colors cursor-pointer">{title}</h3>
                     </Link>
-                    <div className="flex items-center gap-1 text-xs font-bold bg-muted px-2 py-0.5 rounded-full">
-                        <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+                    <div
+                      role="img"
+                      aria-label={`Rating: ${rating} out of 5 stars`}
+                      className="flex items-center gap-1 text-xs font-bold bg-muted px-2 py-0.5 rounded-full"
+                    >
+                        <Star className="w-3 h-3 fill-amber-400 text-amber-400" aria-hidden="true" />
                         {rating}
                     </div>
                     </div>
