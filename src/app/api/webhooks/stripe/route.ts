@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { db } from "@/lib/db";
 import { orders, orderItems, products } from "@/db/schema/commerce";
+import { users } from "@/db/schema/auth";
 import { eq, sql, and, ne } from "drizzle-orm";
 
 export async function POST(req: NextRequest) {
@@ -23,6 +24,49 @@ export async function POST(req: NextRequest) {
 
   // Handle the event
   switch (event.type) {
+    case "checkout.session.completed": {
+      const session = event.data.object;
+
+      if (session.mode === "subscription") {
+        const userId = session.metadata?.userId;
+        if (userId) {
+          await db.update(users).set({
+            stripeCustomerId: session.customer as string,
+            stripeSubscriptionId: session.subscription as string,
+          }).where(eq(users.id, userId));
+          console.log(`Updated user ${userId} with new subscription ${session.subscription}`);
+        }
+      }
+      break;
+    }
+    case "invoice.payment_succeeded": {
+      const invoice = event.data.object;
+
+      if (invoice.subscription) {
+        // Find user by customer ID and update subscription period end
+        const subscription = await stripe.subscriptions.retrieve(invoice.subscription as string);
+
+        await db.update(users).set({
+          stripePriceId: subscription.items.data[0].price.id,
+          stripeCurrentPeriodEnd: new Date(subscription.current_period_end * 1000),
+        }).where(eq(users.stripeCustomerId, invoice.customer as string));
+
+        console.log(`Updated subscription ${invoice.subscription} period end`);
+      }
+      break;
+    }
+    case "customer.subscription.deleted": {
+      const subscription = event.data.object;
+
+      await db.update(users).set({
+        stripeSubscriptionId: null,
+        stripePriceId: null,
+        stripeCurrentPeriodEnd: null,
+      }).where(eq(users.stripeCustomerId, subscription.customer as string));
+
+      console.log(`Cancelled subscription ${subscription.id}`);
+      break;
+    }
     case "payment_intent.succeeded":
       const paymentIntent = event.data.object;
       const orderId = paymentIntent.metadata.orderId;
