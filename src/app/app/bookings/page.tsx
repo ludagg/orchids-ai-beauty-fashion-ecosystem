@@ -16,7 +16,6 @@ import {
   Package,
   Truck,
   RotateCcw,
-  Loader2,
   ShoppingBag,
   PenSquare
 } from "lucide-react";
@@ -27,6 +26,15 @@ import { format } from "date-fns";
 import { toast } from "sonner";
 import { ReviewForm } from "@/components/reviews/ReviewForm";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Spinner } from "@/components/ui/spinner";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -223,17 +231,49 @@ export default function BookingsAndOrdersPage() {
         )}
 
         {loading ? (
+             /* [Jules - Use unified Spinner component] */
              <div className="flex justify-center py-20">
-                <Loader2 className="w-10 h-10 animate-spin text-primary" />
+                <Spinner className="w-10 h-10 text-primary" />
              </div>
         ) : activeTab === "Bookings" ? (
           filteredBookings.length === 0 ? (
-            <div className="text-center py-20 text-muted-foreground">
-              <p>{statusFilter === "All" ? "No bookings found." : `No ${statusFilter.toLowerCase()} bookings.`}</p>
-              {statusFilter !== "All"
-                ? <button onClick={() => setStatusFilter("All")} className="text-primary hover:underline mt-2 inline-block">View all bookings</button>
-                : <Link href="/app/salons" className="text-primary hover:underline mt-2 inline-block">Book an appointment</Link>
-              }
+            /* [Jules - Standardize empty states with branded radial grid] */
+            <div className="relative py-20 rounded-[40px] border border-dashed border-border overflow-hidden">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#e5e5e5_1px,transparent_1px)] dark:bg-[radial-gradient(circle_at_center,#262626_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)] -z-10" />
+              <Empty className="border-none bg-transparent shadow-none">
+                <EmptyHeader>
+                  <EmptyMedia variant="icon" className="bg-primary/10 text-primary">
+                    <Calendar className="w-6 h-6" />
+                  </EmptyMedia>
+                  <EmptyTitle className="text-2xl font-bold">
+                    {statusFilter === "All" ? "No bookings found" : `No ${statusFilter.toLowerCase()} bookings`}
+                  </EmptyTitle>
+                  <EmptyDescription className="max-w-xs mx-auto font-medium">
+                    {statusFilter === "All"
+                      ? "You haven't scheduled any appointments yet. Explore our top salons and book your first session!"
+                      : `It looks like you don't have any ${statusFilter.toLowerCase()} bookings at the moment.`}
+                  </EmptyDescription>
+                </EmptyHeader>
+                <EmptyContent>
+                  {statusFilter !== "All" ? (
+                    <button
+                      onClick={() => setStatusFilter("All")}
+                      className="px-6 py-2.5 rounded-xl bg-foreground text-background font-bold text-sm hover:opacity-90 transition-all"
+                      aria-label="View all bookings"
+                    >
+                      View all bookings
+                    </button>
+                  ) : (
+                    <Link
+                      href="/app/salons"
+                      className="px-6 py-2.5 rounded-xl bg-primary text-primary-foreground font-bold text-sm hover:opacity-90 transition-all"
+                      aria-label="Book an appointment"
+                    >
+                      Book an appointment
+                    </Link>
+                  )}
+                </EmptyContent>
+              </Empty>
             </div>
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -298,10 +338,18 @@ export default function BookingsAndOrdersPage() {
                   </div>
 
                   <div className="mt-8 flex flex-wrap items-center gap-3">
-                    <button className="flex-1 h-14 rounded-2xl bg-primary text-primary-foreground font-bold text-sm hover:opacity-90 transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary/10">
-                      <Navigation className="w-4 h-4" />
-                      Get Directions
-                    </button>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <button
+                          className="flex-1 h-14 rounded-2xl bg-primary text-primary-foreground font-bold text-sm hover:opacity-90 transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary/10"
+                          aria-label={`Get directions to ${booking.salon.name}`}
+                        >
+                          <Navigation className="w-4 h-4" aria-hidden="true" />
+                          Get Directions
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent>Get Directions</TooltipContent>
+                    </Tooltip>
 
                     <Tooltip>
                         <TooltipTrigger asChild>
@@ -311,26 +359,40 @@ export default function BookingsAndOrdersPage() {
                                 className="h-14 w-14 rounded-2xl border border-border flex items-center justify-center text-foreground hover:bg-muted transition-all"
                                 aria-label="Message Salon"
                             >
-                                {messageLoadingId === booking.id ? <Loader2 className="w-5 h-5 animate-spin" /> : <MessageCircle className="w-5 h-5" />}
+                                {messageLoadingId === booking.id ? <Spinner className="w-5 h-5" /> : <MessageCircle className="w-5 h-5" aria-hidden="true" />}
                             </button>
                         </TooltipTrigger>
                         <TooltipContent>Message Salon</TooltipContent>
                     </Tooltip>
 
                     {booking.status === 'completed' && (
-                        <button
-                            onClick={() => handleReview(booking.id, booking.salonId)}
-                            className="flex-1 h-14 rounded-2xl border border-border text-foreground font-bold text-sm hover:bg-muted transition-all flex items-center justify-center gap-2"
-                        >
-                            <PenSquare className="w-4 h-4" />
-                            Leave a Review
-                        </button>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <button
+                                onClick={() => handleReview(booking.id, booking.salonId)}
+                                className="flex-1 h-14 rounded-2xl border border-border text-foreground font-bold text-sm hover:bg-muted transition-all flex items-center justify-center gap-2"
+                                aria-label={`Leave a review for ${booking.salon.name}`}
+                            >
+                                <PenSquare className="w-4 h-4" aria-hidden="true" />
+                                Leave a Review
+                            </button>
+                          </TooltipTrigger>
+                          <TooltipContent>Leave a Review</TooltipContent>
+                        </Tooltip>
                     )}
 
                     {booking.status !== 'cancelled' && booking.status !== 'completed' && (
-                        <button className="flex-1 h-14 rounded-2xl border border-border text-foreground font-bold text-sm hover:bg-muted transition-all">
-                            Reschedule
-                        </button>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <button
+                              className="flex-1 h-14 rounded-2xl border border-border text-foreground font-bold text-sm hover:bg-muted transition-all"
+                              aria-label={`Reschedule appointment at ${booking.salon.name}`}
+                            >
+                                Reschedule
+                            </button>
+                          </TooltipTrigger>
+                          <TooltipContent>Reschedule</TooltipContent>
+                        </Tooltip>
                     )}
                     {(booking.status === 'pending' || booking.status === 'confirmed') && (
                         <Tooltip>
@@ -341,7 +403,7 @@ export default function BookingsAndOrdersPage() {
                                     className="h-14 w-14 rounded-2xl border border-border flex items-center justify-center text-muted-foreground hover:text-rose-600 hover:bg-rose-500/10 transition-all group/cancel"
                                     aria-label="Cancel Booking"
                                 >
-                                    {processingId === booking.id ? <Loader2 className="w-6 h-6 animate-spin" /> : <XCircle className="w-6 h-6" />}
+                                    {processingId === booking.id ? <Spinner className="w-6 h-6" /> : <XCircle className="w-6 h-6" aria-hidden="true" />}
                                 </button>
                             </TooltipTrigger>
                             <TooltipContent>Cancel Booking</TooltipContent>
@@ -354,9 +416,29 @@ export default function BookingsAndOrdersPage() {
           )
         ) : (
           orders.length === 0 ? (
-            <div className="text-center py-20 text-muted-foreground">
-                <p>No orders found.</p>
-                <Link href="/app/marketplace" className="text-primary hover:underline mt-2 inline-block">Browse Marketplace</Link>
+            /* [Jules - Standardize empty states with branded radial grid] */
+            <div className="relative py-20 rounded-[40px] border border-dashed border-border overflow-hidden">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#e5e5e5_1px,transparent_1px)] dark:bg-[radial-gradient(circle_at_center,#262626_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)] -z-10" />
+              <Empty className="border-none bg-transparent shadow-none">
+                <EmptyHeader>
+                  <EmptyMedia variant="icon" className="bg-primary/10 text-primary">
+                    <ShoppingBag className="w-6 h-6" />
+                  </EmptyMedia>
+                  <EmptyTitle className="text-2xl font-bold">No orders found</EmptyTitle>
+                  <EmptyDescription className="max-w-xs mx-auto font-medium">
+                    Your order history is empty. Check out our marketplace for the latest beauty products and fashion!
+                  </EmptyDescription>
+                </EmptyHeader>
+                <EmptyContent>
+                  <Link
+                    href="/app/marketplace"
+                    className="px-6 py-2.5 rounded-xl bg-primary text-primary-foreground font-bold text-sm hover:opacity-90 transition-all"
+                    aria-label="Browse Marketplace"
+                  >
+                    Browse Marketplace
+                  </Link>
+                </EmptyContent>
+              </Empty>
             </div>
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -455,12 +537,17 @@ export default function BookingsAndOrdersPage() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Keep Booking</AlertDialogCancel>
+            <AlertDialogCancel disabled={!!processingId}>Keep Booking</AlertDialogCancel>
             <AlertDialogAction
-              onClick={() => bookingToCancel && handleCancelBooking(bookingToCancel.id)}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={(e) => {
+                e.preventDefault();
+                bookingToCancel && handleCancelBooking(bookingToCancel.id);
+              }}
+              disabled={!!processingId}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90 min-w-[140px]"
             >
-              Cancel Appointment
+              {processingId ? <Spinner className="w-4 h-4 mr-2" /> : null}
+              {processingId ? "Cancelling..." : "Cancel Appointment"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
