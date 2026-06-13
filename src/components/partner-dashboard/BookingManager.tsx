@@ -1,5 +1,6 @@
 "use client";
 
+import { formatPrice } from '@/lib/utils';
 import { useState, useEffect } from "react";
 import { Loader2, Calendar, Clock, User, CheckCircle2, XCircle, Search, Filter, Mail, Phone, MapPin, DollarSign, TrendingUp, AlertCircle } from "lucide-react";
 import { format } from "date-fns";
@@ -89,10 +90,6 @@ export function BookingManager({ salonId }: BookingManagerProps) {
     const matchesStatus = filterStatus === "all" || booking.status === filterStatus;
     return matchesSearch && matchesStatus;
   });
-
-  const formatPrice = (cents: number) => {
-    return (cents / 100).toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
-  };
 
   // Stats Calculation
   const stats = {

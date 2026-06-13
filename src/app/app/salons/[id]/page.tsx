@@ -1,5 +1,6 @@
 "use client";
 
+import { formatPrice } from '@/lib/utils';
 import { motion } from "framer-motion";
 import {
   Scissors,
@@ -329,10 +330,6 @@ export default function SalonDetailsPage() {
             .then(res => res.json())
             .then(data => setReviews(data));
     }
-  };
-
-  const formatPrice = (cents: number) => {
-    return (cents / 100).toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
   };
 
   const selectedService = services.find(s => s.id === selectedServiceId);

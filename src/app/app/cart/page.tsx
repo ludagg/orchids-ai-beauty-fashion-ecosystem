@@ -1,5 +1,6 @@
 "use client";
 
+import { formatPrice } from '@/lib/utils';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
@@ -178,14 +179,6 @@ export default function CartPage() {
     const price = item.product.salePrice || item.product.originalPrice;
     return sum + (price * item.quantity);
   }, 0);
-
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 0,
-    }).format(price / 100);
-  };
 
   return (
     <div className="min-h-screen bg-background pb-24 container mx-auto px-4 py-6 max-w-3xl">

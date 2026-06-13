@@ -1,5 +1,6 @@
 "use client";
 
+import { formatPrice } from '@/lib/utils';
 import { motion } from "framer-motion";
 import {
   Calendar,
@@ -167,10 +168,6 @@ export default function BookingsAndOrdersPage() {
   const handleReview = (bookingId: string, salonId: string) => {
     setSelectedBookingForReview({ id: bookingId, salonId });
     setReviewModalOpen(true);
-  };
-
-  const formatPrice = (cents: number) => {
-    return (cents / 100).toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
   };
 
   const filteredBookings = statusFilter === "All"
