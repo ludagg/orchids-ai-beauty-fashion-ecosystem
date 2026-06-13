@@ -1,5 +1,6 @@
 "use client";
 
+import { formatPrice } from '@/lib/utils';
 import { motion } from "framer-motion";
 import {
   ShoppingBag,
@@ -89,10 +90,6 @@ export default function MarketplacePage() {
 
     return () => clearTimeout(timer);
   }, [selectedCategory, searchQuery]);
-
-  const formatPrice = (cents: number) => {
-    return (cents / 100).toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
-  };
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-8 max-w-[1400px] mx-auto w-full">
