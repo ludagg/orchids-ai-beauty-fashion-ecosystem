@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import {
   Scissors,
-  Search,
   MapPin,
   Star,
   ChevronRight,
@@ -12,10 +11,21 @@ import {
   Loader2,
   Map as MapIcon,
   List,
+  SearchX,
 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
+import SearchBar from "@/components/SearchBar";
+import { Button } from "@/components/ui/button";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
 
 const categories = ["All", "Hair", "Skin", "Spa", "Nails", "Grooming"];
 
@@ -48,6 +58,7 @@ export default function SalonsPage() {
   const [salons, setSalons] = useState<Salon[]>([]);
   const [loading, setLoading] = useState(true);
   const [mobileView, setMobileView] = useState<"list" | "map">("list");
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     async function fetchSalons() {
@@ -66,10 +77,23 @@ export default function SalonsPage() {
     fetchSalons();
   }, []);
 
+  const clearFilters = () => {
+    setSearchQuery("");
+    setSelectedCategory("All");
+    setSortBy(null);
+  };
+
   const filteredSalons = salons
-    .filter(
-      (salon) => selectedCategory === "All" || salon.type === selectedCategory
-    )
+    .filter((salon) => {
+      const matchesCategory =
+        selectedCategory === "All" || salon.type === selectedCategory;
+      const matchesSearch =
+        searchQuery === "" ||
+        [salon.name, salon.address, salon.city].some((field) =>
+          field.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+      return matchesCategory && matchesSearch;
+    })
     .sort((a, b) => {
       if (sortBy === "rating") return (b.rating || 0) - (a.rating || 0);
       if (sortBy === "price")
@@ -108,6 +132,9 @@ export default function SalonsPage() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setSortBy(sortBy === "rating" ? null : "rating")}
+              aria-label={
+                sortBy === "rating" ? "Remove rating sort" : "Sort by rating"
+              }
               className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 rounded-xl border text-sm font-medium hover:bg-secondary transition-all ${
                 sortBy === "rating"
                   ? "border-primary bg-primary text-primary-foreground"
@@ -119,6 +146,9 @@ export default function SalonsPage() {
             </button>
             <button
               onClick={() => setSortBy(sortBy === "price" ? null : "price")}
+              aria-label={
+                sortBy === "price" ? "Remove price sort" : "Sort by price"
+              }
               className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 rounded-xl border text-sm font-medium hover:bg-secondary transition-all ${
                 sortBy === "price"
                   ? "border-primary bg-primary text-primary-foreground"
@@ -133,12 +163,12 @@ export default function SalonsPage() {
       </section>
 
       {/* Search Bar */}
-      <section className="relative">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-        <input
-          type="text"
-          placeholder="Search for services or salon names..."
-          className="w-full pl-12 pr-4 py-4 rounded-2xl bg-card border border-border focus:border-primary shadow-sm transition-all outline-none text-base sm:text-lg text-foreground"
+      <section>
+        <SearchBar
+          value={searchQuery}
+          onChange={setSearchQuery}
+          placeholder="Search for services, salon names, or locations..."
+          className="w-full"
         />
       </section>
 
@@ -218,7 +248,9 @@ export default function SalonsPage() {
                 <SalonCard key={salon.id} salon={salon} index={i} />
               ))}
               {filteredSalons.length === 0 && (
-                <p className="text-muted-foreground">No salons found.</p>
+                <div className="py-12 flex justify-center w-full">
+                  <SalonsEmptyState onClear={clearFilters} />
+                </div>
               )}
             </div>
 
@@ -240,7 +272,9 @@ export default function SalonsPage() {
               <SalonCard key={salon.id} salon={salon} index={i} />
             ))}
             {filteredSalons.length === 0 && (
-              <p className="text-muted-foreground">No salons found.</p>
+              <div className="py-8 flex justify-center w-full">
+                <SalonsEmptyState onClear={clearFilters} mobile />
+              </div>
             )}
           </div>
         </section>
@@ -278,6 +312,48 @@ export default function SalonsPage() {
         <div className="absolute bottom-[-20%] right-[10%] w-[30%] h-[40%] bg-blue-400/20 blur-[60px] rounded-full" />
       </motion.div>
     </div>
+  );
+}
+
+function SalonsEmptyState({
+  onClear,
+  mobile,
+}: {
+  onClear: () => void;
+  mobile?: boolean;
+}) {
+  return (
+    <Empty
+      className={`${
+        mobile ? "p-8" : "max-w-md w-full"
+      } bg-card/50 backdrop-blur-sm border-dashed`}
+    >
+      <EmptyHeader>
+        <EmptyMedia variant="icon" className="bg-primary/10 text-primary">
+          <SearchX className={mobile ? "w-5 h-5" : "w-6 h-6"} />
+        </EmptyMedia>
+        <EmptyTitle className={mobile ? "text-base" : ""}>
+          {mobile ? "No results" : "No salons found"}
+        </EmptyTitle>
+        {!mobile && (
+          <EmptyDescription>
+            We couldn't find any salons matching your current filters. Try
+            adjusting your search or category.
+          </EmptyDescription>
+        )}
+      </EmptyHeader>
+      <EmptyContent>
+        <Button
+          variant="outline"
+          size={mobile ? "sm" : "default"}
+          onClick={onClear}
+          className="rounded-full px-8"
+          aria-label="Clear all filters"
+        >
+          {mobile ? "Clear Filters" : "Clear All Filters"}
+        </Button>
+      </EmptyContent>
+    </Empty>
   );
 }
 
