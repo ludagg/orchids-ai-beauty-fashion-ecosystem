@@ -165,17 +165,28 @@ export function StoryViewer({ initialUserIndex, userStories, onClose }: StoryVie
 
         {/* Progress Bars */}
         <div className="absolute top-0 left-0 right-0 z-20 flex gap-1 p-2">
-            {currentUser.stories.map((story, idx) => (
-                <div key={story.id} className="h-1 flex-1 bg-white/30 rounded-full overflow-hidden">
+            {currentUser.stories.map((story, idx) => {
+                const isCurrent = idx === currentStoryIndex;
+                const isViewed = idx < currentStoryIndex;
+                const value = isViewed ? 100 : isCurrent ? Math.round(progress) : 0;
+
+                return (
                     <div
-                        className="h-full bg-white transition-all duration-100 ease-linear"
-                        style={{
-                            width: idx < currentStoryIndex ? '100%' :
-                                   idx === currentStoryIndex ? `${progress}%` : '0%'
-                        }}
-                    />
-                </div>
-            ))}
+                        key={story.id}
+                        role="progressbar"
+                        aria-valuemin={0}
+                        aria-valuemax={100}
+                        aria-valuenow={value}
+                        aria-label={`Story ${idx + 1} of ${currentUser.stories.length} progress`}
+                        className="h-1 flex-1 bg-white/30 rounded-full overflow-hidden"
+                    >
+                        <div
+                            className="h-full bg-white transition-all duration-100 ease-linear"
+                            style={{ width: `${value}%` }}
+                        />
+                    </div>
+                );
+            })}
         </div>
 
         {/* User Info Header */}
