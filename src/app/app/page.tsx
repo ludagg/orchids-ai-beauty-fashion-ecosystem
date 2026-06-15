@@ -47,8 +47,8 @@ export default function DiscoverPage() {
   const [loading, setLoading] = useState(true);
 
   // Données mock du dashboard (à remplacer par vrai fetch si dispo)
-  const loyaltyPoints = 120;
-  const loyaltyTarget = 150;
+  const loyaltyPoints = (session?.user as any)?.loyaltyPoints || 0;
+  const loyaltyTarget = loyaltyPoints < 100 ? 100 : loyaltyPoints < 500 ? 500 : loyaltyPoints < 1000 ? 1000 : loyaltyPoints + 500;
   const loyaltyProgress = (loyaltyPoints / loyaltyTarget) * 100;
   const nextBooking = { salon: "BERA Hair & Beauty", date: "Apr 27, 4:00 PM" };
 
@@ -165,7 +165,7 @@ export default function DiscoverPage() {
                     Loyalty Points: {loyaltyPoints}
                   </h4>
                   <p className="text-xs text-muted-foreground mt-0.5">
-                    {loyaltyTarget - loyaltyPoints} more points to next reward
+                    {Math.max(0, loyaltyTarget - loyaltyPoints)} more points to next reward
                   </p>
                 </div>
                 <div className="h-3 bg-secondary/50 rounded-full overflow-hidden">
