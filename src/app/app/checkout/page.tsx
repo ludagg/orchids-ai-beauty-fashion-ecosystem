@@ -1,4 +1,5 @@
 "use client";
+import { formatPrice } from "@/lib/utils";
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -76,14 +77,6 @@ export default function CheckoutPage() {
 
   const discountAmount = appliedPromo ? Math.round(cartTotal * appliedPromo.discount / 100) : 0;
   const finalTotal = cartTotal - discountAmount;
-
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 0,
-    }).format(price / 100);
-  };
 
   if (step === 2) {
     return (

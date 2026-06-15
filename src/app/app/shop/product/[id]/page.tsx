@@ -1,4 +1,5 @@
 "use client";
+import { formatPrice } from "@/lib/utils";
 
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
@@ -141,14 +142,6 @@ export default function ProductDetailPage() {
   const currentPrice = isSale ? product.salePrice : product.originalPrice;
 
   // Format Price
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 0,
-    }).format(price / 100);
-  };
-
   return (
     <div className="min-h-screen bg-background pb-24">
       {/* Top Bar / Nav (optional, usually provided by layout or back button) */}
