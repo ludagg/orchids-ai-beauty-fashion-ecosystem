@@ -15,6 +15,16 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import SearchBar from "@/components/SearchBar";
+import {
+  Empty,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+  EmptyDescription,
+  EmptyContent,
+} from "@/components/ui/empty";
+import { Button } from "@/components/ui/button";
 
 const CATEGORIES = ["All", "Clothing", "Beauty & Skincare", "Hair Care", "Nail Care", "Fragrances", "Accessories", "Wellness"];
 
@@ -104,17 +114,16 @@ export default function MarketplacePage() {
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="relative group hidden sm:block">
-             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-             <input
-               type="text"
-               placeholder="Search products..."
-               className="pl-9 pr-4 py-2.5 rounded-xl border border-border bg-card text-sm focus:ring-2 focus:ring-primary/5 transition-all outline-none w-48 text-foreground"
-               value={searchQuery}
-               onChange={(e) => setSearchQuery(e.target.value)}
-             />
-          </div>
-          <button className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-border bg-card text-foreground text-sm font-medium hover:bg-secondary transition-all">
+          <SearchBar
+            value={searchQuery}
+            onChange={setSearchQuery}
+            placeholder="Search products..."
+            className="w-48 sm:w-64"
+          />
+          <button
+            aria-label="Toggle filters"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-border bg-card text-foreground text-sm font-medium hover:bg-secondary transition-all"
+          >
             <Filter className="w-4 h-4" />
             Filters
           </button>
@@ -144,8 +153,48 @@ export default function MarketplacePage() {
             <Loader2 className="w-10 h-10 animate-spin text-primary" />
         </div>
       ) : products.length === 0 ? (
-        <div className="text-center py-20 text-muted-foreground">
-            <p>No products found.</p>
+        <div className="relative">
+          {/* Background Decorations */}
+          <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#e5e5e5_1px,transparent_1px)] dark:bg-[radial-gradient(circle_at_center,#262626_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]" />
+            <motion.div
+              animate={{
+                scale: [1, 1.2, 1],
+                opacity: [0.3, 0.5, 0.3],
+              }}
+              transition={{
+                duration: 8,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/5 blur-[100px] rounded-full"
+            />
+          </div>
+
+          <Empty className="py-20 border-none">
+            <EmptyMedia variant="icon">
+              <ShoppingBag className="w-6 h-6" />
+            </EmptyMedia>
+            <EmptyHeader>
+              <EmptyTitle>No products found</EmptyTitle>
+              <EmptyDescription>
+                We couldn&apos;t find any products matching your current filters. Try adjusting your search or category.
+              </EmptyDescription>
+            </EmptyHeader>
+            <EmptyContent>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setSearchQuery("");
+                  setSelectedCategory("All");
+                }}
+                className="rounded-xl"
+                aria-label="Clear all filters"
+              >
+                Clear All Filters
+              </Button>
+            </EmptyContent>
+          </Empty>
         </div>
       ) : (
         <section className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
