@@ -107,6 +107,7 @@ export default function BusinessLayoutClient({
           )}
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
+            aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
             className="p-1 rounded-full hover:bg-secondary text-muted-foreground transition-colors"
           >
             {isCollapsed ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5" />}

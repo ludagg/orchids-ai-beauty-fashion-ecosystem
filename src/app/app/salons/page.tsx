@@ -14,8 +14,9 @@ import {
   List,
 } from "lucide-react";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import dynamic from "next/dynamic";
+import SearchBar from "@/components/SearchBar";
 
 const categories = ["All", "Hair", "Skin", "Spa", "Nails", "Grooming"];
 
@@ -48,6 +49,7 @@ export default function SalonsPage() {
   const [salons, setSalons] = useState<Salon[]>([]);
   const [loading, setLoading] = useState(true);
   const [mobileView, setMobileView] = useState<"list" | "map">("list");
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     async function fetchSalons() {
@@ -66,16 +68,26 @@ export default function SalonsPage() {
     fetchSalons();
   }, []);
 
-  const filteredSalons = salons
-    .filter(
-      (salon) => selectedCategory === "All" || salon.type === selectedCategory
-    )
-    .sort((a, b) => {
+  const filteredSalons = useMemo(() => {
+    return salons
+      .filter((salon) => {
+        const matchesCategory =
+          selectedCategory === "All" || salon.type === selectedCategory;
+        const query = searchQuery.toLowerCase();
+        const matchesSearch =
+          !query ||
+          [salon.name, salon.address, salon.city].some((f) =>
+            f.toLowerCase().includes(query)
+          );
+        return matchesCategory && matchesSearch;
+      })
+      .sort((a, b) => {
       if (sortBy === "rating") return (b.rating || 0) - (a.rating || 0);
       if (sortBy === "price")
         return (a.priceRange || "").localeCompare(b.priceRange || "");
-      return 0;
-    });
+        return 0;
+      });
+  }, [salons, selectedCategory, searchQuery, sortBy]);
 
   const mapCenter =
     filteredSalons.length > 0 && filteredSalons[0].lat
@@ -108,6 +120,7 @@ export default function SalonsPage() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setSortBy(sortBy === "rating" ? null : "rating")}
+              aria-label="Sort by rating"
               className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 rounded-xl border text-sm font-medium hover:bg-secondary transition-all ${
                 sortBy === "rating"
                   ? "border-primary bg-primary text-primary-foreground"
@@ -119,6 +132,7 @@ export default function SalonsPage() {
             </button>
             <button
               onClick={() => setSortBy(sortBy === "price" ? null : "price")}
+              aria-label="Sort by price"
               className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 rounded-xl border text-sm font-medium hover:bg-secondary transition-all ${
                 sortBy === "price"
                   ? "border-primary bg-primary text-primary-foreground"
@@ -134,11 +148,10 @@ export default function SalonsPage() {
 
       {/* Search Bar */}
       <section className="relative">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-        <input
-          type="text"
+        <SearchBar
+          value={searchQuery}
+          onChange={setSearchQuery}
           placeholder="Search for services or salon names..."
-          className="w-full pl-12 pr-4 py-4 rounded-2xl bg-card border border-border focus:border-primary shadow-sm transition-all outline-none text-base sm:text-lg text-foreground"
         />
       </section>
 
@@ -218,7 +231,18 @@ export default function SalonsPage() {
                 <SalonCard key={salon.id} salon={salon} index={i} />
               ))}
               {filteredSalons.length === 0 && (
-                <p className="text-muted-foreground">No salons found.</p>
+                <div className="py-12 text-center border-2 border-dashed rounded-3xl">
+                  <p className="text-muted-foreground mb-4">No salons found.</p>
+                  <button
+                    onClick={() => {
+                      setSearchQuery("");
+                      setSelectedCategory("All");
+                    }}
+                    className="text-primary font-medium hover:underline"
+                  >
+                    Clear all filters
+                  </button>
+                </div>
               )}
             </div>
 
