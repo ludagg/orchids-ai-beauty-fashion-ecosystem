@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
               await db
                 .update(products)
                 .set({
-                  stock: sql`${products.stock} - ${item.quantity}`,
+                  totalStock: sql`${products.totalStock} - ${item.quantity}`,
                 })
                 .where(eq(products.id, item.productId));
             }
@@ -62,7 +62,7 @@ export async function POST(req: NextRequest) {
 
           console.log(`Order ${orderId} marked as paid.`);
         } catch (dbError) {
-          console.error("Error updating order/stock:", dbError);
+          console.error("Error updating order/totalStock:", dbError);
           return NextResponse.json({ error: "Database update failed" }, { status: 500 });
         }
       }
