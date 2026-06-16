@@ -1,12 +1,19 @@
+// [Jules - Fix schema references, add logger and webhook secret validation]
 import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { db } from "@/lib/db";
 import { orders, orderItems, products } from "@/db/schema/commerce";
 import { eq, sql, and, ne } from "drizzle-orm";
+import { logger } from "@/lib/logger";
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
   const signature = req.headers.get("Stripe-Signature") as string;
+
+  if (!process.env.STRIPE_WEBHOOK_SECRET) {
+    logger.error("STRIPE_WEBHOOK_SECRET is missing in environment variables.");
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+  }
 
   let event;
 
@@ -14,10 +21,10 @@ export async function POST(req: NextRequest) {
     event = stripe.webhooks.constructEvent(
       body,
       signature,
-      process.env.STRIPE_WEBHOOK_SECRET!
+      process.env.STRIPE_WEBHOOK_SECRET
     );
   } catch (err: any) {
-    console.error("Webhook signature verification failed.", err.message);
+    logger.error({ err }, `Webhook signature verification failed: ${err.message}`);
     return NextResponse.json({ error: `Webhook Error: ${err.message}` }, { status: 400 });
   }
 
@@ -37,7 +44,7 @@ export async function POST(req: NextRequest) {
             .returning({ id: orders.id });
 
           if (updatedOrders.length === 0) {
-            console.log(`Order ${orderId} already paid or not found. Skipping.`);
+            logger.info(`Order ${orderId} already paid or not found. Skipping.`);
             return NextResponse.json({ received: true });
           }
 
@@ -54,22 +61,22 @@ export async function POST(req: NextRequest) {
               await db
                 .update(products)
                 .set({
-                  stock: sql`${products.stock} - ${item.quantity}`,
+                  totalStock: sql`${products.totalStock} - ${item.quantity}`,
                 })
                 .where(eq(products.id, item.productId));
             }
           }
 
-          console.log(`Order ${orderId} marked as paid.`);
+          logger.info(`Order ${orderId} marked as paid.`);
         } catch (dbError) {
-          console.error("Error updating order/stock:", dbError);
+          logger.error({ err: dbError }, "Error updating order/stock");
           return NextResponse.json({ error: "Database update failed" }, { status: 500 });
         }
       }
       break;
     default:
       // Unexpected event type
-      console.log(`Unhandled event type ${event.type}`);
+      logger.info(`Unhandled event type ${event.type}`);
   }
 
   return NextResponse.json({ received: true });
