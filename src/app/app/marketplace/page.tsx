@@ -10,10 +10,10 @@ import {
   Star,
   ArrowRight,
   TrendingUp,
-  Tag,
-  Loader2
+  Tag
 } from "lucide-react";
 import Link from "next/link";
+import { Spinner } from "@/components/ui/spinner";
 import { useState, useEffect } from "react";
 
 const CATEGORIES = ["All", "Clothing", "Beauty & Skincare", "Hair Care", "Nail Care", "Fragrances", "Accessories", "Wellness"];
@@ -127,6 +127,7 @@ export default function MarketplacePage() {
           <button
             key={category}
             onClick={() => setSelectedCategory(category)}
+            aria-pressed={selectedCategory === category}
             className={`px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
               selectedCategory === category
                 ? "bg-primary text-primary-foreground shadow-md"
@@ -141,7 +142,7 @@ export default function MarketplacePage() {
       {/* Product Grid */}
       {loading ? (
         <div className="flex justify-center py-20">
-            <Loader2 className="w-10 h-10 animate-spin text-primary" />
+            <Spinner className="w-10 h-10 text-primary" />
         </div>
       ) : products.length === 0 ? (
         <div className="text-center py-20 text-muted-foreground">

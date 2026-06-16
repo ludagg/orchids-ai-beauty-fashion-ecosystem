@@ -64,3 +64,7 @@
 ## 2026-04-13 - Profile UX Standardization
 **Learning:** For high-traffic profile pages, standardizing on unified `Empty` and `Spinner` primitives ensures a consistent brand voice across all tabs. Additionally, adding explicit `aria-label` attributes to numerical statistics (Followers, Following, etc.) provides essential context for screen reader users who might otherwise hear only the number or a truncated label.
 **Action:** Always refactor custom loading/empty states to use the standard UI library. Audit interactive statistics and ensured they have descriptive `aria-label` attributes that combine the value and the metric name.
+
+## 2026-06-16 - Stretched Link Pattern for Accessible Cards
+**Learning:** Nesting interactive elements like wishlist buttons inside a card-wide `Link` component creates invalid HTML and poor screen reader experiences. Using the "stretched link" pattern (an absolute-positioned sibling `Link`) allows the entire card to be clickable while keeping nested buttons functionally and semantically separate.
+**Action:** Implement cards with a relative container, an absolute `Link` with `inset-0`, and nested interactive elements with `z-10` and `pointer-events-auto`.
