@@ -43,15 +43,6 @@ if (!isVercel) {
   (nextConfig as any).outputFileTracingRoot = path.resolve(__dirname, "../../");
 }
 
-// ✅ Disable Turbopack on Vercel
-if (!isVercel) {
-  (nextConfig as any).turbopack = {
-    rules: {
-      "src/**/*.{jsx,tsx}": {
-        loaders: [LOADER],
-      },
-    },
-  };
-}
+// [Jules - Reason for modification: Removed turbopack config from next.config.ts because it causes 'Unrecognized key(s)' warning during build in Next.js 15. Turbopack is enabled via CLI flags.]
 
 export default nextConfig;
