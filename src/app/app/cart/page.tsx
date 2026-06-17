@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Minus, Plus, Trash2, ArrowRight, ShoppingCart } from 'lucide-react';
+import NumberFlow from '@number-flow/react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -116,6 +117,12 @@ export default function CartPage() {
     }
   };
 
+  const currencyFormat = useMemo(() => ({
+    style: 'currency',
+    currency: 'INR',
+    maximumFractionDigits: 0,
+  }), []);
+
   if (loading) {
     return <div className="p-4 space-y-4">
         <Skeleton className="h-20 w-full" />
@@ -179,13 +186,6 @@ export default function CartPage() {
     return sum + (price * item.quantity);
   }, 0);
 
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 0,
-    }).format(price / 100);
-  };
 
   return (
     <div className="min-h-screen bg-background pb-24 container mx-auto px-4 py-6 max-w-3xl">
@@ -220,7 +220,13 @@ export default function CartPage() {
                                                 {item.selectedOptions?.size && `Size: ${item.selectedOptions.size.name}`}
                                             </p>
                                         </div>
-                                        <p className="font-semibold">{formatPrice(price * item.quantity)}</p>
+                                        <p className="font-semibold">
+                                          <NumberFlow
+                                            value={(price * item.quantity) / 100}
+                                            format={currencyFormat}
+                                            locales="en-IN"
+                                          />
+                                        </p>
                                     </div>
                                     <div className="flex items-center justify-between mt-2">
                                         <div className="flex items-center border rounded-md overflow-hidden">
@@ -234,8 +240,8 @@ export default function CartPage() {
                                             >
                                                 <Minus className="h-3 w-3" />
                                             </Button>
-                                            <span className="w-8 text-center text-sm font-medium" aria-label={`Quantity: ${item.quantity}`}>
-                                              {item.quantity}
+                                            <span className="w-8 text-center text-sm font-medium">
+                                              <NumberFlow value={item.quantity} />
                                             </span>
                                             <Button
                                               variant="ghost"
@@ -277,15 +283,31 @@ export default function CartPage() {
       <div className="mt-8 space-y-4 rounded-lg border bg-card p-4 shadow-sm">
         <div className="flex justify-between text-sm">
             <span>Subtotal</span>
-            <span>{formatPrice(subtotal)}</span>
+            <span>
+              <NumberFlow
+                value={subtotal / 100}
+                format={currencyFormat}
+                locales="en-IN"
+              />
+            </span>
         </div>
         <div className="flex gap-2">
-            <Input placeholder="Enter promo code" className="bg-background" />
+            <Input
+              placeholder="Enter promo code"
+              className="bg-background"
+              aria-label="Enter promo code"
+            />
             <Button variant="outline">Apply</Button>
         </div>
         <div className="border-t pt-4 flex justify-between font-bold text-lg">
             <span>Total</span>
-            <span>{formatPrice(subtotal)}</span>
+            <span>
+              <NumberFlow
+                value={subtotal / 100}
+                format={currencyFormat}
+                locales="en-IN"
+              />
+            </span>
         </div>
         <Button className="w-full bg-yellow-500 text-black hover:bg-yellow-600 font-bold h-12" onClick={() => router.push('/app/checkout')}>
             Proceed to Booking <ArrowRight className="ml-2 h-4 w-4" />

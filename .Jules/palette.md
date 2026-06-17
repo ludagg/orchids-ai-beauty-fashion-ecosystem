@@ -64,3 +64,7 @@
 ## 2026-04-13 - Profile UX Standardization
 **Learning:** For high-traffic profile pages, standardizing on unified `Empty` and `Spinner` primitives ensures a consistent brand voice across all tabs. Additionally, adding explicit `aria-label` attributes to numerical statistics (Followers, Following, etc.) provides essential context for screen reader users who might otherwise hear only the number or a truncated label.
 **Action:** Always refactor custom loading/empty states to use the standard UI library. Audit interactive statistics and ensured they have descriptive `aria-label` attributes that combine the value and the metric name.
+
+## 2026-06-17 - Animated Numbers for Premium UX
+**Learning:** Integrating `NumberFlow` for dynamic numerical values like item quantities and prices adds a layer of "premium" delight through smooth, accessible transitions. Crucially, `NumberFlow` handles its own ARIA attributes; adding redundant `aria-label` attributes to parent elements can lead to confusing screen reader announcements.
+**Action:** Use `NumberFlow` for all interactive or dynamic numerical displays. Prefer a memoized configuration object for formatting to maintain DRY principles across multiple component instances.
