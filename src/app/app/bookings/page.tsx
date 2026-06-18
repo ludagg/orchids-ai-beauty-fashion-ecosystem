@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { formatPrice } from "@/lib/utils";
 import {
   Calendar,
   Clock,
@@ -169,9 +170,6 @@ export default function BookingsAndOrdersPage() {
     setReviewModalOpen(true);
   };
 
-  const formatPrice = (cents: number) => {
-    return (cents / 100).toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
-  };
 
   const filteredBookings = statusFilter === "All"
     ? bookings
