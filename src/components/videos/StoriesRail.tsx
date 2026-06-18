@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
 interface Story {
@@ -107,31 +108,45 @@ export function StoriesRail() {
            <div className="flex flex-col items-center justify-center gap-1.5 cursor-pointer shrink-0 snap-start group relative">
                 {hasMyStory ? (
                   <>
-                    <div
-                        onClick={handleMyStoryClick}
-                        className={cn(
-                        "relative w-[72px] h-[72px] rounded-full p-[2px] transition-transform active:scale-95 bg-gradient-to-tr from-yellow-400 to-red-600"
-                        )}
-                    >
-                      <div className="w-full h-full rounded-full bg-background flex items-center justify-center overflow-hidden relative">
-                         <Avatar className="w-full h-full">
-                            <AvatarImage src={session.user.image || undefined} className="object-cover" />
-                            <AvatarFallback>{session.user.name?.charAt(0)}</AvatarFallback>
-                         </Avatar>
-                      </div>
-                    </div>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <button
+                            type="button"
+                            onClick={handleMyStoryClick}
+                            aria-label="Watch your story"
+                            className={cn(
+                            "relative w-[72px] h-[72px] rounded-full p-[2px] transition-transform active:scale-95 bg-gradient-to-tr from-yellow-400 to-red-600"
+                            )}
+                        >
+                          <div className="w-full h-full rounded-full bg-background flex items-center justify-center overflow-hidden relative">
+                             <Avatar className="w-full h-full">
+                                <AvatarImage src={session.user.image || undefined} className="object-cover" />
+                                <AvatarFallback>{session.user.name?.charAt(0)}</AvatarFallback>
+                             </Avatar>
+                          </div>
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent>Watch your story</TooltipContent>
+                    </Tooltip>
                     <span className="text-xs font-medium truncate w-[72px] text-center text-muted-foreground group-hover:text-foreground transition-colors">
                       Your Story
                     </span>
                   </>
                 ) : (
-                  <button
-                      onClick={() => setIsCreateOpen(true)}
-                      className="flex items-center gap-2 px-4 py-2 h-[50px] rounded-full border border-primary text-primary font-medium hover:bg-primary/5 transition-colors mb-5"
-                  >
-                      <Plus className="w-5 h-5" />
-                      Your Story
-                  </button>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                          type="button"
+                          onClick={() => setIsCreateOpen(true)}
+                          aria-label="Add to your story"
+                          className="flex items-center gap-2 px-4 py-2 h-[50px] rounded-full border border-primary text-primary font-medium hover:bg-primary/5 transition-colors mb-5"
+                      >
+                          <Plus className="w-5 h-5" />
+                          Your Story
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>Add to your story</TooltipContent>
+                  </Tooltip>
                 )}
 
                 <Dialog open={iscreateOpen} onOpenChange={setIsCreateOpen}>
@@ -174,23 +189,28 @@ export function StoriesRail() {
             if (session?.user && us.user.id === session.user.id) return null;
 
             return (
-                <button
-                    key={us.user.id}
-                    onClick={() => setSelectedUserIndex(index)}
-                    className="flex flex-col items-center gap-1.5 cursor-pointer shrink-0 snap-start group"
-                >
-                    <div className="w-[72px] h-[72px] rounded-full p-[2px] bg-gradient-to-tr from-yellow-400 to-red-600 transition-transform group-hover:scale-105">
-                        <div className="w-full h-full rounded-full border-2 border-background overflow-hidden relative">
-                            <Avatar className="w-full h-full">
-                                <AvatarImage src={us.user.image || undefined} className="object-cover" />
-                                <AvatarFallback>{us.user.name.charAt(0)}</AvatarFallback>
-                            </Avatar>
+                <Tooltip key={us.user.id}>
+                  <TooltipTrigger asChild>
+                    <button
+                        onClick={() => setSelectedUserIndex(index)}
+                        aria-label={`Watch ${us.user.name}'s story`}
+                        className="flex flex-col items-center gap-1.5 cursor-pointer shrink-0 snap-start group"
+                    >
+                        <div className="w-[72px] h-[72px] rounded-full p-[2px] bg-gradient-to-tr from-yellow-400 to-red-600 transition-transform group-hover:scale-105">
+                            <div className="w-full h-full rounded-full border-2 border-background overflow-hidden relative">
+                                <Avatar className="w-full h-full">
+                                    <AvatarImage src={us.user.image || undefined} className="object-cover" />
+                                    <AvatarFallback>{us.user.name.charAt(0)}</AvatarFallback>
+                                </Avatar>
+                            </div>
                         </div>
-                    </div>
-                    <span className="text-xs font-medium truncate w-[72px] text-center text-muted-foreground group-hover:text-foreground transition-colors">
-                        {us.user.name.split(' ')[0]}
-                    </span>
-                </button>
+                        <span className="text-xs font-medium truncate w-[72px] text-center text-muted-foreground group-hover:text-foreground transition-colors">
+                            {us.user.name.split(' ')[0]}
+                        </span>
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>Watch {us.user.name}'s story</TooltipContent>
+                </Tooltip>
             );
         })}
       </div>
