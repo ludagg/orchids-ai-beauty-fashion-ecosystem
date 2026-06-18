@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Check, ArrowRight, Wallet, CreditCard, Banknote, Tag, X } from 'lucide-react';
+import { Check, ArrowRight, Wallet, CreditCard, Banknote, Tag, X, ChevronLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
@@ -96,16 +96,33 @@ export default function CheckoutPage() {
                 Your order has been placed successfully. You can pick it up at the partner salon.
             </p>
             <div className="flex flex-col gap-3 w-full max-w-sm">
-                <Button className="w-full" onClick={() => router.push('/app/orders')}>View Booking</Button>
+                <Button className="w-full" onClick={() => router.push('/app/bookings')}>View Booking</Button>
                 <Button variant="outline" className="w-full" onClick={() => router.push('/app/shop')}>Continue Shopping</Button>
             </div>
         </div>
     );
   }
 
+  /* [Jules - Added back button, enhanced accessibility and fixed navigation] */
   return (
     <div className="min-h-screen bg-background pb-24 container mx-auto px-4 py-6 max-w-3xl">
-      <h1 className="text-2xl font-bold mb-6">Checkout</h1>
+      <div className="flex items-center gap-4 mb-6">
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="rounded-full"
+              onClick={() => router.push('/app/cart')}
+              aria-label="Back to cart"
+            >
+              <ChevronLeft className="h-6 w-6" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Back to cart</TooltipContent>
+        </Tooltip>
+        <h1 className="text-2xl font-bold">Checkout</h1>
+      </div>
 
       <div className="grid gap-6 md:grid-cols-2">
         <div className="space-y-6">
@@ -114,7 +131,12 @@ export default function CheckoutPage() {
                     <CardTitle>Payment Method</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <RadioGroup defaultValue="upi" value={paymentMethod} onValueChange={setPaymentMethod}>
+                    <RadioGroup
+                        defaultValue="upi"
+                        value={paymentMethod}
+                        onValueChange={setPaymentMethod}
+                        aria-label="Select payment method"
+                    >
                         <div className="flex items-center space-x-2 border p-3 rounded-md cursor-pointer hover:bg-muted/50">
                             <RadioGroupItem value="upi" id="upi" />
                             <Label htmlFor="upi" className="flex items-center gap-2 cursor-pointer flex-1">
@@ -194,7 +216,19 @@ export default function CheckoutPage() {
                           onKeyDown={e => e.key === "Enter" && handleApplyPromo()}
                           className="bg-background font-mono uppercase text-sm"
                         />
-                        <Button variant="outline" onClick={handleApplyPromo} className="shrink-0">Apply</Button>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              variant="outline"
+                              onClick={handleApplyPromo}
+                              className="shrink-0"
+                              aria-label="Apply promo code"
+                            >
+                              Apply
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>Apply promo code</TooltipContent>
+                        </Tooltip>
                       </div>
                     )}
 
@@ -205,7 +239,7 @@ export default function CheckoutPage() {
                       </div>
                     )}
 
-                    <div className="border-t pt-4 flex justify-between font-bold text-lg">
+                    <div className="border-t pt-4 flex justify-between font-bold text-lg" aria-live="polite">
                         <span>Total to Pay</span>
                         <span>{formatPrice(finalTotal)}</span>
                     </div>

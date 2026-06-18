@@ -6,10 +6,12 @@ import {
   useStripe,
   useElements
 } from "@stripe/react-stripe-js";
-import { ArrowRight, Loader2 } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 import { useCart } from "@/lib/cart-context";
+import { Spinner } from "@/components/ui/spinner";
 
+/* [Jules - Standardized loading state with Spinner component] */
 export default function CheckoutForm({ onSuccess }: { onSuccess: () => void }) {
   const stripe = useStripe();
   const elements = useElements();
@@ -59,7 +61,7 @@ export default function CheckoutForm({ onSuccess }: { onSuccess: () => void }) {
         className="w-full py-5 rounded-2xl bg-foreground text-white font-bold text-lg hover:bg-[#333] transition-all shadow-xl shadow-foreground/10 active:scale-[0.98] flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isLoading ? (
-          <Loader2 className="w-6 h-6 animate-spin" />
+          <Spinner className="w-6 h-6" />
         ) : (
           <>
             Pay Now
