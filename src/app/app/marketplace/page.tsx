@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import {
   ShoppingBag,
-  Search,
   Filter,
   Heart,
   ChevronRight,
@@ -11,10 +10,19 @@ import {
   ArrowRight,
   TrendingUp,
   Tag,
-  Loader2
 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import SearchBar from "@/components/SearchBar";
+import { Spinner } from "@/components/ui/spinner";
+import {
+  Empty,
+  EmptyHeader,
+  EmptyTitle,
+  EmptyDescription,
+  EmptyContent,
+  EmptyMedia,
+} from "@/components/ui/empty";
 
 const CATEGORIES = ["All", "Clothing", "Beauty & Skincare", "Hair Care", "Nail Care", "Fragrances", "Accessories", "Wellness"];
 
@@ -104,17 +112,16 @@ export default function MarketplacePage() {
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="relative group hidden sm:block">
-             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-             <input
-               type="text"
-               placeholder="Search products..."
-               className="pl-9 pr-4 py-2.5 rounded-xl border border-border bg-card text-sm focus:ring-2 focus:ring-primary/5 transition-all outline-none w-48 text-foreground"
-               value={searchQuery}
-               onChange={(e) => setSearchQuery(e.target.value)}
-             />
-          </div>
-          <button className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-border bg-card text-foreground text-sm font-medium hover:bg-secondary transition-all">
+          <SearchBar
+            value={searchQuery}
+            onChange={setSearchQuery}
+            placeholder="Search products..."
+            className="hidden sm:block w-48"
+          />
+          <button
+            aria-label="Filter products"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-border bg-card text-foreground text-sm font-medium hover:bg-secondary transition-all"
+          >
             <Filter className="w-4 h-4" />
             Filters
           </button>
@@ -127,6 +134,7 @@ export default function MarketplacePage() {
           <button
             key={category}
             onClick={() => setSelectedCategory(category)}
+            aria-pressed={selectedCategory === category}
             className={`px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
               selectedCategory === category
                 ? "bg-primary text-primary-foreground shadow-md"
@@ -141,12 +149,38 @@ export default function MarketplacePage() {
       {/* Product Grid */}
       {loading ? (
         <div className="flex justify-center py-20">
-            <Loader2 className="w-10 h-10 animate-spin text-primary" />
+          <Spinner className="w-10 h-10 text-primary" />
         </div>
       ) : products.length === 0 ? (
-        <div className="text-center py-20 text-muted-foreground">
-            <p>No products found.</p>
-        </div>
+        <Empty className="relative overflow-hidden border-none bg-card/50 backdrop-blur-sm">
+          {/* Background Decorations */}
+          <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-20" />
+            <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary/5 blur-[80px] rounded-full animate-pulse" />
+            <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-rose-500/5 blur-[80px] rounded-full animate-pulse delay-700" />
+          </div>
+
+          <EmptyMedia variant="icon">
+            <ShoppingBag className="w-6 h-6 text-muted-foreground" />
+          </EmptyMedia>
+          <EmptyHeader>
+            <EmptyTitle>No products found</EmptyTitle>
+            <EmptyDescription>
+              We couldn&apos;t find any products matching your current criteria.
+            </EmptyDescription>
+          </EmptyHeader>
+          <EmptyContent>
+            <button
+              onClick={() => {
+                setSelectedCategory("All");
+                setSearchQuery("");
+              }}
+              className="px-6 py-2 bg-primary text-primary-foreground rounded-full text-sm font-medium hover:opacity-90 transition-opacity"
+            >
+              Clear all filters
+            </button>
+          </EmptyContent>
+        </Empty>
       ) : (
         <section className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
             {products.map((product, i) => (
