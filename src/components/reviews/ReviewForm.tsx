@@ -5,9 +5,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Star, Loader2, Upload, X } from "lucide-react";
+import { Star, Upload, X } from "lucide-react";
 import { toast } from "sonner";
 import Image from "next/image";
+import { Spinner } from "@/components/ui/spinner";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface ReviewFormProps {
   isOpen: boolean;
@@ -119,17 +121,21 @@ export function ReviewForm({ isOpen, onOpenChange, salonId, bookingId, onSuccess
           <DialogTitle>Write a Review</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-6 py-4">
-          <div className="flex justify-center gap-2">
+          <div className="flex justify-center gap-2" role="radiogroup" aria-label="Star rating">
             {[1, 2, 3, 4, 5].map((star) => (
               <button
                 key={star}
                 type="button"
+                role="radio"
+                aria-checked={rating === star}
+                aria-label={star === 1 ? '1 star' : `${star} stars`}
                 onMouseEnter={() => setHoverRating(star)}
                 onMouseLeave={() => setHoverRating(0)}
                 onClick={() => setRating(star)}
-                className="focus:outline-none transition-transform active:scale-95"
+                className="focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm outline-none transition-transform active:scale-95"
               >
                 <Star
+                  aria-hidden="true"
                   className={`w-8 h-8 ${
                     star <= (hoverRating || rating)
                       ? "fill-amber-500 text-amber-500"
@@ -159,15 +165,21 @@ export function ReviewForm({ isOpen, onOpenChange, salonId, bookingId, onSuccess
             <Label>Add Photos (Optional)</Label>
             <div className="grid grid-cols-4 gap-2">
               {previews.map((src, i) => (
-                <div key={i} className="relative aspect-square rounded-lg overflow-hidden border border-border group">
+                <div key={i} className="relative aspect-square rounded-lg overflow-hidden border border-border group focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
                   <Image src={src} alt="Preview" fill className="object-cover" />
-                  <button
-                    type="button"
-                    onClick={() => removeImage(i)}
-                    className="absolute top-1 right-1 p-1 rounded-full bg-black/50 text-white opacity-0 group-hover:opacity-100 transition-opacity"
-                  >
-                    <X className="w-3 h-3" />
-                  </button>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        type="button"
+                        onClick={() => removeImage(i)}
+                        className="absolute top-1 right-1 p-1 rounded-full bg-black/50 text-white opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                        aria-label="Remove photo"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>Remove photo</TooltipContent>
+                  </Tooltip>
                 </div>
               ))}
               {previews.length < 4 && (
@@ -180,6 +192,7 @@ export function ReviewForm({ isOpen, onOpenChange, salonId, bookingId, onSuccess
                     multiple
                     className="hidden"
                     onChange={handleImageChange}
+                    aria-label="Upload photos"
                   />
                 </label>
               )}
@@ -194,7 +207,7 @@ export function ReviewForm({ isOpen, onOpenChange, salonId, bookingId, onSuccess
               Cancel
             </Button>
             <Button type="submit" disabled={isSubmitting || rating === 0}>
-              {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {isSubmitting && <Spinner className="mr-2" />}
               Post Review
             </Button>
           </DialogFooter>

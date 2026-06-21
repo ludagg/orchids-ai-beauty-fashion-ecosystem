@@ -64,3 +64,7 @@
 ## 2026-04-13 - Profile UX Standardization
 **Learning:** For high-traffic profile pages, standardizing on unified `Empty` and `Spinner` primitives ensures a consistent brand voice across all tabs. Additionally, adding explicit `aria-label` attributes to numerical statistics (Followers, Following, etc.) provides essential context for screen reader users who might otherwise hear only the number or a truncated label.
 **Action:** Always refactor custom loading/empty states to use the standard UI library. Audit interactive statistics and ensured they have descriptive `aria-label` attributes that combine the value and the metric name.
+
+## 2026-06-21 - Accessible Review Forms
+**Learning:** Star rating systems often fail accessibility audits because they lack semantic roles. Implementing the `role="radiogroup"` and `role="radio"` pattern, combined with `aria-checked`, provides clear state feedback to screen readers. Furthermore, using `focus-within:ring-2` on containers with hover-only controls ensures that keyboard users can navigate and interact with elements that would otherwise be invisible.
+**Action:** Use `role="radiogroup"` for rating inputs. Ensure hover-only buttons (like photo removal) are visible on focus using `focus:opacity-100` and are wrapped in `Tooltip` components with explicit `aria-label` attributes.
