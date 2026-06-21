@@ -43,6 +43,7 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith("/app/search") ||
     pathname.startsWith("/app/salons") ||
     pathname.startsWith("/app/marketplace") ||
+    pathname.startsWith("/app/shop") ||
     pathname.startsWith("/app/ai-stylist") ||
     pathname.startsWith("/app/videos-creations");
 
