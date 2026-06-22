@@ -12,6 +12,25 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
+import { Spinner } from "@/components/ui/spinner"
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty"
 
 interface ProductManagerProps {
     salonId: string;
@@ -22,6 +41,9 @@ export function ProductManager({ salonId }: ProductManagerProps) {
   const [loading, setLoading] = useState(true)
   const [view, setView] = useState<"list" | "form">("list")
   const [editingProduct, setEditingProduct] = useState<ProductFormValues & { id: string } | undefined>(undefined)
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+  const [productToDelete, setProductToDelete] = useState<string | null>(null)
 
   useEffect(() => {
     if (salonId) {
@@ -43,9 +65,16 @@ export function ProductManager({ salonId }: ProductManagerProps) {
     }
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDeleteClick = (id: string) => {
+    setProductToDelete(id)
+    setIsDeleteDialogOpen(true)
+  }
+
+  const confirmDelete = async () => {
+    if (!productToDelete) return
+    setIsDeleting(true)
     try {
-        const res = await fetch(`/api/products/${id}`, {
+        const res = await fetch(`/api/products/${productToDelete}`, {
             method: "DELETE"
         });
 
@@ -53,10 +82,14 @@ export function ProductManager({ salonId }: ProductManagerProps) {
              throw new Error("Failed to delete product");
         }
 
-        setProducts(products.filter(p => p.id !== id))
+        setProducts(products.filter(p => p.id !== productToDelete))
         toast.success("Product removed")
+        setIsDeleteDialogOpen(false)
     } catch (error) {
         toast.error("Could not delete product");
+    } finally {
+        setIsDeleting(false)
+        setProductToDelete(null)
     }
   }
 
@@ -104,7 +137,12 @@ export function ProductManager({ salonId }: ProductManagerProps) {
   }
 
   if (loading) {
-      return <div className="text-center py-8 text-muted-foreground">Loading products...</div>
+      return (
+          <div className="flex flex-col items-center justify-center py-24 gap-4 text-muted-foreground">
+              <Spinner className="size-8" />
+              <p className="text-sm font-medium animate-pulse">Loading products...</p>
+          </div>
+      )
   }
 
   return (
@@ -141,6 +179,7 @@ export function ProductManager({ salonId }: ProductManagerProps) {
                             size="icon"
                             className="h-8 w-8 hover:text-primary"
                             onClick={() => handleEdit(product)}
+                            aria-label={`Edit ${product.name}`}
                         >
                             <Edit className="w-4 h-4" />
                         </Button>
@@ -153,7 +192,8 @@ export function ProductManager({ salonId }: ProductManagerProps) {
                             variant="ghost"
                             size="icon"
                             className="h-8 w-8 hover:text-destructive"
-                            onClick={() => handleDelete(product.id)}
+                            onClick={() => handleDeleteClick(product.id)}
+                            aria-label={`Delete ${product.name}`}
                         >
                             <Trash2 className="w-4 h-4" />
                         </Button>
@@ -195,16 +235,52 @@ export function ProductManager({ salonId }: ProductManagerProps) {
           </Card>
         ))}
          {products.length === 0 && (
-            <div className="col-span-full py-16 text-center text-muted-foreground bg-muted/10 rounded-lg border-2 border-dashed border-muted">
-                <ShoppingBag className="w-12 h-12 mx-auto mb-4 opacity-20" />
-                <h3 className="text-lg font-medium mb-2">No products yet</h3>
-                <p className="mb-6 max-w-sm mx-auto">Start building your inventory by adding your first product.</p>
-                <Button onClick={handleCreate} className="gap-2">
-                    <Plus className="w-4 h-4" /> Add Product
-                </Button>
+            <div className="col-span-full">
+                <Empty>
+                    <EmptyMedia variant="icon">
+                        <ShoppingBag />
+                    </EmptyMedia>
+                    <EmptyHeader>
+                        <EmptyTitle>No products yet</EmptyTitle>
+                        <EmptyDescription>
+                            Start building your inventory by adding your first product.
+                        </EmptyDescription>
+                    </EmptyHeader>
+                    <EmptyContent>
+                        <Button onClick={handleCreate} className="gap-2">
+                            <Plus className="w-4 h-4" /> Add Product
+                        </Button>
+                    </EmptyContent>
+                </Empty>
             </div>
         )}
       </div>
+
+      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the product
+              and remove it from your inventory.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(e) => {
+                e.preventDefault()
+                confirmDelete()
+              }}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              disabled={isDeleting}
+            >
+              {isDeleting ? <Spinner className="mr-2" /> : null}
+              Delete Product
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }
