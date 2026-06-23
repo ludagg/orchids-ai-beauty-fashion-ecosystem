@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ProductCard } from '@/components/shop/ProductCard';
+import { ARTryOn } from '@/components/shop/ARTryOn';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import {
@@ -298,6 +299,14 @@ export default function ProductDetailPage() {
                 </div>
             )}
         </div>
+
+        {/* AR Try-On */}
+        <ARTryOn
+           productId={product.id}
+           productName={product.name}
+           imageUrl={product.images?.[0] || product.mainImageUrl}
+           category={product.mainCategory || product.category}
+        />
 
         {/* Key Info */}
         <div className="space-y-3 rounded-lg border p-4 bg-muted/20">
