@@ -169,7 +169,7 @@ export default function AIStylistSheet() {
                                 {msg.products && msg.products.length > 0 && (
                                     <div className="mt-2 grid grid-cols-2 gap-2">
                                         {msg.products.map((product: any) => (
-                                            <Link href={`/app/marketplace/${product.id}`} key={product.id} className="bg-card border border-border rounded-lg overflow-hidden hover:shadow-md transition-all group block">
+                                            <Link href={`/app/shop/product/${product.id}`} key={product.id} className="bg-card border border-border rounded-lg overflow-hidden hover:shadow-md transition-all group block">
                                                 <div className="aspect-[3/4] bg-muted relative">
                                                     <img src={product.images?.[0]} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                                                 </div>
