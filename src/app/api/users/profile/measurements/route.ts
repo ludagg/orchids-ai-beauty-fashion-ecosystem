@@ -1,0 +1,37 @@
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { db } from "@/lib/db";
+import { users } from "@/db/schema";
+import { eq } from "drizzle-orm";
+import { NextResponse } from "next/server";
+
+export async function PATCH(req: Request) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session?.user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    const body = await req.json();
+    const { height, weight, bodyType } = body;
+
+    const updateData: any = { updatedAt: new Date() };
+    if (height !== undefined) updateData.height = height;
+    if (weight !== undefined) updateData.weight = weight;
+    if (bodyType !== undefined) updateData.bodyType = bodyType;
+
+    const updatedUser = await db
+      .update(users)
+      .set(updateData)
+      .where(eq(users.id, session.user.id))
+      .returning();
+
+    return NextResponse.json(updatedUser[0]);
+  } catch (error) {
+    console.error("Error updating measurements:", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+  }
+}
