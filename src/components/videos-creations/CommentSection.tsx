@@ -5,7 +5,8 @@ import { useSession } from "@/lib/auth-client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Loader2, Send, MessageSquare } from "lucide-react";
+import { Send, MessageSquare } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
 import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";
 
@@ -98,13 +99,24 @@ export function CommentSection({ videoId, initialCommentsCount = 0 }: CommentSec
           <div className="flex-1 space-y-2">
             <Textarea
               placeholder="Add a comment..."
+              aria-label="Add a comment"
               value={content}
               onChange={(e) => setContent(e.target.value)}
               className="min-h-[80px] bg-secondary/50 border-none focus-visible:ring-1 resize-none rounded-xl"
             />
             <div className="flex justify-end">
-              <Button type="submit" size="sm" disabled={submitting || !content.trim()} className="rounded-full px-6">
-                {submitting ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Send className="w-4 h-4 mr-2" />}
+              <Button
+                type="submit"
+                size="sm"
+                disabled={submitting || !content.trim()}
+                className="rounded-full px-6"
+                aria-label="Post comment"
+              >
+                {submitting ? (
+                  <Spinner className="mr-2" />
+                ) : (
+                  <Send className="w-4 h-4 mr-2" />
+                )}
                 Post
               </Button>
             </div>
@@ -120,7 +132,7 @@ export function CommentSection({ videoId, initialCommentsCount = 0 }: CommentSec
       <div className="space-y-6">
         {loading ? (
           <div className="flex justify-center py-8">
-            <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+            <Spinner className="size-6 text-muted-foreground" />
           </div>
         ) : comments.length > 0 ? (
           comments.map((comment) => (
