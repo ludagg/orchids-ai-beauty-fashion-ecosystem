@@ -78,7 +78,8 @@ describe('AI Fit Check POST /api/ai-fit', () => {
     });
 
     test('should return 404 if product is not found', async () => {
-        vi.mocked((await import('@/lib/db')).db.query.products.findFirst).mockResolvedValueOnce(null);
+        const dbModule = await import('@/lib/db');
+        vi.mocked(dbModule.db.query.products.findFirst).mockResolvedValueOnce(null as never);
         const req = new NextRequest('http://localhost/api/ai-fit', {
             method: 'POST',
             body: JSON.stringify({ productId: "unknown" })
