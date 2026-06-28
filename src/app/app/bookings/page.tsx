@@ -16,7 +16,6 @@ import {
   Package,
   Truck,
   RotateCcw,
-  Loader2,
   ShoppingBag,
   PenSquare
 } from "lucide-react";
@@ -37,6 +36,14 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Spinner } from "@/components/ui/spinner";
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
 
 interface Booking {
   id: string;
@@ -224,17 +231,37 @@ export default function BookingsAndOrdersPage() {
 
         {loading ? (
              <div className="flex justify-center py-20">
-                <Loader2 className="w-10 h-10 animate-spin text-primary" />
+                <Spinner className="w-10 h-10 text-primary" />
              </div>
         ) : activeTab === "Bookings" ? (
           filteredBookings.length === 0 ? (
-            <div className="text-center py-20 text-muted-foreground">
-              <p>{statusFilter === "All" ? "No bookings found." : `No ${statusFilter.toLowerCase()} bookings.`}</p>
-              {statusFilter !== "All"
-                ? <button onClick={() => setStatusFilter("All")} className="text-primary hover:underline mt-2 inline-block">View all bookings</button>
-                : <Link href="/app/salons" className="text-primary hover:underline mt-2 inline-block">Book an appointment</Link>
-              }
-            </div>
+            <Empty className="py-20">
+              <EmptyHeader>
+                <EmptyMedia variant="icon">
+                  <Calendar className="w-6 h-6" />
+                </EmptyMedia>
+                <EmptyTitle>
+                  {statusFilter === "All" ? "No bookings found." : `No ${statusFilter.toLowerCase()} bookings.`}
+                </EmptyTitle>
+                <EmptyDescription>
+                  {statusFilter !== "All" ? (
+                    <button
+                      onClick={() => setStatusFilter("All")}
+                      className="text-primary hover:underline mt-2 inline-block"
+                    >
+                      View all bookings
+                    </button>
+                  ) : (
+                    <Link
+                      href="/app/salons"
+                      className="text-primary hover:underline mt-2 inline-block"
+                    >
+                      Book an appointment
+                    </Link>
+                  )}
+                </EmptyDescription>
+              </EmptyHeader>
+            </Empty>
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {filteredBookings.map((booking, i) => (
@@ -311,7 +338,7 @@ export default function BookingsAndOrdersPage() {
                                 className="h-14 w-14 rounded-2xl border border-border flex items-center justify-center text-foreground hover:bg-muted transition-all"
                                 aria-label="Message Salon"
                             >
-                                {messageLoadingId === booking.id ? <Loader2 className="w-5 h-5 animate-spin" /> : <MessageCircle className="w-5 h-5" />}
+                                {messageLoadingId === booking.id ? <Spinner className="w-5 h-5" /> : <MessageCircle className="w-5 h-5" />}
                             </button>
                         </TooltipTrigger>
                         <TooltipContent>Message Salon</TooltipContent>
@@ -341,7 +368,7 @@ export default function BookingsAndOrdersPage() {
                                     className="h-14 w-14 rounded-2xl border border-border flex items-center justify-center text-muted-foreground hover:text-rose-600 hover:bg-rose-500/10 transition-all group/cancel"
                                     aria-label="Cancel Booking"
                                 >
-                                    {processingId === booking.id ? <Loader2 className="w-6 h-6 animate-spin" /> : <XCircle className="w-6 h-6" />}
+                                    {processingId === booking.id ? <Spinner className="w-6 h-6" /> : <XCircle className="w-6 h-6" />}
                                 </button>
                             </TooltipTrigger>
                             <TooltipContent>Cancel Booking</TooltipContent>
@@ -354,10 +381,19 @@ export default function BookingsAndOrdersPage() {
           )
         ) : (
           orders.length === 0 ? (
-            <div className="text-center py-20 text-muted-foreground">
-                <p>No orders found.</p>
-                <Link href="/app/marketplace" className="text-primary hover:underline mt-2 inline-block">Browse Marketplace</Link>
-            </div>
+            <Empty className="py-20">
+              <EmptyHeader>
+                <EmptyMedia variant="icon">
+                  <ShoppingBag className="w-6 h-6" />
+                </EmptyMedia>
+                <EmptyTitle>No orders found.</EmptyTitle>
+                <EmptyDescription>
+                  <Link href="/app/marketplace" className="text-primary hover:underline mt-2 inline-block">
+                    Browse Marketplace
+                  </Link>
+                </EmptyDescription>
+              </EmptyHeader>
+            </Empty>
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {orders.map((order, i) => (
