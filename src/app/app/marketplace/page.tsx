@@ -10,11 +10,20 @@ import {
   Star,
   ArrowRight,
   TrendingUp,
-  Tag,
-  Loader2
+  Tag
 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import SearchBar from "@/components/SearchBar";
+import { Spinner } from "@/components/ui/spinner";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
 
 const CATEGORIES = ["All", "Clothing", "Beauty & Skincare", "Hair Care", "Nail Care", "Fragrances", "Accessories", "Wellness"];
 
@@ -104,16 +113,12 @@ export default function MarketplacePage() {
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="relative group hidden sm:block">
-             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-             <input
-               type="text"
-               placeholder="Search products..."
-               className="pl-9 pr-4 py-2.5 rounded-xl border border-border bg-card text-sm focus:ring-2 focus:ring-primary/5 transition-all outline-none w-48 text-foreground"
-               value={searchQuery}
-               onChange={(e) => setSearchQuery(e.target.value)}
-             />
-          </div>
+          <SearchBar
+            value={searchQuery}
+            onChange={setSearchQuery}
+            placeholder="Search products..."
+            className="w-48 hidden sm:block"
+          />
           <button className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-border bg-card text-foreground text-sm font-medium hover:bg-secondary transition-all">
             <Filter className="w-4 h-4" />
             Filters
@@ -127,6 +132,7 @@ export default function MarketplacePage() {
           <button
             key={category}
             onClick={() => setSelectedCategory(category)}
+            aria-pressed={selectedCategory === category}
             className={`px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
               selectedCategory === category
                 ? "bg-primary text-primary-foreground shadow-md"
@@ -141,12 +147,20 @@ export default function MarketplacePage() {
       {/* Product Grid */}
       {loading ? (
         <div className="flex justify-center py-20">
-            <Loader2 className="w-10 h-10 animate-spin text-primary" />
+            <Spinner className="size-10 text-primary" />
         </div>
       ) : products.length === 0 ? (
-        <div className="text-center py-20 text-muted-foreground">
-            <p>No products found.</p>
-        </div>
+        <Empty className="py-20">
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <ShoppingBag className="size-6" />
+            </EmptyMedia>
+            <EmptyTitle>No products found</EmptyTitle>
+            <EmptyDescription>
+              We couldn't find any products matching your current filters or search query.
+            </EmptyDescription>
+          </EmptyHeader>
+        </Empty>
       ) : (
         <section className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
             {products.map((product, i) => (
@@ -181,8 +195,12 @@ export default function MarketplacePage() {
                     <div className="flex items-center justify-between mb-0.5 sm:mb-1">
                     <h3 className="font-semibold text-sm sm:text-[15px] truncate text-foreground pr-2">{product.name}</h3>
                     {product.rating > 0 && (
-                        <div className="hidden sm:flex items-center gap-1 text-xs font-bold bg-secondary px-2 py-0.5 rounded-full text-foreground flex-shrink-0">
-                            <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+                        <div
+                          role="img"
+                          aria-label={`${product.rating.toFixed(1)} out of 5 stars`}
+                          className="hidden sm:flex items-center gap-1 text-xs font-bold bg-secondary px-2 py-0.5 rounded-full text-foreground flex-shrink-0"
+                        >
+                            <Star className="w-3 h-3 fill-amber-400 text-amber-400" aria-hidden="true" />
                             {product.rating.toFixed(1)}
                         </div>
                     )}
