@@ -3,11 +3,6 @@ import { PATCH } from './route';
 import { NextRequest } from 'next/server';
 import { eq } from 'drizzle-orm';
 
-// Mock next/headers
-vi.mock('next/headers', () => ({
-  headers: vi.fn().mockResolvedValue(new Headers())
-}));
-
 const { mockUpdate, mockSet, mockWhere, mockGetSession } = vi.hoisted(() => {
     const _mockUpdate = vi.fn().mockReturnThis();
     const _mockSet = vi.fn().mockReturnThis();
@@ -27,6 +22,11 @@ const { mockUpdate, mockSet, mockWhere, mockGetSession } = vi.hoisted(() => {
         mockGetSession: _mockGetSession
     };
 });
+
+// Mock next/headers
+vi.mock('next/headers', () => ({
+  headers: vi.fn().mockResolvedValue(new Headers())
+}));
 
 // Mock db
 vi.mock('@/lib/db', () => ({
