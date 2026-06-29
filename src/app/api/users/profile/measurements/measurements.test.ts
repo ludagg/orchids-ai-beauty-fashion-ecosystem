@@ -3,23 +3,23 @@ import { PATCH } from './route';
 import { NextRequest } from 'next/server';
 import { eq } from 'drizzle-orm';
 
-const { mockUpdate, mockSet, mockWhere, mockGetSession } = vi.hoisted(() => {
-    const _mockUpdate = vi.fn().mockReturnThis();
-    const _mockSet = vi.fn().mockReturnThis();
-    const _mockWhere = vi.fn().mockResolvedValue([]);
-    const _mockGetSession = vi.fn();
+const mocks = vi.hoisted(() => {
+    const mockUpdate = vi.fn().mockReturnThis();
+    const mockSet = vi.fn().mockReturnThis();
+    const mockWhere = vi.fn().mockResolvedValue([]);
+    const mockGetSession = vi.fn();
 
-    _mockUpdate.mockImplementation(() => ({
-        set: _mockSet.mockImplementation(() => ({
-            where: _mockWhere
+    mockUpdate.mockImplementation(() => ({
+        set: mockSet.mockImplementation(() => ({
+            where: mockWhere
         }))
     }));
 
     return {
-        mockUpdate: _mockUpdate,
-        mockSet: _mockSet,
-        mockWhere: _mockWhere,
-        mockGetSession: _mockGetSession
+        mockUpdate,
+        mockSet,
+        mockWhere,
+        mockGetSession
     };
 });
 
@@ -31,7 +31,7 @@ vi.mock('next/headers', () => ({
 // Mock db
 vi.mock('@/lib/db', () => ({
   db: {
-    update: mockUpdate
+    update: mocks.mockUpdate
   }
 }));
 
@@ -39,7 +39,7 @@ vi.mock('@/lib/db', () => ({
 vi.mock('@/lib/auth', () => ({
   auth: {
     api: {
-      getSession: mockGetSession
+      getSession: mocks.mockGetSession
     }
   }
 }));
@@ -50,7 +50,7 @@ describe('PATCH /api/users/profile/measurements', () => {
   });
 
   it('should return 401 if unauthorized', async () => {
-    mockGetSession.mockResolvedValue(null);
+    mocks.mockGetSession.mockResolvedValue(null);
 
     const req = new NextRequest('http://localhost/api/users/profile/measurements', {
       method: 'PATCH',
@@ -66,7 +66,7 @@ describe('PATCH /api/users/profile/measurements', () => {
   });
 
   it('should update measurements', async () => {
-    mockGetSession.mockResolvedValue({
+    mocks.mockGetSession.mockResolvedValue({
         user: { id: 'test-user-123' }
     });
 
@@ -85,17 +85,17 @@ describe('PATCH /api/users/profile/measurements', () => {
     const data = await response.json();
     expect(data.message).toBe('Measurements updated successfully');
 
-    expect(mockUpdate).toHaveBeenCalled();
-    expect(mockSet).toHaveBeenCalledWith(expect.objectContaining({
+    expect(mocks.mockUpdate).toHaveBeenCalled();
+    expect(mocks.mockSet).toHaveBeenCalledWith(expect.objectContaining({
         height: '180',
         weight: '75',
         bodyType: 'regular'
     }));
-    expect(mockWhere).toHaveBeenCalled();
+    expect(mocks.mockWhere).toHaveBeenCalled();
   });
 
   it('should return 400 for invalid input types (if any)', async () => {
-    mockGetSession.mockResolvedValue({
+    mocks.mockGetSession.mockResolvedValue({
         user: { id: 'test-user-123' }
     });
 
