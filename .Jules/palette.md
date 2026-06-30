@@ -64,3 +64,7 @@
 ## 2026-04-13 - Profile UX Standardization
 **Learning:** For high-traffic profile pages, standardizing on unified `Empty` and `Spinner` primitives ensures a consistent brand voice across all tabs. Additionally, adding explicit `aria-label` attributes to numerical statistics (Followers, Following, etc.) provides essential context for screen reader users who might otherwise hear only the number or a truncated label.
 **Action:** Always refactor custom loading/empty states to use the standard UI library. Audit interactive statistics and ensured they have descriptive `aria-label` attributes that combine the value and the metric name.
+
+## 2026-06-30 - Marketplace Search UX Unification
+**Learning:** Using the unified `SearchBar` component for page-specific searches (like in the Marketplace) not only ensures visual consistency but also provides advanced features like the '/' keyboard shortcut and a clear-search button for free, significantly improving the "premium" feel of the interface.
+**Action:** Replace custom search inputs with the unified `SearchBar` component to maintain consistency and leverage built-in accessibility and power-user features.
