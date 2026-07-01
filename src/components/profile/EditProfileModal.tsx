@@ -10,7 +10,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Camera, Mail, Phone, MapPin, Instagram, Youtube, Globe, Loader2 } from "lucide-react";
+import { Camera, Mail, Phone, MapPin, Instagram, Youtube, Globe } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
 import { toast } from "sonner";
 
 interface EditProfileModalProps {
@@ -131,13 +132,13 @@ export function EditProfileModal({ isOpen, onOpenChange, user, onSave }: EditPro
                     aria-label="Change profile picture"
                   >
                     <Avatar className="w-24 h-24 border-2 border-background shadow-md">
-                      <AvatarImage src={image || "/placeholder-avatar.jpg"} alt="Profile" className="object-cover" />
+                      <AvatarImage src={image || "/placeholder-avatar.jpg"} alt="" className="object-cover" />
                       <AvatarFallback className="text-xl">
                         {name ? name.substring(0, 2).toUpperCase() : "JD"}
                       </AvatarFallback>
                     </Avatar>
                     <div className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity">
-                      <Camera className="w-6 h-6 text-white" />
+                      <Camera className="w-6 h-6 text-white" aria-hidden="true" />
                     </div>
                   </button>
                   <input
@@ -234,7 +235,7 @@ export function EditProfileModal({ isOpen, onOpenChange, user, onSave }: EditPro
                   <div className="space-y-0.5">
                     <Label className="text-sm">Accepting Bookings</Label>
                   </div>
-                  <Switch defaultChecked />
+                  <Switch defaultChecked aria-label="Accepting Bookings" />
              </div>
           </TabsContent>
         </Tabs>
@@ -242,7 +243,7 @@ export function EditProfileModal({ isOpen, onOpenChange, user, onSave }: EditPro
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
           <Button onClick={handleSubmit} disabled={loading}>
-            {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
+            {loading ? <Spinner className="mr-2" /> : null}
             Save Changes
           </Button>
         </DialogFooter>
