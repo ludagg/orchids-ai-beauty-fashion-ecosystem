@@ -408,7 +408,7 @@ function SearchContent() {
                                         <h3 className="font-semibold text-sm truncate pr-2">{product.name}</h3>
                                         <p className="text-xs text-muted-foreground mb-1 truncate">{product.brand || product.salon?.name}</p>
                                         <p className="font-bold text-sm text-rose-600">
-                                            {(product.price / 100).toLocaleString('en-IN', { style: 'currency', currency: 'INR' })}
+                                            {((product.salePrice ?? product.originalPrice) / 100).toLocaleString('en-IN', { style: 'currency', currency: 'INR' })}
                                         </p>
                                     </motion.div>
                                 </Link>

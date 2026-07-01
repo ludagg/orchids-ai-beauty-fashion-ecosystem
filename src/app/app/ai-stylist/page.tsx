@@ -453,7 +453,7 @@ export default function AIStylistPage() {
                             <div className="p-2 sm:p-3">
                               <p className="font-bold text-xs truncate mb-1">{product.name}</p>
                               <p className="text-xs text-muted-foreground">
-                                {(product.price / 100).toLocaleString("en-IN", {
+                                {((product.salePrice ?? product.originalPrice) / 100).toLocaleString("en-IN", {
                                   style: "currency",
                                   currency: "INR",
                                 })}
@@ -600,7 +600,7 @@ export default function AIStylistPage() {
                     </div>
                     <h4 className="font-bold text-sm text-foreground truncate">{product.name}</h4>
                     <p className="text-xs text-muted-foreground mt-0.5 font-medium">
-                      {(product.price / 100).toLocaleString("en-IN", {
+                      {((product.salePrice ?? product.originalPrice) / 100).toLocaleString("en-IN", {
                         style: "currency",
                         currency: "INR",
                       })}
