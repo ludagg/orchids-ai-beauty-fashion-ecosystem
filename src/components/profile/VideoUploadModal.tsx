@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Loader2 } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
 
 interface VideoUploadModalProps {
     isOpen: boolean;
@@ -96,7 +96,7 @@ export function VideoUploadModal({ isOpen, onOpenChange, onSuccess }: VideoUploa
                         <div className="space-y-2">
                             <Label htmlFor="category">Category</Label>
                             <Select value={formData.category} onValueChange={(val) => handleSelectChange('category', val)}>
-                                <SelectTrigger>
+                                <SelectTrigger id="category">
                                     <SelectValue placeholder="Select" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -109,7 +109,7 @@ export function VideoUploadModal({ isOpen, onOpenChange, onSuccess }: VideoUploa
                         <div className="space-y-2">
                             <Label htmlFor="status">Status</Label>
                             <Select value={formData.status} onValueChange={(val) => handleSelectChange('status', val)}>
-                                <SelectTrigger>
+                                <SelectTrigger id="status">
                                     <SelectValue placeholder="Select" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -122,7 +122,7 @@ export function VideoUploadModal({ isOpen, onOpenChange, onSuccess }: VideoUploa
                     </div>
                     <DialogFooter>
                         <Button type="submit" disabled={isLoading}>
-                            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                            {isLoading && <Spinner className="mr-2" />}
                             Upload Video
                         </Button>
                     </DialogFooter>
