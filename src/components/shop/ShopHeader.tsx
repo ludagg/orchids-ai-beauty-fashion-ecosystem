@@ -2,10 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Search, ShoppingCart, Heart } from 'lucide-react';
-import { Input } from '@/components/ui/input';
+import { ShoppingCart, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import SearchBar from '@/components/SearchBar';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 export function ShopHeader() {
   const router = useRouter();
@@ -47,34 +48,51 @@ export function ShopHeader() {
         {/* Brand / Logo if needed, otherwise rely on Layout */}
 
         {/* Search Input */}
-        <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            type="search"
-            placeholder="Search products, brands..."
-            className="w-full bg-secondary/50 pl-8 focus-visible:bg-background transition-colors"
+        <div className="flex-1 max-w-md">
+          <SearchBar
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={setQuery}
+            placeholder="Search products, brands..."
           />
         </div>
 
         <div className="flex items-center gap-2">
             {/* Wishlist */}
-            <Button variant="ghost" size="icon" onClick={() => router.push('/app/wishlist')} className="relative">
-            <Heart className="h-5 w-5" />
-            <span className="sr-only">Wishlist</span>
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => router.push('/app/wishlist')}
+                  className="relative"
+                  aria-label="View Wishlist"
+                >
+                  <Heart className="h-5 w-5" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Wishlist</TooltipContent>
+            </Tooltip>
 
             {/* Cart */}
-            <Button variant="ghost" size="icon" onClick={() => router.push('/app/cart')} className="relative">
-            <ShoppingCart className="h-5 w-5" />
-            {cartCount > 0 && (
-                <Badge variant="destructive" className="absolute -top-1 -right-1 h-4 w-4 rounded-full p-0 flex items-center justify-center text-[10px]">
-                    {cartCount}
-                </Badge>
-            )}
-            <span className="sr-only">Cart</span>
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => router.push('/app/cart')}
+                  className="relative"
+                  aria-label={`View Cart${cartCount > 0 ? `, ${cartCount} items` : ''}`}
+                >
+                  <ShoppingCart className="h-5 w-5" />
+                  {cartCount > 0 && (
+                      <Badge variant="destructive" className="absolute -top-1 -right-1 h-4 w-4 rounded-full p-0 flex items-center justify-center text-[10px]">
+                          {cartCount}
+                      </Badge>
+                  )}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Cart</TooltipContent>
+            </Tooltip>
         </div>
       </div>
     </header>
