@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Loader2, Calendar, Clock, User, CheckCircle2, XCircle, Search, Filter, Mail, Phone, MapPin, DollarSign, TrendingUp, AlertCircle } from "lucide-react";
+import { Calendar, Clock, User, CheckCircle2, XCircle, Search, Filter, Mail, Phone, MapPin, DollarSign, TrendingUp, AlertCircle } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
 import { format } from "date-fns";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
@@ -104,7 +105,7 @@ export function BookingManager({ salonId }: BookingManagerProps) {
   if (loading) {
     return (
       <div className="flex justify-center items-center py-20">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        <Spinner className="w-8 h-8 text-primary" />
       </div>
     );
   }
@@ -249,7 +250,7 @@ export function BookingManager({ salonId }: BookingManagerProps) {
                             disabled={processingId === booking.id}
                             className="flex-1 px-4 py-2 rounded-xl bg-foreground text-background text-xs font-bold hover:bg-foreground/90 transition-all flex items-center justify-center gap-2"
                         >
-                            {processingId === booking.id ? <Loader2 className="w-3 h-3 animate-spin" /> : <CheckCircle2 className="w-3 h-3" />}
+                            {processingId === booking.id ? <Spinner className="w-3 h-3" /> : <CheckCircle2 className="w-3 h-3" />}
                             Confirm
                         </button>
                         <button
@@ -269,7 +270,7 @@ export function BookingManager({ salonId }: BookingManagerProps) {
                             disabled={processingId === booking.id}
                             className="flex-1 px-4 py-2 rounded-xl bg-emerald-500 text-white text-xs font-bold hover:bg-emerald-600 transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20"
                         >
-                            {processingId === booking.id ? <Loader2 className="w-3 h-3 animate-spin" /> : <CheckCircle2 className="w-3 h-3" />}
+                            {processingId === booking.id ? <Spinner className="w-3 h-3 text-current" /> : <CheckCircle2 className="w-3 h-3" />}
                             Complete
                         </button>
                         <button

@@ -1,8 +1,9 @@
 "use client";
 
-import { Search, MoreVertical, Loader2 } from "lucide-react";
+import { MoreVertical, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import SearchBar from "@/components/SearchBar";
 import { format } from "date-fns";
 
 interface Conversation {
@@ -65,17 +66,11 @@ export default function ChatSidebar({ selectedId }: ChatSidebarProps) {
             <MoreVertical className="w-5 h-5" />
           </button>
         </div>
-        <div className="relative" role="search">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" aria-hidden="true" />
-          <input
-            type="search"
-            aria-label="Search conversations"
-            placeholder="Search conversations..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-3 rounded-2xl bg-muted border-transparent focus:bg-card focus:border-border transition-all outline-none text-sm text-foreground placeholder:text-muted-foreground"
-          />
-        </div>
+        <SearchBar
+          value={searchQuery}
+          onChange={setSearchQuery}
+          placeholder="Search conversations..."
+        />
       </div>
 
       <div className="flex-1 overflow-y-auto no-scrollbar">
