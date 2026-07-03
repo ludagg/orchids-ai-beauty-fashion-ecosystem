@@ -64,3 +64,7 @@
 ## 2026-04-13 - Profile UX Standardization
 **Learning:** For high-traffic profile pages, standardizing on unified `Empty` and `Spinner` primitives ensures a consistent brand voice across all tabs. Additionally, adding explicit `aria-label` attributes to numerical statistics (Followers, Following, etc.) provides essential context for screen reader users who might otherwise hear only the number or a truncated label.
 **Action:** Always refactor custom loading/empty states to use the standard UI library. Audit interactive statistics and ensured they have descriptive `aria-label` attributes that combine the value and the metric name.
+
+## 2026-07-03 - Contextual Empty States and Filter Accessibility
+**Learning:** Empty states are more than just "no data" messages; they are opportunities to guide the user. Including context-aware descriptions and a primary "Clear Filters" action in the `Empty` component significantly reduces friction in search-heavy interfaces. Additionally, using `aria-pressed` on filter buttons provides essential state feedback for screen reader users that visual color changes alone do not convey.
+**Action:** Always implement a "Clear Filters" action within `Empty` states for filtered lists. Use `aria-pressed` for toggleable filter buttons to ensure state accessibility.
