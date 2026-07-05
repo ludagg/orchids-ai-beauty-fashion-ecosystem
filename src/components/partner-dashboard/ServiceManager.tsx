@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Plus, Scissors, Trash2, Loader2 } from "lucide-react"
+import { Plus, Scissors, Trash2 } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {
@@ -25,6 +25,19 @@ import {
 } from "@/components/ui/alert-dialog"
 import { toast } from "sonner"
 import { Card, CardContent } from "@/components/ui/card"
+import { Spinner } from "@/components/ui/spinner"
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 interface Service {
   id: string
@@ -132,7 +145,12 @@ export function ServiceManager({ salonId }: ServiceManagerProps) {
   }
 
   if (loading) {
-      return <div className="text-center py-8 text-muted-foreground">Loading services...</div>
+    return (
+      <div className="flex flex-col items-center justify-center py-20">
+        <Spinner className="w-8 h-8" />
+        <p className="mt-4 text-sm text-muted-foreground">Loading services...</p>
+      </div>
+    )
   }
 
   return (
@@ -218,7 +236,8 @@ export function ServiceManager({ salonId }: ServiceManagerProps) {
             </div>
             <DialogFooter>
               <Button onClick={handleAdd} disabled={isSubmitting}>
-                  {isSubmitting ? "Adding..." : "Add Service"}
+                {isSubmitting ? <Spinner className="mr-2" /> : null}
+                {isSubmitting ? "Adding..." : "Add Service"}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -229,9 +248,13 @@ export function ServiceManager({ salonId }: ServiceManagerProps) {
         {services.map((service) => (
           <Card key={service.id} className="relative group overflow-hidden border-muted">
             {service.image && (
-                <div className="h-32 w-full overflow-hidden">
-                    <img src={service.image} alt={service.name} className="w-full h-full object-cover transition-transform group-hover:scale-105" />
-                </div>
+              <div className="h-32 w-full overflow-hidden">
+                <img
+                  src={service.image}
+                  alt=""
+                  className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                />
+              </div>
             )}
             <CardContent className="p-5">
               <div className="flex items-start justify-between mb-2">
@@ -245,15 +268,23 @@ export function ServiceManager({ salonId }: ServiceManagerProps) {
                         {service.category}
                     </span>
                 )}
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8 text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 transition-opacity absolute top-2 right-2 bg-background/80 backdrop-blur-sm"
-                    onClick={() => { setServiceToDelete(service.id); setIsDeleteDialogOpen(true); }}
-                    aria-label={`Delete ${service.name}`}
-                >
-                    <Trash2 className="w-4 h-4" />
-                </Button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 transition-opacity absolute top-2 right-2 bg-background/80 backdrop-blur-sm"
+                      onClick={() => {
+                        setServiceToDelete(service.id)
+                        setIsDeleteDialogOpen(true)
+                      }}
+                      aria-label={`Delete ${service.name}`}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Delete service</TooltipContent>
+                </Tooltip>
               </div>
               <h4 className="font-semibold truncate">{service.name}</h4>
               {service.description && (
@@ -261,15 +292,31 @@ export function ServiceManager({ salonId }: ServiceManagerProps) {
               )}
               <div className="flex items-center justify-between mt-2 text-sm text-muted-foreground">
                 <span>{service.duration} min</span>
-                <span className="font-medium text-foreground">${(service.price / 100).toFixed(2)}</span>
+                <span className="font-medium text-foreground">
+                  {(service.price / 100).toLocaleString("en-IN", {
+                    style: "currency",
+                    currency: "INR",
+                  })}
+                </span>
               </div>
             </CardContent>
           </Card>
         ))}
         {services.length === 0 && (
-            <div className="col-span-full py-12 text-center text-muted-foreground bg-muted/50 rounded-lg border-2 border-dashed">
-                <p>No services added yet.</p>
-            </div>
+          <div className="col-span-full">
+            <Empty>
+              <EmptyHeader>
+                <EmptyMedia variant="icon">
+                  <Scissors className="w-6 h-6" />
+                </EmptyMedia>
+                <EmptyTitle>No services added yet</EmptyTitle>
+                <EmptyDescription>
+                  Start by adding your first salon service to help clients book
+                  with you.
+                </EmptyDescription>
+              </EmptyHeader>
+            </Empty>
+          </div>
         )}
       </div>
 
@@ -282,11 +329,14 @@ export function ServiceManager({ salonId }: ServiceManagerProps) {
           <AlertDialogFooter>
             <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
             <AlertDialogAction
-              onClick={(e) => { e.preventDefault(); handleDelete(); }}
+              onClick={(e) => {
+                e.preventDefault()
+                handleDelete()
+              }}
               disabled={isDeleting}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              {isDeleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+              {isDeleting ? <Spinner className="mr-2" /> : null}
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>
