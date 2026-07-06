@@ -5,6 +5,7 @@ import { pointTransactions, users, userLevels } from "@/db/schema";
 import { eq, desc } from "drizzle-orm";
 import { LevelProgress } from "@/components/loyalty/LevelProgress";
 import { PointsHistory } from "@/components/loyalty/PointsHistory";
+import { ReferralsCard } from "@/components/loyalty/ReferralsCard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -95,6 +96,8 @@ export default async function LoyaltyDashboard() {
                       </Button>
                   </CardContent>
               </Card>
+
+              <ReferralsCard />
           </div>
       </div>
     </div>
