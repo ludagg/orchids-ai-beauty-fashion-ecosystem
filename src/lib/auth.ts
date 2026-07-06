@@ -22,6 +22,12 @@ export const auth = betterAuth({
       loyaltyPoints: {
         type: "number",
       },
+      referralCode: {
+        type: "string",
+      },
+      referredById: {
+        type: "string",
+      },
     },
   },
   emailAndPassword: {
