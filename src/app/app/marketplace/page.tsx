@@ -2,19 +2,25 @@
 
 import { motion } from "framer-motion";
 import {
-  ShoppingBag,
   Search,
   Filter,
-  Heart,
-  ChevronRight,
   Star,
-  ArrowRight,
-  TrendingUp,
   Tag,
-  Loader2
+  ShoppingBag
 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import SearchBar from "@/components/SearchBar";
+import { Spinner } from "@/components/ui/spinner";
+import { Button } from "@/components/ui/button";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle
+} from "@/components/ui/empty";
 
 const CATEGORIES = ["All", "Clothing", "Beauty & Skincare", "Hair Care", "Nail Care", "Fragrances", "Accessories", "Wellness"];
 
@@ -94,6 +100,11 @@ export default function MarketplacePage() {
     return (cents / 100).toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
   };
 
+  const clearFilters = () => {
+    setSelectedCategory("All");
+    setSearchQuery("");
+  };
+
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-8 max-w-[1400px] mx-auto w-full">
       {/* Header Section */}
@@ -104,20 +115,16 @@ export default function MarketplacePage() {
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="relative group hidden sm:block">
-             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-             <input
-               type="text"
-               placeholder="Search products..."
-               className="pl-9 pr-4 py-2.5 rounded-xl border border-border bg-card text-sm focus:ring-2 focus:ring-primary/5 transition-all outline-none w-48 text-foreground"
-               value={searchQuery}
-               onChange={(e) => setSearchQuery(e.target.value)}
-             />
-          </div>
-          <button className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-border bg-card text-foreground text-sm font-medium hover:bg-secondary transition-all">
-            <Filter className="w-4 h-4" />
+          <SearchBar
+            value={searchQuery}
+            onChange={setSearchQuery}
+            placeholder="Search products..."
+            className="hidden sm:block w-64"
+          />
+          <Button variant="outline" className="rounded-xl h-10">
+            <Filter className="w-4 h-4 mr-2" />
             Filters
-          </button>
+          </Button>
         </div>
       </section>
 
@@ -127,6 +134,7 @@ export default function MarketplacePage() {
           <button
             key={category}
             onClick={() => setSelectedCategory(category)}
+            aria-pressed={selectedCategory === category}
             className={`px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
               selectedCategory === category
                 ? "bg-primary text-primary-foreground shadow-md"
@@ -141,11 +149,35 @@ export default function MarketplacePage() {
       {/* Product Grid */}
       {loading ? (
         <div className="flex justify-center py-20">
-            <Loader2 className="w-10 h-10 animate-spin text-primary" />
+            <Spinner className="w-10 h-10 text-primary" />
         </div>
       ) : products.length === 0 ? (
-        <div className="text-center py-20 text-muted-foreground">
-            <p>No products found.</p>
+        <div className="min-h-[400px] flex items-center justify-center relative overflow-hidden rounded-3xl border border-dashed">
+             {/* Premium Background Decoration */}
+             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#e5e5e5_1px,transparent_1px)] dark:bg-[radial-gradient(circle_at_center,#262626_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]" />
+             <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 0.05, scale: 1 }}
+                transition={{ duration: 2, repeat: Infinity, repeatType: "reverse" }}
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-primary rounded-full blur-[100px]"
+            />
+
+            <Empty className="relative z-10 border-none">
+                <EmptyHeader>
+                    <EmptyMedia variant="icon">
+                        <ShoppingBag className="w-6 h-6" />
+                    </EmptyMedia>
+                    <EmptyTitle>No products found</EmptyTitle>
+                    <EmptyDescription>
+                        We couldn't find any products matching your current filters. Try adjusting your search or category.
+                    </EmptyDescription>
+                </EmptyHeader>
+                <EmptyContent>
+                    <Button onClick={clearFilters} variant="outline" className="rounded-full">
+                        Clear all filters
+                    </Button>
+                </EmptyContent>
+            </Empty>
         </div>
       ) : (
         <section className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
@@ -181,8 +213,12 @@ export default function MarketplacePage() {
                     <div className="flex items-center justify-between mb-0.5 sm:mb-1">
                     <h3 className="font-semibold text-sm sm:text-[15px] truncate text-foreground pr-2">{product.name}</h3>
                     {product.rating > 0 && (
-                        <div className="hidden sm:flex items-center gap-1 text-xs font-bold bg-secondary px-2 py-0.5 rounded-full text-foreground flex-shrink-0">
-                            <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+                        <div
+                            role="img"
+                            aria-label={`Rating: ${product.rating.toFixed(1)} out of 5`}
+                            className="hidden sm:flex items-center gap-1 text-xs font-bold bg-secondary px-2 py-0.5 rounded-full text-foreground flex-shrink-0"
+                        >
+                            <Star className="w-3 h-3 fill-amber-400 text-amber-400" aria-hidden="true" />
                             {product.rating.toFixed(1)}
                         </div>
                     )}
