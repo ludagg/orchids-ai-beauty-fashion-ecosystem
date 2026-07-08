@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Heart, Star } from 'lucide-react';
+import { Heart, Star, Scale } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -26,9 +26,11 @@ interface Product {
 interface ProductCardProps {
   product: Product;
   view?: 'grid' | 'list';
+  onCompare?: (product: Product, e: React.MouseEvent) => void;
+  isComparing?: boolean;
 }
 
-export function ProductCard({ product, view = 'grid' }: ProductCardProps) {
+export function ProductCard({ product, view = 'grid', onCompare, isComparing }: ProductCardProps) {
   const isSale = product.price < product.originalPrice;
   const isNew = product.createdAt && new Date(product.createdAt) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
   const isLowStock = product.totalStock > 0 && product.totalStock <= 5;
@@ -106,21 +108,42 @@ export function ProductCard({ product, view = 'grid' }: ProductCardProps) {
             {!isOutOfStock && isNew && <Badge className="bg-blue-500 text-white">New</Badge>}
           </div>
 
-          {/* Wishlist Button (absolute top right) */}
-          <Button
-            size="icon"
-            variant="ghost"
-            className={cn(
-                "absolute right-2 top-2 h-8 w-8 rounded-full backdrop-blur-sm transition-colors",
-                isWishlisted
-                    ? "bg-red-500 text-white hover:bg-red-600"
-                    : "bg-black/20 text-white hover:bg-black/40"
+          {/* Action Buttons Container */}
+          <div className="absolute right-2 top-2 flex flex-col gap-2">
+            {/* Compare Button */}
+            {onCompare && (
+                <Button
+                    size="icon"
+                    variant="ghost"
+                    className={cn(
+                        "h-8 w-8 rounded-full backdrop-blur-sm transition-colors",
+                        isComparing
+                            ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                            : "bg-black/20 text-white hover:bg-black/40"
+                    )}
+                    onClick={(e) => onCompare(product, e)}
+                >
+                    <Scale className="h-4 w-4" />
+                    <span className="sr-only">Compare</span>
+                </Button>
             )}
-            onClick={toggleWishlist}
-          >
-            <Heart className={cn("h-4 w-4", isWishlisted && "fill-current")} />
-            <span className="sr-only">Add to wishlist</span>
-          </Button>
+
+            {/* Wishlist Button */}
+            <Button
+                size="icon"
+                variant="ghost"
+                className={cn(
+                    "h-8 w-8 rounded-full backdrop-blur-sm transition-colors",
+                    isWishlisted
+                        ? "bg-red-500 text-white hover:bg-red-600"
+                        : "bg-black/20 text-white hover:bg-black/40"
+                )}
+                onClick={toggleWishlist}
+            >
+                <Heart className={cn("h-4 w-4", isWishlisted && "fill-current")} />
+                <span className="sr-only">Add to wishlist</span>
+            </Button>
+          </div>
         </div>
 
         {/* Content */}
