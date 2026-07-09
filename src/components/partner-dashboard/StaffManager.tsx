@@ -24,10 +24,22 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Trash2, Plus, User, Pencil, Loader2 } from "lucide-react";
+import { Trash2, Plus, User, Pencil } from "lucide-react";
 import { toast } from "sonner";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { Spinner } from "@/components/ui/spinner";
+import {
+  Empty,
+  EmptyMedia,
+  EmptyTitle,
+  EmptyDescription,
+} from "@/components/ui/empty";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface StaffMember {
   id: string;
@@ -195,7 +207,7 @@ export function StaffManager({ salonId }: StaffManagerProps) {
   if (loading) {
     return (
       <div className="flex justify-center py-8">
-        <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
+        <Spinner className="w-8 h-8 text-muted-foreground" />
       </div>
     );
   }
@@ -213,30 +225,41 @@ export function StaffManager({ salonId }: StaffManagerProps) {
         {staffList.map((staff) => (
           <div
             key={staff.id}
-            className="group relative flex flex-col items-center p-6 rounded-xl border bg-card hover:shadow-md transition-all"
+            className="group relative flex flex-col items-center p-6 rounded-xl border bg-card hover:shadow-md transition-all focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2"
           >
-            <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8 text-muted-foreground hover:text-foreground"
-                onClick={() => handleOpenDialog(staff)}
-              >
-                <Pencil className="w-4 h-4" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8 text-destructive hover:bg-destructive/10"
-                onClick={() => handleDeleteClick(staff.id)}
-                aria-label={`Remove ${staff.name}`}
-              >
-                <Trash2 className="w-4 h-4" />
-              </Button>
+            <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 text-muted-foreground hover:text-foreground"
+                    onClick={() => handleOpenDialog(staff)}
+                    aria-label={`Edit ${staff.name}`}
+                  >
+                    <Pencil className="w-4 h-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Edit Staff</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 text-destructive hover:bg-destructive/10"
+                    onClick={() => handleDeleteClick(staff.id)}
+                    aria-label={`Remove ${staff.name}`}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Remove Staff</TooltipContent>
+              </Tooltip>
             </div>
 
             <Avatar className="w-24 h-24 mb-4 border-2 border-border">
-              <AvatarImage src={staff.image || ""} alt={staff.name} className="object-cover" />
+              <AvatarImage src={staff.image || ""} alt="" className="object-cover" />
               <AvatarFallback>
                 <User className="w-10 h-10 text-muted-foreground" />
               </AvatarFallback>
@@ -271,10 +294,19 @@ export function StaffManager({ salonId }: StaffManagerProps) {
         ))}
 
         {staffList.length === 0 && (
-          <div className="col-span-1 md:col-span-3 flex flex-col items-center justify-center py-12 border-2 border-dashed rounded-xl text-muted-foreground bg-muted/20">
-            <User className="w-12 h-12 mb-3 opacity-50" />
-            <p className="font-medium">No staff members yet</p>
-            <p className="text-sm">Add your team members to let clients book them directly.</p>
+          <div className="col-span-1 md:col-span-3">
+            <Empty>
+              <EmptyMedia variant="icon">
+                <User className="w-6 h-6" />
+              </EmptyMedia>
+              <EmptyTitle>No staff members yet</EmptyTitle>
+              <EmptyDescription>
+                Add your team members to let clients book them directly.
+              </EmptyDescription>
+              <Button onClick={() => handleOpenDialog()} variant="outline" size="sm" className="mt-2">
+                <Plus className="w-4 h-4 mr-2" /> Add Your First Member
+              </Button>
+            </Empty>
           </div>
         )}
       </div>
@@ -359,7 +391,7 @@ export function StaffManager({ salonId }: StaffManagerProps) {
                 Cancel
               </Button>
               <Button type="submit" disabled={submitting}>
-                {submitting && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                {submitting && <Spinner className="w-4 h-4 mr-2" />}
                 {editingStaff ? "Save Changes" : "Add Member"}
               </Button>
             </DialogFooter>
@@ -385,7 +417,7 @@ export function StaffManager({ salonId }: StaffManagerProps) {
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
               disabled={submitting}
             >
-              {submitting ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
+              {submitting ? <Spinner className="w-4 h-4 mr-2" /> : null}
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>
