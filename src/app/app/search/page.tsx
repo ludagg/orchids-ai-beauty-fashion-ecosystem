@@ -3,9 +3,12 @@
 import { useSearchParams, useRouter } from "next/navigation";
 import { useState, useEffect, Suspense } from "react";
 import { motion } from "framer-motion";
-import { Search, MapPin, Star, ShoppingBag, Video, Scissors, Sparkles, Users, Filter, X, Loader2, Play } from "lucide-react";
+import { Search, MapPin, Star, ShoppingBag, Video, Scissors, Sparkles, Users, Filter, Play } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
+import SearchBar from "@/components/SearchBar";
+import { Spinner } from "@/components/ui/spinner";
+import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription, EmptyContent } from "@/components/ui/empty";
 
 const TABS = [
   { id: "all", label: "All Results" },
@@ -16,7 +19,7 @@ const TABS = [
 
 export default function SearchPage() {
   return (
-    <Suspense fallback={<div className="flex justify-center p-20"><Loader2 className="w-10 h-10 animate-spin text-primary" /></div>}>
+    <Suspense fallback={<div className="flex justify-center p-20"><Spinner className="w-10 h-10 text-primary" /></div>}>
       <SearchContent />
     </Suspense>
   );
@@ -175,21 +178,12 @@ function SearchContent() {
       <div className="sticky top-0 z-30 bg-background/80 backdrop-blur-md border-b border-border">
         <div className="max-w-7xl mx-auto p-4 sm:p-6 space-y-4">
             <div className="flex flex-col md:flex-row gap-4">
-                <div className="relative flex-1">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                    <input
-                        type="text"
-                        placeholder="Search salons, services, products..."
-                        value={query}
-                        onChange={(e) => setQuery(e.target.value)}
-                        className="w-full pl-10 pr-4 py-3 rounded-2xl bg-secondary border-transparent focus:bg-background focus:border-foreground transition-all outline-none"
-                    />
-                    {query && (
-                        <button onClick={() => setQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-full hover:bg-muted text-muted-foreground">
-                            <X className="w-4 h-4" />
-                        </button>
-                    )}
-                </div>
+                <SearchBar
+                    value={query}
+                    onChange={setQuery}
+                    placeholder="Search salons, services, products..."
+                    className="flex-1"
+                />
                 <button
                     onClick={() => setShowFilters(!showFilters)}
                     className={`flex items-center gap-2 px-5 py-3 rounded-2xl font-medium transition-all ${showFilters || (city || type || userLoc) ? 'bg-primary text-primary-foreground' : 'bg-secondary text-foreground hover:bg-secondary/80'}`}
@@ -303,16 +297,22 @@ function SearchContent() {
         ) : (
             <div className="space-y-12">
                  {resultCount === 0 && !loading && (
-                    <div className="text-center py-20">
-                        <div className="w-20 h-20 bg-secondary rounded-full flex items-center justify-center mx-auto mb-4 text-muted-foreground">
-                            <Search className="w-8 h-8" />
-                        </div>
-                        <h3 className="text-xl font-bold mb-2">No results found</h3>
-                        <p className="text-muted-foreground mb-6">We couldn't find any matches for your search.</p>
-                        <button onClick={clearFilters} className="px-6 py-2.5 bg-foreground text-background rounded-xl font-medium hover:opacity-90">
-                            Clear Filters
-                        </button>
-                    </div>
+                    <Empty className="py-20 border-none">
+                        <EmptyHeader>
+                            <EmptyMedia variant="icon">
+                                <Search className="w-6 h-6" />
+                            </EmptyMedia>
+                            <EmptyTitle>No results found</EmptyTitle>
+                            <EmptyDescription>
+                                We couldn't find any matches for your search "{query}".
+                            </EmptyDescription>
+                        </EmptyHeader>
+                        <EmptyContent>
+                            <button onClick={clearFilters} className="px-6 py-2.5 bg-foreground text-background rounded-xl font-medium hover:opacity-90">
+                                Clear All Filters
+                            </button>
+                        </EmptyContent>
+                    </Empty>
                 )}
 
                 {/* Salons Grid */}
