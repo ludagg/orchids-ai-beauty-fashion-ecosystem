@@ -1,4 +1,5 @@
 "use client";
+import { formatPrice } from "@/lib/utils";
 
 import { motion } from "framer-motion";
 import {
@@ -331,9 +332,6 @@ export default function SalonDetailsPage() {
     }
   };
 
-  const formatPrice = (cents: number) => {
-    return (cents / 100).toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
-  };
 
   const selectedService = services.find(s => s.id === selectedServiceId);
   const qualifiedStaff = selectedServiceId
