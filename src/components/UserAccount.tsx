@@ -84,7 +84,7 @@ export default function UserAccount({ showLabel = true }: { showLabel?: boolean 
             >
               <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-violet-500 to-rose-500 flex items-center justify-center text-white font-medium text-xs shadow-sm group-hover:shadow-md transition-shadow overflow-hidden">
                 {user?.image ? (
-                    <img src={user.image} alt={user.name || "User"} className="w-full h-full object-cover" />
+                    <img src={user.image} alt="" className="w-full h-full object-cover" />
                 ) : (
                     initials
                 )}
