@@ -12,6 +12,17 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { Spinner } from "@/components/ui/spinner"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 
 interface ProductManagerProps {
     salonId: string;
@@ -20,6 +31,9 @@ interface ProductManagerProps {
 export function ProductManager({ salonId }: ProductManagerProps) {
   const [products, setProducts] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+  const [productToDelete, setProductToDelete] = useState<string | null>(null)
   const [view, setView] = useState<"list" | "form">("list")
   const [editingProduct, setEditingProduct] = useState<ProductFormValues & { id: string } | undefined>(undefined)
 
@@ -43,20 +57,19 @@ export function ProductManager({ salonId }: ProductManagerProps) {
     }
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async () => {
+    if (!productToDelete) return;
+    setIsDeleting(true);
     try {
-        const res = await fetch(`/api/products/${id}`, {
-            method: "DELETE"
-        });
-
-        if (!res.ok) {
-             throw new Error("Failed to delete product");
-        }
-
-        setProducts(products.filter(p => p.id !== id))
+        const res = await fetch(`/api/products/${productToDelete}`, { method: "DELETE" });
+        if (!res.ok) throw new Error();
+        setProducts(products.filter(p => p.id !== productToDelete))
         toast.success("Product removed")
+        setIsDeleteDialogOpen(false);
     } catch (error) {
         toast.error("Could not delete product");
+    } finally {
+        setIsDeleting(false);
     }
   }
 
@@ -141,6 +154,7 @@ export function ProductManager({ salonId }: ProductManagerProps) {
                             size="icon"
                             className="h-8 w-8 hover:text-primary"
                             onClick={() => handleEdit(product)}
+                            aria-label={`Edit ${product.name}`}
                         >
                             <Edit className="w-4 h-4" />
                         </Button>
@@ -153,7 +167,8 @@ export function ProductManager({ salonId }: ProductManagerProps) {
                             variant="ghost"
                             size="icon"
                             className="h-8 w-8 hover:text-destructive"
-                            onClick={() => handleDelete(product.id)}
+                            onClick={() => { setProductToDelete(product.id); setIsDeleteDialogOpen(true); }}
+                            aria-label={`Delete ${product.name}`}
                         >
                             <Trash2 className="w-4 h-4" />
                         </Button>
@@ -205,6 +220,21 @@ export function ProductManager({ salonId }: ProductManagerProps) {
             </div>
         )}
       </div>
+
+      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete product?</AlertDialogTitle>
+            <AlertDialogDescription>This action cannot be undone.</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={(e) => { e.preventDefault(); handleDelete(); }} disabled={isDeleting} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              {isDeleting ? <Spinner className="mr-2" /> : null} Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }
