@@ -16,7 +16,7 @@ async function fallbackKeywordMatching(message: string) {
     const foundCategories = FALLBACK_KEYWORDS.categories.filter(c => normalizedMessage.includes(c));
     const foundOccasions = FALLBACK_KEYWORDS.occasions.filter(o => normalizedMessage.includes(o));
 
-    const conditions: SQL[] = [eq(products.status, 'ACTIVE'), eq(products.visibility, 'PUBLIC')];
+    const conditions: SQL[] = [eq(products.isActive, true)];
     const searchTerms = [...foundColors, ...foundCategories, ...foundOccasions];
 
     if (searchTerms.length > 0) {
@@ -24,8 +24,7 @@ async function fallbackKeywordMatching(message: string) {
              conditions.push(or(
                  ilike(products.name, `%${term}%`),
                  ilike(products.description, `%${term}%`),
-                 ilike(products.mainCategory, `%${term}%`),
-                 ilike(products.subcategory, `%${term}%`)
+                 ilike(products.category, `%${term}%`)
              ));
         }
     }
