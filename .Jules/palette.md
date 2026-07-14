@@ -64,3 +64,7 @@
 ## 2026-04-13 - Profile UX Standardization
 **Learning:** For high-traffic profile pages, standardizing on unified `Empty` and `Spinner` primitives ensures a consistent brand voice across all tabs. Additionally, adding explicit `aria-label` attributes to numerical statistics (Followers, Following, etc.) provides essential context for screen reader users who might otherwise hear only the number or a truncated label.
 **Action:** Always refactor custom loading/empty states to use the standard UI library. Audit interactive statistics and ensured they have descriptive `aria-label` attributes that combine the value and the metric name.
+
+## 2026-07-14 - [Unified Sidebar Navigation UX]
+**Learning:** For applications with collapsible sidebars, a unified `NavLink` component that manages both visual labels and Radix-based tooltips ensures a consistent and accessible experience. It prevents redundant "title" tooltips and ensures that screen readers receive the correct `aria-label` only when the visual label is hidden.
+**Action:** Use a dedicated helper component for sidebar items to manage `Tooltip` wrapping and dynamic `aria-label` attributes based on the `isCollapsed` state.
