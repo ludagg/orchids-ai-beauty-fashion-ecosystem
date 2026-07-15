@@ -64,3 +64,7 @@
 ## 2026-04-13 - Profile UX Standardization
 **Learning:** For high-traffic profile pages, standardizing on unified `Empty` and `Spinner` primitives ensures a consistent brand voice across all tabs. Additionally, adding explicit `aria-label` attributes to numerical statistics (Followers, Following, etc.) provides essential context for screen reader users who might otherwise hear only the number or a truncated label.
 **Action:** Always refactor custom loading/empty states to use the standard UI library. Audit interactive statistics and ensured they have descriptive `aria-label` attributes that combine the value and the metric name.
+
+## 2026-07-15 - Async Actions in AlertDialogs
+**Learning:** In Radix-based `AlertDialog` components, the default behavior of the `AlertDialogAction` is to close the dialog immediately upon clicking. For asynchronous operations (like deleting a cart item), this prevents the user from seeing a loading state within the dialog. Using `e.preventDefault()` on the click handler allows the developer to manually manage the dialog's lifecycle, showing a `Spinner` and keeping the dialog open until the operation completes or fails.
+**Action:** Always use `e.preventDefault()` on `AlertDialogAction` for async operations and provide a visual loading indicator (e.g., `Spinner`) to manage user expectations.
