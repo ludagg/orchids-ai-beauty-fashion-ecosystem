@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Minus, Plus, Trash2, ArrowRight, ShoppingCart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Spinner } from "@/components/ui/spinner";
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
@@ -234,7 +235,7 @@ export default function CartPage() {
                                             >
                                                 <Minus className="h-3 w-3" />
                                             </Button>
-                                            <span className="w-8 text-center text-sm font-medium" aria-label={`Quantity: ${item.quantity}`}>
+                                            <span className="w-8 text-center text-sm font-medium" aria-label={`Quantity: ${item.quantity}`} aria-live="polite">
                                               {item.quantity}
                                             </span>
                                             <Button
@@ -303,10 +304,14 @@ export default function CartPage() {
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
-              onClick={confirmRemove}
+              onClick={(e) => {
+                e.preventDefault();
+                confirmRemove();
+              }}
               disabled={updating}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
+              {updating ? <Spinner className="mr-2" /> : null}
               {updating ? "Removing..." : "Remove"}
             </AlertDialogAction>
           </AlertDialogFooter>
