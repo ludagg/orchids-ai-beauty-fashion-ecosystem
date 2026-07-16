@@ -9,6 +9,8 @@ import { Textarea } from "@/components/ui/textarea"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 import { PartnerType, PartnerData } from "@/components/profile/PartnerOnboardingModal"
+import { Spinner } from "@/components/ui/spinner"
+import { Scissors, ShoppingBag, Sparkles } from "lucide-react"
 
 export default function BusinessRegisterForm() {
   const router = useRouter();
@@ -152,8 +154,9 @@ export default function BusinessRegisterForm() {
                 <RadioGroupItem value="SALON" id="salon" className="peer sr-only" />
                 <Label
                   htmlFor="salon"
-                  className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary cursor-pointer text-center"
+                  className="flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-focus-visible:ring-2 peer-focus-visible:ring-ring peer-focus-visible:ring-offset-2 [&:has([data-state=checked])]:border-primary cursor-pointer text-center transition-all"
                 >
+                  <Scissors className="h-5 w-5 mb-1" />
                   <span className="text-sm font-semibold">Salon</span>
                 </Label>
               </div>
@@ -161,8 +164,9 @@ export default function BusinessRegisterForm() {
                 <RadioGroupItem value="BOUTIQUE" id="boutique" className="peer sr-only" />
                 <Label
                   htmlFor="boutique"
-                  className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary cursor-pointer text-center"
+                  className="flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-focus-visible:ring-2 peer-focus-visible:ring-ring peer-focus-visible:ring-offset-2 [&:has([data-state=checked])]:border-primary cursor-pointer text-center transition-all"
                 >
+                  <ShoppingBag className="h-5 w-5 mb-1" />
                   <span className="text-sm font-semibold">Boutique</span>
                 </Label>
               </div>
@@ -170,15 +174,23 @@ export default function BusinessRegisterForm() {
                 <RadioGroupItem value="BOTH" id="both" className="peer sr-only" />
                 <Label
                   htmlFor="both"
-                  className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary cursor-pointer text-center"
+                  className="flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-focus-visible:ring-2 peer-focus-visible:ring-ring peer-focus-visible:ring-offset-2 [&:has([data-state=checked])]:border-primary cursor-pointer text-center transition-all"
                 >
+                  <Sparkles className="h-5 w-5 mb-1" />
                   <span className="text-sm font-semibold">Both</span>
                 </Label>
               </div>
             </RadioGroup>
           </div>
-          <Button type="submit" className="w-full mt-4" disabled={loading}>
-            {loading ? "Creating..." : "Create Business Profile"}
+          <Button type="submit" className="w-full h-11 mt-4" disabled={loading}>
+            {loading ? (
+              <div className="flex items-center justify-center">
+                <Spinner className="mr-2 h-4 w-4 text-white" />
+                <span>Creating...</span>
+              </div>
+            ) : (
+              "Create Business Profile"
+            )}
           </Button>
       </form>
     </div>
