@@ -387,7 +387,7 @@ function SearchContent() {
                         )}
                          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
                             {results.marketplace.map((product, i) => (
-                                <Link href={`/app/marketplace/${product.id}`} key={product.id} className="group block">
+                                <Link href={`/app/shop/product/${product.id}`} key={product.id} className="group block">
                                     <motion.div
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: 0 }}
