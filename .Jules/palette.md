@@ -64,3 +64,7 @@
 ## 2026-04-13 - Profile UX Standardization
 **Learning:** For high-traffic profile pages, standardizing on unified `Empty` and `Spinner` primitives ensures a consistent brand voice across all tabs. Additionally, adding explicit `aria-label` attributes to numerical statistics (Followers, Following, etc.) provides essential context for screen reader users who might otherwise hear only the number or a truncated label.
 **Action:** Always refactor custom loading/empty states to use the standard UI library. Audit interactive statistics and ensured they have descriptive `aria-label` attributes that combine the value and the metric name.
+
+## 2026-04-14 - Accessible Local Video Cards
+**Learning:** Localized copies of standard cards (like `VideoCard` inside search results and creator profiles) are frequently created with plain `div` elements, lacking semantic keyboard navigation, focus indicator styles, and screen reader announcements. Standardizing these localized cards with semantic Next.js `<Link>` components, descriptive `aria-label` attributes, and `aria-hidden="true"` on decorative details provides a highly consistent E2E experience.
+**Action:** Audit all search/list components for localized card elements with hover effects but no semantic anchor/button triggers. Refactor them with semantic `<Link>` wrappers and complete accessibility rings.
