@@ -21,6 +21,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useSession } from "@/lib/auth-client";
+import Link from 'next/link';
 
 interface CreatorProfile {
     user: {
@@ -251,26 +252,30 @@ export default function CreatorProfilePage() {
 
 function VideoCard({ video }: { video: Video }) {
     return (
-        <div className="aspect-[9/16] relative bg-muted cursor-pointer overflow-hidden group">
+        <Link
+            href={`/app/videos-creations/${video.id}`}
+            className="aspect-[9/16] relative bg-muted cursor-pointer overflow-hidden group block outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            aria-label={`Watch video: ${video.title}. ${video.views} views`}
+        >
             {video.thumbnailUrl ? (
                  <img
                     src={video.thumbnailUrl}
-                    alt={video.title}
+                    alt=""
                     className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
             ) : (
-                <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+                <div className="w-full h-full flex items-center justify-center text-muted-foreground" aria-hidden="true">
                     <Video className="w-8 h-8 opacity-20" />
                 </div>
             )}
-            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center" aria-hidden="true">
                  <Play className="w-8 h-8 text-white fill-white" />
             </div>
 
-            <div className="absolute bottom-2 left-2 flex items-center gap-1 text-white drop-shadow-md">
+            <div className="absolute bottom-2 left-2 flex items-center gap-1 text-white drop-shadow-md" aria-hidden="true">
                 <Play className="w-3 h-3 fill-white" />
                 <span className="text-xs font-semibold">{video.views}</span>
             </div>
-        </div>
+        </Link>
     )
 }

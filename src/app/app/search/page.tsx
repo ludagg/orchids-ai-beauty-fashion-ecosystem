@@ -448,21 +448,28 @@ function VideoCard({ video, index }: { video: any, index: number }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05 }}
-      className="group cursor-pointer"
     >
-      <div className="relative aspect-[9/16] rounded-2xl overflow-hidden mb-3 shadow-md border border-border bg-black">
-        <img src={video.thumbnailUrl || video.videoUrl || "https://images.unsplash.com/photo-1562322140-8baeececf3df?w=400&h=600&fit=crop"} alt={video.title} className="w-full h-full object-cover opacity-80 group-hover:opacity-60 transition-opacity duration-300" />
-        <div className="absolute inset-0 flex items-center justify-center">
+      <Link
+        href={`/app/videos-creations/${video.id}`}
+        className="block relative aspect-[9/16] rounded-2xl overflow-hidden mb-3 shadow-md border border-border bg-black group outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        aria-label={`Watch video: ${video.title} by @${video.user?.name || "creator"}. ${video.views} views`}
+      >
+        <img
+          src={video.thumbnailUrl || video.videoUrl || "https://images.unsplash.com/photo-1562322140-8baeececf3df?w=400&h=600&fit=crop"}
+          alt=""
+          className="w-full h-full object-cover opacity-80 group-hover:opacity-60 transition-opacity duration-300"
+        />
+        <div className="absolute inset-0 flex items-center justify-center" aria-hidden="true">
           <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
             <Play className="w-5 h-5 text-white fill-white" />
           </div>
         </div>
-        <div className="absolute bottom-3 left-3 right-3 text-white">
+        <div className="absolute bottom-3 left-3 right-3 text-white" aria-hidden="true">
           <p className="text-xs font-medium bg-black/50 backdrop-blur px-2 py-1 rounded-full inline-block mb-1">{video.views} views</p>
           <p className="font-semibold text-sm truncate">{video.title}</p>
           <p className="text-xs opacity-80">@{video.user?.name || "creator"}</p>
         </div>
-      </div>
+      </Link>
     </motion.div>
   );
 }
