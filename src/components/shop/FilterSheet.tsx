@@ -9,6 +9,8 @@ import { Label } from "@/components/ui/label";
 import { SlidersHorizontal, RotateCcw } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
+import { formatPrice } from "@/lib/utils";
+
 
 export interface FilterState {
   minPrice: number; // in cents
@@ -53,13 +55,7 @@ export function FilterSheet({ filters, onApply, open, onOpenChange, triggerClass
     setLocalFilters(defaultFilters);
   };
 
-  const formatPrice = (cents: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 0,
-    }).format(cents / 100);
-  };
+
 
   const activeFilterCount = (() => {
     let count = 0;

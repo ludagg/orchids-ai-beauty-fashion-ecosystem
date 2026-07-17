@@ -33,6 +33,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { motion } from "framer-motion";
+import { formatPrice } from "@/lib/utils";
+
 
 export default function CartPage() {
   const router = useRouter();
@@ -151,7 +153,7 @@ export default function CartPage() {
             <Button
               size="lg"
               className="w-full bg-primary text-primary-foreground hover:bg-primary/90 rounded-full h-12 font-semibold"
-              onClick={() => router.push('/app/marketplace')}
+              onClick={() => router.push('/app/shop')}
             >
               Start Shopping
             </Button>
@@ -179,13 +181,7 @@ export default function CartPage() {
     return sum + (price * item.quantity);
   }, 0);
 
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 0,
-    }).format(price / 100);
-  };
+
 
   return (
     <div className="min-h-screen bg-background pb-24 container mx-auto px-4 py-6 max-w-3xl">

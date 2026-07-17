@@ -5,6 +5,8 @@ import { Loader2, Calendar, Clock, User, CheckCircle2, XCircle, Search, Filter, 
 import { format } from "date-fns";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
+import { formatPrice } from "@/lib/utils";
+
 
 interface Booking {
   id: string;
@@ -90,9 +92,7 @@ export function BookingManager({ salonId }: BookingManagerProps) {
     return matchesSearch && matchesStatus;
   });
 
-  const formatPrice = (cents: number) => {
-    return (cents / 100).toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
-  };
+
 
   // Stats Calculation
   const stats = {

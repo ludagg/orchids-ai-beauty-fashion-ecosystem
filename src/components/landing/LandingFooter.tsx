@@ -15,7 +15,7 @@ export default function LandingFooter() {
             {
               title: "Platform",
               links: [
-                { label: "Marketplace", href: "/app/marketplace" },
+                { label: "Marketplace", href: "/app/shop" },
                 { label: "Salons", href: "/app/salons" },
                 { label: "Video", href: "/app/videos-creations" },
                 { label: "AI Stylist", href: "/app/ai-stylist" }
