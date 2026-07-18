@@ -184,7 +184,7 @@ export default function WishlistPage() {
             const subtitle = isProduct ? item.product?.salon?.name : item.salon?.city;
             const image = isProduct ? item.product?.images?.[0] : item.salon?.image;
             const price = isProduct && item.product ? (item.product.price / 100).toLocaleString('en-IN', { style: 'currency', currency: 'INR' }) : null;
-            const link = isProduct ? `/app/marketplace/${item.product?.id}` : `/app/salons/${item.salon?.id}`;
+            const link = isProduct ? `/app/shop/product/${item.product?.id}` : `/app/salons/${item.salon?.id}`;
             const rating = 4.8;
 
             return (
@@ -304,7 +304,7 @@ export default function WishlistPage() {
                   size="lg"
                   className="px-8 py-4 rounded-2xl bg-foreground text-white font-bold hover:bg-[#333] transition-all shadow-xl shadow-foreground/10 flex items-center gap-2"
                 >
-                  <Link href="/app/marketplace">
+                  <Link href="/app/shop">
                     Explore Marketplace <ArrowRight className="w-4 h-4" />
                   </Link>
                 </Button>

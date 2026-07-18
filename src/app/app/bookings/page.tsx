@@ -1,4 +1,5 @@
 "use client";
+import { formatPrice } from "@/lib/utils";
 
 import { motion } from "framer-motion";
 import {
@@ -167,10 +168,6 @@ export default function BookingsAndOrdersPage() {
   const handleReview = (bookingId: string, salonId: string) => {
     setSelectedBookingForReview({ id: bookingId, salonId });
     setReviewModalOpen(true);
-  };
-
-  const formatPrice = (cents: number) => {
-    return (cents / 100).toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
   };
 
   const filteredBookings = statusFilter === "All"
@@ -356,7 +353,7 @@ export default function BookingsAndOrdersPage() {
           orders.length === 0 ? (
             <div className="text-center py-20 text-muted-foreground">
                 <p>No orders found.</p>
-                <Link href="/app/marketplace" className="text-primary hover:underline mt-2 inline-block">Browse Marketplace</Link>
+                <Link href="/app/shop" className="text-primary hover:underline mt-2 inline-block">Browse Marketplace</Link>
             </div>
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
