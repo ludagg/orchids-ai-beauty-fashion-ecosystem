@@ -249,7 +249,7 @@ export default function VideoDetailPage() {
                     <div className="space-y-4 max-h-[600px] overflow-y-auto pr-1">
                         {video.products && video.products.length > 0 ? (
                             video.products.map((product: any) => (
-                                <Link href={`/app/marketplace/${product.id}`} key={product.id} className="flex gap-3 p-3 rounded-2xl hover:bg-secondary transition-all group border border-transparent hover:border-border">
+                                <Link href={`/app/shop/product/${product.id}`} key={product.id} className="flex gap-3 p-3 rounded-2xl hover:bg-secondary transition-all group border border-transparent hover:border-border">
                                     <div className="w-20 h-24 rounded-xl bg-muted overflow-hidden flex-shrink-0">
                                         <img src={product.images?.[0]} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                                     </div>

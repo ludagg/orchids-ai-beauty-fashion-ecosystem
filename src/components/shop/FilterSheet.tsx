@@ -1,4 +1,5 @@
 "use client";
+import { formatPrice } from "@/lib/utils";
 
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetDescription } from "@/components/ui/sheet";
 import { Slider } from "@/components/ui/slider";
@@ -51,14 +52,6 @@ export function FilterSheet({ filters, onApply, open, onOpenChange, triggerClass
 
   const handleReset = () => {
     setLocalFilters(defaultFilters);
-  };
-
-  const formatPrice = (cents: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 0,
-    }).format(cents / 100);
   };
 
   const activeFilterCount = (() => {

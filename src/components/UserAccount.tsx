@@ -33,7 +33,7 @@ export default function UserAccount({ showLabel = true }: { showLabel?: boolean 
   const isPublicPath =
     pathname?.startsWith("/app/search") ||
     pathname?.startsWith("/app/salons") ||
-    pathname?.startsWith("/app/marketplace") ||
+    pathname?.startsWith("/app/shop") ||
     pathname?.startsWith("/app/ai-stylist") ||
     pathname?.startsWith("/app/videos-creations");
 
