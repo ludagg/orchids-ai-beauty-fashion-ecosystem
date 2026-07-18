@@ -130,6 +130,7 @@
         "@types/react-syntax-highlighter": "^15.5.13",
         "@types/three": "^0.178.0",
         "@vitejs/plugin-react": "^5.1.4",
+        "@vitest/coverage-v8": "^4.1.10",
         "eslint": "^9.39.4",
         "eslint-config-next": "^16.0.1",
         "jsdom": "^28.1.0",
