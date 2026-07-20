@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
-import { Loader2 } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
 
 interface OpeningHour {
   dayOfWeek: number;
@@ -90,7 +90,13 @@ export function SalonHoursManager({ salonId }: SalonHoursManagerProps) {
     setHours(prev => prev.map(h => h.dayOfWeek === dayIndex ? { ...h, [field]: value } : h));
   };
 
-  if (loading) return <div>Loading hours...</div>;
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center py-20" role="status" aria-label="Loading hours">
+        <Spinner className="w-8 h-8" />
+      </div>
+    );
+  }
 
   // Sort for display: Mon (1) -> Sun (0)
   const sortedHours = [...hours].sort((a, b) => {
@@ -112,6 +118,7 @@ export function SalonHoursManager({ salonId }: SalonHoursManagerProps) {
                         id={`closed-${day.dayOfWeek}`}
                         checked={!day.isClosed}
                         onCheckedChange={(checked) => updateDay(day.dayOfWeek, "isClosed", !checked)}
+                        aria-label={`Toggle business status for ${DAYS[day.dayOfWeek]}`}
                     />
                     <Label htmlFor={`closed-${day.dayOfWeek}`} className="text-sm text-muted-foreground w-16">
                         {day.isClosed ? "Closed" : "Open"}
@@ -125,6 +132,7 @@ export function SalonHoursManager({ salonId }: SalonHoursManagerProps) {
                             value={day.openTime}
                             onChange={(e) => updateDay(day.dayOfWeek, "openTime", e.target.value)}
                             className="w-32"
+                            aria-label={`${DAYS[day.dayOfWeek]} opening time`}
                         />
                         <span>to</span>
                         <Input
@@ -132,6 +140,7 @@ export function SalonHoursManager({ salonId }: SalonHoursManagerProps) {
                             value={day.closeTime}
                             onChange={(e) => updateDay(day.dayOfWeek, "closeTime", e.target.value)}
                             className="w-32"
+                            aria-label={`${DAYS[day.dayOfWeek]} closing time`}
                         />
                     </div>
                 )}
@@ -142,7 +151,7 @@ export function SalonHoursManager({ salonId }: SalonHoursManagerProps) {
 
       <div className="flex justify-end">
         <Button onClick={handleSave} disabled={saving}>
-            {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {saving && <Spinner className="mr-2" />}
             Save Changes
         </Button>
       </div>
