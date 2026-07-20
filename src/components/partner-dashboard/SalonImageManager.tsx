@@ -16,6 +16,15 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Spinner } from "@/components/ui/spinner";
+import {
+  Empty,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+  EmptyDescription,
+} from "@/components/ui/empty";
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 
 interface SalonImage {
   id: string;
@@ -113,7 +122,13 @@ export function SalonImageManager({ salonId }: SalonImageManagerProps) {
     }
   };
 
-  if (loading) return <div>Loading images...</div>;
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center py-20" role="status" aria-label="Loading gallery images">
+        <Spinner className="w-8 h-8" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -127,23 +142,39 @@ export function SalonImageManager({ salonId }: SalonImageManagerProps) {
           <div key={img.id} className="group relative aspect-square rounded-lg overflow-hidden border bg-muted">
             <img src={img.url} alt={img.caption || "Salon image"} className="object-cover w-full h-full" />
             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <Button
-                variant="destructive"
-                size="icon"
-                onClick={() => handleDeleteClick(img.id)}
-                aria-label="Delete image"
-              >
-                <Trash2 className="w-4 h-4" />
-              </Button>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="destructive"
+                      size="icon"
+                      onClick={() => handleDeleteClick(img.id)}
+                      aria-label="Delete image"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    Delete image
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
           </div>
         ))}
 
         {images.length === 0 && (
-            <div className="col-span-2 md:col-span-4 flex flex-col items-center justify-center h-40 border-2 border-dashed rounded-lg text-muted-foreground">
-                <ImageIcon className="w-8 h-8 mb-2" />
-                <p>No images yet</p>
-            </div>
+          <div className="col-span-2 md:col-span-4">
+            <Empty className="h-40 border-2">
+              <EmptyHeader>
+                <EmptyMedia variant="icon">
+                  <ImageIcon />
+                </EmptyMedia>
+                <EmptyTitle>No images yet</EmptyTitle>
+                <EmptyDescription>Add images of your salon below to showcase your space.</EmptyDescription>
+              </EmptyHeader>
+            </Empty>
+          </div>
         )}
       </div>
 
@@ -158,7 +189,15 @@ export function SalonImageManager({ salonId }: SalonImageManagerProps) {
             />
         </div>
         <Button type="submit" disabled={adding || !newUrl}>
-            {adding ? "Adding..." : <><Plus className="w-4 h-4 mr-2" /> Add Image</>}
+            {adding ? (
+              <>
+                <Spinner className="mr-2" /> Adding...
+              </>
+            ) : (
+              <>
+                <Plus className="w-4 h-4 mr-2" /> Add Image
+              </>
+            )}
         </Button>
       </form>
 

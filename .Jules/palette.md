@@ -64,3 +64,7 @@
 ## 2026-04-13 - Profile UX Standardization
 **Learning:** For high-traffic profile pages, standardizing on unified `Empty` and `Spinner` primitives ensures a consistent brand voice across all tabs. Additionally, adding explicit `aria-label` attributes to numerical statistics (Followers, Following, etc.) provides essential context for screen reader users who might otherwise hear only the number or a truncated label.
 **Action:** Always refactor custom loading/empty states to use the standard UI library. Audit interactive statistics and ensured they have descriptive `aria-label` attributes that combine the value and the metric name.
+
+## 2026-07-20 - Partner Dashboard Standardization
+**Learning:** Dynamic time inputs, icon-only buttons, and decorative elements (like rating stars) in secondary dashboard pages (Hours, Reviews, and Gallery) are frequently missed during initial accessibility audits. Adding explicit `aria-label` attributes to inputs, wrapping destructive controls in `TooltipProvider` + `Tooltip` packages, and using a grouped `role="img"` container on decorative star elements ensures a highly accessible and responsive dashboard experience.
+**Action:** Audit and refactor all custom components to use unified `Spinner` and standard `Empty` UI primitives, and ensure all dynamic inputs and star rating vectors include semantic labels/badges for screen readers.
