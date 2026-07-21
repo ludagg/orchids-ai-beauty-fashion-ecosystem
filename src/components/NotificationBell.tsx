@@ -12,6 +12,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Spinner } from "@/components/ui/spinner";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { formatDistanceToNow } from "date-fns";
@@ -135,8 +136,9 @@ export default function NotificationBell() {
         </div>
         <div className="max-h-[400px] overflow-y-auto">
           {loading ? (
-            <div className="p-4 text-center text-sm text-muted-foreground" role="status">
-              Loading...
+            <div className="p-8 flex flex-col items-center justify-center text-muted-foreground" role="status">
+              <Spinner className="w-5 h-5 mb-2" />
+              <span className="text-xs">Loading...</span>
             </div>
           ) : notifications.length === 0 ? (
             <div className="p-4 text-center text-sm text-muted-foreground" role="status">
@@ -146,11 +148,14 @@ export default function NotificationBell() {
             <ul role="list" className="m-0 p-0 list-none">
               {notifications.map((notification) => {
                 const style = getIcon(notification.type);
+                const timeAgo = formatDistanceToNow(new Date(notification.createdAt), { addSuffix: true });
+                const ariaLabel = `${notification.isRead ? 'Read' : 'Unread'}: ${notification.title}. ${notification.message} ${timeAgo}`;
                 return (
                   <li key={notification.id}>
                     <button
                       type="button"
                       onClick={() => handleNotificationClick(notification)}
+                      aria-label={ariaLabel}
                       className={`w-full text-left p-4 flex gap-3 hover:bg-secondary transition-colors cursor-pointer border-b border-border last:border-0 ${
                         !notification.isRead ? "bg-secondary/30" : ""
                       }`}
