@@ -24,6 +24,7 @@ import {
   Award
 } from "lucide-react";
 import Link from "next/link";
+import { NavLink } from "@/components/NavLink";
 import BottomNav from "@/components/BottomNav";
 import SearchBar from "@/components/SearchBar";
 import CartIcon from "@/components/CartIcon";
@@ -92,29 +93,32 @@ export default function AppLayout({
 
         <nav className="flex-1 px-4 space-y-1">
           {session?.user?.role === "salon_owner" && (
-            <Link
+            <NavLink
               href="/app/my-business"
+              label="My Business"
+              icon={Store}
+              isCollapsed={isCollapsed}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-[#D4AF37] hover:bg-secondary hover:text-[#D4AF37] ${isCollapsed ? "justify-center" : ""}`}
-            >
-              <Store className="w-5 h-5 flex-shrink-0" />
-              {!isCollapsed && <span>My Business</span>}
-            </Link>
+              iconClassName="w-5 h-5 flex-shrink-0"
+            />
           )}
           {sidebarItems.map((item) => {
             const isActive = pathname === item.href;
             return (
-              <Link
+              <NavLink
                 key={item.label}
                 href={item.href}
+                label={item.label}
+                icon={item.icon}
+                isActive={isActive}
+                isCollapsed={isCollapsed}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
                   isActive
                     ? "bg-primary text-primary-foreground shadow-lg shadow-foreground/10"
                     : "text-muted-foreground hover:bg-secondary hover:text-foreground"
                 } ${isCollapsed ? "justify-center" : ""}`}
-              >
-                <item.icon className="w-5 h-5 flex-shrink-0" />
-                {!isCollapsed && <span>{item.label}</span>}
-              </Link>
+                iconClassName="w-5 h-5 flex-shrink-0"
+              />
             );
           })}
         </nav>
@@ -122,15 +126,16 @@ export default function AppLayout({
         
 
         <div className={`p-4 border-t border-border ${isCollapsed ? "flex justify-center" : ""}`}>
-          <Link
+          <NavLink
             href="/app/settings"
+            label="Settings"
+            icon={Settings}
+            isCollapsed={isCollapsed}
             className={`w-full flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors ${
               pathname === "/app/settings" ? "text-foreground" : "text-muted-foreground hover:text-foreground"
             } ${isCollapsed ? "justify-center" : ""}`}
-          >
-            <Settings className="w-5 h-5 flex-shrink-0" />
-            {!isCollapsed && <span>Settings</span>}
-          </Link>
+            iconClassName="w-5 h-5 flex-shrink-0"
+          />
         </div>
       </aside>
 
