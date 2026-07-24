@@ -14,17 +14,28 @@ import {
   ArrowLeft,
   User,
   ShoppingBag,
-  Star,
-  Loader2
+  Star
 } from "lucide-react";
 import Link from "next/link";
 import { useSession } from "@/lib/auth-client";
 import { format } from "date-fns";
+import { toast } from "sonner";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Spinner } from "@/components/ui/spinner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface ChatWindowProps {
   chatId: number | string;
@@ -54,6 +65,8 @@ export default function ChatWindow({ chatId }: ChatWindowProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [loading, setLoading] = useState(true);
+  const [isBlocking, setIsBlocking] = useState(false);
+  const [blockDialogOpen, setBlockDialogOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -148,10 +161,25 @@ export default function ChatWindow({ chatId }: ChatWindowProps) {
     }
   };
 
+  const handleBlockConfirm = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setIsBlocking(true);
+    try {
+      // Simulate API call to block the business
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      toast.success(`${conversation?.otherParty.name || "Business"} has been blocked.`);
+      setBlockDialogOpen(false);
+    } catch (error) {
+      toast.error("Failed to block business. Please try again.");
+    } finally {
+      setIsBlocking(false);
+    }
+  };
+
   if (loading) {
       return (
           <div className="flex items-center justify-center h-full w-full">
-              <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              <Spinner className="w-8 h-8 text-primary" />
           </div>
       );
   }
@@ -390,7 +418,11 @@ export default function ChatWindow({ chatId }: ChatWindowProps) {
             <section>
               <h4 className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-4">Settings</h4>
               <div className="space-y-2">
-                <button type="button" className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-rose-500/10 text-rose-500 transition-all group">
+                <button
+                  type="button"
+                  onClick={() => setBlockDialogOpen(true)}
+                  className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-rose-500/10 text-rose-500 transition-all group"
+                >
                   <span className="text-sm font-bold">Block Business</span>
                 </button>
                 <button type="button" className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-muted text-muted-foreground transition-all">
@@ -403,6 +435,34 @@ export default function ChatWindow({ chatId }: ChatWindowProps) {
             </section>
           </div>
         </aside>
+
+      <AlertDialog open={blockDialogOpen} onOpenChange={setBlockDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Block {conversation.otherParty.name}?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to block this business? You will no longer receive messages or notifications from them. This action can be undone later in settings.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isBlocking}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleBlockConfirm}
+              disabled={isBlocking}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {isBlocking ? (
+                <>
+                  <Spinner className="mr-2 h-4 w-4 text-destructive-foreground animate-spin" />
+                  Blocking...
+                </>
+              ) : (
+                "Block Business"
+              )}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
