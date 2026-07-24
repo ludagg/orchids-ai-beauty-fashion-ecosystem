@@ -64,3 +64,7 @@
 ## 2026-04-13 - Profile UX Standardization
 **Learning:** For high-traffic profile pages, standardizing on unified `Empty` and `Spinner` primitives ensures a consistent brand voice across all tabs. Additionally, adding explicit `aria-label` attributes to numerical statistics (Followers, Following, etc.) provides essential context for screen reader users who might otherwise hear only the number or a truncated label.
 **Action:** Always refactor custom loading/empty states to use the standard UI library. Audit interactive statistics and ensured they have descriptive `aria-label` attributes that combine the value and the metric name.
+
+## 2026-07-24 - Themed Confirmation for Chat Settings
+**Learning:** Destructive chat actions like 'Block Business' require robust protective interfaces to prevent accidental clicks. Replacing non-functional or custom styled interactive list items with a themed `AlertDialog` that incorporates the unified `Spinner` component and async state management (preventing default during submission) results in a highly accessible and reassuring user experience.
+**Action:** Wrap critical settings or destructive actions in ChatWindow in an `AlertDialog`. Prevent accidental submit via dual-stage confirmation and display progress through the centralized `Spinner` component with accessible text.
