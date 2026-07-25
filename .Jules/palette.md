@@ -64,3 +64,7 @@
 ## 2026-04-13 - Profile UX Standardization
 **Learning:** For high-traffic profile pages, standardizing on unified `Empty` and `Spinner` primitives ensures a consistent brand voice across all tabs. Additionally, adding explicit `aria-label` attributes to numerical statistics (Followers, Following, etc.) provides essential context for screen reader users who might otherwise hear only the number or a truncated label.
 **Action:** Always refactor custom loading/empty states to use the standard UI library. Audit interactive statistics and ensured they have descriptive `aria-label` attributes that combine the value and the metric name.
+
+## 2026-07-25 - Redundant Accessible Descriptions & Standardized Empty States
+**Learning:** Having an informative image element's `alt` description match the text of an adjacent heading is highly redundant for screen reader users and leads to a cluttered audio experience. When an image is placed next to a clear title, empty alt text (`alt=""`) is optimal. Furthermore, unifying partner management forms and list dashboards under standard `Empty` and `Spinner` components creates a cohesive user expectation and design-system voice.
+**Action:** Always check nearby elements for duplicate naming before setting descriptive image alt texts. Always use the central UI primitive library for empty/loading views to ensure absolute styling consistency.
