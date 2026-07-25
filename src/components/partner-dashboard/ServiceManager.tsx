@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Plus, Scissors, Trash2, Loader2 } from "lucide-react"
+import { Plus, Scissors, Trash2 } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {
@@ -25,6 +25,19 @@ import {
 } from "@/components/ui/alert-dialog"
 import { toast } from "sonner"
 import { Card, CardContent } from "@/components/ui/card"
+import { Spinner } from "@/components/ui/spinner"
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 interface Service {
   id: string
@@ -132,7 +145,11 @@ export function ServiceManager({ salonId }: ServiceManagerProps) {
   }
 
   if (loading) {
-      return <div className="text-center py-8 text-muted-foreground">Loading services...</div>
+      return (
+        <div className="flex justify-center py-8">
+          <Spinner className="w-8 h-8 text-muted-foreground" />
+        </div>
+      )
   }
 
   return (
@@ -218,7 +235,12 @@ export function ServiceManager({ salonId }: ServiceManagerProps) {
             </div>
             <DialogFooter>
               <Button onClick={handleAdd} disabled={isSubmitting}>
-                  {isSubmitting ? "Adding..." : "Add Service"}
+                  {isSubmitting ? (
+                    <>
+                      <Spinner className="mr-2 h-4 w-4 text-current" />
+                      Adding...
+                    </>
+                  ) : "Add Service"}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -230,7 +252,7 @@ export function ServiceManager({ salonId }: ServiceManagerProps) {
           <Card key={service.id} className="relative group overflow-hidden border-muted">
             {service.image && (
                 <div className="h-32 w-full overflow-hidden">
-                    <img src={service.image} alt={service.name} className="w-full h-full object-cover transition-transform group-hover:scale-105" />
+                    <img src={service.image} alt="" className="w-full h-full object-cover transition-transform group-hover:scale-105" />
                 </div>
             )}
             <CardContent className="p-5">
@@ -245,15 +267,20 @@ export function ServiceManager({ salonId }: ServiceManagerProps) {
                         {service.category}
                     </span>
                 )}
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8 text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 transition-opacity absolute top-2 right-2 bg-background/80 backdrop-blur-sm"
-                    onClick={() => { setServiceToDelete(service.id); setIsDeleteDialogOpen(true); }}
-                    aria-label={`Delete ${service.name}`}
-                >
-                    <Trash2 className="w-4 h-4" />
-                </Button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 transition-opacity absolute top-2 right-2 bg-background/80 backdrop-blur-sm"
+                        onClick={() => { setServiceToDelete(service.id); setIsDeleteDialogOpen(true); }}
+                        aria-label={`Delete ${service.name}`}
+                    >
+                        <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Delete service</TooltipContent>
+                </Tooltip>
               </div>
               <h4 className="font-semibold truncate">{service.name}</h4>
               {service.description && (
@@ -267,8 +294,18 @@ export function ServiceManager({ salonId }: ServiceManagerProps) {
           </Card>
         ))}
         {services.length === 0 && (
-            <div className="col-span-full py-12 text-center text-muted-foreground bg-muted/50 rounded-lg border-2 border-dashed">
-                <p>No services added yet.</p>
+            <div className="col-span-full">
+                <Empty className="py-12 border-2 border-dashed rounded-xl bg-muted/20">
+                    <EmptyHeader>
+                        <EmptyMedia variant="icon">
+                            <Scissors className="w-6 h-6 text-muted-foreground" />
+                        </EmptyMedia>
+                        <EmptyTitle>No services yet</EmptyTitle>
+                        <EmptyDescription>
+                            Add your salon services to let clients book them directly.
+                        </EmptyDescription>
+                    </EmptyHeader>
+                </Empty>
             </div>
         )}
       </div>
@@ -286,7 +323,7 @@ export function ServiceManager({ salonId }: ServiceManagerProps) {
               disabled={isDeleting}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              {isDeleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+              {isDeleting ? <Spinner className="mr-2 h-4 w-4 text-destructive-foreground animate-spin" /> : null}
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>
