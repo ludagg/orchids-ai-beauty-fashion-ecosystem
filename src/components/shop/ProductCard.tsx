@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Heart, Star } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Heart, Star, Scale } from 'lucide-react';
+import { cn, formatPrice } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useState } from 'react';
@@ -26,9 +26,11 @@ interface Product {
 interface ProductCardProps {
   product: Product;
   view?: 'grid' | 'list';
+  onCompare?: (product: Product) => void;
+  isComparing?: boolean;
 }
 
-export function ProductCard({ product, view = 'grid' }: ProductCardProps) {
+export function ProductCard({ product, view = 'grid', onCompare, isComparing = false }: ProductCardProps) {
   const isSale = product.price < product.originalPrice;
   const isNew = product.createdAt && new Date(product.createdAt) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
   const isLowStock = product.totalStock > 0 && product.totalStock <= 5;
@@ -67,14 +69,6 @@ export function ProductCard({ product, view = 'grid' }: ProductCardProps) {
     }
   };
 
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 0,
-    }).format(price / 100);
-  };
-
   return (
     <Link href={`/app/shop/product/${product.id}`} className="group block">
       <div className={cn(
@@ -105,6 +99,28 @@ export function ProductCard({ product, view = 'grid' }: ProductCardProps) {
             {!isOutOfStock && isSale && <Badge variant="secondary" className="bg-red-500 text-white">Sale</Badge>}
             {!isOutOfStock && isNew && <Badge className="bg-blue-500 text-white">New</Badge>}
           </div>
+
+          {/* Compare Button (absolute top right, slightly left of wishlist) */}
+          {onCompare && (
+              <Button
+                size="icon"
+                variant="ghost"
+                className={cn(
+                    "absolute right-12 top-2 h-8 w-8 rounded-full backdrop-blur-sm transition-colors",
+                    isComparing
+                        ? "bg-indigo-500 text-white hover:bg-indigo-600"
+                        : "bg-black/20 text-white hover:bg-black/40"
+                )}
+                onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    onCompare(product);
+                }}
+              >
+                <Scale className="h-4 w-4" />
+                <span className="sr-only">Compare</span>
+              </Button>
+          )}
 
           {/* Wishlist Button (absolute top right) */}
           <Button
