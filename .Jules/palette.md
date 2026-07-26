@@ -64,3 +64,7 @@
 ## 2026-04-13 - Profile UX Standardization
 **Learning:** For high-traffic profile pages, standardizing on unified `Empty` and `Spinner` primitives ensures a consistent brand voice across all tabs. Additionally, adding explicit `aria-label` attributes to numerical statistics (Followers, Following, etc.) provides essential context for screen reader users who might otherwise hear only the number or a truncated label.
 **Action:** Always refactor custom loading/empty states to use the standard UI library. Audit interactive statistics and ensured they have descriptive `aria-label` attributes that combine the value and the metric name.
+
+## 2026-04-20 - Keyboard-Accessible File Upload and Preview in Reviews
+**Learning:** Standard hidden file inputs (`hidden` or `display: none`) are ignored by screen readers and keyboard tab order, preventing keyboard-only users from uploading files. Using the `sr-only` class makes the input invisible while keeping it interactive, and adding `focus-within:ring-2` on its parent `label` provides clear focus highlights. Also, photo preview deletion buttons must support keyboard visibility via `focus:opacity-100` alongside hover classes (`group-hover:opacity-100`).
+**Action:** Replace `hidden` with `sr-only` on file inputs. Apply `focus-within:ring-2` focus rings on their parent labels, and ensure any hover-only interactive overlay actions are also visible on `focus:opacity-100`.
