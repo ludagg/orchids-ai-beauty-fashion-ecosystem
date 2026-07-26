@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { expect, test, describe, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { AIFitCheck } from './AIFitCheck';

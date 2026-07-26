@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { expect, test, describe } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { CompareDialog } from './CompareDialog';
