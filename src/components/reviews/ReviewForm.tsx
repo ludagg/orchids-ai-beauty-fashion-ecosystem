@@ -5,9 +5,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Star, Loader2, Upload, X } from "lucide-react";
+import { Star, Upload, X } from "lucide-react";
 import { toast } from "sonner";
 import Image from "next/image";
+import { Spinner } from "@/components/ui/spinner";
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 
 interface ReviewFormProps {
   isOpen: boolean;
@@ -127,7 +129,8 @@ export function ReviewForm({ isOpen, onOpenChange, salonId, bookingId, onSuccess
                 onMouseEnter={() => setHoverRating(star)}
                 onMouseLeave={() => setHoverRating(0)}
                 onClick={() => setRating(star)}
-                className="focus:outline-none transition-transform active:scale-95"
+                className="focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-full p-1 transition-transform active:scale-95"
+                aria-label={`Rate ${star} out of 5 stars`}
               >
                 <Star
                   className={`w-8 h-8 ${
@@ -149,6 +152,7 @@ export function ReviewForm({ isOpen, onOpenChange, salonId, bookingId, onSuccess
               onChange={(e) => setComment(e.target.value)}
               className="min-h-[100px]"
               maxLength={500}
+              aria-label="Add a comment"
             />
             <div className="text-xs text-muted-foreground text-right">
               {comment.length}/500
@@ -159,27 +163,40 @@ export function ReviewForm({ isOpen, onOpenChange, salonId, bookingId, onSuccess
             <Label>Add Photos (Optional)</Label>
             <div className="grid grid-cols-4 gap-2">
               {previews.map((src, i) => (
-                <div key={i} className="relative aspect-square rounded-lg overflow-hidden border border-border group">
+                <div key={i} className="relative aspect-square rounded-lg overflow-hidden border border-border group focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
                   <Image src={src} alt="Preview" fill className="object-cover" />
-                  <button
-                    type="button"
-                    onClick={() => removeImage(i)}
-                    className="absolute top-1 right-1 p-1 rounded-full bg-black/50 text-white opacity-0 group-hover:opacity-100 transition-opacity"
-                  >
-                    <X className="w-3 h-3" />
-                  </button>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        type="button"
+                        onClick={() => removeImage(i)}
+                        className="absolute top-1 right-1 p-1 rounded-full bg-black/50 text-white opacity-0 group-hover:opacity-100 group-focus:opacity-100 focus:opacity-100 transition-opacity focus:outline-none focus:ring-2 focus:ring-destructive"
+                        aria-label="Remove photo"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Remove photo</p>
+                    </TooltipContent>
+                  </Tooltip>
                 </div>
               ))}
               {previews.length < 4 && (
-                <label className="aspect-square rounded-lg border-2 border-dashed border-muted-foreground/25 hover:border-muted-foreground/50 flex flex-col items-center justify-center gap-1 cursor-pointer transition-colors bg-muted/30 hover:bg-muted/50">
+                <label
+                  htmlFor="review-photo-upload"
+                  className="aspect-square rounded-lg border-2 border-dashed border-muted-foreground/25 hover:border-muted-foreground/50 flex flex-col items-center justify-center gap-1 cursor-pointer transition-colors bg-muted/30 hover:bg-muted/50 focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2"
+                >
                   <Upload className="w-5 h-5 text-muted-foreground" />
                   <span className="text-[10px] text-muted-foreground font-medium">Add Photo</span>
                   <input
+                    id="review-photo-upload"
                     type="file"
                     accept="image/*"
                     multiple
-                    className="hidden"
+                    className="sr-only"
                     onChange={handleImageChange}
+                    aria-label="Upload photos"
                   />
                 </label>
               )}
@@ -194,7 +211,7 @@ export function ReviewForm({ isOpen, onOpenChange, salonId, bookingId, onSuccess
               Cancel
             </Button>
             <Button type="submit" disabled={isSubmitting || rating === 0}>
-              {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {isSubmitting && <Spinner className="mr-2 h-4 w-4" />}
               Post Review
             </Button>
           </DialogFooter>
