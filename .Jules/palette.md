@@ -64,3 +64,7 @@
 ## 2026-04-13 - Profile UX Standardization
 **Learning:** For high-traffic profile pages, standardizing on unified `Empty` and `Spinner` primitives ensures a consistent brand voice across all tabs. Additionally, adding explicit `aria-label` attributes to numerical statistics (Followers, Following, etc.) provides essential context for screen reader users who might otherwise hear only the number or a truncated label.
 **Action:** Always refactor custom loading/empty states to use the standard UI library. Audit interactive statistics and ensured they have descriptive `aria-label` attributes that combine the value and the metric name.
+
+## 2026-07-27 - Review System Accessibility and Keyboard Compliance
+**Learning:** Custom interactive elements (like custom star ratings, custom multi-photo previews and upload dropzones) in modal dialog overlays are prone to keyboard trapping or focus loss. Standardizing the file input to be visually hidden via `sr-only` rather than `display: none` keeps it focus-targetable by assistive technology, while wrapping thumbnail close actions inside screen-reader accessible `Tooltip` structures with clear focus-ring triggers ensures full WCAG 2.1 AA keyboard navigation support.
+**Action:** Always use `sr-only` on hidden inputs instead of `hidden` to allow tab-targeting and focus styles, and ensure hover-only actions have explicit focus states (e.g. `focus-within:ring-2`) and are keyboard-activatable.
