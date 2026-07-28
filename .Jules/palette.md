@@ -64,3 +64,7 @@
 ## 2026-04-13 - Profile UX Standardization
 **Learning:** For high-traffic profile pages, standardizing on unified `Empty` and `Spinner` primitives ensures a consistent brand voice across all tabs. Additionally, adding explicit `aria-label` attributes to numerical statistics (Followers, Following, etc.) provides essential context for screen reader users who might otherwise hear only the number or a truncated label.
 **Action:** Always refactor custom loading/empty states to use the standard UI library. Audit interactive statistics and ensured they have descriptive `aria-label` attributes that combine the value and the metric name.
+
+## 2026-04-14 - Collapsible Sidebar Accessibility and Tooltips
+**Learning:** Collapsible sidebars often hide text labels, leaving only icons visible. This makes navigation difficult for desktop users and completely breaks screen reader compatibility if there is no fallback label. Wrapping collapsed navigation links in conditional `Tooltip` components and adding dynamic `aria-label` attributes ensures a delightful and accessible hover state without cluttering the expanded DOM structure.
+**Action:** Conditionally wrap icon-only collapsed sidebar navigation links in `<Tooltip>` components, and apply `aria-label={isCollapsed ? item.label : undefined}` to the link triggers.
