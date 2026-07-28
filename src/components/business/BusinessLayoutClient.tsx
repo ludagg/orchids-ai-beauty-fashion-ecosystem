@@ -23,6 +23,11 @@ import UserAccount from "@/components/UserAccount";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import { usePathname } from "next/navigation";
 import { useState, useEffect, useMemo } from "react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface Salon {
   id: string;
@@ -114,30 +119,58 @@ export default function BusinessLayoutClient({
         </div>
 
         <nav className="flex-1 px-4 space-y-1 overflow-y-auto no-scrollbar">
-           <Link
-              href="/app"
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-muted-foreground hover:bg-secondary hover:text-foreground mb-4 border-b border-border pb-4 ${isCollapsed ? "justify-center" : ""}`}
-            >
-              <LogOut className="w-5 h-5 flex-shrink-0 rotate-180" />
-              {!isCollapsed && <span>Back to App</span>}
-            </Link>
+          {(() => {
+            const backToAppLink = (
+              <Link
+                href="/app"
+                aria-label={isCollapsed ? "Back to App" : undefined}
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-muted-foreground hover:bg-secondary hover:text-foreground mb-4 border-b border-border pb-4 ${isCollapsed ? "justify-center" : ""}`}
+              >
+                <LogOut className="w-5 h-5 flex-shrink-0 rotate-180" />
+                {!isCollapsed && <span>Back to App</span>}
+              </Link>
+            );
+
+            return isCollapsed ? (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  {backToAppLink}
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  <p>Back to App</p>
+                </TooltipContent>
+              </Tooltip>
+            ) : backToAppLink;
+          })()}
 
           {sidebarItems.map((item) => {
             const isActive = pathname === item.href;
-            return (
+            const linkContent = (
               <Link
-                key={item.label}
                 href={item.href}
+                aria-label={isCollapsed ? item.label : undefined}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
                   isActive
                     ? "bg-primary text-primary-foreground shadow-lg shadow-foreground/10"
                     : "text-muted-foreground hover:bg-secondary hover:text-foreground"
                 } ${isCollapsed ? "justify-center" : ""}`}
-                title={isCollapsed ? item.label : undefined}
               >
                 <item.icon className="w-5 h-5 flex-shrink-0" />
                 {!isCollapsed && <span>{item.label}</span>}
               </Link>
+            );
+
+            return isCollapsed ? (
+              <Tooltip key={item.label}>
+                <TooltipTrigger asChild>
+                  {linkContent}
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  <p>{item.label}</p>
+                </TooltipContent>
+              </Tooltip>
+            ) : (
+              <span key={item.label}>{linkContent}</span>
             );
           })}
         </nav>
