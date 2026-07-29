@@ -1,10 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Loader2, Calendar, Clock, User, CheckCircle2, XCircle, Search, Filter, Mail, Phone, MapPin, DollarSign, TrendingUp, AlertCircle } from "lucide-react";
+import { Calendar, Clock, User, CheckCircle2, XCircle, Search, Filter, Mail, Phone, MapPin, DollarSign, TrendingUp, AlertCircle } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
+import { Spinner } from "@/components/ui/spinner";
+import { Empty, EmptyHeader, EmptyTitle, EmptyDescription, EmptyMedia } from "@/components/ui/empty";
 
 interface Booking {
   id: string;
@@ -34,7 +36,7 @@ export function BookingManager({ salonId }: BookingManagerProps) {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState<string>("all");
-  const [processingId, setProcessingId] = useState<string | null>(null);
+  const [processing, setProcessing] = useState<{ id: string; status: string } | null>(null);
 
   useEffect(() => {
     async function fetchBookings() {
@@ -60,7 +62,7 @@ export function BookingManager({ salonId }: BookingManagerProps) {
   }, [salonId]);
 
   const handleUpdateStatus = async (bookingId: string, newStatus: string) => {
-    setProcessingId(bookingId);
+    setProcessing({ id: bookingId, status: newStatus });
     try {
         const res = await fetch(`/api/bookings/${bookingId}`, {
             method: 'PATCH',
@@ -79,7 +81,7 @@ export function BookingManager({ salonId }: BookingManagerProps) {
         console.error("Error updating booking:", error);
         toast.error("Something went wrong");
     } finally {
-        setProcessingId(null);
+        setProcessing(null);
     }
   };
 
@@ -104,7 +106,7 @@ export function BookingManager({ salonId }: BookingManagerProps) {
   if (loading) {
     return (
       <div className="flex justify-center items-center py-20">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        <Spinner className="w-8 h-8 text-primary" />
       </div>
     );
   }
@@ -148,6 +150,7 @@ export function BookingManager({ salonId }: BookingManagerProps) {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <input
             type="text"
+            aria-label="Search bookings by client or service"
             placeholder="Search by client or service..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -159,6 +162,7 @@ export function BookingManager({ salonId }: BookingManagerProps) {
             <button
               key={status}
               onClick={() => setFilterStatus(status)}
+              aria-pressed={filterStatus === status}
               className={`px-4 py-2 rounded-xl text-sm font-medium capitalize whitespace-nowrap transition-all ${
                 filterStatus === status
                   ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
@@ -174,13 +178,17 @@ export function BookingManager({ salonId }: BookingManagerProps) {
       {/* Bookings List */}
       <div className="grid gap-4">
         {filteredBookings.length === 0 ? (
-          <div className="text-center py-12 border rounded-3xl border-dashed">
-            <Calendar className="w-12 h-12 text-muted-foreground mx-auto mb-4 opacity-20" />
-            <h3 className="text-lg font-medium">No bookings found</h3>
-            <p className="text-muted-foreground text-sm">
-              {filterStatus === "all" ? "You haven't received any bookings yet." : `No ${filterStatus} bookings found.`}
-            </p>
-          </div>
+          <Empty className="py-12 border-dashed rounded-3xl">
+            <EmptyHeader>
+              <EmptyMedia variant="icon">
+                <Calendar className="w-6 h-6" />
+              </EmptyMedia>
+              <EmptyTitle>No bookings found</EmptyTitle>
+              <EmptyDescription>
+                {filterStatus === "all" ? "You haven't received any bookings yet." : `No ${filterStatus} bookings found.`}
+              </EmptyDescription>
+            </EmptyHeader>
+          </Empty>
         ) : (
           filteredBookings.map((booking) => (
             <motion.div
@@ -246,17 +254,26 @@ export function BookingManager({ salonId }: BookingManagerProps) {
                     <>
                         <button
                             onClick={() => handleUpdateStatus(booking.id, 'confirmed')}
-                            disabled={processingId === booking.id}
+                            disabled={processing !== null}
                             className="flex-1 px-4 py-2 rounded-xl bg-foreground text-background text-xs font-bold hover:bg-foreground/90 transition-all flex items-center justify-center gap-2"
                         >
-                            {processingId === booking.id ? <Loader2 className="w-3 h-3 animate-spin" /> : <CheckCircle2 className="w-3 h-3" />}
+                            {processing?.id === booking.id && processing?.status === 'confirmed' ? (
+                                <Spinner className="w-3 h-3 text-current" />
+                            ) : (
+                                <CheckCircle2 className="w-3 h-3" />
+                            )}
                             Confirm
                         </button>
                         <button
                             onClick={() => handleUpdateStatus(booking.id, 'cancelled')}
-                            disabled={processingId === booking.id}
+                            disabled={processing !== null}
                             className="flex-1 px-4 py-2 rounded-xl border border-border text-foreground text-xs font-bold hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 transition-all flex items-center justify-center gap-2"
                         >
+                            {processing?.id === booking.id && processing?.status === 'cancelled' ? (
+                                <Spinner className="w-3 h-3 text-current" />
+                            ) : (
+                                <XCircle className="w-3 h-3" />
+                            )}
                             Decline
                         </button>
                     </>
@@ -266,17 +283,26 @@ export function BookingManager({ salonId }: BookingManagerProps) {
                     <>
                         <button
                             onClick={() => handleUpdateStatus(booking.id, 'completed')}
-                            disabled={processingId === booking.id}
+                            disabled={processing !== null}
                             className="flex-1 px-4 py-2 rounded-xl bg-emerald-500 text-white text-xs font-bold hover:bg-emerald-600 transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20"
                         >
-                            {processingId === booking.id ? <Loader2 className="w-3 h-3 animate-spin" /> : <CheckCircle2 className="w-3 h-3" />}
+                            {processing?.id === booking.id && processing?.status === 'completed' ? (
+                                <Spinner className="w-3 h-3 text-current" />
+                            ) : (
+                                <CheckCircle2 className="w-3 h-3" />
+                            )}
                             Complete
                         </button>
                         <button
                             onClick={() => handleUpdateStatus(booking.id, 'cancelled')}
-                            disabled={processingId === booking.id}
+                            disabled={processing !== null}
                             className="flex-1 px-4 py-2 rounded-xl border border-border text-foreground text-xs font-bold hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 transition-all flex items-center justify-center gap-2"
                         >
+                            {processing?.id === booking.id && processing?.status === 'cancelled' ? (
+                                <Spinner className="w-3 h-3 text-current" />
+                            ) : (
+                                <XCircle className="w-3 h-3" />
+                            )}
                             Cancel
                         </button>
                     </>
