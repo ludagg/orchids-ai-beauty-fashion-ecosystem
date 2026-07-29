@@ -248,7 +248,7 @@ export default function DiscoverPage() {
               Check out trending beauty products
             </p>
 
-            <Link href="/app/marketplace">
+            <Link href="/app/shop">
               <Button className="rounded-full w-full gap-2">
                 <ShoppingBag className="w-4 h-4" />
                 Browse
