@@ -39,7 +39,7 @@ import { useSession } from "@/lib/auth-client";
 const sidebarItems = [
   { icon: Compass, label: "Discover", href: "/app" },
   { icon: User, label: "Profile", href: "/app/profile" },
-  { icon: ShoppingBag, label: "Marketplace", href: "/app/marketplace" },
+  { icon: ShoppingBag, label: "Marketplace", href: "/app/shop" },
   { icon: Award, label: "Loyalty Program", href: "/app/loyalty" },
   //{ icon: Sparkles, label: "AI Stylist", href: "/app/ai-stylist" },
   { icon: Scissors, label: "Salons", href: "/app/salons" },

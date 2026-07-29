@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 
 const navItems = [
   { icon: Compass, label: "Discover", href: "/app" },
-  { icon: ShoppingBag, label: "Shop", href: "/app/marketplace" },
+  { icon: ShoppingBag, label: "Shop", href: "/app/shop" },
   { icon: MessageSquare, label: "Chat", href: "/app/conversations" },
   //{ icon: Sparkles, label: "AI", href: "/app/ai-stylist" },
   { icon: Scissors, label: "Salons", href: "/app/salons" },
