@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ProductCard } from '@/components/shop/ProductCard';
+import { AIFitCheck } from '@/components/shop/ai/AIFitCheck';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import {
@@ -297,6 +298,11 @@ export default function ProductDetailPage() {
                     </div>
                 </div>
             )}
+        </div>
+
+        {/* AI Fit Check */}
+        <div className="py-2">
+            <AIFitCheck product={product} />
         </div>
 
         {/* Key Info */}
