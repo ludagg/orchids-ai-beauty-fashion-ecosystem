@@ -45,13 +45,7 @@ if (!isVercel) {
 
 // ✅ Disable Turbopack on Vercel
 if (!isVercel) {
-  (nextConfig as any).turbopack = {
-    rules: {
-      "src/**/*.{jsx,tsx}": {
-        loaders: [LOADER],
-      },
-    },
-  };
+  // /* turbopack removed */
 }
 
 export default nextConfig;
