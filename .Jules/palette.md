@@ -57,6 +57,10 @@
 **Learning:** Replacing native browser `confirm()` with themed `AlertDialog` components not only improves visual consistency but also provides a better UX by allowing for integrated loading states (spinners) directly on the confirmation action. This prevents "double-click" issues and gives users clear feedback that their destructive action is being processed.
 **Action:** Replace `confirm()` with `AlertDialog`. Always include a `disabled` state and a loading indicator on the primary action button during asynchronous operations.
 
+## 2026-03-20 - Standardized Search UX & State Sync
+**Learning:** In applications with global search bars (header) and local search pages, the search page's local input state must be explicitly synced from URL parameters using `useEffect`. Without this, the UI can become desynchronized if a user performs a search from the header while already on the search page. Standardizing zero-result states with `Empty` primitives and branded backgrounds (radial grid + blobs) ensures a premium and consistent experience across the application.
+**Action:** Always implement a `useEffect` to sync local search states from `useSearchParams`. Use the unified `SearchBar` component to ensure consistent keyboard shortcuts and clear functionality. For zero-result states, use `Empty` primitives combined with a branded radial grid background.
+
 ## 2026-03-13 - [Admin UX Consistency]
 **Learning:** Admin salon management actions (Approve, Suspend, Reject) were using native browser `confirm()` dialogs, which felt disconnected from the application's design system and lacked descriptive context or loading feedback.
 **Action:** Replace native `confirm()` with themed `AlertDialog` components. Ensure each action has a tailored title and description to provide clear context for destructive or critical operations. Include `Loader2` spinners in confirmation buttons to signal asynchronous processing.
