@@ -64,3 +64,7 @@
 ## 2026-04-13 - Profile UX Standardization
 **Learning:** For high-traffic profile pages, standardizing on unified `Empty` and `Spinner` primitives ensures a consistent brand voice across all tabs. Additionally, adding explicit `aria-label` attributes to numerical statistics (Followers, Following, etc.) provides essential context for screen reader users who might otherwise hear only the number or a truncated label.
 **Action:** Always refactor custom loading/empty states to use the standard UI library. Audit interactive statistics and ensured they have descriptive `aria-label` attributes that combine the value and the metric name.
+
+## 2026-04-16 - Unified Admin Search & Accessibility
+**Learning:** Integrating the unified `SearchBar` component into core layouts like the Admin dashboard not only provides a consistent search experience but also empowers power users with keyboard shortcuts (like '/'). Additionally, avoid adding `aria-label` to buttons that already contain descriptive text, as it can be redundant and sometimes override the button's content for screen readers.
+**Action:** Prefer shared components like `SearchBar` for global features. Ensure navigation links use `aria-current="page"` for better accessibility.

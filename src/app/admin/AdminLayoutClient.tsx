@@ -9,7 +9,6 @@ import {
   Settings,
   Bell,
   CreditCard,
-  Search,
   Menu,
   X,
   ShieldAlert
@@ -18,6 +17,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
+import SearchBar from "@/components/SearchBar";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const adminNavItems = [
   { icon: LayoutDashboard, label: "Overview", href: "/admin" },
@@ -37,6 +42,7 @@ export default function AdminLayoutClient({
 }) {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col lg:flex-row">
@@ -55,6 +61,7 @@ export default function AdminLayoutClient({
               <Link
                 key={item.label}
                 href={item.href}
+                aria-current={isActive ? "page" : undefined}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
                   isActive
                     ? "bg-indigo-600 text-white"
@@ -89,7 +96,12 @@ export default function AdminLayoutClient({
           </Link>
           <ThemeSwitcher />
         </div>
-        <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="p-2">
+        <button
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className="p-2"
+          aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={isMobileMenuOpen}
+        >
           {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
       </header>
@@ -98,17 +110,21 @@ export default function AdminLayoutClient({
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-40 bg-[#1e293b] dark:bg-card lg:hidden pt-16">
           <nav className="p-6 space-y-2">
-            {adminNavItems.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center gap-4 py-4 text-lg font-medium border-b border-slate-700 text-slate-300"
-              >
-                <item.icon className="w-6 h-6 text-indigo-400" />
-                {item.label}
-              </Link>
-            ))}
+            {adminNavItems.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  aria-current={isActive ? "page" : undefined}
+                  className="flex items-center gap-4 py-4 text-lg font-medium border-b border-slate-700 text-slate-300"
+                >
+                  <item.icon className="w-6 h-6 text-indigo-400" />
+                  {item.label}
+                </Link>
+              );
+            })}
           </nav>
         </div>
       )}
@@ -116,21 +132,30 @@ export default function AdminLayoutClient({
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0">
         <header className="hidden lg:flex h-16 bg-card border-b border-border px-8 items-center justify-between sticky top-0 z-30">
-          <div className="flex-1 max-w-md relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <input
-              type="text"
+          <div className="flex-1 max-w-md">
+            <SearchBar
+              value={searchQuery}
+              onChange={setSearchQuery}
               placeholder="Search anything..."
-              className="w-full pl-10 pr-4 py-2 bg-secondary border-transparent focus:bg-card focus:border-border rounded-lg text-sm transition-all outline-none text-foreground"
             />
           </div>
 
           <div className="flex items-center gap-4">
             <ThemeSwitcher />
-            <button className="p-2 text-muted-foreground hover:text-foreground relative">
-              <Bell className="w-5 h-5" />
-              <span className="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full border-2 border-card"></span>
-            </button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  className="p-2 text-muted-foreground hover:text-foreground relative"
+                  aria-label="Notifications"
+                >
+                  <Bell className="w-5 h-5" />
+                  <span className="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full border-2 border-card"></span>
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Notifications</p>
+              </TooltipContent>
+            </Tooltip>
             <div className="h-8 w-px bg-border mx-2" />
             <button className="flex items-center gap-2">
               <span className="text-sm font-medium text-foreground">Administrator</span>
