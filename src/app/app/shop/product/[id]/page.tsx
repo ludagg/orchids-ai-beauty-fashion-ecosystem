@@ -18,6 +18,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import useEmblaCarousel from 'embla-carousel-react';
 
 export default function ProductDetailPage() {
@@ -29,7 +34,20 @@ export default function ProductDetailPage() {
   const [selectedSize, setSelectedSize] = useState<any>(null);
   const [quantity, setQuantity] = useState(1);
   const [isWishlisted, setIsWishlisted] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    const onSelect = () => setSelectedIndex(emblaApi.selectedScrollSnap());
+    emblaApi.on('select', onSelect);
+    emblaApi.on('reInit', onSelect);
+    onSelect();
+    return () => {
+      emblaApi.off('select', onSelect);
+      emblaApi.off('reInit', onSelect);
+    };
+  }, [emblaApi]);
 
   const toggleWishlist = async () => {
     const newState = !isWishlisted;
@@ -153,16 +171,39 @@ export default function ProductDetailPage() {
     <div className="min-h-screen bg-background pb-24">
       {/* Top Bar / Nav (optional, usually provided by layout or back button) */}
       <div className="sticky top-0 z-40 flex items-center justify-between bg-background/80 p-4 backdrop-blur-md">
-         <Button variant="ghost" size="icon" onClick={() => router.back()}>
-            <ChevronRight className="h-6 w-6 rotate-180" />
-         </Button>
+         <Tooltip>
+            <TooltipTrigger asChild>
+                <Button variant="ghost" size="icon" onClick={() => router.back()} aria-label="Go back">
+                    <ChevronRight className="h-6 w-6 rotate-180" />
+                </Button>
+            </TooltipTrigger>
+            <TooltipContent>Back</TooltipContent>
+         </Tooltip>
+
          <div className="flex gap-2">
-            <Button variant="ghost" size="icon">
-                <Share2 className="h-5 w-5" />
-            </Button>
-            <Button variant="ghost" size="icon" onClick={toggleWishlist} className={isWishlisted ? "text-red-500" : ""}>
-                <Heart className={cn("h-5 w-5", isWishlisted && "fill-current")} />
-            </Button>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <Button variant="ghost" size="icon" aria-label="Share product">
+                        <Share2 className="h-5 w-5" />
+                    </Button>
+                </TooltipTrigger>
+                <TooltipContent>Share</TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={toggleWishlist}
+                        className={isWishlisted ? "text-red-500" : ""}
+                        aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
+                    >
+                        <Heart className={cn("h-5 w-5", isWishlisted && "fill-current")} />
+                    </Button>
+                </TooltipTrigger>
+                <TooltipContent>{isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"}</TooltipContent>
+            </Tooltip>
          </div>
       </div>
 
@@ -181,9 +222,19 @@ export default function ProductDetailPage() {
                 </div>
             ))}
         </div>
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1">
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5">
              {[product.mainImageUrl, ...(product.galleryUrls || [])].map((_, index) => (
-                 <div key={index} className="h-1.5 w-1.5 rounded-full bg-white/50" />
+                 <button
+                    key={index}
+                    type="button"
+                    onClick={() => emblaApi?.scrollTo(index)}
+                    className={cn(
+                        "h-1.5 w-1.5 rounded-full transition-all duration-300",
+                        index === selectedIndex ? "bg-white w-4" : "bg-white/50 hover:bg-white/80"
+                    )}
+                    aria-label={`Go to slide ${index + 1}`}
+                    aria-current={index === selectedIndex ? "true" : "false"}
+                 />
              ))}
         </div>
       </div>
