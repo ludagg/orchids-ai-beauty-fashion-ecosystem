@@ -64,3 +64,7 @@
 ## 2026-04-13 - Profile UX Standardization
 **Learning:** For high-traffic profile pages, standardizing on unified `Empty` and `Spinner` primitives ensures a consistent brand voice across all tabs. Additionally, adding explicit `aria-label` attributes to numerical statistics (Followers, Following, etc.) provides essential context for screen reader users who might otherwise hear only the number or a truncated label.
 **Action:** Always refactor custom loading/empty states to use the standard UI library. Audit interactive statistics and ensured they have descriptive `aria-label` attributes that combine the value and the metric name.
+
+## 2026-05-20 - Story Viewer Accessibility & UX
+**Learning:** High-immersion features like stories often sacrifice accessibility for visual impact. Converting non-semantic triggers to buttons, adding descriptive ARIA labels to icon-only controls, and implementing `role="progressbar"` with dynamic values ensures the feature remains inclusive. Adding Tooltips with keyboard hints (e.g., Arrows for navigation, Esc for close) significantly improves the experience for power users.
+**Action:** Always use semantic buttons for story triggers. Wrap icon-only navigation in Tooltips with keyboard shortcuts. Use ARIA progress roles for story timers.
