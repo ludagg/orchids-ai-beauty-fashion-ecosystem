@@ -16,7 +16,6 @@ import {
   Package,
   Truck,
   RotateCcw,
-  Loader2,
   ShoppingBag,
   PenSquare
 } from "lucide-react";
@@ -37,6 +36,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Spinner } from "@/components/ui/spinner";
+
+/* [Jules - Standardize Bookings page with Spinner, Tooltips, and ARIA labels] */
 
 interface Booking {
   id: string;
@@ -224,7 +226,7 @@ export default function BookingsAndOrdersPage() {
 
         {loading ? (
              <div className="flex justify-center py-20">
-                <Loader2 className="w-10 h-10 animate-spin text-primary" />
+                <Spinner className="w-10 h-10 text-primary" />
              </div>
         ) : activeTab === "Bookings" ? (
           filteredBookings.length === 0 ? (
@@ -298,54 +300,49 @@ export default function BookingsAndOrdersPage() {
                   </div>
 
                   <div className="mt-8 flex flex-wrap items-center gap-3">
-                    <button className="flex-1 h-14 rounded-2xl bg-primary text-primary-foreground font-bold text-sm hover:opacity-90 transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary/10">
-                      <Navigation className="w-4 h-4" />
-                      Get Directions
-                    </button>
-
                     <Tooltip>
-                        <TooltipTrigger asChild>
-                            <button
-                                onClick={() => handleMessage(booking.salonId, booking.id)}
-                                disabled={messageLoadingId === booking.id}
-                                className="h-14 w-14 rounded-2xl border border-border flex items-center justify-center text-foreground hover:bg-muted transition-all"
-                                aria-label="Message Salon"
-                            >
-                                {messageLoadingId === booking.id ? <Loader2 className="w-5 h-5 animate-spin" /> : <MessageCircle className="w-5 h-5" />}
-                            </button>
-                        </TooltipTrigger>
-                        <TooltipContent>Message Salon</TooltipContent>
+                      <TooltipTrigger asChild>
+                        <button className="flex-1 h-14 rounded-2xl bg-primary text-primary-foreground font-bold text-sm hover:opacity-90 transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary/10" aria-label="Get Directions">
+                          <Navigation className="w-4 h-4" /> Get Directions
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent>Get Directions</TooltipContent>
                     </Tooltip>
-
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <button onClick={() => handleMessage(booking.salonId, booking.id)} disabled={messageLoadingId === booking.id} className="h-14 w-14 rounded-2xl border border-border flex items-center justify-center text-foreground hover:bg-muted transition-all" aria-label="Message Salon">
+                          {messageLoadingId === booking.id ? <Spinner className="w-5 h-5" /> : <MessageCircle className="w-5 h-5" />}
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent>Message Salon</TooltipContent>
+                    </Tooltip>
                     {booking.status === 'completed' && (
-                        <button
-                            onClick={() => handleReview(booking.id, booking.salonId)}
-                            className="flex-1 h-14 rounded-2xl border border-border text-foreground font-bold text-sm hover:bg-muted transition-all flex items-center justify-center gap-2"
-                        >
-                            <PenSquare className="w-4 h-4" />
-                            Leave a Review
-                        </button>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <button onClick={() => handleReview(booking.id, booking.salonId)} className="flex-1 h-14 rounded-2xl border border-border text-foreground font-bold text-sm hover:bg-muted transition-all flex items-center justify-center gap-2" aria-label="Leave a Review">
+                            <PenSquare className="w-4 h-4" /> Leave a Review
+                          </button>
+                        </TooltipTrigger>
+                        <TooltipContent>Leave a Review</TooltipContent>
+                      </Tooltip>
                     )}
-
                     {booking.status !== 'cancelled' && booking.status !== 'completed' && (
-                        <button className="flex-1 h-14 rounded-2xl border border-border text-foreground font-bold text-sm hover:bg-muted transition-all">
-                            Reschedule
-                        </button>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <button className="flex-1 h-14 rounded-2xl border border-border text-foreground font-bold text-sm hover:bg-muted transition-all" aria-label="Reschedule Appointment">Reschedule</button>
+                        </TooltipTrigger>
+                        <TooltipContent>Reschedule</TooltipContent>
+                      </Tooltip>
                     )}
                     {(booking.status === 'pending' || booking.status === 'confirmed') && (
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <button
-                                    onClick={() => setBookingToCancel(booking)}
-                                    disabled={processingId === booking.id}
-                                    className="h-14 w-14 rounded-2xl border border-border flex items-center justify-center text-muted-foreground hover:text-rose-600 hover:bg-rose-500/10 transition-all group/cancel"
-                                    aria-label="Cancel Booking"
-                                >
-                                    {processingId === booking.id ? <Loader2 className="w-6 h-6 animate-spin" /> : <XCircle className="w-6 h-6" />}
-                                </button>
-                            </TooltipTrigger>
-                            <TooltipContent>Cancel Booking</TooltipContent>
-                        </Tooltip>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <button onClick={() => setBookingToCancel(booking)} disabled={processingId === booking.id} className="h-14 w-14 rounded-2xl border border-border flex items-center justify-center text-muted-foreground hover:text-rose-600 hover:bg-rose-500/10 transition-all group/cancel" aria-label="Cancel Booking">
+                            {processingId === booking.id ? <Spinner className="w-6 h-6" /> : <XCircle className="w-6 h-6" />}
+                          </button>
+                        </TooltipTrigger>
+                        <TooltipContent>Cancel Booking</TooltipContent>
+                      </Tooltip>
                     )}
                   </div>
                 </motion.div>
@@ -458,9 +455,11 @@ export default function BookingsAndOrdersPage() {
             <AlertDialogCancel>Keep Booking</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => bookingToCancel && handleCancelBooking(bookingToCancel.id)}
+              disabled={!!processingId}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              Cancel Appointment
+              {processingId ? <Spinner className="mr-2 h-4 w-4" /> : null}
+              {processingId ? "Cancelling..." : "Cancel Appointment"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
