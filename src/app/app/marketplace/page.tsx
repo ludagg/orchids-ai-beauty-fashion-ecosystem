@@ -11,10 +11,20 @@ import {
   ArrowRight,
   TrendingUp,
   Tag,
-  Loader2
+  Loader2,
+  X
 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
+import { Button } from "@/components/ui/button";
 
 const CATEGORIES = ["All", "Clothing", "Beauty & Skincare", "Hair Care", "Nail Care", "Fragrances", "Accessories", "Wellness"];
 
@@ -144,8 +154,31 @@ export default function MarketplacePage() {
             <Loader2 className="w-10 h-10 animate-spin text-primary" />
         </div>
       ) : products.length === 0 ? (
-        <div className="text-center py-20 text-muted-foreground">
-            <p>No products found.</p>
+        <div className="flex flex-col items-center justify-center py-20 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <Empty className="border-none bg-transparent">
+            <EmptyHeader>
+              <EmptyMedia variant="icon" className="bg-primary/10 text-primary">
+                <ShoppingBag className="w-6 h-6" />
+              </EmptyMedia>
+              <EmptyTitle>No products found</EmptyTitle>
+              <EmptyDescription>
+                We couldn't find any products matching your current selection. Try adjusting your filters or search query.
+              </EmptyDescription>
+            </EmptyHeader>
+            <EmptyContent>
+              <Button
+                variant="outline"
+                className="rounded-full"
+                onClick={() => {
+                  setSearchQuery("");
+                  setSelectedCategory("All");
+                }}
+              >
+                <X className="w-4 h-4 mr-2" />
+                Clear Filters
+              </Button>
+            </EmptyContent>
+          </Empty>
         </div>
       ) : (
         <section className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
