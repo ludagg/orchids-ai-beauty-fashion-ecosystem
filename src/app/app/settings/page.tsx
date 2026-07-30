@@ -28,7 +28,6 @@ import {
   BellOff,
   Zap,
   CheckCircle2,
-  Loader2,
 } from "lucide-react";
 import dynamic from "next/dynamic";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -40,6 +39,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { Spinner } from "@/components/ui/spinner";
 import {
   Dialog,
   DialogContent,
@@ -253,7 +253,7 @@ function ChangePasswordDialog({ open, onOpenChange }: { open: boolean; onOpenCha
           <DialogFooter className="pt-2">
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={loading}>Cancel</Button>
             <Button type="submit" disabled={loading || !form.current || !form.next || !form.confirm}>
-              {loading ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Updating…</> : "Update Password"}
+              {loading ? <><Spinner className="mr-2" />Updating…</> : "Update Password"}
             </Button>
           </DialogFooter>
         </form>
@@ -326,7 +326,7 @@ function TwoFactorDialog({ open, onOpenChange }: { open: boolean; onOpenChange: 
               <DialogFooter>
                 <Button type="button" variant="outline" onClick={() => setStep("intro")} disabled={loading}>Back</Button>
                 <Button type="submit" disabled={loading || code.length < 6}>
-                  {loading ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Verifying…</> : "Verify & Enable"}
+                  {loading ? <><Spinner className="mr-2" />Verifying…</> : "Verify & Enable"}
                 </Button>
               </DialogFooter>
             </form>
