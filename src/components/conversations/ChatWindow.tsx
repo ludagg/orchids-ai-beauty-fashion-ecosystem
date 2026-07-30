@@ -25,6 +25,18 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { toast } from "sonner";
+import { Spinner } from "@/components/ui/spinner";
 
 interface ChatWindowProps {
   chatId: number | string;
@@ -54,6 +66,8 @@ export default function ChatWindow({ chatId }: ChatWindowProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [loading, setLoading] = useState(true);
+  const [isBlockDialogOpen, setIsBlockDialogOpen] = useState(false);
+  const [isBlocking, setIsBlocking] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -390,9 +404,43 @@ export default function ChatWindow({ chatId }: ChatWindowProps) {
             <section>
               <h4 className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-4">Settings</h4>
               <div className="space-y-2">
-                <button type="button" className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-rose-500/10 text-rose-500 transition-all group">
+                <button
+                  type="button"
+                  onClick={() => setIsBlockDialogOpen(true)}
+                  className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-rose-500/10 text-rose-500 transition-all group"
+                >
                   <span className="text-sm font-bold">Block Business</span>
                 </button>
+
+                <AlertDialog open={isBlockDialogOpen} onOpenChange={setIsBlockDialogOpen}>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Block {conversation.otherParty.name}?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Are you sure you want to block this business? You will no longer receive messages or notifications from them.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel disabled={isBlocking}>Cancel</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={async (e) => {
+                          e.preventDefault();
+                          setIsBlocking(true);
+                          // Simulate API call delay
+                          await new Promise((resolve) => setTimeout(resolve, 1000));
+                          toast.success(`${conversation.otherParty.name} has been blocked.`);
+                          setIsBlocking(false);
+                          setIsBlockDialogOpen(false);
+                        }}
+                        disabled={isBlocking}
+                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                      >
+                        {isBlocking ? <Spinner className="text-destructive-foreground" /> : "Block"}
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+
                 <button type="button" className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-muted text-muted-foreground transition-all">
                   <span className="text-sm font-bold">Mute Notifications</span>
                   <div className="w-8 h-4 bg-muted-foreground/30 rounded-full relative">
