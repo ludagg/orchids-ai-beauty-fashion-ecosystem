@@ -16,11 +16,11 @@ import {
   Package,
   Truck,
   RotateCcw,
-  Loader2,
   ShoppingBag,
   PenSquare
 } from "lucide-react";
 import { useState, useEffect } from "react";
+import { Spinner } from "@/components/ui/spinner";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { format } from "date-fns";
@@ -223,9 +223,10 @@ export default function BookingsAndOrdersPage() {
         )}
 
         {loading ? (
-             <div className="flex justify-center py-20">
-                <Loader2 className="w-10 h-10 animate-spin text-primary" />
-             </div>
+          <div className="flex justify-center py-20">
+            {/* [Jules - Standardize loading feedback] */}
+            <Spinner className="w-10 h-10" />
+          </div>
         ) : activeTab === "Bookings" ? (
           filteredBookings.length === 0 ? (
             <div className="text-center py-20 text-muted-foreground">
@@ -311,7 +312,7 @@ export default function BookingsAndOrdersPage() {
                                 className="h-14 w-14 rounded-2xl border border-border flex items-center justify-center text-foreground hover:bg-muted transition-all"
                                 aria-label="Message Salon"
                             >
-                                {messageLoadingId === booking.id ? <Loader2 className="w-5 h-5 animate-spin" /> : <MessageCircle className="w-5 h-5" />}
+                                {messageLoadingId === booking.id ? <Spinner className="w-5 h-5" /> : <MessageCircle className="w-5 h-5" />}
                             </button>
                         </TooltipTrigger>
                         <TooltipContent>Message Salon</TooltipContent>
@@ -341,7 +342,7 @@ export default function BookingsAndOrdersPage() {
                                     className="h-14 w-14 rounded-2xl border border-border flex items-center justify-center text-muted-foreground hover:text-rose-600 hover:bg-rose-500/10 transition-all group/cancel"
                                     aria-label="Cancel Booking"
                                 >
-                                    {processingId === booking.id ? <Loader2 className="w-6 h-6 animate-spin" /> : <XCircle className="w-6 h-6" />}
+                                    {processingId === booking.id ? <Spinner className="w-6 h-6" /> : <XCircle className="w-6 h-6" />}
                                 </button>
                             </TooltipTrigger>
                             <TooltipContent>Cancel Booking</TooltipContent>
@@ -455,12 +456,18 @@ export default function BookingsAndOrdersPage() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Keep Booking</AlertDialogCancel>
+            <AlertDialogCancel disabled={!!processingId}>Keep Booking</AlertDialogCancel>
             <AlertDialogAction
-              onClick={() => bookingToCancel && handleCancelBooking(bookingToCancel.id)}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={(e) => {
+                /* [Jules - Prevent dialog close until processing is complete] */
+                e.preventDefault();
+                bookingToCancel && handleCancelBooking(bookingToCancel.id);
+              }}
+              disabled={!!processingId}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90 min-w-[140px]"
             >
-              Cancel Appointment
+              {processingId ? <Spinner className="mr-2" /> : null}
+              {processingId ? "Cancelling..." : "Cancel Appointment"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
