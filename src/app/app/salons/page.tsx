@@ -97,9 +97,10 @@ export default function SalonsPage() {
 
         <div className="flex items-center gap-3">
           <div className="relative hidden sm:block">
-            <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" aria-hidden="true" />
             <input
               type="text"
+              aria-label="Your Location"
               placeholder="Your Location"
               className="pl-9 pr-4 py-2.5 rounded-xl border border-border bg-card text-sm focus:ring-2 focus:ring-primary/5 transition-all outline-none w-48 text-foreground"
               defaultValue="Bangalore"
@@ -108,24 +109,26 @@ export default function SalonsPage() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setSortBy(sortBy === "rating" ? null : "rating")}
+              aria-label={`Sort by rating${sortBy === "rating" ? " (active)" : ""}`}
               className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 rounded-xl border text-sm font-medium hover:bg-secondary transition-all ${
                 sortBy === "rating"
                   ? "border-primary bg-primary text-primary-foreground"
                   : "border-border bg-card text-foreground"
               }`}
             >
-              <Star className="w-4 h-4" />
+              <Star className="w-4 h-4" aria-hidden="true" />
               <span className="hidden sm:inline">Rating</span>
             </button>
             <button
               onClick={() => setSortBy(sortBy === "price" ? null : "price")}
+              aria-label={`Sort by price${sortBy === "price" ? " (active)" : ""}`}
               className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 rounded-xl border text-sm font-medium hover:bg-secondary transition-all ${
                 sortBy === "price"
                   ? "border-primary bg-primary text-primary-foreground"
                   : "border-border bg-card text-foreground"
               }`}
             >
-              <span className="font-bold">₹</span>
+              <span className="font-bold" aria-hidden="true">₹</span>
               <span className="hidden sm:inline">Price</span>
             </button>
           </div>
@@ -134,9 +137,10 @@ export default function SalonsPage() {
 
       {/* Search Bar */}
       <section className="relative">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" aria-hidden="true" />
         <input
           type="text"
+          aria-label="Search for services or salon names"
           placeholder="Search for services or salon names..."
           className="w-full pl-12 pr-4 py-4 rounded-2xl bg-card border border-border focus:border-primary shadow-sm transition-all outline-none text-base sm:text-lg text-foreground"
         />
@@ -303,7 +307,7 @@ function SalonCard({ salon, index }: { salon: Salon; index: number }) {
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
           />
           <div className="absolute top-3 left-3 px-2 py-1 rounded-lg bg-background/90 backdrop-blur-md text-[10px] font-bold flex items-center gap-1 shadow-sm text-foreground">
-            <Navigation className="w-3 h-3 text-blue-600" />
+            <Navigation className="w-3 h-3 text-blue-600" aria-hidden="true" />
             2.0 km
           </div>
         </div>
@@ -314,14 +318,18 @@ function SalonCard({ salon, index }: { salon: Salon; index: number }) {
               <h3 className="text-lg sm:text-xl font-bold text-foreground group-hover:text-blue-600 transition-colors truncate">
                 {salon.name}
               </h3>
-              <div className="flex items-center gap-1 text-sm font-bold bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-400 px-2 py-0.5 rounded-lg border border-amber-100 dark:border-amber-900/30 shrink-0">
-                <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
+              <div
+                className="flex items-center gap-1 text-sm font-bold bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-400 px-2 py-0.5 rounded-lg border border-amber-100 dark:border-amber-900/30 shrink-0"
+                aria-label="5 star rating"
+                role="img"
+              >
+                <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500" aria-hidden="true" />
                 5.0
               </div>
             </div>
 
             <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
-              <MapPin className="w-4 h-4 shrink-0" />
+              <MapPin className="w-4 h-4 shrink-0" aria-hidden="true" />
               {salon.address}, {salon.city}
             </div>
 
