@@ -13,12 +13,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import {
-    Loader2, Upload, FileText, CheckCircle2, MapPin, X,
+    Upload, FileText, CheckCircle2, MapPin, X,
     User, Building2, FileCheck, Check, ChevronRight,
     Mail, Phone, Globe, Building, Hash
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
+import { Spinner } from "@/components/ui/spinner";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 // Schema (matching API)
 const partnerSchema = z.object({
@@ -374,7 +376,7 @@ export default function PartnerRegistrationForm({ user }: { user: any }) {
                                     <div className="grid gap-2">
                                         <Label htmlFor="business.category">Category</Label>
                                         <Select onValueChange={(val) => setValue("business.category", val)} defaultValue={formData.business.category}>
-                                            <SelectTrigger>
+                                            <SelectTrigger id="business.category">
                                                 <SelectValue placeholder="Select a category" />
                                             </SelectTrigger>
                                             <SelectContent>
@@ -430,34 +432,45 @@ export default function PartnerRegistrationForm({ user }: { user: any }) {
 
                                     <div className="grid gap-2">
                                         <Label>Gallery Photos (Min 2, Max 10)</Label>
-                                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-2">
-                                            {formData.gallery.map((url, i) => (
-                                                <div key={i} className="relative aspect-square rounded-lg overflow-hidden border group">
-                                                    <img src={url} alt={`Gallery ${i}`} className="w-full h-full object-cover" />
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => removeGalleryImage(i)}
-                                                        className="absolute top-1 right-1 p-1 bg-black/50 rounded-full text-white opacity-0 group-hover:opacity-100 transition-opacity"
-                                                    >
-                                                        <X className="w-3 h-3" />
-                                                    </button>
-                                                </div>
-                                            ))}
-                                            {formData.gallery.length < 10 && (
-                                                <label className="aspect-square rounded-lg border-2 border-dashed border-muted-foreground/20 hover:border-primary/50 flex flex-col items-center justify-center cursor-pointer bg-muted/20 transition-colors">
-                                                    <Upload className="w-6 h-6 text-muted-foreground mb-2" />
-                                                    <span className="text-xs text-muted-foreground font-medium">Add Photos</span>
-                                                    <input
-                                                        type="file"
-                                                        multiple
-                                                        accept="image/*"
-                                                        className="hidden"
-                                                        onChange={handleGalleryUpload}
-                                                        disabled={uploading === "gallery"}
-                                                    />
-                                                </label>
-                                            )}
-                                        </div>
+                                        <TooltipProvider>
+                                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-2">
+                                                {formData.gallery.map((url, i) => (
+                                                    <div key={i} className="relative aspect-square rounded-lg overflow-hidden border group focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2">
+                                                        <img src={url} alt={`Gallery photo ${i + 1}`} className="w-full h-full object-cover" />
+                                                        <Tooltip>
+                                                            <TooltipTrigger asChild>
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => removeGalleryImage(i)}
+                                                                    aria-label={`Remove gallery photo ${i + 1}`}
+                                                                    className="absolute top-1 right-1 p-1 bg-black/50 rounded-full text-white opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                                                                >
+                                                                    <X className="w-3 h-3" />
+                                                                </button>
+                                                            </TooltipTrigger>
+                                                            <TooltipContent>
+                                                                <p>Remove photo</p>
+                                                            </TooltipContent>
+                                                        </Tooltip>
+                                                    </div>
+                                                ))}
+                                                {formData.gallery.length < 10 && (
+                                                    <label className="aspect-square rounded-lg border-2 border-dashed border-muted-foreground/20 hover:border-primary/50 flex flex-col items-center justify-center cursor-pointer bg-muted/20 transition-colors focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2">
+                                                        <Upload className="w-6 h-6 text-muted-foreground mb-2" />
+                                                        <span className="text-xs text-muted-foreground font-medium">Add Photos</span>
+                                                        <input
+                                                            type="file"
+                                                            multiple
+                                                            accept="image/*"
+                                                            className="sr-only"
+                                                            aria-label="Upload gallery images"
+                                                            onChange={handleGalleryUpload}
+                                                            disabled={uploading === "gallery"}
+                                                        />
+                                                    </label>
+                                                )}
+                                            </div>
+                                        </TooltipProvider>
                                         {errors.gallery && <p className="text-red-500 text-sm">{errors.gallery.message}</p>}
                                     </div>
                                 </div>
@@ -531,12 +544,12 @@ export default function PartnerRegistrationForm({ user }: { user: any }) {
 
                                     <div className="grid gap-2">
                                         <Label>Owner ID Document (Passport / Driver's License)</Label>
-                                        <div className="border-2 border-dashed border-muted-foreground/20 rounded-xl p-6 flex flex-col items-center justify-center text-center hover:bg-muted/30 transition-colors">
+                                        <div className="border-2 border-dashed border-muted-foreground/20 rounded-xl p-6 flex flex-col items-center justify-center text-center hover:bg-muted/30 transition-colors relative focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2">
                                             {formData.docs.idUrl ? (
                                                 <div className="flex items-center gap-2 text-emerald-600 font-medium">
                                                     <CheckCircle2 className="w-5 h-5" />
                                                     <span>ID Document Uploaded</span>
-                                                    <button type="button" onClick={() => setValue("docs.idUrl", "")} className="text-xs text-red-500 underline ml-2">Change</button>
+                                                    <button type="button" onClick={() => setValue("docs.idUrl", "")} aria-label="Change Owner ID document" className="text-xs text-red-500 underline ml-2 focus-visible:ring-2 focus-visible:ring-primary">Change</button>
                                                 </div>
                                             ) : (
                                                 <>
@@ -547,6 +560,7 @@ export default function PartnerRegistrationForm({ user }: { user: any }) {
                                                         type="file"
                                                         className="absolute inset-0 opacity-0 cursor-pointer"
                                                         accept=".pdf,image/*"
+                                                        aria-label="Upload Owner ID Document"
                                                         onChange={(e) => handleFileUpload(e, "docs.idUrl", "document")}
                                                         disabled={uploading === "docs.idUrl"}
                                                     />
@@ -559,12 +573,12 @@ export default function PartnerRegistrationForm({ user }: { user: any }) {
 
                                     <div className="grid gap-2">
                                         <Label>Business Proof (Utility Bill / Registration Cert)</Label>
-                                        <div className="border-2 border-dashed border-muted-foreground/20 rounded-xl p-6 flex flex-col items-center justify-center text-center hover:bg-muted/30 transition-colors relative">
+                                        <div className="border-2 border-dashed border-muted-foreground/20 rounded-xl p-6 flex flex-col items-center justify-center text-center hover:bg-muted/30 transition-colors relative focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2">
                                             {formData.docs.proofUrl ? (
                                                 <div className="flex items-center gap-2 text-emerald-600 font-medium">
                                                     <CheckCircle2 className="w-5 h-5" />
                                                     <span>Business Proof Uploaded</span>
-                                                    <button type="button" onClick={() => setValue("docs.proofUrl", "")} className="text-xs text-red-500 underline ml-2">Change</button>
+                                                    <button type="button" onClick={() => setValue("docs.proofUrl", "")} aria-label="Change Business Proof document" className="text-xs text-red-500 underline ml-2 focus-visible:ring-2 focus-visible:ring-primary">Change</button>
                                                 </div>
                                             ) : (
                                                 <>
@@ -575,6 +589,7 @@ export default function PartnerRegistrationForm({ user }: { user: any }) {
                                                         type="file"
                                                         className="absolute inset-0 opacity-0 cursor-pointer"
                                                         accept=".pdf,image/*"
+                                                        aria-label="Upload Business Proof Document"
                                                         onChange={(e) => handleFileUpload(e, "docs.proofUrl", "document")}
                                                         disabled={uploading === "docs.proofUrl"}
                                                     />
@@ -667,7 +682,7 @@ export default function PartnerRegistrationForm({ user }: { user: any }) {
                             <Button type="submit" disabled={loading || !formData.legal.terms || !formData.legal.confirm} className="px-8">
                                 {loading ? (
                                     <>
-                                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                        <Spinner className="w-4 h-4 mr-2" />
                                         Submitting...
                                     </>
                                 ) : (
