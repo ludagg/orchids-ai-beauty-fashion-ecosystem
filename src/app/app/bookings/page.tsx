@@ -356,7 +356,7 @@ export default function BookingsAndOrdersPage() {
           orders.length === 0 ? (
             <div className="text-center py-20 text-muted-foreground">
                 <p>No orders found.</p>
-                <Link href="/app/marketplace" className="text-primary hover:underline mt-2 inline-block">Browse Marketplace</Link>
+                <Link href="/app/shop" className="text-primary hover:underline mt-2 inline-block">Browse Marketplace</Link>
             </div>
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -371,7 +371,7 @@ export default function BookingsAndOrdersPage() {
                         <div className="flex gap-6">
                             <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-[32px] overflow-hidden bg-muted flex-shrink-0">
                                 <img
-                                    src={order.items[0]?.product.images?.[0] || "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=200&h=200&fit=crop"}
+                                    src={order.items[0]?.product.mainImageUrl || "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=200&h=200&fit=crop"}
                                     alt={order.items[0]?.product.name}
                                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                                 />

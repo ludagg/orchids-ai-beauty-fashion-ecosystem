@@ -79,7 +79,7 @@ export default function NotFound() {
             Back to Home
           </Link>
           <Link
-            href="/app/marketplace"
+            href="/app/shop"
             className="w-full sm:w-auto px-8 py-4 bg-muted text-foreground border border-border rounded-full font-bold flex items-center justify-center gap-2 hover:bg-muted/80 transition-all active:scale-95"
           >
             <Search size={20} />
