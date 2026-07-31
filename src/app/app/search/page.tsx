@@ -387,7 +387,7 @@ function SearchContent() {
                         )}
                          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
                             {results.marketplace.map((product, i) => (
-                                <Link href={`/app/marketplace/${product.id}`} key={product.id} className="group block">
+                                <Link href={`/app/shop/product/${product.id}`} key={product.id} className="group block">
                                     <motion.div
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: 0 }}
@@ -395,7 +395,7 @@ function SearchContent() {
                                     >
                                         <div className="aspect-[3/4] rounded-[24px] overflow-hidden bg-secondary mb-3 relative border border-border">
                                             <img
-                                                src={product.images?.[0] || "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=500&fit=crop"}
+                                                src={product.mainImageUrl || "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=500&fit=crop"}
                                                 alt={product.name}
                                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                             />

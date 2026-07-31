@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ProductCard } from '@/components/shop/ProductCard';
+import { ARTryOn } from '@/components/shop/ai/ARTryOn';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import {
@@ -189,6 +190,13 @@ export default function ProductDetailPage() {
       </div>
 
       <div className="p-4 space-y-6">
+        <div className="pt-2">
+            <ARTryOn
+                productImageUrl={product.mainImageUrl}
+                productName={product.name}
+            />
+        </div>
+
         {/* Header Info */}
         <div className="space-y-2">
              <div className="flex items-start justify-between">
