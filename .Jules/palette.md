@@ -64,3 +64,7 @@
 ## 2026-04-13 - Profile UX Standardization
 **Learning:** For high-traffic profile pages, standardizing on unified `Empty` and `Spinner` primitives ensures a consistent brand voice across all tabs. Additionally, adding explicit `aria-label` attributes to numerical statistics (Followers, Following, etc.) provides essential context for screen reader users who might otherwise hear only the number or a truncated label.
 **Action:** Always refactor custom loading/empty states to use the standard UI library. Audit interactive statistics and ensured they have descriptive `aria-label` attributes that combine the value and the metric name.
+
+## 2026-08-01 - Mobile Bottom Navigation Accessibility
+**Learning:** Mobile bottom navigation links that rely solely on icons and visual labels often lack explicit programmatic context for screen readers and search engines. Standardizing them to include explicit, localized `aria-label` attributes and dynamic `aria-current="page"` declarations ensures screen readers clearly announce the current active section during mobile navigation.
+**Action:** Always ensure all mobile bottom navigation `<Link>` and `<a>` elements carry explicit `aria-label` attributes and dynamic `aria-current` properties based on the active path state.
