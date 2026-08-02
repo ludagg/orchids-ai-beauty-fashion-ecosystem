@@ -64,3 +64,7 @@
 ## 2026-04-13 - Profile UX Standardization
 **Learning:** For high-traffic profile pages, standardizing on unified `Empty` and `Spinner` primitives ensures a consistent brand voice across all tabs. Additionally, adding explicit `aria-label` attributes to numerical statistics (Followers, Following, etc.) provides essential context for screen reader users who might otherwise hear only the number or a truncated label.
 **Action:** Always refactor custom loading/empty states to use the standard UI library. Audit interactive statistics and ensured they have descriptive `aria-label` attributes that combine the value and the metric name.
+
+## 2026-04-14 - Billing & Subscription UX Standardization
+**Learning:** Protecting destructive or critical subscription operations (like cancellation) with a themed `AlertDialog` provides a far superior user experience than a standard web action. Coupling this with animated `Loader2` icons and immediate `toast` feedback provides strong visual cues of progress and success. Additionally, tables often contain icon-only actions (like downloading an invoice) that are invisible to screen readers; wrapping them in Radix-based `Tooltip` components with explicit `aria-label` tags keeps the tabular layout clean while ensuring perfect accessibility.
+**Action:** Always wrap table-based icon-only actions in custom `Tooltip` + `aria-label` pairs. Protect all critical subscription/billing adjustments with styled `AlertDialog` components showing dynamic spinner-based loading states.
