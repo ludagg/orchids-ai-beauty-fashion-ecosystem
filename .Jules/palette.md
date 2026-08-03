@@ -64,3 +64,7 @@
 ## 2026-04-13 - Profile UX Standardization
 **Learning:** For high-traffic profile pages, standardizing on unified `Empty` and `Spinner` primitives ensures a consistent brand voice across all tabs. Additionally, adding explicit `aria-label` attributes to numerical statistics (Followers, Following, etc.) provides essential context for screen reader users who might otherwise hear only the number or a truncated label.
 **Action:** Always refactor custom loading/empty states to use the standard UI library. Audit interactive statistics and ensured they have descriptive `aria-label` attributes that combine the value and the metric name.
+
+## 2026-05-24 - Dynamic Themed Confirmation for High-Stakes Chat Settings
+**Learning:** For destructive settings in conversations (like blocking a contact), users need clear confirmation to prevent accidental clicks. Dynamically personalizing the confirmation dialog (e.g., distinguishing between a "business" and a "creator") based on the contact's type makes the warning feel contextual and precise. Adding a spinner on the primary action button while keeping the Radix dialog open with `e.preventDefault()` prevents double-submissions and guarantees seamless interactive feedback.
+**Action:** Audit conversational actions and secure them with context-aware `AlertDialog` components. Prevent automatic closing of dialogs during async flows to display processing states natively.
