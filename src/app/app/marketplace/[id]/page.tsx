@@ -1,4 +1,5 @@
 "use client";
+import { formatPrice } from '@/lib/utils';
 
 import { motion } from "framer-motion";
 import {
@@ -228,9 +229,6 @@ export default function ProductDetailsPage() {
     }
   };
 
-  const formatPrice = (cents: number) => {
-    return (cents / 100).toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
-  };
 
   if (loading) {
     return (

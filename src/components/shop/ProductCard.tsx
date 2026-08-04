@@ -1,4 +1,5 @@
 "use client";
+import { formatPrice } from '@/lib/utils';
 
 import Link from 'next/link';
 import Image from 'next/image';
@@ -67,13 +68,6 @@ export function ProductCard({ product, view = 'grid' }: ProductCardProps) {
     }
   };
 
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 0,
-    }).format(price / 100);
-  };
 
   return (
     <Link href={`/app/shop/product/${product.id}`} className="group block">
