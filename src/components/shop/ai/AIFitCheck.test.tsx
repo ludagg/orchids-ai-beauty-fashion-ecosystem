@@ -46,7 +46,7 @@ describe("AIFitCheck", () => {
   });
 
   it("renders trigger correctly", () => {
-    vi.mocked(authClient.useSession).mockReturnValue({ data: null } as any);
+    (authClient.useSession as any).mockReturnValue({ data: null });
     render(<AIFitCheck productId="test-prod" />);
 
     expect(screen.getByText("AI Fit Analysis")).toBeDefined();
