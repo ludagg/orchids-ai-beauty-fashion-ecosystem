@@ -25,6 +25,8 @@ export const users = pgTable('users', {
   height: text('height'),
   weight: text('weight'),
   bodyType: text('body_type'),
+  referralCode: text('referral_code'),
+  referredById: text('referred_by_id'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });

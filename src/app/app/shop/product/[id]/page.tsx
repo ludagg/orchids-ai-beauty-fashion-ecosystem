@@ -1,5 +1,7 @@
 "use client";
 
+import { AIFitCheck } from '@/components/shop/ai/AIFitCheck';
+import { ARTryOn } from '@/components/shop/ai/ARTryOn';
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
@@ -215,38 +217,11 @@ export default function ProductDetailPage() {
              </div>
         </div>
 
-        {/* AI Fit Check */}
-        <Dialog>
-            <DialogTrigger asChild>
-                <div className="flex items-center justify-between rounded-lg border border-yellow-500/30 bg-yellow-500/10 p-3 cursor-pointer">
-                    <div className="flex items-center gap-3">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-500 text-white">
-                            <Ruler className="h-4 w-4" />
-                        </div>
-                        <div>
-                            <div className="text-sm font-semibold text-yellow-700 dark:text-yellow-400">
-                                AI recommends size M for you
-                            </div>
-                            <div className="text-xs text-muted-foreground">Based on your profile</div>
-                        </div>
-                    </div>
-                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                </div>
-            </DialogTrigger>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>AI Fit Analysis</DialogTitle>
-                    <DialogDescription>
-                        We analyzed your previous purchases and profile measurements.
-                        This brand typically runs true to size.
-                    </DialogDescription>
-                </DialogHeader>
-                {/* Mock chart or details */}
-                <div className="h-40 bg-muted rounded-md flex items-center justify-center text-muted-foreground">
-                    Fit Graph Placeholder
-                </div>
-            </DialogContent>
-        </Dialog>
+        {/* AI Tools */}
+        <div className="grid grid-cols-2 gap-3">
+            <AIFitCheck productId={id as string} />
+            <ARTryOn productId={id as string} />
+        </div>
 
         {/* Variants */}
         <div className="space-y-4">
