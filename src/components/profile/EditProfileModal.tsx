@@ -10,8 +10,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Camera, Mail, Phone, MapPin, Instagram, Youtube, Globe, Loader2 } from "lucide-react";
+import { Camera, Mail, Phone, MapPin, Instagram, Youtube, Globe } from "lucide-react";
 import { toast } from "sonner";
+import { Spinner } from "@/components/ui/spinner";
 
 interface EditProfileModalProps {
   isOpen: boolean;
@@ -131,7 +132,7 @@ export function EditProfileModal({ isOpen, onOpenChange, user, onSave }: EditPro
                     aria-label="Change profile picture"
                   >
                     <Avatar className="w-24 h-24 border-2 border-background shadow-md">
-                      <AvatarImage src={image || "/placeholder-avatar.jpg"} alt="Profile" className="object-cover" />
+                      <AvatarImage src={image || "/placeholder-avatar.jpg"} alt="" className="object-cover" />
                       <AvatarFallback className="text-xl">
                         {name ? name.substring(0, 2).toUpperCase() : "JD"}
                       </AvatarFallback>
@@ -232,9 +233,9 @@ export function EditProfileModal({ isOpen, onOpenChange, user, onSave }: EditPro
              </div>
               <div className="flex items-center justify-between pt-2 border-t">
                   <div className="space-y-0.5">
-                    <Label className="text-sm">Accepting Bookings</Label>
+                    <Label htmlFor="accepting-bookings" className="text-sm cursor-pointer">Accepting Bookings</Label>
                   </div>
-                  <Switch defaultChecked />
+                  <Switch id="accepting-bookings" aria-label="Accepting Bookings" defaultChecked />
              </div>
           </TabsContent>
         </Tabs>
@@ -242,7 +243,7 @@ export function EditProfileModal({ isOpen, onOpenChange, user, onSave }: EditPro
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
           <Button onClick={handleSubmit} disabled={loading}>
-            {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
+            {loading ? <Spinner className="mr-2" /> : null}
             Save Changes
           </Button>
         </DialogFooter>
