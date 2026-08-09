@@ -8,8 +8,10 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ProductCard } from '@/components/shop/ProductCard';
+import { ARTryOn } from '@/components/shop/ai/ARTryOn';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
+import { Camera } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -29,6 +31,7 @@ export default function ProductDetailPage() {
   const [selectedSize, setSelectedSize] = useState<any>(null);
   const [quantity, setQuantity] = useState(1);
   const [isWishlisted, setIsWishlisted] = useState(false);
+  const [showAR, setShowAR] = useState(false);
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
 
   const toggleWishlist = async () => {
@@ -185,6 +188,18 @@ export default function ProductDetailPage() {
              {[product.mainImageUrl, ...(product.galleryUrls || [])].map((_, index) => (
                  <div key={index} className="h-1.5 w-1.5 rounded-full bg-white/50" />
              ))}
+        </div>
+
+        {/* AR Try-On Button */}
+        <div className="absolute top-4 right-16 z-10">
+            <Button
+                onClick={() => setShowAR(true)}
+                size="sm"
+                className="rounded-full bg-black/50 hover:bg-black/70 text-white backdrop-blur-md border border-white/20 shadow-lg"
+            >
+                <Camera className="w-4 h-4 mr-2" />
+                AR Try-On
+            </Button>
         </div>
       </div>
 
@@ -388,6 +403,13 @@ export default function ProductDetailPage() {
             </Button>
         </div>
       </div>
+
+      {showAR && (
+        <ARTryOn
+          productImage={product.mainImageUrl}
+          onClose={() => setShowAR(false)}
+        />
+      )}
     </div>
   );
 }
