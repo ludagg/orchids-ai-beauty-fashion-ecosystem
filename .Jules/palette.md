@@ -64,3 +64,7 @@
 ## 2026-04-13 - Profile UX Standardization
 **Learning:** For high-traffic profile pages, standardizing on unified `Empty` and `Spinner` primitives ensures a consistent brand voice across all tabs. Additionally, adding explicit `aria-label` attributes to numerical statistics (Followers, Following, etc.) provides essential context for screen reader users who might otherwise hear only the number or a truncated label.
 **Action:** Always refactor custom loading/empty states to use the standard UI library. Audit interactive statistics and ensured they have descriptive `aria-label` attributes that combine the value and the metric name.
+
+## 2026-04-14 - Mobile Navigation Accessibility
+**Learning:** For bottom navigation elements on mobile screens, utilizing explicit aria-label attributes and matching the active tab with dynamic aria-current="page" state indicators is crucial for screen readers. Furthermore, adding focus-visible keyboard outlines and hiding decorative elements inside the interactive links using aria-hidden="true" prevents redundant text readouts and ensures the elements are fully keyboard navigatable.
+**Action:** Standardize bottom nav components to include explicit aria-label, dynamic aria-current="page" state indicators, and focus-visible keyboard ring outlines while hiding decorative inner components with aria-hidden="true".
