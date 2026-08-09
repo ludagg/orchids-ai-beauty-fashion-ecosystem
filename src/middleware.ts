@@ -50,6 +50,12 @@ export async function middleware(request: NextRequest) {
     const response = NextResponse.next();
     // Add custom header for debugging
     response.headers.set("x-orchids-latency", `${Date.now() - start}ms`);
+
+    // Set default locale cookie if not present
+    if (!request.cookies.has('NEXT_LOCALE')) {
+      response.cookies.set('NEXT_LOCALE', 'en', { path: '/' });
+    }
+
     return response;
   }
 
@@ -76,6 +82,12 @@ export async function middleware(request: NextRequest) {
 
   const response = NextResponse.next();
   response.headers.set("x-orchids-latency", `${Date.now() - start}ms`);
+
+  // Set default locale cookie if not present
+  if (!request.cookies.has('NEXT_LOCALE')) {
+    response.cookies.set('NEXT_LOCALE', 'en', { path: '/' });
+  }
+
   return response;
 }
 

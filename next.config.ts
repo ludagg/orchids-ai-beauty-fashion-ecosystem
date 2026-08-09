@@ -1,5 +1,8 @@
 import type { NextConfig } from "next";
 import path from "node:path";
+import createNextIntlPlugin from 'next-intl/plugin';
+
+const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 
 const LOADER = path.resolve(__dirname, "src/visual-edits/component-tagger-loader.js");
 
@@ -54,4 +57,4 @@ if (!isVercel) {
   };
 }
 
-export default nextConfig;
+export default withNextIntl(nextConfig);
