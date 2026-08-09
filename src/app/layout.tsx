@@ -9,6 +9,8 @@ import { Toaster } from "@/components/ui/sonner";
 import OfflineDetector from "@/components/OfflineDetector";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { CookieConsent } from "@/components/privacy/CookieConsent";
+import { NextIntlClientProvider } from 'next-intl';
+import { getLocale, getMessages } from 'next-intl/server';
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -34,11 +36,14 @@ export const metadata: Metadata = {
   description: "Discover fashion, book salons, and shop via video commerce - all powered by AI. Virtual fit intelligence, personalized style, and verified beauty services in one platform.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getLocale();
+  const messages = await getMessages();
+
   const jsonLdData = {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -48,8 +53,9 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <body className={`${playfair.variable} ${outfit.variable} ${pinyon.variable} font-sans antialiased`}>
+        <NextIntlClientProvider messages={messages} locale={locale}>
         <JsonLd data={jsonLdData} />
         <ThemeProvider
           attribute="class"
@@ -80,6 +86,7 @@ export default function RootLayout({
         <CookieConsent />
         <OfflineDetector />
         </ThemeProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );
