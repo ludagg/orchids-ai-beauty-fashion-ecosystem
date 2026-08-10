@@ -25,16 +25,24 @@ export default function BusinessBottomNav() {
             <Link
               key={item.href}
               href={item.href}
-              className="flex flex-col items-center gap-1 py-1 group relative"
+              className="flex flex-col items-center gap-1 py-1 group relative rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 px-2"
+              aria-label={item.label}
+              aria-current={isActive ? "page" : undefined}
             >
-              <div className={`p-1.5 rounded-xl transition-all ${
-                isActive ? "text-foreground bg-secondary" : "text-muted-foreground hover:text-foreground"
-              }`}>
+              <div
+                className={`p-1.5 rounded-xl transition-all ${
+                  isActive ? "text-foreground bg-secondary" : "text-muted-foreground hover:text-foreground"
+                }`}
+                aria-hidden="true"
+              >
                 <item.icon className={`w-5 h-5 ${isActive ? "fill-current/10" : ""}`} />
               </div>
-              <span className={`text-[10px] font-medium transition-colors ${
-                isActive ? "text-foreground" : "text-muted-foreground"
-              }`}>
+              <span
+                className={`text-[10px] font-medium transition-colors ${
+                  isActive ? "text-foreground" : "text-muted-foreground"
+                }`}
+                aria-hidden="true"
+              >
                 {item.label}
               </span>
               {isActive && (
@@ -42,6 +50,7 @@ export default function BusinessBottomNav() {
                   layoutId="business-bottom-nav-indicator"
                   className="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-1 bg-foreground rounded-full"
                   transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                  aria-hidden="true"
                 />
               )}
             </Link>
