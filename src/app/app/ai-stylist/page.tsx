@@ -439,7 +439,7 @@ export default function AIStylistPage() {
                       <div className="mt-4 grid grid-cols-2 gap-3 max-w-sm">
                         {msg.products.map((product: any) => (
                           <Link
-                            href={`/app/marketplace/${product.id}`}
+                            href={`/app/shop/product/${product.id}`}
                             key={product.id}
                             className="bg-card border border-border rounded-xl overflow-hidden hover:shadow-md transition-all group block"
                           >
@@ -587,7 +587,7 @@ export default function AIStylistPage() {
                   animate={{ opacity: 1, x: 0 }}
                   className="group cursor-pointer"
                 >
-                  <Link href={`/app/marketplace/${product.id}`} className="block">
+                  <Link href={`/app/shop/product/${product.id}`} className="block">
                     <div className="aspect-[4/5] rounded-3xl overflow-hidden mb-3 relative shadow-md border border-border">
                       <img
                         src={product.images?.[0]}
