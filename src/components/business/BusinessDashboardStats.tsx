@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { format } from "date-fns";
+import { formatPrice } from '@/lib/utils';
 
 interface Booking {
   id: string;
@@ -45,9 +46,7 @@ interface DashboardStatsProps {
 
 export default function BusinessDashboardStats({ stats, upcomingBookings, salonName, isPending }: DashboardStatsProps) {
 
-  const formatPrice = (cents: number) => {
-    return (cents / 100).toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
-  };
+
 
   const statCards = [
     {

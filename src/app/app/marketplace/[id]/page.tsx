@@ -25,6 +25,7 @@ import { useSession } from "@/lib/auth-client";
 import { useCart } from "@/lib/cart-context";
 import { Textarea } from "@/components/ui/textarea";
 import { format } from "date-fns";
+import { formatPrice } from '@/lib/utils';
 import {
   Tooltip,
   TooltipContent,
@@ -228,9 +229,7 @@ export default function ProductDetailsPage() {
     }
   };
 
-  const formatPrice = (cents: number) => {
-    return (cents / 100).toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
-  };
+
 
   if (loading) {
     return (

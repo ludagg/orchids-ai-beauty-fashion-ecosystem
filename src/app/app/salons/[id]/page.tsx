@@ -35,6 +35,7 @@ import dynamic from "next/dynamic";
 import { ReviewList } from "@/components/reviews/ReviewList";
 import { RatingSummary } from "@/components/reviews/RatingSummary";
 import { ReviewForm } from "@/components/reviews/ReviewForm";
+import { formatPrice } from '@/lib/utils';
 
 const Map = dynamic(() => import("@/components/ui/Map"), {
   ssr: false,
@@ -331,9 +332,7 @@ export default function SalonDetailsPage() {
     }
   };
 
-  const formatPrice = (cents: number) => {
-    return (cents / 100).toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
-  };
+
 
   const selectedService = services.find(s => s.id === selectedServiceId);
   const qualifiedStaff = selectedServiceId
