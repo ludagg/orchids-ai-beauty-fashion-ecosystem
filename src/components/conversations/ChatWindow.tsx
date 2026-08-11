@@ -25,6 +25,17 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { toast } from "sonner";
 
 interface ChatWindowProps {
   chatId: number | string;
@@ -54,7 +65,23 @@ export default function ChatWindow({ chatId }: ChatWindowProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [loading, setLoading] = useState(true);
+  const [isBlockDialogOpen, setIsBlockDialogOpen] = useState(false);
+  const [isBlocking, setIsBlocking] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const handleBlockBusiness = async () => {
+    setIsBlocking(true);
+    try {
+      // Simulate API request
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      toast.success(`${conversation?.otherParty.name || "Business"} has been blocked.`);
+      setIsBlockDialogOpen(false);
+    } catch (error) {
+      toast.error("Failed to block. Please try again.");
+    } finally {
+      setIsBlocking(false);
+    }
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -390,7 +417,11 @@ export default function ChatWindow({ chatId }: ChatWindowProps) {
             <section>
               <h4 className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-4">Settings</h4>
               <div className="space-y-2">
-                <button type="button" className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-rose-500/10 text-rose-500 transition-all group">
+                <button
+                  type="button"
+                  onClick={() => setIsBlockDialogOpen(true)}
+                  className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-rose-500/10 text-rose-500 transition-all group"
+                >
                   <span className="text-sm font-bold">Block Business</span>
                 </button>
                 <button type="button" className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-muted text-muted-foreground transition-all">
@@ -403,6 +434,37 @@ export default function ChatWindow({ chatId }: ChatWindowProps) {
             </section>
           </div>
         </aside>
+
+        <AlertDialog open={isBlockDialogOpen} onOpenChange={setIsBlockDialogOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Block {conversation?.otherParty?.name || "Business"}?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to block this business? You will no longer be able to send or receive messages in this conversation.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel disabled={isBlocking}>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleBlockBusiness();
+                }}
+                disabled={isBlocking}
+                className="bg-destructive hover:bg-destructive/90 text-white"
+              >
+                {isBlocking ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Blocking...
+                  </>
+                ) : (
+                  "Block Business"
+                )}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
     </div>
   );
 }
