@@ -27,6 +27,7 @@ import { format } from "date-fns";
 import { toast } from "sonner";
 import { ReviewForm } from "@/components/reviews/ReviewForm";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { formatPrice } from '@/lib/utils';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -169,9 +170,7 @@ export default function BookingsAndOrdersPage() {
     setReviewModalOpen(true);
   };
 
-  const formatPrice = (cents: number) => {
-    return (cents / 100).toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
-  };
+
 
   const filteredBookings = statusFilter === "All"
     ? bookings

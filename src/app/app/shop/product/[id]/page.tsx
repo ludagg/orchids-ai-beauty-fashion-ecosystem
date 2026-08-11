@@ -8,7 +8,8 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ProductCard } from '@/components/shop/ProductCard';
-import { cn } from '@/lib/utils';
+import { ARTryOn } from '@/components/shop/ai/ARTryOn';
+import { cn, formatPrice } from '@/lib/utils';
 import { toast } from 'sonner';
 import {
   Dialog,
@@ -141,13 +142,7 @@ export default function ProductDetailPage() {
   const currentPrice = isSale ? product.salePrice : product.originalPrice;
 
   // Format Price
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 0,
-    }).format(price / 100);
-  };
+
 
   return (
     <div className="min-h-screen bg-background pb-24">
@@ -165,6 +160,10 @@ export default function ProductDetailPage() {
             </Button>
          </div>
       </div>
+
+        <div className="p-4 pt-0">
+             <ARTryOn productName={product.name} />
+        </div>
 
       {/* Gallery */}
       <div className="relative aspect-[3/4] w-full bg-muted overflow-hidden" ref={emblaRef}>
