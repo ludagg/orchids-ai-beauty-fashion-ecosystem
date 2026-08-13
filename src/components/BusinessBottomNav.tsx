@@ -25,14 +25,16 @@ export default function BusinessBottomNav() {
             <Link
               key={item.href}
               href={item.href}
-              className="flex flex-col items-center gap-1 py-1 group relative"
+              aria-label={item.label}
+              aria-current={isActive ? "page" : undefined}
+              className="flex flex-col items-center gap-1 py-1 group relative rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             >
               <div className={`p-1.5 rounded-xl transition-all ${
                 isActive ? "text-foreground bg-secondary" : "text-muted-foreground hover:text-foreground"
               }`}>
-                <item.icon className={`w-5 h-5 ${isActive ? "fill-current/10" : ""}`} />
+                <item.icon aria-hidden="true" className={`w-5 h-5 ${isActive ? "fill-current/10" : ""}`} />
               </div>
-              <span className={`text-[10px] font-medium transition-colors ${
+              <span aria-hidden="true" className={`text-[10px] font-medium transition-colors ${
                 isActive ? "text-foreground" : "text-muted-foreground"
               }`}>
                 {item.label}
