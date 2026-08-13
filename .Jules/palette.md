@@ -1,3 +1,7 @@
+## 2026-08-13 - Mobile Bottom Navigation Accessibility
+**Learning:** Mobile bottom navigation links are often overlooked for accessibility because they are styled as simple graphic icons. Lacking focus-visible outlines and explicit labels makes mobile navigation impossible for keyboard and screen-reader users. Hiding nested elements with `aria-hidden="true"` and applying `aria-label` with `aria-current="page"` directly to the interactive Next.js `<Link>` element, paired with custom `focus-visible` styles, ensures robust accessibility.
+**Action:** Always wrap bottom nav elements in semantic `<Link>` components, apply explicit `aria-label` and `aria-current` to the link, hide internal icons/labels, and ensure custom `focus-visible:ring-2` focus outlines are present.
+
 ## 2026-02-10 - Enhancing Hero Background
 **Learning:** Adding subtle background decorations like a dotted grid and animated blurred blobs can significantly improve the "premium" feel of a hero section without requiring complex assets or distracting the user.
 **Action:** Use CSS radial-gradients for grids and framer-motion with blur filters for blobs to fill empty space elegantly.
