@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import { CompareDialog } from "@/components/shop/ai/CompareDialog";
 
 interface Product {
   id: string;
@@ -141,6 +142,15 @@ export function ProductCard({ product, view = 'grid' }: ProductCardProps) {
                 {formatPrice(product.originalPrice)}
               </span>
             )}
+          </div>
+
+          {/* Action: AI Compare */}
+          <div className="mt-2" onClick={(e) => e.preventDefault()}>
+            <CompareDialog
+                productId={product.id}
+                productName={product.name}
+                productCategory={(product as any).category || (product as any).mainCategory}
+            />
           </div>
         </div>
       </div>
