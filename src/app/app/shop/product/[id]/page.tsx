@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ProductCard } from '@/components/shop/ProductCard';
 import { cn } from '@/lib/utils';
+import ARTryOn from '@/components/shop/ai/ARTryOn';
 import { toast } from 'sonner';
 import {
   Dialog,
@@ -215,6 +216,7 @@ export default function ProductDetailPage() {
              </div>
         </div>
 
+        <ARTryOn productId={product.id} productName={product.name} productImage={product.mainImageUrl} />
         {/* AI Fit Check */}
         <Dialog>
             <DialogTrigger asChild>
