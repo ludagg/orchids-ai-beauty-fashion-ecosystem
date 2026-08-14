@@ -3,9 +3,10 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { Star, Heart, Share2, MapPin, ChevronRight, Check, ShieldCheck, Ruler } from 'lucide-react';
+import { Star, Heart, Share2, MapPin, ChevronRight, Check, ShieldCheck, Ruler, ScanFace } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { ARTryOn } from "@/components/shop/ai/ARTryOn";
 import { Skeleton } from '@/components/ui/skeleton';
 import { ProductCard } from '@/components/shop/ProductCard';
 import { cn } from '@/lib/utils';
@@ -28,6 +29,7 @@ export default function ProductDetailPage() {
   const [selectedColor, setSelectedColor] = useState<any>(null);
   const [selectedSize, setSelectedSize] = useState<any>(null);
   const [quantity, setQuantity] = useState(1);
+  const [showAR, setShowAR] = useState(false);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
 
@@ -359,6 +361,17 @@ export default function ProductDetailPage() {
             ) : (
                 <div className="text-sm text-muted-foreground">No reviews yet.</div>
             )}
+
+             {/* AR Try-On Button */}
+             <div className="absolute bottom-4 right-4 z-10">
+                <Button
+                    onClick={() => setShowAR(true)}
+                    className="rounded-full bg-black/80 hover:bg-black text-white shadow-lg backdrop-blur gap-2"
+                >
+                    <ScanFace className="w-4 h-4 text-yellow-500" />
+                    AR Try-On
+                </Button>
+             </div>
         </div>
 
         {/* Similar Products */}
@@ -388,6 +401,14 @@ export default function ProductDetailPage() {
             </Button>
         </div>
       </div>
+
+      {showAR && product && (
+         <ARTryOn
+             productImageUrl={product.mainImageUrl}
+             productName={product.name}
+             onClose={() => setShowAR(false)}
+         />
+      )}
     </div>
   );
 }
