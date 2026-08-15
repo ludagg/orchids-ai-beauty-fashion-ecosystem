@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { db } from "@/lib/db";
 import { orders, orderItems, products } from "@/db/schema/commerce";
+import { users } from "@/db/schema/auth";
 import { eq, sql, and, ne } from "drizzle-orm";
 
 export async function POST(req: NextRequest) {
@@ -67,6 +68,59 @@ export async function POST(req: NextRequest) {
         }
       }
       break;
+
+    case "checkout.session.completed":
+      const checkoutSession = event.data.object as any;
+      if (checkoutSession.mode === "subscription") {
+        const userId = checkoutSession.metadata?.userId;
+        const subscriptionId = checkoutSession.subscription;
+        const customerId = checkoutSession.customer;
+
+        if (userId && subscriptionId && customerId) {
+          const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+          await db.update(users).set({
+            stripeCustomerId: customerId,
+            stripeSubscriptionId: subscriptionId,
+            stripePriceId: subscription.items.data[0].price.id,
+            stripeCurrentPeriodEnd: new Date(subscription.current_period_end * 1000),
+          }).where(eq(users.id, userId));
+          console.log(`Updated subscription for user ${userId}`);
+        }
+      }
+      break;
+
+    case "invoice.payment_succeeded":
+      const invoice = event.data.object as any;
+      if (invoice.subscription) {
+        const subscription = await stripe.subscriptions.retrieve(invoice.subscription as string);
+        await db.update(users).set({
+          stripePriceId: subscription.items.data[0].price.id,
+          stripeCurrentPeriodEnd: new Date(subscription.current_period_end * 1000),
+        }).where(eq(users.stripeSubscriptionId, invoice.subscription as string));
+        console.log(`Refreshed subscription ${invoice.subscription}`);
+      }
+      break;
+
+    case "customer.subscription.deleted":
+    case "customer.subscription.updated":
+      const subscription = event.data.object as any;
+      const status = subscription.status;
+      if (status === "canceled" || status === "unpaid") {
+         await db.update(users).set({
+            stripeSubscriptionId: null,
+            stripePriceId: null,
+            stripeCurrentPeriodEnd: null,
+         }).where(eq(users.stripeSubscriptionId, subscription.id));
+         console.log(`Canceled/unpaid subscription ${subscription.id}`);
+      } else {
+         await db.update(users).set({
+            stripePriceId: subscription.items.data[0].price.id,
+            stripeCurrentPeriodEnd: new Date(subscription.current_period_end * 1000),
+         }).where(eq(users.stripeSubscriptionId, subscription.id));
+         console.log(`Updated subscription ${subscription.id}`);
+      }
+      break;
+
     default:
       // Unexpected event type
       console.log(`Unhandled event type ${event.type}`);

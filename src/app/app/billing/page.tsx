@@ -1,7 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { CreditCard, History, Download, CheckCircle2 } from "lucide-react";
+import { CreditCard, History, Download, CheckCircle2, Loader2 } from "lucide-react";
+import { authClient } from "@/lib/auth-client";
+import { useState } from "react";
 
 const INVOICES = [
   { id: "INV-001", date: "Oct 24, 2024", plan: "Pro Plan (Monthly)", amount: "₹499.00", status: "Paid" },
@@ -10,6 +12,49 @@ const INVOICES = [
 ];
 
 export default function BillingPage() {
+  const { data: session, isPending } = authClient.useSession();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const isSubscribed = session?.user?.stripeSubscriptionId && session?.user?.stripePriceId;
+
+  const handleUpgrade = async () => {
+    try {
+      setIsLoading(true);
+      const res = await fetch("/api/billing/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_ID }), // Requires env variable
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleManage = async () => {
+    try {
+      setIsLoading(true);
+      const res = await fetch("/api/billing/portal", {
+        method: "POST",
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (isPending) return <div className="flex justify-center p-12"><Loader2 className="w-8 h-8 animate-spin" /></div>;
+
   return (
     <div className="p-6 max-w-4xl mx-auto space-y-8">
       <div>
@@ -29,11 +74,13 @@ export default function BillingPage() {
             <div className="flex justify-between items-start mb-6">
               <div>
                 <p className="text-violet-200 text-sm font-medium mb-1">Current Plan</p>
-                <h2 className="text-3xl font-bold">Pro Member</h2>
+                <h2 className="text-3xl font-bold">{isSubscribed ? "Pro Member" : "Free Plan"}</h2>
               </div>
-              <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-bold border border-white/10">
-                Active
-              </span>
+              {isSubscribed && (
+                <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-bold border border-white/10">
+                  Active
+                </span>
+              )}
             </div>
 
             <div className="space-y-3 mb-8">
@@ -49,12 +96,25 @@ export default function BillingPage() {
             </div>
 
             <div className="flex gap-4">
-              <button className="px-5 py-2.5 rounded-xl bg-white text-violet-700 font-bold text-sm hover:bg-violet-50 transition-colors">
-                Upgrade Plan
-              </button>
-              <button className="px-5 py-2.5 rounded-xl bg-white/10 backdrop-blur-md text-white font-medium text-sm hover:bg-white/20 transition-colors border border-white/10">
-                Cancel Subscription
-              </button>
+              {!isSubscribed ? (
+                <button
+                  onClick={handleUpgrade}
+                  disabled={isLoading}
+                  className="px-5 py-2.5 rounded-xl bg-white text-violet-700 font-bold text-sm hover:bg-violet-50 transition-colors disabled:opacity-50 flex items-center gap-2"
+                >
+                  {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
+                  Upgrade Plan
+                </button>
+              ) : (
+                <button
+                  onClick={handleManage}
+                  disabled={isLoading}
+                  className="px-5 py-2.5 rounded-xl bg-white/10 backdrop-blur-md text-white font-medium text-sm hover:bg-white/20 transition-colors border border-white/10 flex items-center gap-2"
+                >
+                  {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
+                  Manage Subscription
+                </button>
+              )}
             </div>
           </div>
         </motion.div>
