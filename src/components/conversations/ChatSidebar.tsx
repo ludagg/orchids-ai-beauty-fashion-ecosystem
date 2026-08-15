@@ -1,9 +1,22 @@
 "use client";
 
-import { Search, MoreVertical, Loader2 } from "lucide-react";
+import { Search, MoreVertical, MessageSquare } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
+import { Spinner } from "@/components/ui/spinner";
+import {
+  Empty,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+  EmptyDescription,
+} from "@/components/ui/empty";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface Conversation {
   id: string;
@@ -61,9 +74,16 @@ export default function ChatSidebar({ selectedId }: ChatSidebarProps) {
       <div className="p-6 border-b border-border space-y-4">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold text-foreground">Messages</h1>
-          <button className="p-2 rounded-xl bg-muted text-foreground hover:bg-muted/80 transition-colors" aria-label="Chat options">
-            <MoreVertical className="w-5 h-5" />
-          </button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button className="p-2 rounded-xl bg-muted text-foreground hover:bg-muted/80 transition-colors" aria-label="Chat options">
+                <MoreVertical className="w-5 h-5" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Chat options</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
         <div className="relative" role="search">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" aria-hidden="true" />
@@ -80,13 +100,23 @@ export default function ChatSidebar({ selectedId }: ChatSidebarProps) {
 
       <div className="flex-1 overflow-y-auto no-scrollbar">
         {loading ? (
-           <div className="flex justify-center p-8">
-             <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
-           </div>
+          <div className="flex justify-center p-8" role="status" aria-label="Loading conversations">
+            <Spinner className="w-6 h-6 text-muted-foreground" />
+          </div>
         ) : filteredConversations.length === 0 ? (
-           <div className="p-8 text-center text-muted-foreground">
-             <p>No conversations yet.</p>
-           </div>
+          <div className="p-4">
+            <Empty>
+              <EmptyHeader>
+                <EmptyMedia variant="icon">
+                  <MessageSquare />
+                </EmptyMedia>
+                <EmptyTitle>No conversations found</EmptyTitle>
+                <EmptyDescription>
+                  {searchQuery ? "No messages match your search criteria." : "You don't have any active conversations yet."}
+                </EmptyDescription>
+              </EmptyHeader>
+            </Empty>
+          </div>
         ) : (
           filteredConversations.map((chat) => (
             <Link
@@ -101,7 +131,7 @@ export default function ChatSidebar({ selectedId }: ChatSidebarProps) {
                 <div className="w-14 h-14 rounded-2xl overflow-hidden shadow-sm bg-secondary">
                   <img
                     src={chat.otherParty.image || "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=100&h=100&fit=crop"}
-                    alt={chat.otherParty.name}
+                    alt=""
                     className="w-full h-full object-cover"
                   />
                 </div>
