@@ -22,6 +22,18 @@ export const auth = betterAuth({
       loyaltyPoints: {
         type: "number",
       },
+      stripeCustomerId: {
+        type: "string",
+      },
+      stripeSubscriptionId: {
+        type: "string",
+      },
+      stripePriceId: {
+        type: "string",
+      },
+      stripeCurrentPeriodEnd: {
+        type: "date",
+      },
     },
   },
   emailAndPassword: {

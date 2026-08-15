@@ -25,6 +25,10 @@ export const users = pgTable('users', {
   height: text('height'),
   weight: text('weight'),
   bodyType: text('body_type'),
+  stripeCustomerId: text('stripe_customer_id'),
+  stripeSubscriptionId: text('stripe_subscription_id'),
+  stripePriceId: text('stripe_price_id'),
+  stripeCurrentPeriodEnd: timestamp('stripe_current_period_end'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
