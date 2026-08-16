@@ -19,6 +19,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import useEmblaCarousel from 'embla-carousel-react';
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { ARTryOn } from '@/components/shop/ai/ARTryOn';
 
 export default function ProductDetailPage() {
   const { id } = useParams();
@@ -30,6 +33,12 @@ export default function ProductDetailPage() {
   const [quantity, setQuantity] = useState(1);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+
+  // AI Fit Check State
+  const [fitCheckLoading, setFitCheckLoading] = useState(false);
+  const [fitRecommendation, setFitRecommendation] = useState<any>(null);
+  const [measurements, setMeasurements] = useState({ height: '', weight: '', bodyType: '' });
+  const [showMeasurementsForm, setShowMeasurementsForm] = useState(false);
 
   const toggleWishlist = async () => {
     const newState = !isWishlisted;
@@ -76,8 +85,87 @@ export default function ProductDetailPage() {
             toast.error("Failed to load product");
             setLoading(false);
         });
+
+        // Fetch user profile for measurements
+        fetch('/api/users/profile')
+            .then(res => res.json())
+            .then(data => {
+                if (data && !data.error) {
+                     setMeasurements({
+                         height: data.height || '',
+                         weight: data.weight || '',
+                         bodyType: data.bodyType || ''
+                     });
+                     if (data.height && data.weight && data.bodyType) {
+                         // Automatically run AI Fit Check if measurements exist
+                         fetchAIFitRecommendation(data.height, data.weight, data.bodyType);
+                     } else {
+                         setShowMeasurementsForm(true);
+                     }
+                }
+            })
+            .catch(err => console.error("Could not load user measurements", err));
     }
   }, [id, router]);
+
+  const fetchAIFitRecommendation = async (height: string, weight: string, bodyType: string) => {
+        if (!product) return;
+        setFitCheckLoading(true);
+        try {
+            const res = await fetch('/api/ai-fit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    productId: product.id,
+                    productName: product.name,
+                    brand: product.brand,
+                    availableSizes: product.sizes,
+                    userMeasurements: { height, weight, bodyType }
+                })
+            });
+            const data = await res.json();
+            if (res.ok && data.recommendation) {
+                setFitRecommendation(data);
+
+                // Highlight the recommended size if it exists
+                if (product.sizes) {
+                     const recommended = product.sizes.find((s: any) => s.name.toLowerCase() === data.recommendation.toLowerCase());
+                     if (recommended) setSelectedSize(recommended);
+                }
+            } else {
+                toast.error(data.error || "Could not generate fit recommendation");
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error("Failed to fetch AI Fit check");
+        } finally {
+            setFitCheckLoading(false);
+        }
+  };
+
+  const handleUpdateMeasurements = async () => {
+      try {
+          setFitCheckLoading(true);
+          const res = await fetch('/api/users/profile/measurements', {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(measurements)
+          });
+
+          if (res.ok) {
+              toast.success("Measurements saved!");
+              setShowMeasurementsForm(false);
+              await fetchAIFitRecommendation(measurements.height, measurements.weight, measurements.bodyType);
+          } else {
+              const errData = await res.json();
+              toast.error(errData.error || "Failed to save measurements");
+          }
+      } catch (err) {
+          toast.error("Failed to save measurements");
+      } finally {
+          setFitCheckLoading(false);
+      }
+  };
 
   const handleAddToCart = async (goToCheckout = false) => {
     if (!product) return;
@@ -186,6 +274,13 @@ export default function ProductDetailPage() {
                  <div key={index} className="h-1.5 w-1.5 rounded-full bg-white/50" />
              ))}
         </div>
+
+        {/* AR Try-On Button Overlay */}
+        {product.mainImageUrl && (
+            <div className="absolute bottom-4 right-4 z-10">
+                <ARTryOn productImageUrl={product.mainImageUrl} />
+            </div>
+        )}
       </div>
 
       <div className="p-4 space-y-6">
@@ -216,37 +311,74 @@ export default function ProductDetailPage() {
         </div>
 
         {/* AI Fit Check */}
-        <Dialog>
-            <DialogTrigger asChild>
-                <div className="flex items-center justify-between rounded-lg border border-yellow-500/30 bg-yellow-500/10 p-3 cursor-pointer">
-                    <div className="flex items-center gap-3">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-500 text-white">
-                            <Ruler className="h-4 w-4" />
-                        </div>
-                        <div>
-                            <div className="text-sm font-semibold text-yellow-700 dark:text-yellow-400">
-                                AI recommends size M for you
+        {product.sizes && product.sizes.length > 0 && (
+            <Dialog>
+                <DialogTrigger asChild>
+                    <div className="flex items-center justify-between rounded-lg border border-yellow-500/30 bg-yellow-500/10 p-3 cursor-pointer">
+                        <div className="flex items-center gap-3">
+                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-500 text-white">
+                                <Ruler className="h-4 w-4" />
                             </div>
-                            <div className="text-xs text-muted-foreground">Based on your profile</div>
+                            <div>
+                                <div className="text-sm font-semibold text-yellow-700 dark:text-yellow-400">
+                                    {fitRecommendation ? `AI recommends size ${fitRecommendation.recommendation}` : 'Get AI Size Recommendation'}
+                                </div>
+                                <div className="text-xs text-muted-foreground">
+                                     {fitRecommendation ? `Confidence: ${fitRecommendation.confidence}%` : 'Tap to set up'}
+                                </div>
+                            </div>
                         </div>
+                        <ChevronRight className="h-4 w-4 text-muted-foreground" />
                     </div>
-                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                </div>
-            </DialogTrigger>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>AI Fit Analysis</DialogTitle>
-                    <DialogDescription>
-                        We analyzed your previous purchases and profile measurements.
-                        This brand typically runs true to size.
-                    </DialogDescription>
-                </DialogHeader>
-                {/* Mock chart or details */}
-                <div className="h-40 bg-muted rounded-md flex items-center justify-center text-muted-foreground">
-                    Fit Graph Placeholder
-                </div>
-            </DialogContent>
-        </Dialog>
+                </DialogTrigger>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>AI Fit Analysis</DialogTitle>
+                        <DialogDescription>
+                            We analyze your measurements and brand sizing to recommend the perfect fit.
+                        </DialogDescription>
+                    </DialogHeader>
+
+                    {showMeasurementsForm ? (
+                        <div className="space-y-4 py-4">
+                             <div className="space-y-2">
+                                <Label htmlFor="height">Height (e.g., 175 cm)</Label>
+                                <Input id="height" value={measurements.height} onChange={(e) => setMeasurements({...measurements, height: e.target.value})} placeholder="175 cm" />
+                             </div>
+                             <div className="space-y-2">
+                                <Label htmlFor="weight">Weight (e.g., 70 kg)</Label>
+                                <Input id="weight" value={measurements.weight} onChange={(e) => setMeasurements({...measurements, weight: e.target.value})} placeholder="70 kg" />
+                             </div>
+                             <div className="space-y-2">
+                                <Label htmlFor="bodyType">Body Type (e.g., Slim, Athletic, Average)</Label>
+                                <Input id="bodyType" value={measurements.bodyType} onChange={(e) => setMeasurements({...measurements, bodyType: e.target.value})} placeholder="Athletic" />
+                             </div>
+                             <Button onClick={handleUpdateMeasurements} disabled={fitCheckLoading} className="w-full">
+                                 {fitCheckLoading ? "Saving & Analyzing..." : "Save Measurements & Analyze"}
+                             </Button>
+                        </div>
+                    ) : fitRecommendation ? (
+                        <div className="space-y-4 py-4">
+                            <div className="rounded-lg bg-muted p-4 space-y-2 text-center">
+                                 <div className="text-3xl font-bold text-yellow-600">{fitRecommendation.recommendation}</div>
+                                 <div className="text-sm text-muted-foreground">{fitRecommendation.reasoning}</div>
+                            </div>
+                            <Button variant="outline" className="w-full text-xs" onClick={() => setShowMeasurementsForm(true)}>
+                                Update My Measurements
+                            </Button>
+                        </div>
+                    ) : (
+                         <div className="flex flex-col items-center justify-center py-8 space-y-4">
+                             {fitCheckLoading ? (
+                                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                             ) : (
+                                  <Button onClick={() => setShowMeasurementsForm(true)}>Set Up Measurements</Button>
+                             )}
+                         </div>
+                    )}
+                </DialogContent>
+            </Dialog>
+        )}
 
         {/* Variants */}
         <div className="space-y-4">
@@ -286,7 +418,7 @@ export default function ProductDetailPage() {
                                 )}
                             >
                                 {size.name}
-                                {size.name === 'M' && (
+                                {fitRecommendation?.recommendation === size.name && (
                                      <span className="absolute -top-1 -right-1 flex h-2 w-2">
                                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
                                         <span className="relative inline-flex rounded-full h-2 w-2 bg-yellow-500"></span>
