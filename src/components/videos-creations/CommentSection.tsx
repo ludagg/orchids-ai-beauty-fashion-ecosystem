@@ -5,9 +5,17 @@ import { useSession } from "@/lib/auth-client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Loader2, Send, MessageSquare } from "lucide-react";
+import { Send, MessageSquare } from "lucide-react";
 import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";
+import { Spinner } from "@/components/ui/spinner";
+import {
+  Empty,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+  EmptyDescription,
+} from "@/components/ui/empty";
 
 interface Comment {
   id: string;
@@ -92,19 +100,26 @@ export function CommentSection({ videoId, initialCommentsCount = 0 }: CommentSec
       {session ? (
         <form onSubmit={handleSubmit} className="flex gap-4">
           <Avatar className="w-10 h-10">
-            <AvatarImage src={session.user.image || undefined} />
+            <AvatarImage src={session.user.image || undefined} alt="" />
             <AvatarFallback>{session.user.name?.[0]}</AvatarFallback>
           </Avatar>
           <div className="flex-1 space-y-2">
             <Textarea
               placeholder="Add a comment..."
+              aria-label="Write a comment"
               value={content}
               onChange={(e) => setContent(e.target.value)}
               className="min-h-[80px] bg-secondary/50 border-none focus-visible:ring-1 resize-none rounded-xl"
             />
             <div className="flex justify-end">
-              <Button type="submit" size="sm" disabled={submitting || !content.trim()} className="rounded-full px-6">
-                {submitting ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Send className="w-4 h-4 mr-2" />}
+              <Button
+                type="submit"
+                size="sm"
+                aria-label="Post comment"
+                disabled={submitting || !content.trim()}
+                className="rounded-full px-6"
+              >
+                {submitting ? <Spinner className="mr-2" /> : <Send className="w-4 h-4 mr-2" />}
                 Post
               </Button>
             </div>
@@ -120,13 +135,13 @@ export function CommentSection({ videoId, initialCommentsCount = 0 }: CommentSec
       <div className="space-y-6">
         {loading ? (
           <div className="flex justify-center py-8">
-            <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+            <Spinner className="size-6 text-muted-foreground" />
           </div>
         ) : comments.length > 0 ? (
           comments.map((comment) => (
             <div key={comment.id} className="flex gap-4 group animate-in fade-in slide-in-from-bottom-2 duration-500">
               <Avatar className="w-10 h-10 border border-border mt-1">
-                <AvatarImage src={comment.user.image || undefined} />
+                <AvatarImage src={comment.user.image || undefined} alt="" />
                 <AvatarFallback>{comment.user.name[0]}</AvatarFallback>
               </Avatar>
               <div className="flex-1">
@@ -143,10 +158,15 @@ export function CommentSection({ videoId, initialCommentsCount = 0 }: CommentSec
             </div>
           ))
         ) : (
-          <div className="text-center py-10 text-muted-foreground bg-muted/20 rounded-xl border border-dashed border-border">
-            <MessageSquare className="w-8 h-8 mx-auto mb-2 opacity-20" />
-            <p>No comments yet. Be the first to share your thoughts!</p>
-          </div>
+          <Empty className="py-8 border-dashed border-border bg-muted/20">
+            <EmptyHeader>
+              <EmptyMedia variant="icon">
+                <MessageSquare className="size-5" />
+              </EmptyMedia>
+              <EmptyTitle>No comments yet</EmptyTitle>
+              <EmptyDescription>Be the first to share your thoughts!</EmptyDescription>
+            </EmptyHeader>
+          </Empty>
         )}
       </div>
     </div>
