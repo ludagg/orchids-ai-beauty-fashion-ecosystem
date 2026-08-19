@@ -16,7 +16,10 @@ async function fallbackKeywordMatching(message: string) {
     const foundCategories = FALLBACK_KEYWORDS.categories.filter(c => normalizedMessage.includes(c));
     const foundOccasions = FALLBACK_KEYWORDS.occasions.filter(o => normalizedMessage.includes(o));
 
-    const conditions: SQL[] = [eq(products.isActive, true)];
+    const conditions: SQL[] = [
+        eq(products.status, 'ACTIVE'),
+        eq(products.visibility, 'PUBLIC')
+    ];
     const searchTerms = [...foundColors, ...foundCategories, ...foundOccasions];
 
     if (searchTerms.length > 0) {
@@ -24,7 +27,8 @@ async function fallbackKeywordMatching(message: string) {
              conditions.push(or(
                  ilike(products.name, `%${term}%`),
                  ilike(products.description, `%${term}%`),
-                 ilike(products.category, `%${term}%`)
+                 ilike(products.mainCategory, `%${term}%`),
+                 ilike(products.subcategory, `%${term}%`)
              ));
         }
     }
@@ -45,7 +49,10 @@ async function fallbackKeywordMatching(message: string) {
         } else {
             replyMessage = `I couldn't find exactly "${searchTerms.join(" ")}" in our collection right now. However, you might like these top-rated items:`;
             resultProducts = await db.query.products.findMany({
-                where: eq(products.isActive, true),
+                where: and(
+                    eq(products.status, 'ACTIVE'),
+                    eq(products.visibility, 'PUBLIC')
+                ),
                 limit: 4,
                 orderBy: [desc(products.rating)]
             });
@@ -57,7 +64,10 @@ async function fallbackKeywordMatching(message: string) {
          } else {
              replyMessage = "I'm not sure I understood the style you're looking for. Could you mention a color, category (like 'dress' or 'shoes'), or occasion? Here are some of our trending pieces:";
              resultProducts = await db.query.products.findMany({
-                where: eq(products.isActive, true),
+                where: and(
+                    eq(products.status, 'ACTIVE'),
+                    eq(products.visibility, 'PUBLIC')
+                ),
                 limit: 4,
                 orderBy: [desc(products.rating)]
             });
@@ -140,7 +150,10 @@ export async function POST(req: NextRequest) {
         const { reply, searchCriteria } = parsedResponse;
 
         // Build Database Query
-        const conditions: SQL[] = [eq(products.isActive, true)];
+        const conditions: SQL[] = [
+            eq(products.status, 'ACTIVE'),
+            eq(products.visibility, 'PUBLIC')
+        ];
 
         const categories = searchCriteria?.category || [];
         const colors = searchCriteria?.color || [];
@@ -153,7 +166,8 @@ export async function POST(req: NextRequest) {
         if (allTerms.length > 0) {
             if (categories.length > 0) {
                  const catConditions = categories.map((c: string) => or(
-                     ilike(products.category, `%${c}%`),
+                     ilike(products.mainCategory, `%${c}%`),
+                     ilike(products.subcategory, `%${c}%`),
                      ilike(products.name, `%${c}%`),
                      ilike(products.description, `%${c}%`)
                  ));
@@ -195,11 +209,15 @@ export async function POST(req: NextRequest) {
 
         // Fallback if 0 results but we had terms -> Relax to OR logic on all terms
         if (resultProducts.length === 0 && allTerms.length > 0) {
-             const relaxedConditions: SQL[] = [eq(products.isActive, true)];
+             const relaxedConditions: SQL[] = [
+                 eq(products.status, 'ACTIVE'),
+                 eq(products.visibility, 'PUBLIC')
+             ];
              const termConditions = allTerms.map((t: string) => or(
                  ilike(products.name, `%${t}%`),
                  ilike(products.description, `%${t}%`),
-                 ilike(products.category, `%${t}%`)
+                 ilike(products.mainCategory, `%${t}%`),
+                 ilike(products.subcategory, `%${t}%`)
              ));
              relaxedConditions.push(or(...termConditions));
 
@@ -214,7 +232,10 @@ export async function POST(req: NextRequest) {
         if (resultProducts.length === 0 && allTerms.length === 0) {
              if (reply.toLowerCase().includes("here are")) {
                   resultProducts = await db.query.products.findMany({
-                    where: eq(products.isActive, true),
+                    where: and(
+                        eq(products.status, 'ACTIVE'),
+                        eq(products.visibility, 'PUBLIC')
+                    ),
                     limit: 4,
                     orderBy: [desc(products.rating)]
                 });
