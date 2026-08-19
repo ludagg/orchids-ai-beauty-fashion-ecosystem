@@ -22,6 +22,7 @@ import {
 import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { toast } from "sonner";
+import { formatPrice } from "@/lib/utils";
 
 interface Message {
   id: number;
@@ -439,13 +440,13 @@ export default function AIStylistPage() {
                       <div className="mt-4 grid grid-cols-2 gap-3 max-w-sm">
                         {msg.products.map((product: any) => (
                           <Link
-                            href={`/app/marketplace/${product.id}`}
+                            href={`/app/shop/product/${product.id}`}
                             key={product.id}
                             className="bg-card border border-border rounded-xl overflow-hidden hover:shadow-md transition-all group block"
                           >
                             <div className="aspect-[3/4] bg-muted relative overflow-hidden">
                               <img
-                                src={product.images?.[0]}
+                                src={product.mainImageUrl}
                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                 alt={product.name}
                               />
@@ -453,10 +454,7 @@ export default function AIStylistPage() {
                             <div className="p-2 sm:p-3">
                               <p className="font-bold text-xs truncate mb-1">{product.name}</p>
                               <p className="text-xs text-muted-foreground">
-                                {(product.price / 100).toLocaleString("en-IN", {
-                                  style: "currency",
-                                  currency: "INR",
-                                })}
+                                {formatPrice(product.salePrice ?? product.originalPrice)}
                               </p>
                             </div>
                           </Link>
@@ -587,10 +585,10 @@ export default function AIStylistPage() {
                   animate={{ opacity: 1, x: 0 }}
                   className="group cursor-pointer"
                 >
-                  <Link href={`/app/marketplace/${product.id}`} className="block">
+                  <Link href={`/app/shop/product/${product.id}`} className="block">
                     <div className="aspect-[4/5] rounded-3xl overflow-hidden mb-3 relative shadow-md border border-border">
                       <img
-                        src={product.images?.[0]}
+                        src={product.mainImageUrl}
                         alt="Suggestion"
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       />
@@ -600,10 +598,7 @@ export default function AIStylistPage() {
                     </div>
                     <h4 className="font-bold text-sm text-foreground truncate">{product.name}</h4>
                     <p className="text-xs text-muted-foreground mt-0.5 font-medium">
-                      {(product.price / 100).toLocaleString("en-IN", {
-                        style: "currency",
-                        currency: "INR",
-                      })}
+                      {formatPrice(product.salePrice ?? product.originalPrice)}
                     </p>
                   </Link>
                 </motion.div>
