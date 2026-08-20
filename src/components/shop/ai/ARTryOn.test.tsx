@@ -21,7 +21,9 @@ describe('ARTryOn', () => {
     });
 
     // Mock HTMLMediaElement play
-    window.HTMLMediaElement.prototype.play = vi.fn().mockResolvedValue(undefined);
+    if (typeof window !== 'undefined' && window.HTMLMediaElement) {
+        window.HTMLMediaElement.prototype.play = vi.fn().mockResolvedValue(undefined);
+    }
   });
 
   afterEach(() => {
