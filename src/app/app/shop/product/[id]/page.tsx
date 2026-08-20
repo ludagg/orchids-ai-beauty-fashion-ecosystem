@@ -10,6 +10,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { ProductCard } from '@/components/shop/ProductCard';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
+import { ARTryOn } from '@/components/shop/ai/ARTryOn';
 import {
   Dialog,
   DialogContent,
@@ -215,11 +216,14 @@ export default function ProductDetailPage() {
              </div>
         </div>
 
-        {/* AI Fit Check */}
-        <Dialog>
-            <DialogTrigger asChild>
-                <div className="flex items-center justify-between rounded-lg border border-yellow-500/30 bg-yellow-500/10 p-3 cursor-pointer">
-                    <div className="flex items-center gap-3">
+        {/* AR Try-On & AI Fit Check */}
+        <div className="flex flex-col gap-3">
+            <ARTryOn mainImageUrl={product.mainImageUrl} productName={product.name} />
+
+            <Dialog>
+                <DialogTrigger asChild>
+                    <div className="flex items-center justify-between rounded-lg border border-yellow-500/30 bg-yellow-500/10 p-3 cursor-pointer">
+                        <div className="flex items-center gap-3">
                         <div className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-500 text-white">
                             <Ruler className="h-4 w-4" />
                         </div>
@@ -241,12 +245,13 @@ export default function ProductDetailPage() {
                         This brand typically runs true to size.
                     </DialogDescription>
                 </DialogHeader>
-                {/* Mock chart or details */}
-                <div className="h-40 bg-muted rounded-md flex items-center justify-center text-muted-foreground">
-                    Fit Graph Placeholder
-                </div>
-            </DialogContent>
-        </Dialog>
+                    {/* Mock chart or details */}
+                    <div className="h-40 bg-muted rounded-md flex items-center justify-center text-muted-foreground">
+                        Fit Graph Placeholder
+                    </div>
+                </DialogContent>
+            </Dialog>
+        </div>
 
         {/* Variants */}
         <div className="space-y-4">
