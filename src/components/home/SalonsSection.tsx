@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, Star, CheckCircle2 } from "lucide-react";
 
@@ -47,9 +48,13 @@ export default function SalonsSection() {
                     </span>
                   ))}
                 </div>
-                <button className="w-full py-3.5 rounded-2xl bg-primary text-primary-foreground font-medium hover:opacity-90 transition-all active:scale-[0.98]">
+                <Link
+                  href="/app/salons"
+                  className="w-full py-3.5 rounded-2xl bg-primary text-primary-foreground font-medium hover:opacity-90 transition-all active:scale-[0.98] block text-center"
+                  aria-label="Book appointment at Luxe Beauty Lounge"
+                >
                   Book Appointment
-                </button>
+                </Link>
               </div>
             </div>
           </motion.div>
@@ -82,10 +87,14 @@ export default function SalonsSection() {
               ))}
             </ul>
 
-            <button className="px-6 py-3 rounded-full bg-primary text-primary-foreground font-medium hover:opacity-90 transition-all hover:shadow-lg hover:shadow-primary/20 active:scale-[0.98] inline-flex items-center gap-2 group">
+            <Link
+              href="/app/salons"
+              className="px-6 py-3 rounded-full bg-primary text-primary-foreground font-medium hover:opacity-90 transition-all hover:shadow-lg hover:shadow-primary/20 active:scale-[0.98] inline-flex items-center gap-2 group"
+              aria-label="Find salons near you"
+            >
               Find Salons Near You
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-            </button>
+            </Link>
           </motion.div>
         </div>
       </div>
