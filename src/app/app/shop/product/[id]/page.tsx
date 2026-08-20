@@ -31,6 +31,11 @@ export default function ProductDetailPage() {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
 
+  // AI Fit State
+  const [fitData, setFitData] = useState<any>(null);
+  const [loadingFit, setLoadingFit] = useState(false);
+  const [showFitDialog, setShowFitDialog] = useState(false);
+
   const toggleWishlist = async () => {
     const newState = !isWishlisted;
     setIsWishlisted(newState);
@@ -53,6 +58,29 @@ export default function ProductDetailPage() {
         toast.error("Failed to update wishlist");
     }
   };
+
+  useEffect(() => {
+    async function fetchFitData() {
+        if (!product?.id) return;
+        setLoadingFit(true);
+        try {
+            const res = await fetch('/api/ai-fit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ productId: product.id })
+            });
+            if (res.ok) {
+                const data = await res.json();
+                setFitData(data);
+            }
+        } catch (e) {
+            console.error("Failed to fetch fit data", e);
+        } finally {
+            setLoadingFit(false);
+        }
+    }
+    fetchFitData();
+  }, [product?.id]);
 
   useEffect(() => {
     if (id) {
@@ -216,7 +244,7 @@ export default function ProductDetailPage() {
         </div>
 
         {/* AI Fit Check */}
-        <Dialog>
+        <Dialog open={showFitDialog} onOpenChange={setShowFitDialog}>
             <DialogTrigger asChild>
                 <div className="flex items-center justify-between rounded-lg border border-yellow-500/30 bg-yellow-500/10 p-3 cursor-pointer">
                     <div className="flex items-center gap-3">
@@ -225,7 +253,7 @@ export default function ProductDetailPage() {
                         </div>
                         <div>
                             <div className="text-sm font-semibold text-yellow-700 dark:text-yellow-400">
-                                AI recommends size M for you
+                                {loadingFit ? "Analyzing your fit..." : (fitData?.recommendedSize ? `AI recommends size ${fitData.recommendedSize} for you` : "AI Fit Analysis")}
                             </div>
                             <div className="text-xs text-muted-foreground">Based on your profile</div>
                         </div>
@@ -237,13 +265,30 @@ export default function ProductDetailPage() {
                 <DialogHeader>
                     <DialogTitle>AI Fit Analysis</DialogTitle>
                     <DialogDescription>
-                        We analyzed your previous purchases and profile measurements.
-                        This brand typically runs true to size.
+                        We analyzed your profile measurements and product details.
                     </DialogDescription>
                 </DialogHeader>
-                {/* Mock chart or details */}
-                <div className="h-40 bg-muted rounded-md flex items-center justify-center text-muted-foreground">
-                    Fit Graph Placeholder
+                <div className="space-y-4 pt-4">
+                    {loadingFit ? (
+                        <div className="flex justify-center p-4">
+                            <span className="animate-spin h-6 w-6 border-2 border-yellow-500 border-t-transparent rounded-full"></span>
+                        </div>
+                    ) : fitData ? (
+                        <div className="space-y-4">
+                            <div className="flex justify-center">
+                                <div className="text-4xl font-bold text-yellow-500">{fitData.recommendedSize}</div>
+                            </div>
+                            <p className="text-center text-muted-foreground">{fitData.explanation}</p>
+                            <div className="flex justify-between text-sm">
+                                <span>Fit: <strong className="capitalize">{fitData.fitType}</strong></span>
+                                <span>Confidence: <strong>{Math.round(fitData.confidence * 100)}%</strong></span>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="text-center text-muted-foreground p-4">
+                            Please update your profile measurements to get accurate size recommendations.
+                        </div>
+                    )}
                 </div>
             </DialogContent>
         </Dialog>
