@@ -6,7 +6,7 @@ vi.mock('next/headers', () => ({
 }));
 
 // Mock dependencies
-const { mDbQuery, mAuthGetSession } = vi.hoisted(() => ({
+const { mDbQuery, mAuthGetSession } = await vi.hoisted(async () => ({
     mDbQuery: { findFirst: vi.fn() },
     mAuthGetSession: vi.fn(),
 }));
