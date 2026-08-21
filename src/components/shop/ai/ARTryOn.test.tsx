@@ -13,12 +13,21 @@ describe('ARTryOn', () => {
       ]
     });
 
-    Object.defineProperty(navigator, 'mediaDevices', {
-      value: {
-        getUserMedia: mockGetUserMedia
-      },
-      configurable: true
-    });
+    if (typeof navigator !== 'undefined') {
+      Object.defineProperty(navigator, 'mediaDevices', {
+        value: {
+          getUserMedia: mockGetUserMedia
+        },
+        configurable: true
+      });
+    } else {
+        // Fallback for extremely strict environments where navigator isn't patched by JSDOM yet
+        global.navigator = {
+            mediaDevices: {
+                getUserMedia: mockGetUserMedia
+            }
+        } as any;
+    }
 
     // Mock HTMLMediaElement play
     if (typeof window !== 'undefined' && window.HTMLMediaElement) {
