@@ -24,15 +24,19 @@ export function ThemeSwitcher() {
     );
   }
 
+  const isDark = resolvedTheme === "dark";
+  const label = isDark ? "Switch to light theme" : "Switch to dark theme";
+
   return (
     <Tooltip>
       <TooltipTrigger asChild>
         <button
-          onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
-          className="p-2 rounded-full hover:bg-secondary transition-colors"
-          aria-label="Toggle theme"
+          type="button"
+          onClick={() => setTheme(isDark ? "light" : "dark")}
+          className="p-2 rounded-full hover:bg-secondary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 active:scale-95"
+          aria-label={label}
         >
-          {resolvedTheme === "dark" ? (
+          {isDark ? (
             <Sun className="w-5 h-5 text-yellow-400" />
           ) : (
             <Moon className="w-5 h-5 text-muted-foreground" />
@@ -40,7 +44,7 @@ export function ThemeSwitcher() {
         </button>
       </TooltipTrigger>
       <TooltipContent>
-        <p>Toggle theme</p>
+        <p>{label}</p>
       </TooltipContent>
     </Tooltip>
   );
