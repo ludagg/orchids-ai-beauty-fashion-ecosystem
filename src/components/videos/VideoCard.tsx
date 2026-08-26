@@ -112,10 +112,12 @@ export function VideoCard({ video }: VideoCardProps) {
 
         {/* Content - Moved outside Link to avoid nesting button inside a */}
         <div className="absolute bottom-0 left-0 right-0 p-3 text-white flex items-end justify-between z-10 pointer-events-none">
-            <div className="flex flex-col gap-0.5 max-w-[75%]">
-                <span className="text-[10px] font-medium text-white/80 truncate">
-                    @{video.user.name.replace(/\s+/g, '')}
-                </span>
+            <div className="flex flex-col gap-0.5 max-w-[75%] pointer-events-auto">
+                <Link href={`/app/profile/${video.user.id}`} className="hover:underline">
+                    <span className="text-[10px] font-medium text-white/80 truncate block">
+                        @{video.user.name.replace(/\s+/g, '')}
+                    </span>
+                </Link>
                 <h3 className="font-bold text-sm leading-tight line-clamp-2 drop-shadow-sm">
                     {video.title}
                 </h3>
