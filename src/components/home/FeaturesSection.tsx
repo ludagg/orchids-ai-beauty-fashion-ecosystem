@@ -173,7 +173,8 @@ export default function FeaturesSection() {
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.2 }}
-                                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-black text-sm font-medium hover:bg-white/90 transition-colors group/btn"
+                                aria-label={`Explore ${feature.title}`}
+                                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-black text-sm font-medium hover:bg-white/90 transition-colors group/btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                               >
                                 Explore
                                 <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
@@ -194,7 +195,9 @@ export default function FeaturesSection() {
               <button
                 key={feature.title}
                 onClick={() => setActiveFeature(i)}
-                className={`relative h-2 rounded-full transition-all duration-500 ${
+                aria-label={`Go to ${feature.title}`}
+                aria-current={i === activeFeature ? "true" : undefined}
+                className={`relative h-2 rounded-full transition-all duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
                   i === activeFeature ? "w-10" : "w-2 hover:w-4"
                 }`}
                 style={{
@@ -208,7 +211,8 @@ export default function FeaturesSection() {
           <div className="flex items-center justify-center gap-8 mt-8">
             <button
               onClick={() => setActiveFeature((prev) => (prev - 1 + features.length) % features.length)}
-              className="w-12 h-12 rounded-full border border-border flex items-center justify-center hover:bg-secondary transition-colors"
+              aria-label="Previous feature"
+              className="w-12 h-12 rounded-full border border-border flex items-center justify-center hover:bg-secondary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             >
               <ChevronRight className="w-5 h-5 rotate-180" />
             </button>
@@ -219,7 +223,8 @@ export default function FeaturesSection() {
             </div>
             <button
               onClick={() => setActiveFeature((prev) => (prev + 1) % features.length)}
-              className="w-12 h-12 rounded-full border border-border flex items-center justify-center hover:bg-secondary transition-colors"
+              aria-label="Next feature"
+              className="w-12 h-12 rounded-full border border-border flex items-center justify-center hover:bg-secondary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             >
               <ChevronRight className="w-5 h-5" />
             </button>
