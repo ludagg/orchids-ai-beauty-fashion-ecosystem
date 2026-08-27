@@ -3,6 +3,7 @@
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Spinner } from "@/components/ui/spinner";
 import { Ticket, ShoppingBag, Percent, Tag, Store } from "lucide-react";
 import Image from "next/image";
 
@@ -30,11 +31,11 @@ interface RewardCardProps {
 
 const getTypeIcon = (type: string) => {
     switch (type) {
-        case 'discount_fixed': return <Tag className="h-4 w-4" />;
-        case 'discount_percent': return <Percent className="h-4 w-4" />;
-        case 'product': return <ShoppingBag className="h-4 w-4" />;
-        case 'free_service': return <Ticket className="h-4 w-4" />;
-        default: return <Tag className="h-4 w-4" />;
+        case 'discount_fixed': return <Tag className="h-4 w-4" aria-hidden="true" />;
+        case 'discount_percent': return <Percent className="h-4 w-4" aria-hidden="true" />;
+        case 'product': return <ShoppingBag className="h-4 w-4" aria-hidden="true" />;
+        case 'free_service': return <Ticket className="h-4 w-4" aria-hidden="true" />;
+        default: return <Tag className="h-4 w-4" aria-hidden="true" />;
     }
 };
 
@@ -49,6 +50,9 @@ const getTypeName = (type: string) => {
 }
 
 export function RewardCard({ reward, onRedeem, isLoading, canAfford = true }: RewardCardProps) {
+  const isOutOfStock = reward.quantity != null && reward.quantity <= 0;
+  const isButtonDisabled = !canAfford || isLoading || isOutOfStock;
+
   return (
     <Card className="flex flex-col h-full overflow-hidden hover:shadow-md transition-shadow">
       <div className="relative h-32 w-full bg-muted">
@@ -72,7 +76,7 @@ export function RewardCard({ reward, onRedeem, isLoading, canAfford = true }: Re
         </div>
         {reward.salon && (
              <div className="flex items-center text-xs text-muted-foreground gap-1">
-                 <Store className="h-3 w-3" />
+                 <Store className="h-3 w-3" aria-hidden="true" />
                  {reward.salon.name}
              </div>
         )}
@@ -90,9 +94,24 @@ export function RewardCard({ reward, onRedeem, isLoading, canAfford = true }: Re
             <Button
                 size="sm"
                 onClick={() => onRedeem?.(reward.id)}
-                disabled={!canAfford || isLoading || (reward.quantity != null && reward.quantity <= 0)}
+                disabled={isButtonDisabled}
+                aria-label={
+                  isLoading
+                    ? `Redeeming ${reward.name}`
+                    : isOutOfStock
+                    ? `${reward.name} is out of stock`
+                    : !canAfford
+                    ? `Cannot afford ${reward.name}, costs ${reward.cost} points`
+                    : `Redeem ${reward.name} for ${reward.cost} points`
+                }
             >
-                {isLoading ? "..." : (reward.quantity != null && reward.quantity <= 0) ? "Out of Stock" : "Redeem"}
+                {isLoading ? (
+                  <Spinner className="w-4 h-4" />
+                ) : isOutOfStock ? (
+                  "Out of Stock"
+                ) : (
+                  "Redeem"
+                )}
             </Button>
         </div>
       </CardFooter>
