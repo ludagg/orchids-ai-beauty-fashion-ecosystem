@@ -69,10 +69,23 @@ export function LevelProgress({ currentPoints, currentLevel, nextLevel }: LevelP
       </div>
 
       <div className="relative pt-2">
-        <Progress value={progress} className="h-3" />
+        <Progress
+          value={progress}
+          className="h-3 overflow-hidden"
+          indicatorClassName="bg-gradient-to-r from-violet-500 to-rose-500 transition-all duration-500"
+          role="progressbar"
+          aria-label={
+            nextLevel
+              ? `Level progress: ${Math.round(progress)}% towards ${nextLevel.name}`
+              : `${currentLevel.name} progress: 100%, Max Level Reached`
+          }
+          aria-valuenow={Math.round(progress)}
+          aria-valuemin={0}
+          aria-valuemax={100}
+        />
         <motion.div
-            className="absolute top-0 transform -translate-x-1/2 -mt-1"
-            style={{ left: `${progress}%` }}
+            className="absolute top-0 transform -translate-x-1/2 -mt-1 pointer-events-none"
+            style={{ left: `${Math.min(95, Math.max(5, progress))}%` }}
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: "spring", stiffness: 260, damping: 20 }}
