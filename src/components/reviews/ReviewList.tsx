@@ -4,7 +4,9 @@ import { useState } from "react";
 import { ReviewCard } from "./ReviewCard";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { CheckCircle2, Image as ImageIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
+import { CheckCircle2, Image as ImageIcon, MessageSquare } from "lucide-react";
 
 interface Review {
   id: string;
@@ -64,7 +66,7 @@ export function ReviewList({ reviews }: ReviewListProps) {
         </ToggleGroup>
 
         <Select value={sort} onValueChange={setSort}>
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-[180px]" aria-label="Sort reviews by">
             <SelectValue placeholder="Sort by" />
           </SelectTrigger>
           <SelectContent>
@@ -78,7 +80,24 @@ export function ReviewList({ reviews }: ReviewListProps) {
 
       <div className="space-y-4">
         {filteredReviews.length === 0 ? (
-          <p className="text-center text-muted-foreground py-8">No reviews match your filters.</p>
+          <Empty className="py-12">
+            <EmptyHeader>
+              <EmptyMedia variant="icon">
+                <MessageSquare className="h-6 w-6 text-muted-foreground" />
+              </EmptyMedia>
+              <EmptyTitle>No reviews found</EmptyTitle>
+              <EmptyDescription>
+                No reviews match your selected filters. Try clearing filters to view all reviews.
+              </EmptyDescription>
+            </EmptyHeader>
+            {filter.length > 0 && (
+              <EmptyContent>
+                <Button variant="outline" onClick={() => setFilter([])}>
+                  Clear filters
+                </Button>
+              </EmptyContent>
+            )}
+          </Empty>
         ) : (
           filteredReviews.map((review) => (
             <ReviewCard key={review.id} review={review} />
