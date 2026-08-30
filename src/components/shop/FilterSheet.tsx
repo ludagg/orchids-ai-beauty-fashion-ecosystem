@@ -73,11 +73,16 @@ export function FilterSheet({ filters, onApply, open, onOpenChange, triggerClass
   return (
     <Sheet open={open !== undefined ? open : isOpen} onOpenChange={onOpenChange || setIsOpen}>
       <SheetTrigger asChild>
-        <Button variant="outline" size="sm" className={triggerClassName}>
+        <Button
+          variant="outline"
+          size="sm"
+          className={triggerClassName}
+          aria-label={`Filter products${activeFilterCount > 0 ? `, ${activeFilterCount} active filter${activeFilterCount > 1 ? 's' : ''}` : ''}`}
+        >
           <SlidersHorizontal className="mr-2 h-4 w-4" />
           Filters
           {activeFilterCount > 0 && (
-            <Badge variant="secondary" className="ml-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-[10px]">
+            <Badge variant="secondary" className="ml-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-[10px]" aria-hidden="true">
               {activeFilterCount}
             </Badge>
           )}
@@ -99,7 +104,7 @@ export function FilterSheet({ filters, onApply, open, onOpenChange, triggerClass
               value={localFilters.sortBy}
               onValueChange={(val) => setLocalFilters({ ...localFilters, sortBy: val })}
             >
-              <SelectTrigger>
+              <SelectTrigger aria-label="Sort products by">
                 <SelectValue placeholder="Select order" />
               </SelectTrigger>
               <SelectContent>
@@ -126,6 +131,7 @@ export function FilterSheet({ filters, onApply, open, onOpenChange, triggerClass
               step={100}
               onValueChange={(val) => setLocalFilters({ ...localFilters, minPrice: val[0], maxPrice: val[1] })}
               className="py-4"
+              aria-label="Price range filter"
             />
           </div>
 
@@ -142,6 +148,7 @@ export function FilterSheet({ filters, onApply, open, onOpenChange, triggerClass
               step={0.5}
               onValueChange={(val) => setLocalFilters({ ...localFilters, minRating: val[0] })}
               className="py-4"
+              aria-label="Minimum rating filter"
             />
           </div>
 
@@ -157,11 +164,11 @@ export function FilterSheet({ filters, onApply, open, onOpenChange, triggerClass
         </div>
 
         <div className="flex gap-2 pt-4 border-t">
-          <Button variant="outline" className="flex-1" onClick={handleReset}>
+          <Button variant="outline" className="flex-1" onClick={handleReset} aria-label="Reset all filters">
             <RotateCcw className="mr-2 h-4 w-4" />
             Reset
           </Button>
-          <Button className="flex-1" onClick={handleApply}>
+          <Button className="flex-1" onClick={handleApply} aria-label="Apply filters and show results">
             Show Results
           </Button>
         </div>
