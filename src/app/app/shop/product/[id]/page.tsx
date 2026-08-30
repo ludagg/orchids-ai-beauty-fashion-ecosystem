@@ -7,7 +7,11 @@ import { Star, Heart, Share2, MapPin, ChevronRight, Check, ShieldCheck, Ruler } 
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { authClient } from '@/lib/auth-client';
 import { ProductCard } from '@/components/shop/ProductCard';
+import { ARTryOn } from '@/components/shop/ai/ARTryOn';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import {
@@ -23,6 +27,9 @@ import useEmblaCarousel from 'embla-carousel-react';
 export default function ProductDetailPage() {
   const { id } = useParams();
   const router = useRouter();
+  const { data: session } = authClient.useSession();
+  const user = session?.user;
+
   const [product, setProduct] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [selectedColor, setSelectedColor] = useState<any>(null);
@@ -30,6 +37,95 @@ export default function ProductDetailPage() {
   const [quantity, setQuantity] = useState(1);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+
+  // AI Fit Check State
+  const [aiFitLoading, setAiFitLoading] = useState(false);
+  const [aiFitResult, setAiFitResult] = useState<any>(null);
+  const [isFitDialogOpen, setIsFitDialogOpen] = useState(false);
+  const [showARTryOn, setShowARTryOn] = useState(false);
+
+  // User measurements form state
+  const [height, setHeight] = useState('');
+  const [weight, setWeight] = useState('');
+  const [bodyType, setBodyType] = useState('');
+  const [isSavingMeasurements, setIsSavingMeasurements] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+        setHeight((user as any).height || '');
+        setWeight((user as any).weight || '');
+        setBodyType((user as any).bodyType || '');
+    }
+  }, [user]);
+
+  const runAIFitCheck = async (currentHeight: string, currentWeight: string, currentBodyType: string) => {
+      if (!product) return;
+      setAiFitLoading(true);
+      try {
+          const res = await fetch('/api/ai-fit', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                  height: currentHeight,
+                  weight: currentWeight,
+                  bodyType: currentBodyType,
+                  product: {
+                      name: product.name,
+                      category: product.category,
+                      description: product.description,
+                  }
+              })
+          });
+          const data = await res.json();
+          if (res.ok) {
+              setAiFitResult(data);
+          } else {
+              toast.error(data.error || "Failed to analyze fit");
+          }
+      } catch (err) {
+          toast.error("An error occurred during AI fit check");
+      } finally {
+          setAiFitLoading(false);
+      }
+  };
+
+  const handleSaveMeasurementsAndRunFit = async () => {
+      setIsSavingMeasurements(true);
+      try {
+          // Save measurements to profile
+          const res = await fetch('/api/users/profile/measurements', {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ height, weight, bodyType })
+          });
+
+          if (!res.ok) {
+              const data = await res.json();
+              toast.error(data.error || "Failed to save measurements");
+              setIsSavingMeasurements(false);
+              return;
+          }
+
+          toast.success("Measurements saved!");
+          // Now run fit check
+          await runAIFitCheck(height, weight, bodyType);
+
+      } catch (err) {
+          toast.error("Failed to update measurements");
+      } finally {
+          setIsSavingMeasurements(false);
+      }
+  };
+
+  useEffect(() => {
+      if (product && isFitDialogOpen && !aiFitResult && !aiFitLoading) {
+           // Auto-run if we have measurements
+           if (height || weight) {
+               runAIFitCheck(height, weight, bodyType);
+           }
+      }
+  }, [isFitDialogOpen, product, height, weight, bodyType]);
+
 
   const toggleWishlist = async () => {
     const newState = !isWishlisted;
@@ -216,7 +312,7 @@ export default function ProductDetailPage() {
         </div>
 
         {/* AI Fit Check */}
-        <Dialog>
+        <Dialog open={isFitDialogOpen} onOpenChange={setIsFitDialogOpen}>
             <DialogTrigger asChild>
                 <div className="flex items-center justify-between rounded-lg border border-yellow-500/30 bg-yellow-500/10 p-3 cursor-pointer">
                     <div className="flex items-center gap-3">
@@ -225,9 +321,13 @@ export default function ProductDetailPage() {
                         </div>
                         <div>
                             <div className="text-sm font-semibold text-yellow-700 dark:text-yellow-400">
-                                AI recommends size M for you
+                                {aiFitResult?.recommendedSize
+                                    ? `AI recommends size ${aiFitResult.recommendedSize}`
+                                    : "Get AI Fit Recommendation"}
                             </div>
-                            <div className="text-xs text-muted-foreground">Based on your profile</div>
+                            <div className="text-xs text-muted-foreground">
+                                {aiFitResult ? "Based on your measurements" : "Personalized sizing advice"}
+                            </div>
                         </div>
                     </div>
                     <ChevronRight className="h-4 w-4 text-muted-foreground" />
@@ -237,14 +337,71 @@ export default function ProductDetailPage() {
                 <DialogHeader>
                     <DialogTitle>AI Fit Analysis</DialogTitle>
                     <DialogDescription>
-                        We analyzed your previous purchases and profile measurements.
-                        This brand typically runs true to size.
+                        Get personalized sizing recommendations based on your unique measurements.
                     </DialogDescription>
                 </DialogHeader>
-                {/* Mock chart or details */}
-                <div className="h-40 bg-muted rounded-md flex items-center justify-center text-muted-foreground">
-                    Fit Graph Placeholder
-                </div>
+
+                {!user ? (
+                     <div className="py-6 text-center">
+                         <p className="text-sm text-muted-foreground mb-4">Please log in to use the AI Fit Check feature.</p>
+                         <Button onClick={() => router.push('/login')}>Log In</Button>
+                     </div>
+                ) : (
+                    <div className="space-y-6 py-4">
+                        {/* Profile Measurements Form */}
+                        <div className="space-y-4 rounded-lg border p-4 bg-muted/20">
+                            <h4 className="text-sm font-semibold">Your Measurements</h4>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="height">Height (cm)</Label>
+                                    <Input id="height" type="number" placeholder="e.g. 175" value={height} onChange={(e) => setHeight(e.target.value)} />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="weight">Weight (kg)</Label>
+                                    <Input id="weight" type="number" placeholder="e.g. 70" value={weight} onChange={(e) => setWeight(e.target.value)} />
+                                </div>
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="bodyType">Body Type (optional)</Label>
+                                <Input id="bodyType" placeholder="e.g. Athletic, Slim, Curvy" value={bodyType} onChange={(e) => setBodyType(e.target.value)} />
+                            </div>
+                            <Button className="w-full" onClick={handleSaveMeasurementsAndRunFit} disabled={isSavingMeasurements || aiFitLoading}>
+                                {(isSavingMeasurements || aiFitLoading) ? "Analyzing..." : "Update & Analyze Fit"}
+                            </Button>
+                        </div>
+
+                        {/* AI Result */}
+                        {aiFitLoading && (
+                            <div className="flex flex-col items-center justify-center py-6 space-y-4">
+                                <div className="animate-spin h-8 w-8 border-4 border-yellow-500 border-t-transparent rounded-full" />
+                                <p className="text-sm text-muted-foreground">AI is calculating your perfect fit...</p>
+                            </div>
+                        )}
+
+                        {aiFitResult && !aiFitLoading && (
+                            <div className="rounded-lg bg-yellow-500/10 p-4 border border-yellow-500/30 space-y-3">
+                                <div className="flex items-center justify-between">
+                                    <span className="font-semibold text-yellow-700 dark:text-yellow-400">Recommended Size</span>
+                                    <span className="text-xl font-bold">{aiFitResult.recommendedSize}</span>
+                                </div>
+                                <div className="text-sm">
+                                    {aiFitResult.fitDescription}
+                                </div>
+                                <div className="flex items-center gap-2 pt-2 border-t border-yellow-500/20">
+                                    <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
+                                        <div
+                                            className="h-full bg-yellow-500"
+                                            style={{ width: `${aiFitResult.confidenceScore || 0}%` }}
+                                        />
+                                    </div>
+                                    <span className="text-xs text-muted-foreground whitespace-nowrap">
+                                        {aiFitResult.confidenceScore}% Confidence
+                                    </span>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                )}
             </DialogContent>
         </Dialog>
 
