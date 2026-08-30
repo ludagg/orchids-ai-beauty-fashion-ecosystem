@@ -1,0 +1,79 @@
+$ next dev --turbopack
+   ▲ Next.js 15.1.0 (Turbopack)
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.0.2:3000
+   - Environments: .env
+
+ ✓ Starting...
+ ⚠ Invalid next.config.ts options detected:
+ ⚠     Unrecognized key(s) in object: 'turbopack'
+ ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+ ✓ Compiled in 648ms
+ ✓ Ready in 2.3s
+{"timestamp":"2026-08-30T00:05:37.811Z","method":"GET","path":"/api/products","userAgent":"curl/8.5.0"}
+ ○ Compiling /api/products ...
+ ✓ Compiled /api/products in 3.2s
+(node:102568) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ GET /api/products 200 in 4597ms
+{"timestamp":"2026-08-30T00:06:28.706Z","method":"GET","path":"/app/shop/product/123","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-08-30T00:06:28.727Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+ ○ Compiling /auth/sign-in ...
+ ✓ Compiled /auth/sign-in in 8.7s
+ GET /auth/sign-in 200 in 9723ms
+{"timestamp":"2026-08-30T00:08:35.691Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+ GET /auth/sign-in 200 in 292ms
+{"timestamp":"2026-08-30T00:08:37.406Z","method":"GET","path":"/app/shop/product/123","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+ ○ Compiling /app/shop/product/[id] ...
+ ✓ Compiled /app/shop/product/[id] in 3.4s
+ GET /app/shop/product/123 200 in 4903ms
+ ✓ Compiled in 298ms
+{"timestamp":"2026-08-30T00:08:42.860Z","method":"GET","path":"/api/auth/get-session","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+ ✓ Compiled in 172ms
+{"timestamp":"2026-08-30T00:08:42.954Z","method":"GET","path":"/api/notifications","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-08-30T00:08:43.047Z","method":"GET","path":"/api/products/123","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-08-30T00:08:43.242Z","method":"GET","path":"/app/shop/product/123","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+ ○ Compiling /api/auth/[...all] ...
+ GET /app/shop/product/123 200 in 624ms
+ ✓ Compiled /api/auth/[...all] in 7.4s
+[2m2026-08-30T00:08:50.921Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
+[2m2026-08-30T00:08:50.924Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
+[2m2026-08-30T00:08:50.925Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
+ GET /api/notifications 401 in 8277ms
+{"timestamp":"2026-08-30T00:08:51.259Z","method":"GET","path":"/api/notifications","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+ GET /api/notifications 401 in 392ms
+{"timestamp":"2026-08-30T00:08:51.719Z","method":"GET","path":"/app/shop/product/123","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+ ✓ Compiled in 239ms
+ GET /app/shop/product/123 200 in 927ms
+{"timestamp":"2026-08-30T00:08:52.712Z","method":"GET","path":"/app/shop/product/123","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+[2m2026-08-30T00:08:53.247Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
+[2m2026-08-30T00:08:53.253Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
+[2m2026-08-30T00:08:53.255Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
+ GET /api/auth/get-session 200 in 10499ms
+{"timestamp":"2026-08-30T00:08:53.464Z","method":"GET","path":"/auth","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+ GET /app/shop/product/123 200 in 1007ms
+ ○ Compiling /auth ...
+[2m2026-08-30T00:08:54.067Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
+[2m2026-08-30T00:08:54.073Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
+[2m2026-08-30T00:08:54.074Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
+ ✓ Compiled /auth in 916ms
+ GET /api/products/123 200 in 11366ms
+{"timestamp":"2026-08-30T00:08:54.636Z","method":"GET","path":"/auth","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+ GET /auth 200 in 1250ms
+ GET /auth 200 in 239ms
+{"timestamp":"2026-08-30T00:08:55.201Z","method":"GET","path":"/auth","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+ GET /auth 200 in 592ms
+{"timestamp":"2026-08-30T00:08:55.958Z","method":"GET","path":"/auth","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+ GET /auth 200 in 333ms
+{"timestamp":"2026-08-30T00:08:56.567Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+ ✓ Compiled /auth/sign-in in 74ms
+{"timestamp":"2026-08-30T00:08:56.876Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+ GET /auth/sign-in 200 in 323ms
+ GET /auth/sign-in 200 in 201ms
