@@ -3,11 +3,12 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { Star, Heart, Share2, MapPin, ChevronRight, Check, ShieldCheck, Ruler } from 'lucide-react';
+import { Star, Heart, Share2, MapPin, ChevronRight, Check, ShieldCheck, Ruler, Camera } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ProductCard } from '@/components/shop/ProductCard';
+import { ARTryOn } from '@/components/shop/ai/ARTryOn';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import {
@@ -185,6 +186,22 @@ export default function ProductDetailPage() {
              {[product.mainImageUrl, ...(product.galleryUrls || [])].map((_, index) => (
                  <div key={index} className="h-1.5 w-1.5 rounded-full bg-white/50" />
              ))}
+        </div>
+        <div className="absolute bottom-4 right-4 z-10">
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button size="sm" className="bg-black/50 hover:bg-black/70 text-white backdrop-blur-md rounded-full shadow-lg border border-white/20">
+                <Camera className="h-4 w-4 mr-2" />
+                Try in AR
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-md p-0 overflow-hidden border-0 bg-transparent shadow-none">
+              <ARTryOn
+                productImage={product.mainImageUrl}
+                productName={product.name}
+              />
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
 
