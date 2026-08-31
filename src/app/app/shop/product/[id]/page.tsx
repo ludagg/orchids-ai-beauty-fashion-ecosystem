@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { Star, Heart, Share2, MapPin, ChevronRight, Check, ShieldCheck, Ruler } from 'lucide-react';
+import { Star, Heart, Share2, MapPin, ChevronRight, Check, ShieldCheck, Ruler, Camera } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -19,6 +19,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import useEmblaCarousel from 'embla-carousel-react';
+import { ARTryOn } from '@/components/shop/ai/ARTryOn';
 
 export default function ProductDetailPage() {
   const { id } = useParams();
@@ -218,7 +219,7 @@ export default function ProductDetailPage() {
         {/* AI Fit Check */}
         <Dialog>
             <DialogTrigger asChild>
-                <div className="flex items-center justify-between rounded-lg border border-yellow-500/30 bg-yellow-500/10 p-3 cursor-pointer">
+                <div className="flex items-center justify-between rounded-lg border border-yellow-500/30 bg-yellow-500/10 p-3 cursor-pointer mb-2">
                     <div className="flex items-center gap-3">
                         <div className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-500 text-white">
                             <Ruler className="h-4 w-4" />
@@ -245,6 +246,35 @@ export default function ProductDetailPage() {
                 <div className="h-40 bg-muted rounded-md flex items-center justify-center text-muted-foreground">
                     Fit Graph Placeholder
                 </div>
+            </DialogContent>
+        </Dialog>
+
+        {/* AR Try-On */}
+        <Dialog>
+            <DialogTrigger asChild>
+                <div className="flex items-center justify-between rounded-lg border border-primary/30 bg-primary/10 p-3 cursor-pointer">
+                    <div className="flex items-center gap-3">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                            <Camera className="h-4 w-4" />
+                        </div>
+                        <div>
+                            <div className="text-sm font-semibold text-primary">
+                                Try it on virtually
+                            </div>
+                            <div className="text-xs text-muted-foreground">See how it looks on you</div>
+                        </div>
+                    </div>
+                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                </div>
+            </DialogTrigger>
+            <DialogContent className="max-w-3xl sm:max-w-2xl">
+                <DialogHeader>
+                    <DialogTitle>AR Try-On</DialogTitle>
+                    <DialogDescription>
+                        Use your camera to see how this product looks on you.
+                    </DialogDescription>
+                </DialogHeader>
+                <ARTryOn productImageUrl={product.mainImageUrl} />
             </DialogContent>
         </Dialog>
 

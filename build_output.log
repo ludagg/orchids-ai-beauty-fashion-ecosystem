@@ -1,0 +1,170 @@
+$ next build
+ ⚠ Invalid next.config.ts options detected:
+ ⚠     Unrecognized key(s) in object: 'turbopack'
+ ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+   ▲ Next.js 15.1.0
+   - Environments: .env
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Skipping validation of types
+   Linting ...
+   Collecting page data ...
+[2m2026-08-31T23:20:17.195Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
+[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]
+[2m2026-08-31T23:20:17.221Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
+[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]
+[2m2026-08-31T23:20:17.230Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
+[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]
+STRIPE_SECRET_KEY is missing. Stripe functionality will be disabled.
+STRIPE_SECRET_KEY is missing. Stripe functionality will be disabled.
+   Generating static pages (0/89) ...
+   Generating static pages (22/89)
+[2m2026-08-31T23:20:23.623Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
+[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]
+STRIPE_SECRET_KEY is missing. Stripe functionality will be disabled.
+   Generating static pages (44/89)
+[2m2026-08-31T23:20:23.738Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
+[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]
+STRIPE_SECRET_KEY is missing. Stripe functionality will be disabled.
+[2m2026-08-31T23:20:23.757Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
+[Error [BetterAuthError]: You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.]
+   Generating static pages (66/89)
+ ✓ Generating static pages (89/89)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                     Size     First Load JS
+┌ ○ /                                           19.9 kB         207 kB
+├ ○ /_not-found                                 296 B           107 kB
+├ ○ /about                                      2.36 kB         183 kB
+├ ƒ /admin                                      4.28 kB         164 kB
+├ ƒ /admin/analytics                            9.32 kB         225 kB
+├ ƒ /admin/marketplace                          2.18 kB         118 kB
+├ ƒ /admin/moderation                           2.87 kB         118 kB
+├ ƒ /admin/payments                             1.38 kB         108 kB
+├ ƒ /admin/salons                               4.71 kB         189 kB
+├ ƒ /admin/salons/[id]                          5.17 kB         149 kB
+├ ƒ /admin/settings                             3.59 kB         150 kB
+├ ƒ /admin/users                                3.75 kB         119 kB
+├ ƒ /api/ai-stylist/chat                        296 B           107 kB
+├ ƒ /api/auth/[...all]                          296 B           107 kB
+├ ƒ /api/bookings                               296 B           107 kB
+├ ƒ /api/bookings/[id]                          296 B           107 kB
+├ ƒ /api/bookings/availability                  296 B           107 kB
+├ ƒ /api/cart                                   296 B           107 kB
+├ ƒ /api/cart/[itemId]                          296 B           107 kB
+├ ƒ /api/conversations                          296 B           107 kB
+├ ƒ /api/conversations/[id]                     296 B           107 kB
+├ ƒ /api/conversations/[id]/messages            296 B           107 kB
+├ ƒ /api/create-payment-intent                  296 B           107 kB
+├ ƒ /api/creators                               296 B           107 kB
+├ ƒ /api/favorites                              296 B           107 kB
+├ ƒ /api/loyalty/badges                         296 B           107 kB
+├ ƒ /api/loyalty/leaderboard                    296 B           107 kB
+├ ƒ /api/loyalty/points                         296 B           107 kB
+├ ƒ /api/loyalty/rewards                        296 B           107 kB
+├ ƒ /api/loyalty/webhook                        296 B           107 kB
+├ ƒ /api/notifications                          296 B           107 kB
+├ ƒ /api/notifications/[id]/read                296 B           107 kB
+├ ƒ /api/orders                                 296 B           107 kB
+├ ƒ /api/products                               296 B           107 kB
+├ ƒ /api/products/[id]                          296 B           107 kB
+├ ƒ /api/products/[id]/reviews                  296 B           107 kB
+├ ƒ /api/reviews                                296 B           107 kB
+├ ƒ /api/reviews/[id]                           296 B           107 kB
+├ ƒ /api/reviews/[id]/helpful                   296 B           107 kB
+├ ƒ /api/salons                                 296 B           107 kB
+├ ƒ /api/salons/[salonId]                       296 B           107 kB
+├ ƒ /api/salons/[salonId]/bookings              296 B           107 kB
+├ ƒ /api/salons/[salonId]/hours                 296 B           107 kB
+├ ƒ /api/salons/[salonId]/images                296 B           107 kB
+├ ƒ /api/salons/[salonId]/images/[imageId]      296 B           107 kB
+├ ƒ /api/salons/[salonId]/products              296 B           107 kB
+├ ƒ /api/salons/[salonId]/reviews               296 B           107 kB
+├ ƒ /api/salons/[salonId]/rewards               296 B           107 kB
+├ ƒ /api/salons/[salonId]/services              296 B           107 kB
+├ ƒ /api/salons/[salonId]/services/[serviceId]  296 B           107 kB
+├ ƒ /api/salons/[salonId]/staff                 296 B           107 kB
+├ ƒ /api/salons/[salonId]/staff/[staffId]       296 B           107 kB
+├ ƒ /api/search                                 296 B           107 kB
+├ ƒ /api/services/[serviceId]                   296 B           107 kB
+├ ƒ /api/shop/home                              296 B           107 kB
+├ ƒ /api/stories                                296 B           107 kB
+├ ƒ /api/upload/avatar                          296 B           107 kB
+├ ƒ /api/upload/partner                         296 B           107 kB
+├ ƒ /api/upload/product                         296 B           107 kB
+├ ƒ /api/upload/review-images                   296 B           107 kB
+├ ƒ /api/users/[id]                             296 B           107 kB
+├ ƒ /api/users/[id]/follow                      296 B           107 kB
+├ ƒ /api/users/profile                          296 B           107 kB
+├ ƒ /api/videos                                 296 B           107 kB
+├ ƒ /api/videos/[id]                            296 B           107 kB
+├ ƒ /api/videos/[id]/comments                   296 B           107 kB
+├ ƒ /api/videos/[id]/like                       296 B           107 kB
+├ ƒ /api/videos/[id]/view                       296 B           107 kB
+├ ƒ /api/webhooks/stripe                        296 B           107 kB
+├ ○ /app                                        5.21 kB         179 kB
+├ ○ /app/ai-stylist                             8.48 kB         168 kB
+├ ○ /app/billing                                2.61 kB         149 kB
+├ ○ /app/bookings                               7.87 kB         219 kB
+├ ƒ /app/bookings/[id]                          2.58 kB         112 kB
+├ ○ /app/cart                                   7.97 kB         205 kB
+├ ○ /app/checkout                               6.87 kB         153 kB
+├ ○ /app/conversations                          2.83 kB         120 kB
+├ ƒ /app/conversations/[id]                     6.46 kB         159 kB
+├ ƒ /app/loyalty                                6.83 kB         177 kB
+├ ƒ /app/loyalty/achievements                   3.38 kB         131 kB
+├ ƒ /app/loyalty/rewards                        6.43 kB         190 kB
+├ ○ /app/marketplace                            3.34 kB         154 kB
+├ ƒ /app/marketplace/[id]                       6.94 kB         202 kB
+├ ƒ /app/my-business                            4.01 kB         238 kB
+├ ○ /app/notifications                          3.2 kB          122 kB
+├ ○ /app/partner-dashboard                      5.95 kB         332 kB
+├ ƒ /app/profile                                16.4 kB         226 kB
+├ ○ /app/salons                                 5.45 kB         156 kB
+├ ƒ /app/salons/[id]                            16.2 kB         211 kB
+├ ○ /app/search                                 5.68 kB         165 kB
+├ ○ /app/settings                               17.7 kB         225 kB
+├ ○ /app/shop                                   12.7 kB         183 kB
+├ ƒ /app/shop/product/[id]                      16 kB           162 kB
+├ ○ /app/videos-creations                       11.1 kB         221 kB
+├ ƒ /app/videos-creations/[id]                  8.52 kB         150 kB
+├ ƒ /app/videos-creations/creator/[id]          10.7 kB         146 kB
+├ ○ /app/wishlist                               9.05 kB         195 kB
+├ ○ /auth                                       296 B           107 kB
+├ ○ /auth/forgot-password                       4.65 kB         183 kB
+├ ○ /auth/sign-in                               5.63 kB         184 kB
+├ ○ /auth/sign-up                               6.5 kB          214 kB
+├ ƒ /become-partner                             13 kB           251 kB
+├ ○ /blog                                       2.36 kB         183 kB
+├ ƒ /business                                   3.72 kB         161 kB
+├ ƒ /business/appointments                      1.1 kB          167 kB
+├ ƒ /business/customers                         3.53 kB         150 kB
+├ ƒ /business/earnings                          3.57 kB         225 kB
+├ ƒ /business/loyalty                           5.1 kB          174 kB
+├ ƒ /business/products                          1.38 kB         268 kB
+├ ƒ /business/register                          6.72 kB         135 kB
+├ ƒ /business/reviews                           4.04 kB         135 kB
+├ ƒ /business/services                          5.3 kB          145 kB
+├ ƒ /business/settings                          10.7 kB         149 kB
+├ ƒ /business/staff                             5.09 kB         149 kB
+├ ○ /careers                                    2.36 kB         183 kB
+├ ○ /contact                                    2.36 kB         183 kB
+├ ○ /cookies                                    2.36 kB         183 kB
+├ ○ /help                                       2.36 kB         183 kB
+├ ○ /press                                      2.36 kB         183 kB
+├ ○ /privacy                                    2.36 kB         183 kB
+├ ○ /robots.txt                                 0 B                0 B
+├ ○ /sitemap.xml                                0 B                0 B
+└ ○ /terms                                      2.36 kB         183 kB
++ First Load JS shared by all                   106 kB
+  ├ chunks/1517-be1cec8a957f8938.js             50.7 kB
+  ├ chunks/4bd1b696-24f4afa5306d8db9.js         53 kB
+  └ other shared chunks (total)                 2.53 kB
+
+
+ƒ Middleware                                    37.6 kB
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
