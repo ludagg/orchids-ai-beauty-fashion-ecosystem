@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: CI
 
 on:
   push:
@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Setup Bun
@@ -21,30 +21,20 @@ jobs:
         with:
           bun-version: latest
 
-      - name: Install Dependencies
+      - name: Install dependencies
         run: bun install
 
-      - name: Lint Code
+      - name: Run lint
         run: bun run lint
 
-      - name: Run Tests
-        run: bun test
+      - name: Run tests
+        run: bun run test
 
-      - name: Build
+      - name: Build application
         run: bun run build
         env:
-          DATABASE_URL: postgres://dummy:dummy@localhost:5432/dummy
-          BETTER_AUTH_SECRET: dummy-secret
-          BETTER_AUTH_BASE_URL: http://localhost:3000
-          STRIPE_SECRET_KEY: dummy-stripe-key
-          STRIPE_WEBHOOK_SECRET: dummy-webhook-secret
-          NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: dummy-pub-key
-          CLOUDFLARE_ACCOUNT_ID: dummy-cf-id
-          R2_ACCESS_KEY_ID: dummy-r2-key
-          R2_SECRET_ACCESS_KEY: dummy-r2-secret
-          NEXT_PUBLIC_R2_PUBLIC_URL: http://localhost:3000
-          GOOGLE_CLIENT_ID: dummy-google-client
-          GOOGLE_CLIENT_SECRET: dummy-google-secret
-          RESEND_API_KEY: dummy-resend-key
-          GEMINI_API_KEY: dummy-gemini-key
-          CRON_SECRET: dummy-cron-secret
+          DATABASE_URL: "postgres://postgres:postgres@localhost:5432/postgres"
+          BETTER_AUTH_SECRET: "dummy-secret-for-ci"
+          BETTER_AUTH_BASE_URL: "http://localhost:3000"
+          STRIPE_SECRET_KEY: "dummy-stripe-secret"
+          RESEND_API_KEY: "dummy-resend-key"
