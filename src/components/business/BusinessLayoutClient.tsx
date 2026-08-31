@@ -21,6 +21,7 @@ import BusinessBottomNav from "@/components/BusinessBottomNav";
 import SearchBar from "@/components/SearchBar";
 import UserAccount from "@/components/UserAccount";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { usePathname } from "next/navigation";
 import { useState, useEffect, useMemo } from "react";
 
@@ -107,38 +108,65 @@ export default function BusinessLayoutClient({
           )}
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className="p-1 rounded-full hover:bg-secondary text-muted-foreground transition-colors"
+            className="p-1 rounded-full hover:bg-secondary text-muted-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
             {isCollapsed ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5" />}
           </button>
         </div>
 
         <nav className="flex-1 px-4 space-y-1 overflow-y-auto no-scrollbar">
-           <Link
+          {isCollapsed ? (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link
+                  href="/app"
+                  className="w-full flex items-center justify-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-muted-foreground hover:bg-secondary hover:text-foreground mb-4 border-b border-border pb-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  aria-label="Back to App"
+                >
+                  <LogOut className="w-5 h-5 flex-shrink-0 rotate-180" />
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent side="right">Back to App</TooltipContent>
+            </Tooltip>
+          ) : (
+            <Link
               href="/app"
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-muted-foreground hover:bg-secondary hover:text-foreground mb-4 border-b border-border pb-4 ${isCollapsed ? "justify-center" : ""}`}
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-muted-foreground hover:bg-secondary hover:text-foreground mb-4 border-b border-border pb-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <LogOut className="w-5 h-5 flex-shrink-0 rotate-180" />
-              {!isCollapsed && <span>Back to App</span>}
+              <span>Back to App</span>
             </Link>
+          )}
 
           {sidebarItems.map((item) => {
             const isActive = pathname === item.href;
-            return (
+            const linkContent = (
               <Link
                 key={item.label}
                 href={item.href}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
                   isActive
                     ? "bg-primary text-primary-foreground shadow-lg shadow-foreground/10"
                     : "text-muted-foreground hover:bg-secondary hover:text-foreground"
                 } ${isCollapsed ? "justify-center" : ""}`}
-                title={isCollapsed ? item.label : undefined}
+                aria-label={isCollapsed ? item.label : undefined}
               >
                 <item.icon className="w-5 h-5 flex-shrink-0" />
                 {!isCollapsed && <span>{item.label}</span>}
               </Link>
             );
+
+            if (isCollapsed) {
+              return (
+                <Tooltip key={item.label}>
+                  <TooltipTrigger asChild>{linkContent}</TooltipTrigger>
+                  <TooltipContent side="right">{item.label}</TooltipContent>
+                </Tooltip>
+              );
+            }
+
+            return linkContent;
           })}
         </nav>
 
@@ -167,7 +195,11 @@ export default function BusinessLayoutClient({
           <div className="flex items-center gap-1">
             <ThemeSwitcher />
             <UserAccount showLabel={false} />
-            <button onClick={() => setMobileMenuOpen(true)} className="p-2 ml-1">
+            <button
+              onClick={() => setMobileMenuOpen(true)}
+              className="p-2 ml-1 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              aria-label="Open menu"
+            >
               <Menu className="w-6 h-6" />
             </button>
           </div>
@@ -183,7 +215,11 @@ export default function BusinessLayoutClient({
           <div className="flex flex-col h-full">
             <div className="flex items-center justify-between h-16 px-6 border-b border-border">
               <span className="text-3xl font-script text-black dark:text-white">Rare Business</span>
-              <button onClick={() => setMobileMenuOpen(false)} className="p-2">
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                aria-label="Close menu"
+              >
                 <X className="w-6 h-6" />
               </button>
             </div>
