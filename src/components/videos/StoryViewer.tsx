@@ -201,9 +201,24 @@ export function StoryViewer({ initialUserIndex, userStories, onClose }: StoryVie
 
         {/* Touch Navigation Zones */}
         <div className="absolute inset-0 z-10 flex">
-            <div className="w-1/3 h-full" onClick={goToPrevStory} />
-            <div className="w-1/3 h-full" onClick={() => setIsPaused(p => !p)} />
-            <div className="w-1/3 h-full" onClick={goToNextStory} />
+            <button
+                type="button"
+                className="w-1/3 h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-inset"
+                onClick={goToPrevStory}
+                aria-label="Previous story"
+            />
+            <button
+                type="button"
+                className="w-1/3 h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-inset"
+                onClick={() => setIsPaused(p => !p)}
+                aria-label={isPaused ? "Resume story" : "Pause story"}
+            />
+            <button
+                type="button"
+                className="w-1/3 h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-inset"
+                onClick={goToNextStory}
+                aria-label="Next story"
+            />
         </div>
 
         {/* Content */}
