@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ProductCard } from '@/components/shop/ProductCard';
-import { cn } from '@/lib/utils';
+import {  cn , formatPrice } from "@/lib/utils";
 import { toast } from 'sonner';
 import {
   Dialog,

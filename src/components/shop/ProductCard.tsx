@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Heart, Star } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import {  cn , formatPrice } from "@/lib/utils";
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useState } from 'react';
