@@ -15,6 +15,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Plus, Trash2, RefreshCw } from "lucide-react"
 import { useEffect } from "react"
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip"
 import { nanoid } from "nanoid"
 import { ImageUpload } from "./ImageUpload"
 import { ProductFormValues } from "./schema"
@@ -137,11 +138,13 @@ export function VariantsSection({ salonId, productId }: VariantsSectionProps) {
                                     <Input
                                         {...register(`colors.${index}.name`)}
                                         placeholder="Color Name"
+                                        aria-label="Color name"
                                         className="max-w-[150px]"
                                     />
                                     <Input
                                         type="color"
                                         {...register(`colors.${index}.hex`)}
+                                        aria-label="Color hex picker"
                                         className="w-12 h-10 p-1 cursor-pointer"
                                     />
                                 </div>
@@ -149,9 +152,20 @@ export function VariantsSection({ salonId, productId }: VariantsSectionProps) {
                                      <AccordionTrigger className="no-underline hover:no-underline">
                                          <span className="text-xs text-muted-foreground mr-2">Images & Details</span>
                                      </AccordionTrigger>
-                                     <Button type="button" variant="ghost" size="icon" onClick={() => removeColor(index)}>
-                                        <Trash2 className="w-4 h-4 text-destructive" />
-                                    </Button>
+                                     <Tooltip>
+                                        <TooltipTrigger asChild>
+                                            <Button
+                                                type="button"
+                                                variant="ghost"
+                                                size="icon"
+                                                aria-label={`Remove color ${colors?.[index]?.name || index + 1}`}
+                                                onClick={() => removeColor(index)}
+                                            >
+                                                <Trash2 className="w-4 h-4 text-destructive" />
+                                            </Button>
+                                        </TooltipTrigger>
+                                        <TooltipContent side="bottom">Remove color</TooltipContent>
+                                     </Tooltip>
                                 </div>
                             </div>
                             <AccordionContent className="pb-4 space-y-4">
@@ -196,16 +210,29 @@ export function VariantsSection({ salonId, productId }: VariantsSectionProps) {
                         <Input
                             {...register(`sizes.${index}.name`)}
                             placeholder="Size (e.g. S, M, 42)"
+                            aria-label="Size name"
                         />
                          <Input
                             type="number"
                             {...register(`sizes.${index}.priceAdjustment`)}
                             placeholder="+ Price"
+                            aria-label="Price adjustment"
                             className="max-w-[100px]"
                         />
-                        <Button type="button" variant="ghost" size="icon" onClick={() => removeSize(index)}>
-                            <Trash2 className="w-4 h-4 text-destructive" />
-                        </Button>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="icon"
+                                    aria-label={`Remove size ${sizes?.[index]?.name || index + 1}`}
+                                    onClick={() => removeSize(index)}
+                                >
+                                    <Trash2 className="w-4 h-4 text-destructive" />
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent side="bottom">Remove size</TooltipContent>
+                        </Tooltip>
                     </div>
                 ))}
             </div>

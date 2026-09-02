@@ -5,6 +5,7 @@ import { useDropzone } from "react-dropzone"
 import { UploadCloud, X, Loader2, Image as ImageIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip"
 import { toast } from "sonner"
 import Image from "next/image"
 
@@ -135,18 +136,24 @@ export function ImageUpload({ value = [], onChange, maxFiles = 1, salonId, produ
                                 />
                             )}
                             <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                <Button
-                                    type="button"
-                                    variant="destructive"
-                                    size="icon"
-                                    className="h-8 w-8"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        removeImage(url);
-                                    }}
-                                >
-                                    <X className="w-4 h-4" />
-                                </Button>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <Button
+                                            type="button"
+                                            variant="destructive"
+                                            size="icon"
+                                            className="h-8 w-8"
+                                            aria-label={`Remove image ${index + 1}`}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                removeImage(url);
+                                            }}
+                                        >
+                                            <X className="w-4 h-4" />
+                                        </Button>
+                                    </TooltipTrigger>
+                                    <TooltipContent side="bottom">Remove image</TooltipContent>
+                                </Tooltip>
                             </div>
                         </div>
                     ))}
