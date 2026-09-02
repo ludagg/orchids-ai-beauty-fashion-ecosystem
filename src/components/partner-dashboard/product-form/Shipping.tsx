@@ -14,6 +14,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Badge } from "@/components/ui/badge"
 import { X } from "lucide-react"
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip"
 import {
   Select,
   SelectContent,
@@ -136,9 +137,19 @@ export function ShippingSection() {
                 {regions.map((region: string) => (
                     <Badge key={region} variant="secondary" className="gap-1">
                         {region}
-                        <button type="button" onClick={() => removeRegion(region)} className="ml-1 hover:text-destructive">
-                            <X className="w-3 h-3" />
-                        </button>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <button
+                                    type="button"
+                                    onClick={() => removeRegion(region)}
+                                    className="ml-1 hover:text-destructive focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring rounded"
+                                    aria-label={`Remove shipping region ${region}`}
+                                >
+                                    <X className="w-3 h-3" />
+                                </button>
+                            </TooltipTrigger>
+                            <TooltipContent side="bottom">Remove region</TooltipContent>
+                        </Tooltip>
                     </Badge>
                 ))}
             </div>

@@ -19,6 +19,7 @@ import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { X } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip"
 import { useState } from "react"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
@@ -164,9 +165,19 @@ export function CategorySection() {
                 {tags.map((tag: string) => (
                     <Badge key={tag} variant="secondary" className="gap-1">
                         {tag}
-                        <button type="button" onClick={() => removeTag(tag)} className="ml-1 hover:text-destructive">
-                            <X className="w-3 h-3" />
-                        </button>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <button
+                                    type="button"
+                                    onClick={() => removeTag(tag)}
+                                    className="ml-1 hover:text-destructive focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring rounded"
+                                    aria-label={`Remove tag ${tag}`}
+                                >
+                                    <X className="w-3 h-3" />
+                                </button>
+                            </TooltipTrigger>
+                            <TooltipContent side="bottom">Remove tag</TooltipContent>
+                        </Tooltip>
                     </Badge>
                 ))}
             </div>
