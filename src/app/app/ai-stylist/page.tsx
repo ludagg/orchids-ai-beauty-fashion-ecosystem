@@ -22,6 +22,11 @@ import {
 import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { toast } from "sonner";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface Message {
   id: number;
@@ -299,8 +304,11 @@ export default function AIStylistPage() {
         <div className="flex items-center gap-2">
           {/* History toggle on mobile */}
           <button
+            type="button"
             onClick={() => setShowHistory(!showHistory)}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold border border-border bg-card text-muted-foreground hover:border-foreground hover:text-foreground transition-all"
+            aria-label={showHistory ? "Hide conversation history" : "Show conversation history"}
+            aria-expanded={showHistory}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold border border-border bg-card text-muted-foreground hover:border-foreground hover:text-foreground transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             <Clock className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">History</span>
@@ -308,8 +316,10 @@ export default function AIStylistPage() {
           </button>
 
           <button
+            type="button"
             onClick={startNewConversation}
-            className="px-3 py-2 rounded-xl text-xs font-bold border border-border bg-card text-muted-foreground hover:border-violet-500 hover:text-violet-600 transition-all"
+            aria-label="Start new conversation"
+            className="px-3 py-2 rounded-xl text-xs font-bold border border-border bg-card text-muted-foreground hover:border-violet-500 hover:text-violet-600 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             + New
           </button>
@@ -318,7 +328,10 @@ export default function AIStylistPage() {
             {stylePersonalities.map((style) => (
               <button
                 key={style.name}
-                className={`px-3 py-2 rounded-xl text-xs font-bold transition-all border ${
+                type="button"
+                aria-label={`Select ${style.name} style personality`}
+                aria-pressed={style.active}
+                className={`px-3 py-2 rounded-xl text-xs font-bold transition-all border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
                   style.active
                     ? "bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/10"
                     : "bg-card text-muted-foreground border-border hover:border-foreground hover:text-foreground"
@@ -538,28 +551,54 @@ export default function AIStylistPage() {
           {/* Input Area */}
           <div className="p-4 sm:p-6 bg-transparent">
             <div className="max-w-3xl mx-auto relative">
-              <div className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 flex items-center gap-1">
-                <button className="p-1.5 sm:p-2 rounded-xl hover:bg-secondary text-muted-foreground transition-colors">
-                  <Camera className="w-4 h-4 sm:w-5 sm:h-5" />
-                </button>
-                <button className="p-1.5 sm:p-2 rounded-xl hover:bg-secondary text-muted-foreground transition-colors">
-                  <ImageIcon className="w-4 h-4 sm:w-5 sm:h-5" />
-                </button>
+              <div className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 flex items-center gap-1 z-10">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      type="button"
+                      aria-label="Upload photo from camera"
+                      className="p-1.5 sm:p-2 rounded-xl hover:bg-secondary text-muted-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    >
+                      <Camera className="w-4 h-4 sm:w-5 sm:h-5" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Upload photo from camera</p>
+                  </TooltipContent>
+                </Tooltip>
+
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      type="button"
+                      aria-label="Upload image"
+                      className="p-1.5 sm:p-2 rounded-xl hover:bg-secondary text-muted-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    >
+                      <ImageIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Upload image</p>
+                  </TooltipContent>
+                </Tooltip>
               </div>
               <input
                 ref={inputRef}
                 type="text"
+                aria-label="Ask me anything about your style..."
                 placeholder="Ask me anything about your style..."
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSend()}
                 disabled={isTyping}
-                className="w-full pl-24 sm:pl-28 pr-14 sm:pr-16 py-4 sm:py-5 rounded-[24px] sm:rounded-[28px] bg-card border border-border focus:border-violet-500 shadow-xl shadow-black/[0.03] transition-all outline-none text-sm sm:text-base text-foreground disabled:opacity-60"
+                className="w-full pl-24 sm:pl-28 pr-14 sm:pr-16 py-4 sm:py-5 rounded-[24px] sm:rounded-[28px] bg-card border border-border focus:border-violet-500 shadow-xl shadow-black/[0.03] transition-all outline-none text-sm sm:text-base text-foreground disabled:opacity-60 focus-visible:ring-2 focus-visible:ring-ring"
               />
               <button
+                type="button"
                 onClick={handleSend}
                 disabled={!inputValue.trim() || isTyping}
-                className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-primary text-primary-foreground flex items-center justify-center hover:opacity-90 disabled:bg-muted disabled:cursor-not-allowed transition-all shadow-lg"
+                aria-label="Send message"
+                className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-primary text-primary-foreground flex items-center justify-center hover:opacity-90 disabled:bg-muted disabled:cursor-not-allowed transition-all shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 <Send className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
