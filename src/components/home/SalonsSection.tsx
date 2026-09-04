@@ -47,7 +47,11 @@ export default function SalonsSection() {
                     </span>
                   ))}
                 </div>
-                <button className="w-full py-3.5 rounded-2xl bg-primary text-primary-foreground font-medium hover:opacity-90 transition-all active:scale-[0.98]">
+                <button
+                  type="button"
+                  aria-label="Book appointment at Luxe Beauty Lounge"
+                  className="w-full py-3.5 rounded-2xl bg-primary text-primary-foreground font-medium hover:opacity-90 transition-all active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                >
                   Book Appointment
                 </button>
               </div>
@@ -82,7 +86,11 @@ export default function SalonsSection() {
               ))}
             </ul>
 
-            <button className="px-6 py-3 rounded-full bg-primary text-primary-foreground font-medium hover:opacity-90 transition-all hover:shadow-lg hover:shadow-primary/20 active:scale-[0.98] inline-flex items-center gap-2 group">
+            <button
+              type="button"
+              aria-label="Find salons near you"
+              className="px-6 py-3 rounded-full bg-primary text-primary-foreground font-medium hover:opacity-90 transition-all hover:shadow-lg hover:shadow-primary/20 active:scale-[0.98] inline-flex items-center gap-2 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            >
               Find Salons Near You
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
             </button>
