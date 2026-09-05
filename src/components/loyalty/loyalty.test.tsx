@@ -1,4 +1,18 @@
-import { render, screen, cleanup } from "@testing-library/react";
+import { JSDOM } from "jsdom";
+
+if (typeof globalThis.document === "undefined") {
+  const dom = new JSDOM("<!DOCTYPE html><html><body></body></html>", {
+    url: "http://localhost/",
+  });
+  global.document = dom.window.document;
+  global.window = dom.window as unknown as Window & typeof globalThis;
+  global.navigator = dom.window.navigator;
+  global.HTMLElement = dom.window.HTMLElement;
+  global.Element = dom.window.Element;
+  global.Node = dom.window.Node;
+}
+
+import { render, cleanup } from "@testing-library/react";
 import { describe, it, expect, afterEach } from "vitest";
 import { PointsHistory } from "./PointsHistory";
 import { BadgeCollection } from "./BadgeCollection";
@@ -10,9 +24,9 @@ describe("Loyalty Components", () => {
 
   describe("PointsHistory Component", () => {
     it("renders empty state when transactions list is empty", () => {
-      render(<PointsHistory transactions={[]} />);
-      expect(screen.getByText("No transactions yet")).toBeDefined();
-      expect(screen.getByText("Your loyalty points history and activity will appear here.")).toBeDefined();
+      const { getByText } = render(<PointsHistory transactions={[]} />);
+      expect(getByText("No transactions yet")).toBeDefined();
+      expect(getByText("Your loyalty points history and activity will appear here.")).toBeDefined();
     });
 
     it("renders transactions list with semantic list roles and ARIA labels", () => {
@@ -33,12 +47,12 @@ describe("Loyalty Components", () => {
         }
       ];
 
-      render(<PointsHistory transactions={mockTransactions} />);
+      const { getByRole, getAllByRole } = render(<PointsHistory transactions={mockTransactions} />);
 
-      const list = screen.getByRole("list", { name: "Points transaction history" });
+      const list = getByRole("list", { name: "Points transaction history" });
       expect(list).toBeDefined();
 
-      const items = screen.getAllByRole("listitem");
+      const items = getAllByRole("listitem");
       expect(items.length).toBe(2);
 
       expect(items[0].getAttribute("aria-label")).toContain("Earned 50 points");
@@ -48,9 +62,9 @@ describe("Loyalty Components", () => {
 
   describe("BadgeCollection Component", () => {
     it("renders empty state when badges list is empty", () => {
-      render(<BadgeCollection badges={[]} />);
-      expect(screen.getByText("No achievements found")).toBeDefined();
-      expect(screen.getByText("Complete activities and book services to unlock loyalty badges.")).toBeDefined();
+      const { getByText } = render(<BadgeCollection badges={[]} />);
+      expect(getByText("No achievements found")).toBeDefined();
+      expect(getByText("Complete activities and book services to unlock loyalty badges.")).toBeDefined();
     });
 
     it("renders badges with semantic list roles and status labels", () => {
@@ -75,12 +89,12 @@ describe("Loyalty Components", () => {
         }
       ];
 
-      render(<BadgeCollection badges={mockBadges} />);
+      const { getByRole, getAllByRole } = render(<BadgeCollection badges={mockBadges} />);
 
-      const list = screen.getByRole("list", { name: "Achievements list" });
+      const list = getByRole("list", { name: "Achievements list" });
       expect(list).toBeDefined();
 
-      const items = screen.getAllByRole("listitem");
+      const items = getAllByRole("listitem");
       expect(items.length).toBe(2);
 
       expect(items[0].getAttribute("aria-label")).toContain("First Booking: Unlocked");
