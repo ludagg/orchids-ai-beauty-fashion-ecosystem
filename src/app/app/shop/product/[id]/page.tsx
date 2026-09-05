@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ProductCard } from '@/components/shop/ProductCard';
+import { ARTryOn } from '@/components/shop/ai/ARTryOn';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import {
@@ -214,6 +215,8 @@ export default function ProductDetailPage() {
                 <span className="text-sm text-muted-foreground">({product.reviewCount || 0} reviews)</span>
              </div>
         </div>
+
+        <ARTryOn productId={product.id} productName={product.name} />
 
         {/* AI Fit Check */}
         <Dialog>
