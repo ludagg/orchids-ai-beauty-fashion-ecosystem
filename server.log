@@ -1,0 +1,135 @@
+$ next dev --turbopack
+   ▲ Next.js 15.1.0 (Turbopack)
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.0.2:3000
+   - Environments: .env
+
+ ✓ Starting...
+ ⚠ Invalid next.config.ts options detected:
+ ⚠     Unrecognized key(s) in object: 'turbopack'
+ ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+ ✓ Compiled in 643ms
+ ✓ Ready in 2.3s
+{"timestamp":"2026-09-06T23:24:04.363Z","method":"GET","path":"/app/shop/product/test-product-id","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+ ○ Compiling /app/shop/product/[id] ...
+ ✓ Compiled /app/shop/product/[id] in 14.7s
+ GET /app/shop/product/test-product-id 200 in 17468ms
+{"timestamp":"2026-09-06T23:24:23.161Z","method":"GET","path":"/api/auth/get-session","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-09-06T23:24:23.302Z","method":"GET","path":"/api/notifications","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-09-06T23:24:23.486Z","method":"GET","path":"/api/products/test-product-id","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+ ○ Compiling /api/auth/[...all] ...
+ ✓ Compiled /api/auth/[...all] in 6.7s
+[2m2026-09-06T23:24:30.656Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
+[2m2026-09-06T23:24:30.658Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
+[2m2026-09-06T23:24:30.658Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
+ GET /api/notifications 401 in 7361ms
+{"timestamp":"2026-09-06T23:24:30.839Z","method":"GET","path":"/api/notifications","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+ GET /api/notifications 401 in 310ms
+[2m2026-09-06T23:24:32.587Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
+[2m2026-09-06T23:24:32.591Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
+[2m2026-09-06T23:24:32.592Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
+ GET /api/auth/get-session 200 in 9457ms
+{"timestamp":"2026-09-06T23:24:32.670Z","method":"GET","path":"/auth","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+[2m2026-09-06T23:24:32.760Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
+[2m2026-09-06T23:24:32.763Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
+[2m2026-09-06T23:24:32.763Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
+(node:85516) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ ○ Compiling /auth ...
+ GET /api/products/test-product-id 200 in 9688ms
+{"timestamp":"2026-09-06T23:24:33.228Z","method":"POST","path":"/api/ai-fit","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+[TypeError: fetch failed] {
+  [cause]: [Error: Client network socket disconnected before secure TLS connection was established] {
+    code: 'ECONNRESET',
+    path: undefined,
+    host: 'via.placeholder.com',
+    port: 443,
+    localAddress: null
+  }
+}
+{"timestamp":"2026-09-06T23:24:34.215Z","method":"GET","path":"/auth","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+ GET /auth 200 in 1566ms
+ GET /auth 200 in 289ms
+ POST /api/ai-fit 401 in 1348ms
+{"timestamp":"2026-09-06T23:24:34.603Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-09-06T23:24:35.541Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+ GET /auth/sign-in 200 in 957ms
+ GET /auth/sign-in 200 in 119ms
+ ✓ Compiled /auth in 3.7s
+ GET /_next/image?url=https%3A%2F%2Fvia.placeholder.com%2F300&w=1920&q=75 500 in 3243ms
+ GET /_next/image?url=https%3A%2F%2Fvia.placeholder.com%2F300&w=1920&q=75 500 in 3006ms
+{"timestamp":"2026-09-06T23:25:06.726Z","method":"GET","path":"/app/shop/product/test-product-id","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+ GET /app/shop/product/test-product-id 200 in 338ms
+{"timestamp":"2026-09-06T23:25:07.514Z","method":"GET","path":"/api/auth/get-session","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-09-06T23:25:07.594Z","method":"GET","path":"/api/notifications","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-09-06T23:25:07.639Z","method":"GET","path":"/api/products/test-product-id","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+ GET /api/auth/get-session 200 in 308ms
+{"timestamp":"2026-09-06T23:25:07.900Z","method":"GET","path":"/auth","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+ GET /api/notifications 401 in 343ms
+{"timestamp":"2026-09-06T23:25:07.963Z","method":"GET","path":"/api/notifications","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+ GET /api/notifications 401 in 209ms
+{"timestamp":"2026-09-06T23:25:08.210Z","method":"GET","path":"/auth","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+ GET /auth 200 in 354ms
+ GET /auth 200 in 177ms
+ GET /api/products/test-product-id 200 in 741ms
+{"timestamp":"2026-09-06T23:25:08.492Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-09-06T23:25:08.504Z","method":"POST","path":"/api/ai-fit","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+ POST /api/ai-fit 401 in 115ms
+{"timestamp":"2026-09-06T23:25:08.659Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+ GET /auth/sign-in 200 in 182ms
+ GET /auth/sign-in 200 in 90ms
+[2m2026-09-06T23:25:09.275Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
+[2m2026-09-06T23:25:09.280Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
+[2m2026-09-06T23:25:09.281Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
+[2m2026-09-06T23:25:09.611Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
+[2m2026-09-06T23:25:09.614Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
+[2m2026-09-06T23:25:09.614Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
+ ✓ Compiled middleware in 32ms
+ ✓ Compiled in 211ms
+ ○ Compiling /test-ai-fit ...
+ ✓ Compiled /test-ai-fit in 581ms
+ GET /test-ai-fit 200 in 703ms
+ ✓ Compiled /app/shop/product/[id] in 28ms
+ GET /app/shop/product/test-product-id 200 in 215ms
+ GET /api/auth/get-session 200 in 179ms
+ ✓ Compiled /auth in 134ms
+ GET /api/notifications 401 in 338ms
+ GET /api/notifications 401 in 349ms
+ GET /auth 200 in 385ms
+ GET /auth 200 in 392ms
+ GET /api/products/test-product-id 200 in 777ms
+ GET /auth/sign-in 200 in 212ms
+ GET /auth/sign-in 200 in 251ms
+ POST /api/ai-fit 401 in 144ms
+[2m2026-09-06T23:25:58.446Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
+[2m2026-09-06T23:25:58.450Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
+[2m2026-09-06T23:25:58.451Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
+[2m2026-09-06T23:25:58.910Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
+[2m2026-09-06T23:25:58.913Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
+[2m2026-09-06T23:25:58.913Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
+ ✓ Compiled middleware in 20ms
+ ✓ Compiled in 328ms
+ GET /app/shop/product/test-product-id 200 in 267ms
+ GET /api/auth/get-session 200 in 141ms
+ GET /api/notifications 401 in 304ms
+ GET /api/notifications 401 in 319ms
+ GET /auth 200 in 385ms
+ GET /auth 200 in 387ms
+ GET /api/products/test-product-id 200 in 731ms
+ GET /auth/sign-in 200 in 165ms
+ GET /auth/sign-in 200 in 266ms
+ POST /api/ai-fit 401 in 316ms
+[2m2026-09-06T23:26:27.215Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
+[2m2026-09-06T23:26:27.219Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
+[2m2026-09-06T23:26:27.220Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
+[2m2026-09-06T23:26:27.760Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
+[2m2026-09-06T23:26:27.763Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
+[2m2026-09-06T23:26:27.764Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
+ ✓ Compiled in 191ms
