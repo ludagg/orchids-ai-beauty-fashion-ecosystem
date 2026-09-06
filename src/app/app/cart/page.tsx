@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Spinner } from '@/components/ui/spinner';
 import {
   Empty,
   EmptyContent,
@@ -91,7 +92,8 @@ export default function CartPage() {
     setItemToRemove({ id: itemId, name: itemName });
   };
 
-  const confirmRemove = async () => {
+  const confirmRemove = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     if (!itemToRemove || updating) return;
     setUpdating(true);
     try {
@@ -280,7 +282,7 @@ export default function CartPage() {
             <span>{formatPrice(subtotal)}</span>
         </div>
         <div className="flex gap-2">
-            <Input placeholder="Enter promo code" className="bg-background" />
+            <Input placeholder="Enter promo code" aria-label="Promo code" className="bg-background" />
             <Button variant="outline">Apply</Button>
         </div>
         <div className="border-t pt-4 flex justify-between font-bold text-lg">
@@ -307,7 +309,14 @@ export default function CartPage() {
               disabled={updating}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              {updating ? "Removing..." : "Remove"}
+              {updating ? (
+                <>
+                  <Spinner className="mr-2 h-4 w-4 text-destructive-foreground" />
+                  Removing...
+                </>
+              ) : (
+                "Remove"
+              )}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
