@@ -31,6 +31,11 @@ export default function ProductDetailPage() {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
 
+  // AI Fit Check State
+  const [fitRecommendation, setFitRecommendation] = useState<any>(null);
+  const [isFitLoading, setIsFitLoading] = useState(false);
+  const [fitMeasurements, setFitMeasurements] = useState({ height: '', weight: '', bodyType: '' });
+
   const toggleWishlist = async () => {
     const newState = !isWishlisted;
     setIsWishlisted(newState);
@@ -70,6 +75,7 @@ export default function ProductDetailPage() {
             if (data.colors && data.colors.length > 0) setSelectedColor(data.colors[0]);
             if (data.sizes && data.sizes.length > 0) setSelectedSize(data.sizes[0]);
             setLoading(false);
+            fetchFitRecommendation(id as string);
         })
         .catch(err => {
             console.error(err);
@@ -78,6 +84,49 @@ export default function ProductDetailPage() {
         });
     }
   }, [id, router]);
+
+  const fetchFitRecommendation = async (productId: string) => {
+    setIsFitLoading(true);
+    try {
+        const res = await fetch('/api/ai-fit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ productId })
+        });
+        if (res.ok) {
+            const data = await res.json();
+            setFitRecommendation(data);
+            if (data.recommendation && data.recommendation !== "Missing Data") {
+                 // Try to pre-select recommended size if we haven't selected one
+                 // Or we just show it to user
+            }
+        }
+    } catch (err) {
+        console.error("Failed to load AI Fit recommendation", err);
+    } finally {
+        setIsFitLoading(false);
+    }
+  };
+
+  const handleUpdateMeasurements = async () => {
+    try {
+        const res = await fetch('/api/users/profile/measurements', {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(fitMeasurements)
+        });
+
+        if (res.ok) {
+            toast.success("Measurements updated!");
+            if (id) fetchFitRecommendation(id as string);
+        } else {
+            toast.error("Failed to update measurements");
+        }
+    } catch (err) {
+        console.error(err);
+        toast.error("An error occurred");
+    }
+  };
 
   const handleAddToCart = async (goToCheckout = false) => {
     if (!product) return;
@@ -218,32 +267,100 @@ export default function ProductDetailPage() {
         {/* AI Fit Check */}
         <Dialog>
             <DialogTrigger asChild>
-                <div className="flex items-center justify-between rounded-lg border border-yellow-500/30 bg-yellow-500/10 p-3 cursor-pointer">
+                <div className="flex items-center justify-between rounded-lg border border-yellow-500/30 bg-yellow-500/10 p-3 cursor-pointer hover:bg-yellow-500/20 transition-colors">
                     <div className="flex items-center gap-3">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-500 text-white">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-500 text-white shadow-sm shrink-0">
                             <Ruler className="h-4 w-4" />
                         </div>
                         <div>
                             <div className="text-sm font-semibold text-yellow-700 dark:text-yellow-400">
-                                AI recommends size M for you
+                                {isFitLoading ? (
+                                    <span className="animate-pulse">Analyzing fit...</span>
+                                ) : fitRecommendation?.recommendation === "Missing Data" ? (
+                                    "Complete profile for fit recommendation"
+                                ) : fitRecommendation?.recommendation ? (
+                                    `AI recommends size ${fitRecommendation.recommendation}`
+                                ) : (
+                                    "Get your AI Fit recommendation"
+                                )}
                             </div>
-                            <div className="text-xs text-muted-foreground">Based on your profile</div>
+                            <div className="text-xs text-muted-foreground">
+                                {fitRecommendation?.recommendation === "Missing Data"
+                                    ? "Add your measurements"
+                                    : "Based on your profile"}
+                            </div>
                         </div>
                     </div>
                     <ChevronRight className="h-4 w-4 text-muted-foreground" />
                 </div>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="sm:max-w-md">
                 <DialogHeader>
-                    <DialogTitle>AI Fit Analysis</DialogTitle>
+                    <DialogTitle className="flex items-center gap-2">
+                        <Ruler className="w-5 h-5 text-yellow-500" />
+                        AI Fit Analysis
+                    </DialogTitle>
                     <DialogDescription>
-                        We analyzed your previous purchases and profile measurements.
-                        This brand typically runs true to size.
+                        Personalized sizing recommendations based on your unique profile and product details.
                     </DialogDescription>
                 </DialogHeader>
-                {/* Mock chart or details */}
-                <div className="h-40 bg-muted rounded-md flex items-center justify-center text-muted-foreground">
-                    Fit Graph Placeholder
+
+                <div className="space-y-4 py-4">
+                    {fitRecommendation?.recommendation === "Missing Data" ? (
+                        <div className="space-y-4">
+                            <p className="text-sm text-muted-foreground">
+                                {fitRecommendation.analysis}
+                            </p>
+                            <div className="grid gap-3">
+                                <input
+                                    type="text"
+                                    placeholder="Height (e.g., 5'10 or 178cm)"
+                                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                    value={fitMeasurements.height}
+                                    onChange={(e) => setFitMeasurements(prev => ({...prev, height: e.target.value}))}
+                                />
+                                <input
+                                    type="text"
+                                    placeholder="Weight (e.g., 150 lbs or 68kg)"
+                                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                    value={fitMeasurements.weight}
+                                    onChange={(e) => setFitMeasurements(prev => ({...prev, weight: e.target.value}))}
+                                />
+                                <select
+                                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                    value={fitMeasurements.bodyType}
+                                    onChange={(e) => setFitMeasurements(prev => ({...prev, bodyType: e.target.value}))}
+                                >
+                                    <option value="">Select Body Type (Optional)</option>
+                                    <option value="Slim">Slim</option>
+                                    <option value="Athletic">Athletic</option>
+                                    <option value="Average">Average</option>
+                                    <option value="Curvy">Curvy</option>
+                                    <option value="Broad">Broad</option>
+                                </select>
+                                <Button onClick={handleUpdateMeasurements} className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold">
+                                    Save & Get Recommendation
+                                </Button>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="space-y-4">
+                            <div className="flex flex-col items-center justify-center p-6 bg-yellow-500/10 rounded-lg border border-yellow-500/20">
+                                <div className="text-4xl font-bold text-yellow-600 mb-2">
+                                    {fitRecommendation?.recommendation || "M"}
+                                </div>
+                                <div className="text-sm font-medium">Recommended Size</div>
+                                {fitRecommendation?.confidence && (
+                                    <div className="mt-2 text-xs text-muted-foreground">
+                                        {fitRecommendation.confidence}% match confidence
+                                    </div>
+                                )}
+                            </div>
+                            <div className="text-sm p-4 bg-muted/50 rounded-lg border leading-relaxed">
+                                {fitRecommendation?.analysis || "Based on a basic analysis of your profile, we suggest this size. For more accurate results, make sure your profile measurements are up to date."}
+                            </div>
+                        </div>
+                    )}
                 </div>
             </DialogContent>
         </Dialog>
