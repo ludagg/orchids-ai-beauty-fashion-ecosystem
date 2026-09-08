@@ -55,8 +55,8 @@ export default function UserAccount({ showLabel = true }: { showLabel?: boolean 
   if (!session) {
     if (isPublicPath) {
       return (
-        <Link href="/auth" className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-primary-foreground hover:opacity-90 transition-opacity text-sm font-medium">
-          <LogIn className="w-4 h-4" />
+        <Link href="/auth" className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-primary-foreground hover:opacity-90 transition-opacity text-sm font-medium focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 outline-none">
+          <LogIn className="w-4 h-4" aria-hidden="true" />
           <span>Sign In</span>
         </Link>
       );
@@ -73,18 +73,20 @@ export default function UserAccount({ showLabel = true }: { showLabel?: boolean 
         .slice(0, 2)
     : "U";
 
+  const accountMenuLabel = user?.name ? `Account menu for ${user.name}` : "Account Menu";
+
   return (
     <DropdownMenu>
       <Tooltip>
         <TooltipTrigger asChild>
           <DropdownMenuTrigger asChild>
             <button
-              className="flex items-center gap-2 p-1.5 pr-3 rounded-full hover:bg-secondary transition-colors border border-transparent hover:border-border outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 group"
-              aria-label="Account Menu"
+              className="flex items-center gap-2 p-1.5 pr-3 rounded-full hover:bg-secondary transition-colors border border-transparent hover:border-border outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 group cursor-pointer"
+              aria-label={accountMenuLabel}
             >
               <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-violet-500 to-rose-500 flex items-center justify-center text-white font-medium text-xs shadow-sm group-hover:shadow-md transition-shadow overflow-hidden">
                 {user?.image ? (
-                    <img src={user.image} alt={user.name || "User"} className="w-full h-full object-cover" />
+                    <img src={user.image} alt="" className="w-full h-full object-cover" />
                 ) : (
                     initials
                 )}
@@ -94,7 +96,7 @@ export default function UserAccount({ showLabel = true }: { showLabel?: boolean 
                   {user?.name || "User"}
                 </span>
               )}
-              <ChevronDown className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors hidden sm:inline" />
+              <ChevronDown className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors hidden sm:inline" aria-hidden="true" />
             </button>
           </DropdownMenuTrigger>
         </TooltipTrigger>
@@ -105,29 +107,29 @@ export default function UserAccount({ showLabel = true }: { showLabel?: boolean 
       <DropdownMenuContent className="w-auto p-2" align="end" sideOffset={8}>
         <div className="grid grid-cols-4 gap-2 min-w-[340px]">
           <DropdownMenuItem asChild className="focus:bg-transparent p-0">
-             <Link href="/app/profile" className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-lg hover:bg-accent focus:bg-accent transition-colors text-center w-full h-20 group">
-                <UserCircle className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+             <Link href="/app/profile" className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-lg hover:bg-accent focus:bg-accent transition-colors text-center w-full h-20 group focus-visible:ring-2 focus-visible:ring-ring outline-none">
+                <UserCircle className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" aria-hidden="true" />
                 <span className="text-[10px] font-medium text-foreground">Profile</span>
              </Link>
           </DropdownMenuItem>
 
           <DropdownMenuItem asChild className="focus:bg-transparent p-0">
-             <Link href="/app/notifications" className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-lg hover:bg-accent focus:bg-accent transition-colors text-center w-full h-20 group">
-                <Bell className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+             <Link href="/app/notifications" className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-lg hover:bg-accent focus:bg-accent transition-colors text-center w-full h-20 group focus-visible:ring-2 focus-visible:ring-ring outline-none">
+                <Bell className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" aria-hidden="true" />
                 <span className="text-[10px] font-medium text-foreground">Notifications</span>
              </Link>
           </DropdownMenuItem>
 
           <DropdownMenuItem asChild className="focus:bg-transparent p-0">
-             <Link href="/app/wishlist" className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-lg hover:bg-accent focus:bg-accent transition-colors text-center w-full h-20 group">
-                <Heart className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+             <Link href="/app/wishlist" className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-lg hover:bg-accent focus:bg-accent transition-colors text-center w-full h-20 group focus-visible:ring-2 focus-visible:ring-ring outline-none">
+                <Heart className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" aria-hidden="true" />
                 <span className="text-[10px] font-medium text-foreground">Wishlist</span>
              </Link>
           </DropdownMenuItem>
 
           <DropdownMenuItem asChild className="focus:bg-transparent p-0">
-             <Link href="/app/settings" className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-lg hover:bg-accent focus:bg-accent transition-colors text-center w-full h-20 group">
-                <Settings className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+             <Link href="/app/settings" className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-lg hover:bg-accent focus:bg-accent transition-colors text-center w-full h-20 group focus-visible:ring-2 focus-visible:ring-ring outline-none">
+                <Settings className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" aria-hidden="true" />
                 <span className="text-[10px] font-medium text-foreground">Settings</span>
              </Link>
           </DropdownMenuItem>
