@@ -5,7 +5,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Star, Loader2, Upload, X } from "lucide-react";
+import { Star, Upload, X } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { toast } from "sonner";
 import Image from "next/image";
 
@@ -119,15 +121,18 @@ export function ReviewForm({ isOpen, onOpenChange, salonId, bookingId, onSuccess
           <DialogTitle>Write a Review</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-6 py-4">
-          <div className="flex justify-center gap-2">
+          <div className="flex justify-center gap-2" role="radiogroup" aria-label="Rating">
             {[1, 2, 3, 4, 5].map((star) => (
               <button
                 key={star}
                 type="button"
+                role="radio"
+                aria-checked={star === rating}
+                aria-label={`${star} star${star > 1 ? "s" : ""}`}
                 onMouseEnter={() => setHoverRating(star)}
                 onMouseLeave={() => setHoverRating(0)}
                 onClick={() => setRating(star)}
-                className="focus:outline-none transition-transform active:scale-95"
+                className="rounded-full p-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-transform active:scale-95"
               >
                 <Star
                   className={`w-8 h-8 ${
@@ -135,6 +140,7 @@ export function ReviewForm({ isOpen, onOpenChange, salonId, bookingId, onSuccess
                       ? "fill-amber-500 text-amber-500"
                       : "text-muted-foreground/30"
                   }`}
+                  aria-hidden="true"
                 />
               </button>
             ))}
@@ -160,14 +166,20 @@ export function ReviewForm({ isOpen, onOpenChange, salonId, bookingId, onSuccess
             <div className="grid grid-cols-4 gap-2">
               {previews.map((src, i) => (
                 <div key={i} className="relative aspect-square rounded-lg overflow-hidden border border-border group">
-                  <Image src={src} alt="Preview" fill className="object-cover" />
-                  <button
-                    type="button"
-                    onClick={() => removeImage(i)}
-                    className="absolute top-1 right-1 p-1 rounded-full bg-black/50 text-white opacity-0 group-hover:opacity-100 transition-opacity"
-                  >
-                    <X className="w-3 h-3" />
-                  </button>
+                  <Image src={src} alt={`Preview ${i + 1}`} fill className="object-cover" />
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        type="button"
+                        onClick={() => removeImage(i)}
+                        aria-label={`Remove photo ${i + 1}`}
+                        className="absolute top-1 right-1 p-1 rounded-full bg-black/50 text-white opacity-0 group-hover:opacity-100 focus:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white transition-opacity"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>Remove photo</TooltipContent>
+                  </Tooltip>
                 </div>
               ))}
               {previews.length < 4 && (
@@ -194,7 +206,7 @@ export function ReviewForm({ isOpen, onOpenChange, salonId, bookingId, onSuccess
               Cancel
             </Button>
             <Button type="submit" disabled={isSubmitting || rating === 0}>
-              {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {isSubmitting && <Spinner className="mr-2 h-4 w-4 text-primary-foreground" />}
               Post Review
             </Button>
           </DialogFooter>
