@@ -1,6 +1,6 @@
-# Priisme
+# Rare
 
-Priisme is a SaaS application described as a 'TikTok x Beauty Marketplace' ecosystem. It integrates a vertical video feed, salon booking SaaS, and AI stylist features.
+Rare is a SaaS application described as a 'TikTok x Beauty Marketplace' ecosystem. It integrates a vertical video feed, salon booking SaaS, and AI stylist features.
 
 ## Tech Stack
 - **Framework:** Next.js 15.1.0 (App Router)

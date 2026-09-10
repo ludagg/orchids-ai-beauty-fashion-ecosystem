@@ -1,20 +1,20 @@
-# SPECIFICATIONS.md — PRIISME
+# SPECIFICATIONS.md — RARE
 > Cahier des charges complet · Version finale · Référence officielle du projet
 > Ce fichier est lu automatiquement par Jules (via AGENTS.md) comme source de vérité du produit. On souligne que le nouveau nom choisit est Rare
 
 ---
 
-## 🌐 À PROPOS DE PRIISME
+## 🌐 À PROPOS DE RARE
 
-Priisme est une plateforme de commerce beauté et mode tout-en-un, propulsée par l'IA, qui intègre les **services de salon & beauté**, le **shopping mode**, le **commerce vidéo**, le **chat en temps réel** et la **personnalisation intelligente** dans un seul écosystème fluide.
+Rare est une plateforme de commerce beauté et mode tout-en-un, propulsée par l'IA, qui intègre les **services de salon & beauté**, le **shopping mode**, le **commerce vidéo**, le **chat en temps réel** et la **personnalisation intelligente** dans un seul écosystème fluide.
 
-Priisme combine technologie, contenu et intelligence IA pour offrir une expérience de shopping et de services plus intelligente et plus personnalisée — pour les utilisateurs, les vendeurs et les créateurs.
+Rare combine technologie, contenu et intelligence IA pour offrir une expérience de shopping et de services plus intelligente et plus personnalisée — pour les utilisateurs, les vendeurs et les créateurs.
 
 ---
 
 ## 1. COMPTES UTILISATEURS & GESTION DES ACCÈS
 
-Priisme fournit un accès sécurisé basé sur les rôles pour les **utilisateurs**, **vendeurs**, **créateurs** et **administrateurs**.
+Rare fournit un accès sécurisé basé sur les rôles pour les **utilisateurs**, **vendeurs**, **créateurs** et **administrateurs**.
 
 ### 1.1 Utilisateurs
 - Création de compte via email, téléphone ou connexion sociale (Google, Apple, Facebook)
@@ -216,7 +216,7 @@ Découverte Salon → Sélection Service → Choix Créneau → Paiement → Con
 
 ## 10. FONCTIONNALITÉS IA AVANCÉES
 
-> L'IA est intégrée à tous les niveaux de Priisme pour améliorer la précision, la personnalisation, la confiance et la conversion.
+> L'IA est intégrée à tous les niveaux de Rare pour améliorer la précision, la personnalisation, la confiance et la conversion.
 
 ---
 
@@ -353,9 +353,9 @@ Découverte Salon → Sélection Service → Choix Créneau → Paiement → Con
 
 ---
 
-## 13. VALEUR FONDAMENTALE DE PRIISME
+## 13. VALEUR FONDAMENTALE DE RARE
 
-Priisme unifie en une seule plateforme :
+Rare unifie en une seule plateforme :
 
 | Pilier | Description |
 |---|---|
@@ -365,7 +365,7 @@ Priisme unifie en une seule plateforme :
 | 💬 Communication | Chat temps réel utilisateurs ↔ vendeurs |
 | 🤖 Intelligence IA | Personnalisation, automatisation, prédiction |
 
-> **Vision : Priisme est la prochaine génération du commerce beauté et mode — intelligent, immersif et global.**
+> **Vision : Rare est la prochaine génération du commerce beauté et mode — intelligent, immersif et global.**
 
 ---
 
@@ -383,5 +383,5 @@ Priisme unifie en une seule plateforme :
 
 ---
 
-*SPECIFICATIONS.md — Priisme · Document de référence officiel*
+*SPECIFICATIONS.md — Rare · Document de référence officiel*
 *À maintenir à jour à chaque évolution majeure du produit*
