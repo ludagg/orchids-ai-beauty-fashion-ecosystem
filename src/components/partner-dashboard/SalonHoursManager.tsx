@@ -5,8 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { Spinner } from "@/components/ui/spinner";
 import { toast } from "sonner";
-import { Loader2 } from "lucide-react";
 
 interface OpeningHour {
   dayOfWeek: number;
@@ -90,7 +90,13 @@ export function SalonHoursManager({ salonId }: SalonHoursManagerProps) {
     setHours(prev => prev.map(h => h.dayOfWeek === dayIndex ? { ...h, [field]: value } : h));
   };
 
-  if (loading) return <div>Loading hours...</div>;
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[200px]" aria-label="Loading opening hours">
+        <Spinner className="w-8 h-8 text-primary" />
+      </div>
+    );
+  }
 
   // Sort for display: Mon (1) -> Sun (0)
   const sortedHours = [...hours].sort((a, b) => {
@@ -102,47 +108,53 @@ export function SalonHoursManager({ salonId }: SalonHoursManagerProps) {
   return (
     <div className="space-y-6">
       <div className="grid gap-4">
-        {sortedHours.map((day) => (
-          <div key={day.dayOfWeek} className="flex flex-col sm:flex-row sm:items-center gap-4 p-4 border rounded-lg bg-card text-card-foreground shadow-sm">
-            <div className="w-24 font-medium">{DAYS[day.dayOfWeek]}</div>
+        {sortedHours.map((day) => {
+          const dayName = DAYS[day.dayOfWeek];
+          return (
+            <div key={day.dayOfWeek} className="flex flex-col sm:flex-row sm:items-center gap-4 p-4 border rounded-lg bg-card text-card-foreground shadow-sm">
+              <div className="w-24 font-medium">{dayName}</div>
 
-            <div className="flex-1 flex items-center gap-4">
-                <div className="flex items-center space-x-2">
-                    <Switch
-                        id={`closed-${day.dayOfWeek}`}
-                        checked={!day.isClosed}
-                        onCheckedChange={(checked) => updateDay(day.dayOfWeek, "isClosed", !checked)}
-                    />
-                    <Label htmlFor={`closed-${day.dayOfWeek}`} className="text-sm text-muted-foreground w-16">
-                        {day.isClosed ? "Closed" : "Open"}
-                    </Label>
-                </div>
+              <div className="flex-1 flex items-center gap-4">
+                  <div className="flex items-center space-x-2">
+                      <Switch
+                          id={`closed-${day.dayOfWeek}`}
+                          checked={!day.isClosed}
+                          onCheckedChange={(checked) => updateDay(day.dayOfWeek, "isClosed", !checked)}
+                          aria-label={`${dayName} status`}
+                      />
+                      <Label htmlFor={`closed-${day.dayOfWeek}`} className="text-sm text-muted-foreground w-16">
+                          {day.isClosed ? "Closed" : "Open"}
+                      </Label>
+                  </div>
 
-                {!day.isClosed && (
-                    <div className="flex items-center gap-2">
-                        <Input
-                            type="time"
-                            value={day.openTime}
-                            onChange={(e) => updateDay(day.dayOfWeek, "openTime", e.target.value)}
-                            className="w-32"
-                        />
-                        <span>to</span>
-                        <Input
-                            type="time"
-                            value={day.closeTime}
-                            onChange={(e) => updateDay(day.dayOfWeek, "closeTime", e.target.value)}
-                            className="w-32"
-                        />
-                    </div>
-                )}
+                  {!day.isClosed && (
+                      <div className="flex items-center gap-2">
+                          <Input
+                              type="time"
+                              value={day.openTime}
+                              onChange={(e) => updateDay(day.dayOfWeek, "openTime", e.target.value)}
+                              aria-label={`${dayName} opening time`}
+                              className="w-32"
+                          />
+                          <span className="text-sm text-muted-foreground">to</span>
+                          <Input
+                              type="time"
+                              value={day.closeTime}
+                              onChange={(e) => updateDay(day.dayOfWeek, "closeTime", e.target.value)}
+                              aria-label={`${dayName} closing time`}
+                              className="w-32"
+                          />
+                      </div>
+                  )}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       <div className="flex justify-end">
         <Button onClick={handleSave} disabled={saving}>
-            {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {saving && <Spinner className="mr-2" />}
             Save Changes
         </Button>
       </div>
