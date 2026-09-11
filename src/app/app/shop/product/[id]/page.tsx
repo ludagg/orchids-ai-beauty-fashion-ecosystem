@@ -3,12 +3,13 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { Star, Heart, Share2, MapPin, ChevronRight, Check, ShieldCheck, Ruler } from 'lucide-react';
+import { Star, Heart, Share2, MapPin, ChevronRight, Check, ShieldCheck, Ruler, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { ARTryOn } from '@/components/shop/ai/ARTryOn';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ProductCard } from '@/components/shop/ProductCard';
-import { cn } from '@/lib/utils';
+import { cn, formatPrice } from '@/lib/utils';
 import { toast } from 'sonner';
 import {
   Dialog,
@@ -23,6 +24,58 @@ import useEmblaCarousel from 'embla-carousel-react';
 export default function ProductDetailPage() {
   const { id } = useParams();
   const router = useRouter();
+
+  const [fitCheck, setFitCheck] = useState<any>(null);
+  const [isCheckingFit, setIsCheckingFit] = useState(false);
+  const [userMeasurements, setUserMeasurements] = useState({ height: '175', weight: '68', bodyType: 'Average' });
+
+  const handleUpdateMeasurements = async () => {
+      setIsCheckingFit(true);
+      try {
+          await fetch('/api/users/profile/measurements', {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(userMeasurements)
+          });
+          await checkFit();
+      } catch (e) {
+          console.error(e);
+      } finally {
+          setIsCheckingFit(false);
+      }
+  };
+
+  const checkFit = async () => {
+      if (!product) return;
+      setIsCheckingFit(true);
+      try {
+          const res = await fetch('/api/ai-fit', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                  ...userMeasurements,
+                  productBrand: product.brand,
+                  productCategory: product.category,
+                  productName: product.name
+              })
+          });
+          if (res.ok) {
+              const data = await res.json();
+              setFitCheck(data);
+          }
+      } catch (error) {
+          console.error(error);
+      } finally {
+          setIsCheckingFit(false);
+      }
+  };
+
+  useEffect(() => {
+      if (product) {
+          checkFit();
+      }
+  }, [product]);
+
   const [product, setProduct] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [selectedColor, setSelectedColor] = useState<any>(null);
@@ -218,35 +271,76 @@ export default function ProductDetailPage() {
         {/* AI Fit Check */}
         <Dialog>
             <DialogTrigger asChild>
-                <div className="flex items-center justify-between rounded-lg border border-yellow-500/30 bg-yellow-500/10 p-3 cursor-pointer">
+                <div className="flex items-center justify-between rounded-lg border border-yellow-500/30 bg-yellow-500/10 p-3 cursor-pointer hover:bg-yellow-500/20 transition-colors">
                     <div className="flex items-center gap-3">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-500 text-white">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 shadow-sm text-white">
                             <Ruler className="h-4 w-4" />
                         </div>
                         <div>
                             <div className="text-sm font-semibold text-yellow-700 dark:text-yellow-400">
-                                AI recommends size M for you
+                                AI Size Matcher ({fitCheck?.recommendedSize || "M"})
                             </div>
-                            <div className="text-xs text-muted-foreground">Based on your profile</div>
+                            <div className="text-xs text-muted-foreground">Get your perfect fit</div>
                         </div>
                     </div>
                     <ChevronRight className="h-4 w-4 text-muted-foreground" />
                 </div>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>AI Fit Analysis</DialogTitle>
+                    <DialogTitle className="flex items-center gap-2">
+                        <Sparkles className="w-5 h-5 text-yellow-500" />
+                        AI Fit Recommendation
+                    </DialogTitle>
                     <DialogDescription>
-                        We analyzed your previous purchases and profile measurements.
-                        This brand typically runs true to size.
+                        We use AI to recommend the best size for this specific product based on your body measurements.
                     </DialogDescription>
                 </DialogHeader>
-                {/* Mock chart or details */}
-                <div className="h-40 bg-muted rounded-md flex items-center justify-center text-muted-foreground">
-                    Fit Graph Placeholder
+                <div className="space-y-6 py-4">
+                    <div className="flex flex-col items-center justify-center space-y-2 p-6 bg-secondary/30 rounded-xl border border-border">
+                        <div className="text-sm text-muted-foreground">Recommended Size</div>
+                        <div className="text-4xl font-black text-primary">{fitCheck?.recommendedSize || "..."}</div>
+                        <div className="text-xs font-medium text-emerald-600 bg-emerald-100 dark:bg-emerald-900/30 dark:text-emerald-400 px-2.5 py-0.5 rounded-full">
+                            {fitCheck?.confidence || "..."}% Match Confidence
+                        </div>
+                        <p className="text-xs text-center text-muted-foreground mt-2 max-w-[250px]">{fitCheck?.description}</p>
+                    </div>
+                    <div className="space-y-4">
+                         <div className="text-sm font-medium">Your Measurements</div>
+                         <div className="grid grid-cols-3 gap-3">
+                              <div className="space-y-1">
+                                  <label className="text-xs text-muted-foreground">Height (cm)</label>
+                                  <input type="number" value={userMeasurements.height} onChange={(e) => setUserMeasurements(p => ({...p, height: e.target.value}))} className="w-full bg-background border border-input rounded-md px-3 py-1.5 text-sm" />
+                              </div>
+                              <div className="space-y-1">
+                                  <label className="text-xs text-muted-foreground">Weight (kg)</label>
+                                  <input type="number" value={userMeasurements.weight} onChange={(e) => setUserMeasurements(p => ({...p, weight: e.target.value}))} className="w-full bg-background border border-input rounded-md px-3 py-1.5 text-sm" />
+                              </div>
+                              <div className="space-y-1">
+                                  <label className="text-xs text-muted-foreground">Body Type</label>
+                                  <select value={userMeasurements.bodyType} onChange={(e) => setUserMeasurements(p => ({...p, bodyType: e.target.value}))} className="w-full bg-background border border-input rounded-md px-3 py-1.5 text-sm appearance-none">
+                                      <option>Athletic</option>
+                                      <option>Slim</option>
+                                      <option>Average</option>
+                                      <option>Curvy</option>
+                                      <option>Plus Size</option>
+                                  </select>
+                              </div>
+                         </div>
+                    </div>
+                    <div className="flex justify-end">
+                        <Button className="w-full" onClick={handleUpdateMeasurements} disabled={isCheckingFit}>{isCheckingFit ? "Recalculating..." : "Update & Recalculate"}</Button>
+                    </div>
                 </div>
             </DialogContent>
         </Dialog>
+
+        {/* AR Try On Overlay (only for products with clothes/makeup category mock) */}
+        {product.category?.toLowerCase() === 'fashion' || product.category?.toLowerCase() === 'clothing' || product.category?.toLowerCase() === 'makeup' ? (
+             <div className="py-2">
+                 <ARTryOn product={product} />
+             </div>
+        ) : null}
 
         {/* Variants */}
         <div className="space-y-4">
