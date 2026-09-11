@@ -4,6 +4,19 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Spinner } from "@/components/ui/spinner";
+import {
+  Empty,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+  EmptyDescription,
+} from "@/components/ui/empty";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Trash2, Plus, Image as ImageIcon } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -113,7 +126,13 @@ export function SalonImageManager({ salonId }: SalonImageManagerProps) {
     }
   };
 
-  if (loading) return <div>Loading images...</div>;
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[200px]" aria-label="Loading gallery images">
+        <Spinner className="w-8 h-8 text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -127,23 +146,40 @@ export function SalonImageManager({ salonId }: SalonImageManagerProps) {
           <div key={img.id} className="group relative aspect-square rounded-lg overflow-hidden border bg-muted">
             <img src={img.url} alt={img.caption || "Salon image"} className="object-cover w-full h-full" />
             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <Button
-                variant="destructive"
-                size="icon"
-                onClick={() => handleDeleteClick(img.id)}
-                aria-label="Delete image"
-              >
-                <Trash2 className="w-4 h-4" />
-              </Button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="destructive"
+                    size="icon"
+                    onClick={() => handleDeleteClick(img.id)}
+                    aria-label={`Delete image${img.caption ? `: ${img.caption}` : ""}`}
+                    className="focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Delete image</p>
+                </TooltipContent>
+              </Tooltip>
             </div>
           </div>
         ))}
 
         {images.length === 0 && (
-            <div className="col-span-2 md:col-span-4 flex flex-col items-center justify-center h-40 border-2 border-dashed rounded-lg text-muted-foreground">
-                <ImageIcon className="w-8 h-8 mb-2" />
-                <p>No images yet</p>
-            </div>
+          <div className="col-span-2 md:col-span-4">
+            <Empty className="border-2 border-dashed py-8">
+              <EmptyHeader>
+                <EmptyMedia variant="icon">
+                  <ImageIcon className="w-6 h-6" />
+                </EmptyMedia>
+                <EmptyTitle>No images yet</EmptyTitle>
+                <EmptyDescription>
+                  Add image URLs below to display your salon's gallery to customers.
+                </EmptyDescription>
+              </EmptyHeader>
+            </Empty>
+          </div>
         )}
       </div>
 
@@ -158,7 +194,16 @@ export function SalonImageManager({ salonId }: SalonImageManagerProps) {
             />
         </div>
         <Button type="submit" disabled={adding || !newUrl}>
-            {adding ? "Adding..." : <><Plus className="w-4 h-4 mr-2" /> Add Image</>}
+            {adding ? (
+              <>
+                <Spinner className="mr-2" />
+                Adding...
+              </>
+            ) : (
+              <>
+                <Plus className="w-4 h-4 mr-2" /> Add Image
+              </>
+            )}
         </Button>
       </form>
 
@@ -180,7 +225,7 @@ export function SalonImageManager({ salonId }: SalonImageManagerProps) {
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
               disabled={isDeleting}
             >
-              {isDeleting ? <span className="w-4 h-4 mr-2 animate-spin border-2 border-current border-t-transparent rounded-full" /> : null}
+              {isDeleting ? <Spinner className="mr-2" /> : null}
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>
