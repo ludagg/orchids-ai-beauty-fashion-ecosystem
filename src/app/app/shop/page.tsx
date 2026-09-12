@@ -8,6 +8,7 @@ import { ProductCard } from '@/components/shop/ProductCard';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useInView } from 'react-intersection-observer';
 import { FilterSheet, FilterState, defaultFilters } from '@/components/shop/FilterSheet';
+import CompareDialog from '@/components/shop/ai/CompareDialog';
 
 export default function ShopPage() {
   const router = useRouter();
@@ -144,6 +145,9 @@ export default function ShopPage() {
                         router.push(`?${params.toString()}`);
                     }}
                 />
+            </div>
+            <div className="ml-2">
+                <CompareDialog />
             </div>
         </div>
       </div>

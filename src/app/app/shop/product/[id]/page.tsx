@@ -19,6 +19,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import useEmblaCarousel from 'embla-carousel-react';
+import AIFitCheckDialog from "@/components/shop/ai/AIFitCheckDialog";
+import ARTryOn from "@/components/shop/ai/ARTryOn";
 
 export default function ProductDetailPage() {
   const { id } = useParams();
@@ -215,38 +217,11 @@ export default function ProductDetailPage() {
              </div>
         </div>
 
-        {/* AI Fit Check */}
-        <Dialog>
-            <DialogTrigger asChild>
-                <div className="flex items-center justify-between rounded-lg border border-yellow-500/30 bg-yellow-500/10 p-3 cursor-pointer">
-                    <div className="flex items-center gap-3">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-500 text-white">
-                            <Ruler className="h-4 w-4" />
-                        </div>
-                        <div>
-                            <div className="text-sm font-semibold text-yellow-700 dark:text-yellow-400">
-                                AI recommends size M for you
-                            </div>
-                            <div className="text-xs text-muted-foreground">Based on your profile</div>
-                        </div>
-                    </div>
-                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                </div>
-            </DialogTrigger>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>AI Fit Analysis</DialogTitle>
-                    <DialogDescription>
-                        We analyzed your previous purchases and profile measurements.
-                        This brand typically runs true to size.
-                    </DialogDescription>
-                </DialogHeader>
-                {/* Mock chart or details */}
-                <div className="h-40 bg-muted rounded-md flex items-center justify-center text-muted-foreground">
-                    Fit Graph Placeholder
-                </div>
-            </DialogContent>
-        </Dialog>
+        {/* AI Fit Check & AR Try On */}
+        <div className="flex flex-col gap-3">
+            <AIFitCheckDialog product={product} />
+            <ARTryOn product={product} />
+        </div>
 
         {/* Variants */}
         <div className="space-y-4">
