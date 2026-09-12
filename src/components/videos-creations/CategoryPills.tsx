@@ -10,13 +10,14 @@ interface CategoryPillsProps {
 
 export default function CategoryPills({ categories, selected, onSelect }: CategoryPillsProps) {
   return (
-    <div className="flex gap-3 overflow-x-auto pb-4 no-scrollbar px-1">
+    <div className="flex gap-3 overflow-x-auto pb-4 no-scrollbar px-1" role="region" aria-label="Video categories">
       {categories.map((cat) => (
         <button
           key={cat}
+          type="button"
           onClick={() => onSelect(cat)}
           aria-pressed={selected === cat}
-          className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all border whitespace-nowrap ${
+          className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all border whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
             selected === cat
               ? "bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/10"
               : "bg-card text-muted-foreground border-border hover:border-foreground hover:text-foreground hover:bg-secondary/50"
