@@ -3,11 +3,12 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { Star, Heart, Share2, MapPin, ChevronRight, Check, ShieldCheck, Ruler } from 'lucide-react';
+import { Star, Heart, Share2, MapPin, ChevronRight, Check, ShieldCheck, Ruler, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ProductCard } from '@/components/shop/ProductCard';
+import { ARTryOn } from '@/components/shop/ai/ARTryOn';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import {
@@ -185,6 +186,21 @@ export default function ProductDetailPage() {
              {[product.mainImageUrl, ...(product.galleryUrls || [])].map((_, index) => (
                  <div key={index} className="h-1.5 w-1.5 rounded-full bg-white/50" />
              ))}
+        </div>
+
+        {/* AR Try-On Trigger overlay */}
+        <div className="absolute bottom-4 right-4">
+           <Dialog>
+             <DialogTrigger asChild>
+                <Button variant="secondary" className="bg-white/80 backdrop-blur text-black font-semibold shadow-md border border-white/20 hover:bg-white">
+                   <Sparkles className="w-4 h-4 mr-2 text-yellow-500" />
+                   AR Try-On
+                </Button>
+             </DialogTrigger>
+             <DialogContent className="sm:max-w-md border-none bg-transparent shadow-none p-0">
+               <ARTryOn />
+             </DialogContent>
+           </Dialog>
         </div>
       </div>
 
