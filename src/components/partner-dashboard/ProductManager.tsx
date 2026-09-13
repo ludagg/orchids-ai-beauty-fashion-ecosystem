@@ -7,6 +7,25 @@ import { toast } from "sonner"
 import { Card, CardContent } from "@/components/ui/card"
 import { ProductForm } from "./product-form/ProductForm"
 import { ProductFormValues } from "./product-form/schema"
+import { Spinner } from "@/components/ui/spinner"
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 import {
   Tooltip,
   TooltipContent,
@@ -22,6 +41,8 @@ export function ProductManager({ salonId }: ProductManagerProps) {
   const [loading, setLoading] = useState(true)
   const [view, setView] = useState<"list" | "form">("list")
   const [editingProduct, setEditingProduct] = useState<ProductFormValues & { id: string } | undefined>(undefined)
+  const [productToDelete, setProductToDelete] = useState<any | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   useEffect(() => {
     if (salonId) {
@@ -43,9 +64,13 @@ export function ProductManager({ salonId }: ProductManagerProps) {
     }
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDeleteConfirm = async (e: React.MouseEvent) => {
+    if (!productToDelete) return;
+    e.preventDefault();
+    setIsDeleting(true);
+
     try {
-        const res = await fetch(`/api/products/${id}`, {
+        const res = await fetch(`/api/products/${productToDelete.id}`, {
             method: "DELETE"
         });
 
@@ -53,10 +78,13 @@ export function ProductManager({ salonId }: ProductManagerProps) {
              throw new Error("Failed to delete product");
         }
 
-        setProducts(products.filter(p => p.id !== id))
+        setProducts(products.filter(p => p.id !== productToDelete.id))
         toast.success("Product removed")
+        setProductToDelete(null)
     } catch (error) {
         toast.error("Could not delete product");
+    } finally {
+        setIsDeleting(false);
     }
   }
 
@@ -104,7 +132,12 @@ export function ProductManager({ salonId }: ProductManagerProps) {
   }
 
   if (loading) {
-      return <div className="text-center py-8 text-muted-foreground">Loading products...</div>
+      return (
+        <div className="flex flex-col items-center justify-center py-16 gap-3 text-muted-foreground">
+          <Spinner className="w-8 h-8 text-primary" />
+          <p className="text-sm font-medium">Loading products...</p>
+        </div>
+      )
   }
 
   return (
@@ -124,22 +157,23 @@ export function ProductManager({ salonId }: ProductManagerProps) {
           <Card key={product.id} className="relative group overflow-hidden border-muted hover:border-primary/50 transition-colors">
              {product.mainImageUrl ? (
                 <div className="h-48 w-full overflow-hidden bg-muted">
-                    <img src={product.mainImageUrl} alt={product.name} className="w-full h-full object-cover transition-transform group-hover:scale-105" />
+                    <img src={product.mainImageUrl} alt="" className="w-full h-full object-cover transition-transform group-hover:scale-105" />
                 </div>
             ) : (
                 <div className="h-48 w-full bg-secondary/20 flex items-center justify-center text-muted-foreground">
-                    <ShoppingBag className="w-8 h-8 opacity-20" />
+                    <ShoppingBag className="w-8 h-8 opacity-20" aria-hidden="true" />
                 </div>
             )}
 
             <CardContent className="p-5">
-              <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity bg-background/80 backdrop-blur-sm rounded-md p-1">
+              <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity bg-background/80 backdrop-blur-sm rounded-md p-1">
                  <Tooltip>
                     <TooltipTrigger asChild>
                         <Button
                             variant="ghost"
                             size="icon"
-                            className="h-8 w-8 hover:text-primary"
+                            className="h-8 w-8 hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                            aria-label={`Edit ${product.name}`}
                             onClick={() => handleEdit(product)}
                         >
                             <Edit className="w-4 h-4" />
@@ -152,8 +186,9 @@ export function ProductManager({ salonId }: ProductManagerProps) {
                         <Button
                             variant="ghost"
                             size="icon"
-                            className="h-8 w-8 hover:text-destructive"
-                            onClick={() => handleDelete(product.id)}
+                            className="h-8 w-8 hover:text-destructive focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                            aria-label={`Delete ${product.name}`}
+                            onClick={() => setProductToDelete(product)}
                         >
                             <Trash2 className="w-4 h-4" />
                         </Button>
@@ -195,16 +230,48 @@ export function ProductManager({ salonId }: ProductManagerProps) {
           </Card>
         ))}
          {products.length === 0 && (
-            <div className="col-span-full py-16 text-center text-muted-foreground bg-muted/10 rounded-lg border-2 border-dashed border-muted">
-                <ShoppingBag className="w-12 h-12 mx-auto mb-4 opacity-20" />
-                <h3 className="text-lg font-medium mb-2">No products yet</h3>
-                <p className="mb-6 max-w-sm mx-auto">Start building your inventory by adding your first product.</p>
-                <Button onClick={handleCreate} className="gap-2">
+            <div className="col-span-full">
+              <Empty className="border-2 border-dashed border-muted py-12">
+                <EmptyHeader>
+                  <EmptyMedia variant="icon">
+                    <ShoppingBag className="w-6 h-6 text-muted-foreground" aria-hidden="true" />
+                  </EmptyMedia>
+                  <EmptyTitle>No products yet</EmptyTitle>
+                  <EmptyDescription>
+                    Start building your inventory by adding your first product.
+                  </EmptyDescription>
+                </EmptyHeader>
+                <EmptyContent>
+                  <Button onClick={handleCreate} className="gap-2">
                     <Plus className="w-4 h-4" /> Add Product
-                </Button>
+                  </Button>
+                </EmptyContent>
+              </Empty>
             </div>
         )}
       </div>
+
+      <AlertDialog open={!!productToDelete} onOpenChange={(open) => !open && !isDeleting && setProductToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete product</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete &quot;{productToDelete?.name}&quot;? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteConfirm}
+              disabled={isDeleting}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {isDeleting ? <Spinner className="w-4 h-4 mr-2" /> : null}
+              {isDeleting ? "Deleting..." : "Delete"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }
