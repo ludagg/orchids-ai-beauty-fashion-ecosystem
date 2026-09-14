@@ -10,11 +10,11 @@ import {
   ArrowRight,
   Share2,
   Plus,
-  Loader2,
   Bell,
   BellOff,
   Link2,
 } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
@@ -135,7 +135,7 @@ export default function WishlistPage() {
   if (loading) {
       return (
         <div className="flex justify-center items-center h-screen">
-            <Loader2 className="w-10 h-10 animate-spin text-primary" />
+            <Spinner className="w-10 h-10 text-primary" />
         </div>
       )
   }
@@ -155,15 +155,17 @@ export default function WishlistPage() {
         {validItems.length > 0 && (
             <div className="flex items-center gap-3">
             <button
+              type="button"
               onClick={shareWishlist}
-              className="flex items-center gap-2 px-5 py-3 rounded-2xl border border-border text-sm font-bold hover:bg-muted transition-all"
+              className="flex items-center gap-2 px-5 py-3 rounded-2xl border border-border text-sm font-bold hover:bg-muted transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               aria-label="Share Wishlist"
             >
                 <Link2 className="w-4 h-4" />
                 Share List
             </button>
             <button
-              className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-foreground text-white text-sm font-bold hover:bg-[#333] transition-all shadow-xl shadow-foreground/10"
+              type="button"
+              className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-foreground text-white text-sm font-bold hover:bg-[#333] transition-all shadow-xl shadow-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               aria-label="Add all items to bag"
             >
                 <ShoppingBag className="w-4 h-4" />
@@ -200,7 +202,7 @@ export default function WishlistPage() {
                 <div className="relative aspect-[4/5] rounded-[32px] overflow-hidden mb-4 shadow-sm border border-border bg-muted">
                     <img
                     src={image || "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=500&fit=crop"}
-                    alt={title || "Item"}
+                    alt=""
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                     />
                     <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -210,8 +212,9 @@ export default function WishlistPage() {
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <button
+                            type="button"
                             onClick={() => removeItem(item.id)}
-                            className="p-3 rounded-2xl bg-card/90 backdrop-blur-md text-rose-500 shadow-lg hover:bg-rose-500 hover:text-white transition-all"
+                            className="p-3 rounded-2xl bg-card/90 backdrop-blur-md text-rose-500 shadow-lg hover:bg-rose-500 hover:text-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                             aria-label={`Remove ${title} from wishlist`}
                         >
                             <Trash2 className="w-4 h-4" />
@@ -224,8 +227,9 @@ export default function WishlistPage() {
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <button
+                            type="button"
                             onClick={() => toggleAlert(item.id)}
-                            className={`p-3 rounded-2xl bg-card/90 backdrop-blur-md shadow-lg transition-all ${
+                            className={`p-3 rounded-2xl bg-card/90 backdrop-blur-md shadow-lg transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
                               priceAlerts[item.id]
                                 ? "text-amber-500 hover:bg-amber-500 hover:text-white"
                                 : "text-foreground hover:bg-foreground hover:text-white"
@@ -244,7 +248,8 @@ export default function WishlistPage() {
 
                     {isProduct && (
                     <button
-                      className="absolute bottom-4 left-4 right-4 p-3 rounded-2xl bg-foreground text-white opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 shadow-2xl flex items-center justify-between cursor-pointer hover:bg-rose-600 w-[calc(100%-2rem)]"
+                      type="button"
+                      className="absolute bottom-4 left-4 right-4 p-3 rounded-2xl bg-foreground text-white opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:translate-y-0 focus-visible:opacity-100 focus-visible:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-all duration-300 shadow-2xl flex items-center justify-between cursor-pointer hover:bg-rose-600 w-[calc(100%-2rem)]"
                       aria-label={`Add ${title} to bag`}
                     >
                         <p className="text-xs font-bold uppercase tracking-widest pl-2 text-left">Add to Bag</p>
@@ -258,8 +263,12 @@ export default function WishlistPage() {
                     <Link href={link}>
                         <h3 className="font-semibold text-[15px] truncate text-foreground hover:text-rose-600 transition-colors cursor-pointer">{title}</h3>
                     </Link>
-                    <div className="flex items-center gap-1 text-xs font-bold bg-muted px-2 py-0.5 rounded-full">
-                        <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+                    <div
+                      role="img"
+                      aria-label={`Rating: ${rating} out of 5 stars`}
+                      className="flex items-center gap-1 text-xs font-bold bg-muted px-2 py-0.5 rounded-full"
+                    >
+                        <Star className="w-3 h-3 fill-amber-400 text-amber-400" aria-hidden="true" />
                         {rating}
                     </div>
                     </div>
