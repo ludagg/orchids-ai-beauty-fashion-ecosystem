@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { StoriesRail } from "@/components/videos/StoriesRail";
 import { MasonryVideoGrid } from "@/components/videos/MasonryVideoGrid";
 import CategoryPills from "@/components/videos-creations/CategoryPills";
+import { PopularSearches } from "@/components/videos/PopularSearches";
 import { useSession } from "@/lib/auth-client";
 import { Loader2 } from "lucide-react";
 import { useInView } from "react-intersection-observer";
@@ -112,6 +113,8 @@ export default function VideosCreationsPage() {
           selected={selectedCategory}
           onSelect={setSelectedCategory}
         />
+
+      <PopularSearches />
       </div>
 
       {/* Masonry Grid */}

@@ -17,19 +17,35 @@ const POPULAR_SEARCHES = [
   "Korean Beauty"
 ];
 
-export function PopularSearches() {
+interface PopularSearchesProps {
+  onSelectSearch?: (query: string) => void;
+}
+
+export function PopularSearches({ onSelectSearch }: PopularSearchesProps) {
   return (
-    <div className="w-full py-3 bg-background border-b border-border/40">
+    <div
+      role="region"
+      aria-label="Popular searches"
+      className="w-full py-3 bg-background border-b border-border/40"
+    >
       <ScrollArea className="w-full whitespace-nowrap">
-        <div className="flex w-max space-x-3 px-4 pb-2">
+        <div className="flex w-max space-x-3 px-4 pb-2" role="list">
           {POPULAR_SEARCHES.map((search) => (
-            <Badge
-              key={search}
-              variant="outline"
-              className="cursor-pointer hover:bg-primary hover:text-primary-foreground transition-all px-4 py-2 text-sm font-medium rounded-full border-muted-foreground/20 hover:border-primary bg-background shadow-sm hover:shadow-md"
-            >
-              #{search.replace(/\s+/g, '')}
-            </Badge>
+            <div key={search} role="listitem">
+              <button
+                type="button"
+                onClick={() => onSelectSearch?.(search)}
+                aria-label={`Search for ${search}`}
+                className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 active:scale-95 transition-all rounded-full"
+              >
+                <Badge
+                  variant="outline"
+                  className="cursor-pointer hover:bg-primary hover:text-primary-foreground transition-all px-4 py-2 text-sm font-medium rounded-full border-muted-foreground/20 hover:border-primary bg-background shadow-sm hover:shadow-md"
+                >
+                  #{search.replace(/\s+/g, '')}
+                </Badge>
+              </button>
+            </div>
           ))}
         </div>
         <ScrollBar orientation="horizontal" className="hidden" />
