@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Plus, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface Creator {
   id: string;
@@ -17,24 +18,44 @@ interface CreatorRailProps {
 
 export default function CreatorRail({ creators }: CreatorRailProps) {
   return (
-    <div className="overflow-x-auto no-scrollbar pb-4 -mx-4 px-4 sm:mx-0 sm:px-0">
+    <div
+      role="region"
+      aria-label="Creators and stories"
+      className="overflow-x-auto no-scrollbar pb-4 -mx-4 px-4 sm:mx-0 sm:px-0"
+    >
       <div className="flex gap-4 sm:gap-6 min-w-max">
         {/* Add Story / Create Button */}
-        <div className="flex flex-col items-center gap-2 group cursor-pointer">
-            <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-[24px] bg-secondary border-2 border-dashed border-border flex items-center justify-center group-hover:border-primary group-hover:text-primary transition-colors">
-                <Plus className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors" />
-            </div>
-            <span className="text-xs font-bold text-muted-foreground group-hover:text-foreground transition-colors">Create</span>
-        </div>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Link
+              href="/app/videos-creations"
+              className="flex flex-col items-center gap-2 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-[24px]"
+              aria-label="Create new story or video"
+            >
+              <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-[24px] bg-secondary border-2 border-dashed border-border flex items-center justify-center group-hover:border-primary group-hover:text-primary transition-colors">
+                <Plus className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors" aria-hidden="true" />
+              </div>
+              <span className="text-xs font-bold text-muted-foreground group-hover:text-foreground transition-colors">Create</span>
+            </Link>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Create new story or video</p>
+          </TooltipContent>
+        </Tooltip>
 
         {creators.map((creator) => (
-          <Link key={creator.id} href={`/app/videos-creations/creator/${creator.id}`} className="group">
+          <Link
+            key={creator.id}
+            href={`/app/videos-creations/creator/${creator.id}`}
+            className="group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-[24px]"
+            aria-label={`View ${creator.name}'s profile${creator.isLive ? ' (Live)' : ''}`}
+          >
             <div className="flex flex-col items-center gap-2">
               <div className={`relative w-16 h-16 sm:w-20 sm:h-20 rounded-[24px] p-[2px] ${creator.isLive ? 'bg-gradient-to-tr from-rose-500 to-violet-500 animate-spin-slow' : 'bg-transparent'}`}>
                 <div className={`w-full h-full rounded-[22px] overflow-hidden border-2 ${creator.isLive ? 'border-background' : 'border-border group-hover:border-primary'} transition-colors`}>
                   <img
                     src={creator.avatar}
-                    alt={creator.name}
+                    alt=""
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
                 </div>

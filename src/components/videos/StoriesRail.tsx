@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 
 interface Story {
@@ -104,18 +105,22 @@ export function StoriesRail() {
 
         {/* Create Story Button (Always first if logged in) */}
         {session?.user && (
-           <div className="flex flex-col items-center justify-center gap-1.5 cursor-pointer shrink-0 snap-start group relative">
+           <div className="flex flex-col items-center justify-center gap-1.5 shrink-0 snap-start group relative">
                 {hasMyStory ? (
-                  <>
+                  <button
+                    type="button"
+                    onClick={handleMyStoryClick}
+                    aria-label="View your story"
+                    className="flex flex-col items-center gap-1.5 cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-full"
+                  >
                     <div
-                        onClick={handleMyStoryClick}
                         className={cn(
-                        "relative w-[72px] h-[72px] rounded-full p-[2px] transition-transform active:scale-95 bg-gradient-to-tr from-yellow-400 to-red-600"
+                        "relative w-[72px] h-[72px] rounded-full p-[2px] transition-transform active:scale-95 bg-gradient-to-tr from-yellow-400 to-red-600 group-hover:scale-105"
                         )}
                     >
-                      <div className="w-full h-full rounded-full bg-background flex items-center justify-center overflow-hidden relative">
+                      <div className="w-full h-full rounded-full bg-background flex items-center justify-center overflow-hidden relative border-2 border-background">
                          <Avatar className="w-full h-full">
-                            <AvatarImage src={session.user.image || undefined} className="object-cover" />
+                            <AvatarImage src={session.user.image || undefined} alt="" className="object-cover" />
                             <AvatarFallback>{session.user.name?.charAt(0)}</AvatarFallback>
                          </Avatar>
                       </div>
@@ -123,13 +128,15 @@ export function StoriesRail() {
                     <span className="text-xs font-medium truncate w-[72px] text-center text-muted-foreground group-hover:text-foreground transition-colors">
                       Your Story
                     </span>
-                  </>
+                  </button>
                 ) : (
                   <button
+                      type="button"
                       onClick={() => setIsCreateOpen(true)}
-                      className="flex items-center gap-2 px-4 py-2 h-[50px] rounded-full border border-primary text-primary font-medium hover:bg-primary/5 transition-colors mb-5"
+                      aria-label="Create a story"
+                      className="flex items-center gap-2 px-4 py-2 h-[50px] rounded-full border border-primary text-primary font-medium hover:bg-primary/5 transition-colors mb-5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                   >
-                      <Plus className="w-5 h-5" />
+                      <Plus className="w-5 h-5" aria-hidden="true" />
                       Your Story
                   </button>
                 )}
@@ -141,8 +148,9 @@ export function StoriesRail() {
                     </DialogHeader>
                     <form onSubmit={handleCreateStory} className="space-y-4 pt-4">
                         <div className="space-y-2">
-                        <Label>Media URL (Image or Video)</Label>
+                        <Label htmlFor="story-media-url">Media URL (Image or Video)</Label>
                         <Input
+                            id="story-media-url"
                             placeholder="https://..."
                             value={newStoryUrl}
                             onChange={e => setNewStoryUrl(e.target.value)}
@@ -153,7 +161,14 @@ export function StoriesRail() {
                         </p>
                         </div>
                         <Button type="submit" disabled={isSubmitting} className="w-full">
-                        {isSubmitting ? "Posting..." : "Share to Story"}
+                        {isSubmitting ? (
+                          <div className="flex items-center gap-2">
+                            <Spinner className="w-4 h-4" />
+                            <span>Posting...</span>
+                          </div>
+                        ) : (
+                          "Share to Story"
+                        )}
                         </Button>
                     </form>
                     </DialogContent>
@@ -176,13 +191,15 @@ export function StoriesRail() {
             return (
                 <button
                     key={us.user.id}
+                    type="button"
                     onClick={() => setSelectedUserIndex(index)}
-                    className="flex flex-col items-center gap-1.5 cursor-pointer shrink-0 snap-start group"
+                    aria-label={`View story by ${us.user.name}`}
+                    className="flex flex-col items-center gap-1.5 cursor-pointer shrink-0 snap-start group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-full"
                 >
                     <div className="w-[72px] h-[72px] rounded-full p-[2px] bg-gradient-to-tr from-yellow-400 to-red-600 transition-transform group-hover:scale-105">
                         <div className="w-full h-full rounded-full border-2 border-background overflow-hidden relative">
                             <Avatar className="w-full h-full">
-                                <AvatarImage src={us.user.image || undefined} className="object-cover" />
+                                <AvatarImage src={us.user.image || undefined} alt="" className="object-cover" />
                                 <AvatarFallback>{us.user.name.charAt(0)}</AvatarFallback>
                             </Avatar>
                         </div>
