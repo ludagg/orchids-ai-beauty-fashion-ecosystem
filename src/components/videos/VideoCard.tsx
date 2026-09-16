@@ -72,20 +72,20 @@ export function VideoCard({ video }: VideoCardProps) {
     >
         <Link
             href={`/app/videos-creations/${video.id}`}
-            className="block relative aspect-[9/16] w-full bg-black"
+            className="block relative aspect-[9/16] w-full bg-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl"
             aria-label={`Watch video: ${video.title}`}
         >
             {/* Thumbnail */}
             {video.thumbnailUrl ? (
                 <Image
                     src={video.thumbnailUrl}
-                    alt={video.title}
+                    alt=""
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
             ) : (
                 <div className="w-full h-full flex items-center justify-center bg-gray-900 text-white/20">
-                    <Play className="w-12 h-12" />
+                    <Play className="w-12 h-12" aria-hidden="true" />
                 </div>
             )}
 
@@ -124,8 +124,9 @@ export function VideoCard({ video }: VideoCardProps) {
             <Tooltip>
                 <TooltipTrigger asChild>
                     <button
+                        type="button"
                         onClick={handleLike}
-                        className="flex items-center gap-1 hover:scale-110 transition-transform mb-0.5 pointer-events-auto"
+                        className="flex items-center gap-1 hover:scale-110 transition-transform mb-0.5 pointer-events-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 rounded-full px-1.5 py-1"
                         aria-label={`${isLiked ? "Unlike" : "Like"} video. ${likesCount} likes`}
                     >
                         <Heart
@@ -133,6 +134,7 @@ export function VideoCard({ video }: VideoCardProps) {
                                 "w-4 h-4 drop-shadow-sm",
                                 isLiked ? "fill-red-500 text-red-500" : "text-white"
                             )}
+                            aria-hidden="true"
                         />
                         <span className="text-xs font-medium">{likesCount}</span>
                     </button>
