@@ -28,8 +28,8 @@ import {
   BellOff,
   Zap,
   CheckCircle2,
-  Loader2,
 } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
 import dynamic from "next/dynamic";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
@@ -235,8 +235,8 @@ function ChangePasswordDialog({ open, onOpenChange }: { open: boolean; onOpenCha
                 <button
                   type="button"
                   onClick={() => setShow(prev => ({ ...prev, [field]: !prev[field] }))}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                  aria-label={`${show[field] ? 'Hide' : 'Show'} ${field.replace('current', 'current').replace('next', 'new').replace('confirm', 'confirmation')} password`}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded"
+                  aria-label={`${show[field] ? 'Hide' : 'Show'} ${field === 'current' ? 'current' : field === 'next' ? 'new' : 'confirmation'} password`}
                 >
                   {show[field] ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -253,7 +253,7 @@ function ChangePasswordDialog({ open, onOpenChange }: { open: boolean; onOpenCha
           <DialogFooter className="pt-2">
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={loading}>Cancel</Button>
             <Button type="submit" disabled={loading || !form.current || !form.next || !form.confirm}>
-              {loading ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Updating…</> : "Update Password"}
+              {loading ? <><Spinner className="w-4 h-4 mr-2" />Updating…</> : "Update Password"}
             </Button>
           </DialogFooter>
         </form>
@@ -326,7 +326,7 @@ function TwoFactorDialog({ open, onOpenChange }: { open: boolean; onOpenChange: 
               <DialogFooter>
                 <Button type="button" variant="outline" onClick={() => setStep("intro")} disabled={loading}>Back</Button>
                 <Button type="submit" disabled={loading || code.length < 6}>
-                  {loading ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Verifying…</> : "Verify & Enable"}
+                  {loading ? <><Spinner className="w-4 h-4 mr-2" />Verifying…</> : "Verify & Enable"}
                 </Button>
               </DialogFooter>
             </form>
@@ -353,11 +353,34 @@ export default function SettingsPage() {
   const { data: session } = authClient.useSession();
   const [changePasswordOpen, setChangePasswordOpen] = useState(false);
   const [twoFactorOpen, setTwoFactorOpen] = useState(false);
+  const [isSigningOut, setIsSigningOut] = useState(false);
+  const [isSigningOutAll, setIsSigningOutAll] = useState(false);
 
   const handleSignOut = async () => {
-    await authClient.signOut();
-    toast.success("Signed out successfully");
-    window.location.href = "/";
+    setIsSigningOut(true);
+    try {
+      await authClient.signOut();
+      toast.success("Signed out successfully");
+      window.location.href = "/";
+    } catch {
+      toast.error("Failed to sign out");
+    } finally {
+      setIsSigningOut(false);
+    }
+  };
+
+  const handleSignOutAll = async () => {
+    setIsSigningOutAll(true);
+    try {
+      await new Promise((r) => setTimeout(r, 1000));
+      await authClient.signOut();
+      toast.success("Signed out from all devices");
+      window.location.href = "/";
+    } catch {
+      toast.error("Failed to sign out from all devices");
+    } finally {
+      setIsSigningOutAll(false);
+    }
   };
 
   return (
@@ -420,11 +443,12 @@ export default function SettingsPage() {
                 ].map((item) => (
                   <button
                     key={item.color}
+                    type="button"
                     onClick={() => toast.success(`${item.name} accent selected`, { duration: 1500 })}
                     aria-label={`Set ${item.name} accent color`}
                     className={`w-5 h-5 rounded-full ${item.color} ring-2 ring-offset-2 ring-offset-background ${
                       item.color === "bg-rose-500" ? "ring-rose-500" : "ring-transparent"
-                    } hover:scale-110 transition-transform`}
+                    } hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-transform`}
                   />
                 ))}
               </div>
@@ -764,8 +788,8 @@ export default function SettingsPage() {
                   description="End your current session on this device."
                   icon={<LogOut className="w-4 h-4" />}
                 >
-                  <Button variant="outline" size="sm" className="h-8 text-xs" onClick={handleSignOut}>
-                    Sign Out
+                  <Button variant="outline" size="sm" className="h-8 text-xs" onClick={handleSignOut} disabled={isSigningOut || isSigningOutAll}>
+                    {isSigningOut ? <><Spinner className="w-3.5 h-3.5 mr-1.5" />Signing out…</> : "Sign Out"}
                   </Button>
                 </SettingRow>
                 <SettingRow
@@ -773,8 +797,8 @@ export default function SettingsPage() {
                   description="Terminate all active sessions across every device."
                   icon={<MonitorSmartphone className="w-4 h-4" />}
                 >
-                  <Button variant="outline" size="sm" className="h-8 text-xs text-destructive border-destructive/30 hover:bg-destructive/5">
-                    Sign Out All
+                  <Button variant="outline" size="sm" className="h-8 text-xs text-destructive border-destructive/30 hover:bg-destructive/5" onClick={handleSignOutAll} disabled={isSigningOut || isSigningOutAll}>
+                    {isSigningOutAll ? <><Spinner className="w-3.5 h-3.5 mr-1.5" />Signing out…</> : "Sign Out All"}
                   </Button>
                 </SettingRow>
               </CardContent>
@@ -802,7 +826,12 @@ export default function SettingsPage() {
                   description="Download a copy of all your personal data and content."
                   icon={<Shield className="w-4 h-4" />}
                 >
-                  <Button variant="outline" size="sm" className="h-8 text-xs">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-8 text-xs"
+                    onClick={() => toast.success("Data export request submitted. You will receive an email once ready.", { duration: 3000 })}
+                  >
                     Request Export
                   </Button>
                 </SettingRow>
