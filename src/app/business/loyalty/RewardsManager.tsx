@@ -10,8 +10,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from "@/components/ui/empty";
+import { Spinner } from "@/components/ui/spinner";
 import { toast } from "sonner";
-import { Plus, Trash2, Tag, Percent, ShoppingBag, Ticket } from "lucide-react";
+import { Plus, Trash2, Tag, Percent, ShoppingBag, Ticket, Gift } from "lucide-react";
 import { useForm } from "react-hook-form";
 
 interface Reward {
@@ -120,7 +123,7 @@ export function RewardsManager({ salonId, initialRewards }: RewardsManagerProps)
                                     <div className="space-y-2">
                                         <Label htmlFor="type">Type</Label>
                                         <Select onValueChange={(val) => setValue("type", val)} defaultValue="discount_percent">
-                                            <SelectTrigger>
+                                            <SelectTrigger id="type">
                                                 <SelectValue placeholder="Select type" />
                                             </SelectTrigger>
                                             <SelectContent>
@@ -143,7 +146,10 @@ export function RewardsManager({ salonId, initialRewards }: RewardsManagerProps)
                                     </div>
                                 </div>
                                 <DialogFooter>
-                                    <Button type="submit" disabled={isSubmitting}>Create Reward</Button>
+                                    <Button type="submit" disabled={isSubmitting}>
+                                        {isSubmitting && <Spinner className="mr-2 h-4 w-4" />}
+                                        Create Reward
+                                    </Button>
                                 </DialogFooter>
                             </form>
                         </DialogContent>
@@ -163,8 +169,18 @@ export function RewardsManager({ salonId, initialRewards }: RewardsManagerProps)
                         <TableBody>
                             {rewards.length === 0 ? (
                                 <TableRow>
-                                    <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
-                                        No rewards created yet.
+                                    <TableCell colSpan={5} className="p-0 border-none">
+                                        <Empty className="my-8">
+                                            <EmptyHeader>
+                                                <EmptyMedia variant="icon">
+                                                    <Gift className="h-6 w-6 text-muted-foreground" />
+                                                </EmptyMedia>
+                                                <EmptyTitle>No rewards created yet</EmptyTitle>
+                                                <EmptyDescription>
+                                                    Offer special discounts and freebies to reward your loyal customers.
+                                                </EmptyDescription>
+                                            </EmptyHeader>
+                                        </Empty>
                                     </TableCell>
                                 </TableRow>
                             ) : (
@@ -182,9 +198,20 @@ export function RewardsManager({ salonId, initialRewards }: RewardsManagerProps)
                                         <TableCell>{reward.cost} pts</TableCell>
                                         <TableCell>{reward.quantity === null ? '∞' : reward.quantity}</TableCell>
                                         <TableCell className="text-right">
-                                            <Button variant="ghost" size="icon" onClick={() => handleDelete(reward.id)}>
-                                                <Trash2 className="h-4 w-4 text-red-500" />
-                                            </Button>
+                                            <Tooltip>
+                                                <TooltipTrigger asChild>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="icon"
+                                                        aria-label={`Delete reward ${reward.name}`}
+                                                        className="focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                                                        onClick={() => handleDelete(reward.id)}
+                                                    >
+                                                        <Trash2 className="h-4 w-4 text-red-500" />
+                                                    </Button>
+                                                </TooltipTrigger>
+                                                <TooltipContent>Delete reward</TooltipContent>
+                                            </Tooltip>
                                         </TableCell>
                                     </TableRow>
                                 ))
