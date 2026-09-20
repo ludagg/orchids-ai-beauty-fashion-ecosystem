@@ -20,7 +20,7 @@ export default function CartIcon() {
       <TooltipTrigger asChild>
         <Link
           href="/app/cart"
-          className="p-2 relative rounded-full hover:bg-secondary transition-colors"
+          className="p-2 relative rounded-full hover:bg-secondary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           aria-label={itemCount > 0 ? `Shopping Cart, ${itemCount} items` : "Shopping Cart"}
         >
           <ShoppingCart className={`w-5 h-5 ${isActive ? 'text-rose-500 fill-rose-500' : 'text-muted-foreground'}`} />
