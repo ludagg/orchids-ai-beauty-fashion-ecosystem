@@ -39,6 +39,7 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith("/api") || // API endpoints are public (auth handled in route handlers)
     pathname.startsWith("/_next") || // Next.js internals
     pathname.match(/\.(ico|png|jpg|jpeg|svg|css|js|txt|xml)$/) || // Static files
+    pathname.startsWith("/test-ar-tryon") ||
     // Allow public discovery
     pathname.startsWith("/app/search") ||
     pathname.startsWith("/app/salons") ||

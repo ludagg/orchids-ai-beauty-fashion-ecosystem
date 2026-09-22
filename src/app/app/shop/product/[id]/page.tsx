@@ -3,11 +3,12 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { Star, Heart, Share2, MapPin, ChevronRight, Check, ShieldCheck, Ruler } from 'lucide-react';
+import { Star, Heart, Share2, MapPin, ChevronRight, Check, ShieldCheck, Ruler, Camera } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ProductCard } from '@/components/shop/ProductCard';
+import { ARTryOn } from '@/components/shop/ai/ARTryOn';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import {
@@ -214,6 +215,35 @@ export default function ProductDetailPage() {
                 <span className="text-sm text-muted-foreground">({product.reviewCount || 0} reviews)</span>
              </div>
         </div>
+
+        {/* AR Try-On MVP */}
+        <Dialog>
+            <DialogTrigger asChild>
+                <div className="flex items-center justify-between rounded-lg border border-blue-500/30 bg-blue-500/10 p-3 cursor-pointer mb-4">
+                    <div className="flex items-center gap-3">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500 text-white">
+                            <Camera className="h-4 w-4" />
+                        </div>
+                        <div>
+                            <div className="text-sm font-semibold text-blue-700 dark:text-blue-400">
+                                Virtual Try-On (AR)
+                            </div>
+                            <div className="text-xs text-muted-foreground">See how it looks on you</div>
+                        </div>
+                    </div>
+                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                </div>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                    <DialogTitle>Virtual Try-On</DialogTitle>
+                    <DialogDescription>
+                        Try this item in real-time using your camera.
+                    </DialogDescription>
+                </DialogHeader>
+                <ARTryOn />
+            </DialogContent>
+        </Dialog>
 
         {/* AI Fit Check */}
         <Dialog>
