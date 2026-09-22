@@ -131,16 +131,20 @@ export default function FeaturesSection() {
                     className={`absolute w-[320px] sm:w-[380px] md:w-[440px] cursor-pointer ${isHidden ? "pointer-events-none" : ""}`}
                     style={{ transformStyle: "preserve-3d" }}
                   >
-                    <div
-            className={`relative rounded-3xl overflow-hidden bg-card shadow-2xl transition-shadow duration-500 ${isActive ? "shadow-black/20 dark:shadow-white/5" : "shadow-foreground/10"}`}
+                    <button
+                      type="button"
+                      onClick={() => !isActive && setActiveFeature(i)}
+                      disabled={isActive}
+                      aria-label={isActive ? `${feature.title} feature active` : `View ${feature.title} feature`}
+                      className={`w-full text-left rounded-3xl overflow-hidden bg-card shadow-2xl transition-all duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${isActive ? "shadow-black/20 dark:shadow-white/5 cursor-default" : "shadow-foreground/10 hover:opacity-95"}`}
                       style={{
-                      border: isActive ? `2px solid ${feature.color}30` : "1px solid var(--border)",
+                        border: isActive ? `2px solid ${feature.color}30` : "1px solid var(--border)",
                       }}
                     >
                       <div className="relative aspect-[4/5] overflow-hidden">
                         <Image
                           src={feature.image}
-                          alt={feature.title}
+                          alt=""
                           fill
                           className="object-cover"
                           sizes="(max-width: 768px) 100vw, 33vw"
@@ -152,7 +156,7 @@ export default function FeaturesSection() {
                             className="w-12 h-12 rounded-2xl flex items-center justify-center backdrop-blur-xl"
                             style={{ backgroundColor: `${feature.color}90` }}
                           >
-                            <Icon className="w-6 h-6 text-white" />
+                            <Icon className="w-6 h-6 text-white" aria-hidden="true" />
                           </div>
                         </div>
 
@@ -169,20 +173,20 @@ export default function FeaturesSection() {
                               {feature.description}
                             </p>
                             {isActive && (
-                              <motion.button
+                              <motion.span
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.2 }}
                                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-black text-sm font-medium hover:bg-white/90 transition-colors group/btn"
                               >
                                 Explore
-                                <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
-                              </motion.button>
+                                <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" aria-hidden="true" />
+                              </motion.span>
                             )}
                           </motion.div>
                         </div>
                       </div>
-                    </div>
+                    </button>
                   </motion.div>
                 );
               })}
@@ -193,8 +197,11 @@ export default function FeaturesSection() {
             {features.map((feature, i) => (
               <button
                 key={feature.title}
+                type="button"
                 onClick={() => setActiveFeature(i)}
-                className={`relative h-2 rounded-full transition-all duration-500 ${
+                aria-pressed={i === activeFeature}
+                aria-label={`Go to slide ${i + 1}: ${feature.title}`}
+                className={`relative h-2 rounded-full transition-all duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
                   i === activeFeature ? "w-10" : "w-2 hover:w-4"
                 }`}
                 style={{
@@ -207,21 +214,25 @@ export default function FeaturesSection() {
 
           <div className="flex items-center justify-center gap-8 mt-8">
             <button
+              type="button"
               onClick={() => setActiveFeature((prev) => (prev - 1 + features.length) % features.length)}
-              className="w-12 h-12 rounded-full border border-border flex items-center justify-center hover:bg-secondary transition-colors"
+              aria-label="Previous feature"
+              className="w-12 h-12 rounded-full border border-border flex items-center justify-center hover:bg-secondary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             >
-              <ChevronRight className="w-5 h-5 rotate-180" />
+              <ChevronRight className="w-5 h-5 rotate-180" aria-hidden="true" />
             </button>
             <div className="text-center">
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-muted-foreground" aria-live="polite">
                 <span className="font-semibold text-foreground">{activeFeature + 1}</span> / {features.length}
               </p>
             </div>
             <button
+              type="button"
               onClick={() => setActiveFeature((prev) => (prev + 1) % features.length)}
-              className="w-12 h-12 rounded-full border border-border flex items-center justify-center hover:bg-secondary transition-colors"
+              aria-label="Next feature"
+              className="w-12 h-12 rounded-full border border-border flex items-center justify-center hover:bg-secondary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             >
-              <ChevronRight className="w-5 h-5" />
+              <ChevronRight className="w-5 h-5" aria-hidden="true" />
             </button>
           </div>
         </div>
