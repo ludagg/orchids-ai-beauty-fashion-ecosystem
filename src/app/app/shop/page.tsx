@@ -8,6 +8,8 @@ import { ProductCard } from '@/components/shop/ProductCard';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useInView } from 'react-intersection-observer';
 import { FilterSheet, FilterState, defaultFilters } from '@/components/shop/FilterSheet';
+import { CompareDialog } from '@/components/shop/ai/CompareDialog';
+import { Button } from '@/components/ui/button';
 
 export default function ShopPage() {
   const router = useRouter();
@@ -27,6 +29,18 @@ export default function ShopPage() {
   const [hasMore, setHasMore] = useState(true);
   const { ref, inView } = useInView();
   const LIMIT = 20;
+
+  const [compareItems, setCompareItems] = useState<any[]>([]);
+  const [isCompareOpen, setIsCompareOpen] = useState(false);
+
+  const handleCompareSelect = (product: any) => {
+      setCompareItems(prev => {
+          const exists = prev.find(p => p.id === product.id);
+          if (exists) return prev.filter(p => p.id !== product.id);
+          if (prev.length >= 4) return prev; // max 4
+          return [...prev, product];
+      });
+  };
 
   // Determine if we are in "Filtering Mode" (excluding default sort/filters)
   // "Filtering Mode" means we HIDE the curated sections (Hero, Trending, etc)
@@ -150,6 +164,26 @@ export default function ShopPage() {
 
       <main className="container mx-auto px-4 py-6 space-y-8">
 
+        {/* COMPARE FLOATING BUTTON */}
+        {compareItems.length > 0 && (
+            <div className="fixed bottom-24 right-4 z-50">
+                <Button
+                    onClick={() => setIsCompareOpen(true)}
+                    className="bg-yellow-500 text-black hover:bg-yellow-600 shadow-lg rounded-full px-6 flex items-center gap-2"
+                >
+                    <span className="font-bold">VS</span>
+                    Compare ({compareItems.length})
+                </Button>
+            </div>
+        )}
+
+        <CompareDialog
+            open={isCompareOpen}
+            onOpenChange={setIsCompareOpen}
+            items={compareItems}
+            onRemoveItem={(id) => setCompareItems(prev => prev.filter(p => p.id !== id))}
+        />
+
         {/* SHOW CURATED SECTIONS ONLY IF NOT FILTERING */}
         {!isFiltering && !loadingHome && homeData && (
           <>
@@ -159,7 +193,7 @@ export default function ShopPage() {
                 <div className="flex overflow-x-auto gap-4 pb-4 -mx-4 px-4 snap-x no-scrollbar">
                   {homeData.hero.map((product: any) => (
                     <div key={product.id} className="min-w-[85vw] md:min-w-[400px] snap-center">
-                       <ProductCard product={product} />
+                       <ProductCard product={product} onCompareSelect={handleCompareSelect} isCompareSelected={compareItems.some(p => p.id === product.id)} />
                     </div>
                   ))}
                 </div>
@@ -172,7 +206,7 @@ export default function ShopPage() {
                     <h2 className="text-xl font-bold mb-4">Recommended for You</h2>
                      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
                         {homeData.recommended.map((product: any) => (
-                            <ProductCard key={product.id} product={product} />
+                            <ProductCard key={product.id} product={product} onCompareSelect={handleCompareSelect} isCompareSelected={compareItems.some(p => p.id === product.id)} />
                         ))}
                     </div>
                 </section>
@@ -185,7 +219,7 @@ export default function ShopPage() {
                 <div className="flex overflow-x-auto gap-4 pb-4 -mx-4 px-4 snap-x no-scrollbar">
                   {homeData.trending.map((product: any) => (
                     <div key={product.id} className="min-w-[160px] w-[160px] snap-center">
-                       <ProductCard product={product} />
+                       <ProductCard product={product} onCompareSelect={handleCompareSelect} isCompareSelected={compareItems.some(p => p.id === product.id)} />
                     </div>
                   ))}
                 </div>
@@ -198,7 +232,7 @@ export default function ShopPage() {
                     <h2 className="text-xl font-bold mb-4">New Arrivals</h2>
                      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
                         {homeData.newArrivals.map((product: any) => (
-                            <ProductCard key={product.id} product={product} />
+                            <ProductCard key={product.id} product={product} onCompareSelect={handleCompareSelect} isCompareSelected={compareItems.some(p => p.id === product.id)} />
                         ))}
                     </div>
                 </section>
@@ -236,7 +270,7 @@ export default function ShopPage() {
 
              <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
                 {searchResults.map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <ProductCard key={product.id} product={product} onCompareSelect={handleCompareSelect} isCompareSelected={compareItems.some(p => p.id === product.id)} />
                 ))}
             </div>
 
