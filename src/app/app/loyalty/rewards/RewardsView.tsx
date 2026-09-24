@@ -4,6 +4,8 @@ import { RewardCard } from "@/components/loyalty/RewardCard";
 import { useState } from "react";
 import { toast } from "sonner";
 import { GamificationPopup } from "@/components/loyalty/GamificationPopup";
+import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from "@/components/ui/empty";
+import { Gift } from "lucide-react";
 
 interface Reward {
   id: string;
@@ -68,7 +70,10 @@ export function RewardsView({ initialRewards, userPoints }: RewardsViewProps) {
     <>
       <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold">Rewards Shop</h2>
-          <div className="bg-primary/10 px-4 py-2 rounded-full font-bold text-primary">
+          <div
+              className="bg-primary/10 px-4 py-2 rounded-full font-bold text-primary"
+              aria-label={`Points balance: ${points} points`}
+          >
               Balance: {points} pts
           </div>
       </div>
@@ -84,9 +89,17 @@ export function RewardsView({ initialRewards, userPoints }: RewardsViewProps) {
           />
         ))}
         {rewards.length === 0 && (
-            <p className="col-span-full text-center text-muted-foreground py-12">
-                No rewards available at the moment.
-            </p>
+            <div className="col-span-full py-12">
+                <Empty>
+                    <EmptyHeader>
+                        <EmptyMedia variant="icon">
+                            <Gift className="size-6 text-muted-foreground" aria-hidden="true" />
+                        </EmptyMedia>
+                        <EmptyTitle>No rewards available</EmptyTitle>
+                        <EmptyDescription>Check back later for new reward offers and discounts.</EmptyDescription>
+                    </EmptyHeader>
+                </Empty>
+            </div>
         )}
       </div>
 
