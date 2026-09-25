@@ -1,0 +1,25 @@
+
+> app@0.1.0 start /app
+> next start
+
+   ▲ Next.js 15.5.12
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.0.2:3000
+
+ ✓ Starting...
+ ✓ Ready in 909ms
+[2m2026-09-25T16:05:04.408Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Base URL could not be determined. Please set a valid base URL using the baseURL config option or the BETTER_AUTH_BASE_URL environment variable. Without this, callbacks and redirects may not work correctly.
+[2m2026-09-25T16:05:04.408Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx @better-auth/cli secret` or `openssl rand -base64 32`.
+[2m2026-09-25T16:05:04.409Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+[2m2026-09-25T16:05:04.410Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider github is missing clientId or clientSecret
+[2m2026-09-25T16:05:04.410Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
+STRIPE_SECRET_KEY is missing. Stripe functionality will be disabled.
+{"timestamp":"2026-09-25T16:05:17.551Z","method":"GET","path":"/contact","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-09-25T16:05:17.879Z","method":"GET","path":"/","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-09-25T16:05:17.889Z","method":"GET","path":"/business","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-09-25T16:05:17.895Z","method":"GET","path":"/auth","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-09-25T16:05:17.904Z","method":"GET","path":"/app/marketplace","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-09-25T16:05:17.913Z","method":"GET","path":"/about","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-09-25T16:05:17.922Z","method":"GET","path":"/auth/sign-in","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-09-25T16:05:17.961Z","method":"GET","path":"/help","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}
+{"timestamp":"2026-09-25T16:05:17.977Z","method":"GET","path":"/privacy","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36"}

@@ -39,7 +39,16 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith("/api") || // API endpoints are public (auth handled in route handlers)
     pathname.startsWith("/_next") || // Next.js internals
     pathname.match(/\.(ico|png|jpg|jpeg|svg|css|js|txt|xml)$/) || // Static files
-    // Allow public discovery
+    // Allow public discovery and company pages
+    pathname.startsWith("/about") ||
+    pathname.startsWith("/contact") ||
+    pathname.startsWith("/help") ||
+    pathname.startsWith("/blog") ||
+    pathname.startsWith("/careers") ||
+    pathname.startsWith("/press") ||
+    pathname.startsWith("/privacy") ||
+    pathname.startsWith("/terms") ||
+    pathname.startsWith("/cookies") ||
     pathname.startsWith("/app/search") ||
     pathname.startsWith("/app/salons") ||
     pathname.startsWith("/app/marketplace") ||
