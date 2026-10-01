@@ -44,7 +44,8 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith("/app/salons") ||
     pathname.startsWith("/app/marketplace") ||
     pathname.startsWith("/app/ai-stylist") ||
-    pathname.startsWith("/app/videos-creations");
+    pathname.startsWith("/app/videos-creations") ||
+    pathname.startsWith("/test-ar");
 
   if (isPublicPath) {
     const response = NextResponse.next();
