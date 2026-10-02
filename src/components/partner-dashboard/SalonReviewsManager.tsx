@@ -5,6 +5,14 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Star, MessageSquare } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
+import { Spinner } from "@/components/ui/spinner";
+import {
+  Empty,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+  EmptyDescription,
+} from "@/components/ui/empty";
 
 interface Review {
   id: string;
@@ -44,7 +52,13 @@ export function SalonReviewsManager({ salonId }: SalonReviewsManagerProps) {
     fetchReviews();
   }, [salonId]);
 
-  if (loading) return <div>Loading reviews...</div>;
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <Spinner className="w-8 h-8 text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -53,43 +67,62 @@ export function SalonReviewsManager({ salonId }: SalonReviewsManagerProps) {
         <span className="text-sm text-muted-foreground">{reviews.length} reviews</span>
       </div>
 
-      <div className="space-y-4">
-        {reviews.map((review) => (
-          <div key={review.id} className="flex gap-4 p-4 border rounded-lg bg-card shadow-sm">
-            <Avatar className="w-10 h-10">
-              <AvatarImage src={review.user.image || ""} />
-              <AvatarFallback>{review.user.name.substring(0, 2).toUpperCase()}</AvatarFallback>
-            </Avatar>
-            <div className="flex-1 space-y-1">
-              <div className="flex items-center justify-between">
-                <span className="font-semibold">{review.user.name}</span>
-                <span className="text-xs text-muted-foreground">
+      {reviews.length > 0 ? (
+        <div className="space-y-4" role="list">
+          {reviews.map((review) => (
+            <div
+              key={review.id}
+              role="listitem"
+              className="flex gap-4 p-4 border rounded-lg bg-card shadow-sm"
+            >
+              <Avatar className="w-10 h-10">
+                <AvatarImage src={review.user.image || ""} alt="" />
+                <AvatarFallback>
+                  {review.user.name.substring(0, 2).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+              <div className="flex-1 space-y-1">
+                <div className="flex items-center justify-between">
+                  <span className="font-semibold">{review.user.name}</span>
+                  <span className="text-xs text-muted-foreground">
                     {format(new Date(review.createdAt), "PPP")}
-                </span>
+                  </span>
+                </div>
+                <div
+                  className="flex items-center text-yellow-500 mb-1"
+                  role="img"
+                  aria-label={`${review.rating} out of 5 stars`}
+                >
+                  {[...Array(5)].map((_, i) => (
+                    <Star
+                      key={i}
+                      aria-hidden="true"
+                      className={`w-4 h-4 ${
+                        i < review.rating
+                          ? "fill-current"
+                          : "text-muted stroke-muted-foreground"
+                      }`}
+                    />
+                  ))}
+                </div>
+                {review.comment && <p className="text-sm text-foreground">{review.comment}</p>}
               </div>
-              <div className="flex items-center text-yellow-500 mb-1">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className={`w-4 h-4 ${i < review.rating ? "fill-current" : "text-muted stroke-muted-foreground"}`}
-                  />
-                ))}
-              </div>
-              <p className="text-sm text-foreground">{review.comment}</p>
             </div>
-          </div>
-        ))}
-
-        {reviews.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-12 text-center border-2 border-dashed rounded-lg text-muted-foreground">
-            <MessageSquare className="w-10 h-10 mb-4 opacity-50" />
-            <h3 className="text-lg font-medium">No reviews yet</h3>
-            <p className="text-sm max-w-xs mt-2">
+          ))}
+        </div>
+      ) : (
+        <Empty>
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <MessageSquare className="w-6 h-6 text-muted-foreground" aria-hidden="true" />
+            </EmptyMedia>
+            <EmptyTitle>No reviews yet</EmptyTitle>
+            <EmptyDescription>
               Reviews from your customers will appear here.
-            </p>
-          </div>
-        )}
-      </div>
+            </EmptyDescription>
+          </EmptyHeader>
+        </Empty>
+      )}
     </div>
   );
 }
