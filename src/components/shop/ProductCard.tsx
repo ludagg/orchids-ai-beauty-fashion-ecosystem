@@ -26,9 +26,10 @@ interface Product {
 interface ProductCardProps {
   product: Product;
   view?: 'grid' | 'list';
+  compareState?: { selected: boolean; disabled: boolean; onToggle: () => void };
 }
 
-export function ProductCard({ product, view = 'grid' }: ProductCardProps) {
+export function ProductCard({ product, view = 'grid', compareState }: ProductCardProps) {
   const isSale = product.price < product.originalPrice;
   const isNew = product.createdAt && new Date(product.createdAt) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
   const isLowStock = product.totalStock > 0 && product.totalStock <= 5;
@@ -105,6 +106,20 @@ export function ProductCard({ product, view = 'grid' }: ProductCardProps) {
             {!isOutOfStock && isSale && <Badge variant="secondary" className="bg-red-500 text-white">Sale</Badge>}
             {!isOutOfStock && isNew && <Badge className="bg-blue-500 text-white">New</Badge>}
           </div>
+
+          {/* Compare Checkbox */}
+          {compareState && (
+            <div className="absolute top-2 left-2 z-10 pt-20" onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}>
+               <input
+                 type="checkbox"
+                 checked={compareState.selected}
+                 onChange={() => compareState.onToggle()}
+                 className="w-5 h-5 rounded border-gray-300 bg-white/50 focus:ring-violet-500 cursor-pointer shadow-sm"
+                 disabled={compareState.disabled}
+                 title="Compare product"
+               />
+            </div>
+          )}
 
           {/* Wishlist Button (absolute top right) */}
           <Button

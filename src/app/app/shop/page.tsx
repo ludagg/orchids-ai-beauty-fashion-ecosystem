@@ -8,6 +8,7 @@ import { ProductCard } from '@/components/shop/ProductCard';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useInView } from 'react-intersection-observer';
 import { FilterSheet, FilterState, defaultFilters } from '@/components/shop/FilterSheet';
+import { CompareDialog } from '@/components/shop/ai/CompareDialog';
 
 export default function ShopPage() {
   const router = useRouter();
@@ -18,6 +19,7 @@ export default function ShopPage() {
   // Filter state
   const [filters, setFilters] = useState<FilterState>(defaultFilters);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [compareIds, setCompareIds] = useState<string[]>([]);
 
   const [homeData, setHomeData] = useState<any>(null);
   const [searchResults, setSearchResults] = useState<any[]>([]);
@@ -118,6 +120,14 @@ export default function ShopPage() {
     { label: 'Fragrances', value: 'Fragrances' },
     { label: 'Wellness', value: 'Wellness' },
   ];
+
+  const toggleCompare = (id: string) => {
+    setCompareIds(prev => {
+      if (prev.includes(id)) return prev.filter(x => x !== id);
+      if (prev.length >= 4) return prev;
+      return [...prev, id];
+    });
+  };
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -234,9 +244,23 @@ export default function ShopPage() {
                 </div>
              )}
 
+             {compareIds.length > 0 && (
+                <div className="sticky top-[120px] z-30 bg-background/95 p-2 rounded-xl border shadow-sm flex items-center justify-between">
+                  <CompareDialog productIds={compareIds} />
+                </div>
+             )}
+
              <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
                 {searchResults.map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  compareState={{
+                    selected: compareIds.includes(product.id),
+                    disabled: !compareIds.includes(product.id) && compareIds.length >= 4,
+                    onToggle: () => toggleCompare(product.id)
+                  }}
+                />
                 ))}
             </div>
 
