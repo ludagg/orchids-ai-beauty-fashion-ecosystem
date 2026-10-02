@@ -5,18 +5,10 @@ import {
   Calendar,
   Clock,
   MapPin,
-  ChevronRight,
-  Star,
-  MoreVertical,
   MessageCircle,
-  Phone,
   Navigation,
   XCircle,
   CheckCircle2,
-  Package,
-  Truck,
-  RotateCcw,
-  Loader2,
   ShoppingBag,
   PenSquare
 } from "lucide-react";
@@ -27,6 +19,15 @@ import { format } from "date-fns";
 import { toast } from "sonner";
 import { ReviewForm } from "@/components/reviews/ReviewForm";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Spinner } from "@/components/ui/spinner";
+import {
+  Empty,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+  EmptyDescription,
+  EmptyContent
+} from "@/components/ui/empty";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -186,12 +187,15 @@ export default function BookingsAndOrdersPage() {
         </div>
 
         {/* Tab Switcher */}
-        <div className="flex bg-muted p-1.5 rounded-[20px] w-fit border border-border">
+        <div role="tablist" aria-label="Reservations and orders view" className="flex bg-muted p-1.5 rounded-[20px] w-fit border border-border">
           {["Bookings", "Orders"].map((tab) => (
             <button
               key={tab}
+              type="button"
+              role="tab"
+              aria-selected={activeTab === tab}
               onClick={() => { setActiveTab(tab); setStatusFilter("All"); }}
-              className={`px-8 py-3 rounded-2xl text-sm font-bold transition-all ${
+              className={`px-8 py-3 rounded-2xl text-sm font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
                 activeTab === tab ? "bg-card text-foreground shadow-lg shadow-foreground/5" : "text-muted-foreground hover:text-foreground"
               }`}
             >
@@ -202,14 +206,16 @@ export default function BookingsAndOrdersPage() {
 
         {/* Booking Status Filters */}
         {activeTab === "Bookings" && !loading && (
-          <div className="flex flex-wrap gap-2">
+          <div role="region" aria-label="Filter bookings by status" className="flex flex-wrap gap-2">
             {BOOKING_STATUSES.map((status) => {
               const count = status === "All" ? bookings.length : bookings.filter(b => b.status.toLowerCase() === status.toLowerCase()).length;
               return (
                 <button
                   key={status}
+                  type="button"
+                  aria-pressed={statusFilter === status}
                   onClick={() => setStatusFilter(status)}
-                  className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all border ${
+                  className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
                     statusFilter === status
                       ? "bg-foreground text-background border-foreground"
                       : "bg-transparent text-muted-foreground border-border hover:border-foreground hover:text-foreground"
@@ -224,17 +230,43 @@ export default function BookingsAndOrdersPage() {
 
         {loading ? (
              <div className="flex justify-center py-20">
-                <Loader2 className="w-10 h-10 animate-spin text-primary" />
+                <Spinner className="size-10 text-primary" />
              </div>
         ) : activeTab === "Bookings" ? (
           filteredBookings.length === 0 ? (
-            <div className="text-center py-20 text-muted-foreground">
-              <p>{statusFilter === "All" ? "No bookings found." : `No ${statusFilter.toLowerCase()} bookings.`}</p>
-              {statusFilter !== "All"
-                ? <button onClick={() => setStatusFilter("All")} className="text-primary hover:underline mt-2 inline-block">View all bookings</button>
-                : <Link href="/app/salons" className="text-primary hover:underline mt-2 inline-block">Book an appointment</Link>
-              }
-            </div>
+            <Empty className="py-20 border-border bg-card/50 rounded-[32px]">
+              <EmptyHeader>
+                <EmptyMedia variant="icon">
+                  <Calendar className="size-6 text-muted-foreground" />
+                </EmptyMedia>
+                <EmptyTitle className="text-xl font-bold">
+                  {statusFilter === "All" ? "No bookings found" : `No ${statusFilter.toLowerCase()} bookings`}
+                </EmptyTitle>
+                <EmptyDescription className="text-muted-foreground">
+                  {statusFilter !== "All"
+                    ? "Try changing your status filter or view all bookings."
+                    : "You haven't made any salon appointments yet."}
+                </EmptyDescription>
+              </EmptyHeader>
+              <EmptyContent>
+                {statusFilter !== "All" ? (
+                  <button
+                    type="button"
+                    onClick={() => setStatusFilter("All")}
+                    className="px-6 py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-bold hover:opacity-90 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  >
+                    View all bookings
+                  </button>
+                ) : (
+                  <Link
+                    href="/app/salons"
+                    className="px-6 py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-bold hover:opacity-90 transition-all inline-flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  >
+                    Book an appointment
+                  </Link>
+                )}
+              </EmptyContent>
+            </Empty>
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {filteredBookings.map((booking, i) => (
@@ -251,7 +283,7 @@ export default function BookingsAndOrdersPage() {
                     <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-[32px] overflow-hidden bg-muted flex-shrink-0">
                       <img
                         src={booking.salon.image || "https://images.unsplash.com/photo-1600948836101-f9ffda59d250?w=200&h=200&fit=crop"}
-                        alt={booking.salon.name}
+                        alt=""
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                       />
                     </div>
@@ -298,7 +330,11 @@ export default function BookingsAndOrdersPage() {
                   </div>
 
                   <div className="mt-8 flex flex-wrap items-center gap-3">
-                    <button className="flex-1 h-14 rounded-2xl bg-primary text-primary-foreground font-bold text-sm hover:opacity-90 transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary/10">
+                    <button
+                      type="button"
+                      aria-label={`Get directions to ${booking.salon.name}`}
+                      className="flex-1 h-14 rounded-2xl bg-primary text-primary-foreground font-bold text-sm hover:opacity-90 transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    >
                       <Navigation className="w-4 h-4" />
                       Get Directions
                     </button>
@@ -306,12 +342,13 @@ export default function BookingsAndOrdersPage() {
                     <Tooltip>
                         <TooltipTrigger asChild>
                             <button
+                                type="button"
                                 onClick={() => handleMessage(booking.salonId, booking.id)}
                                 disabled={messageLoadingId === booking.id}
-                                className="h-14 w-14 rounded-2xl border border-border flex items-center justify-center text-foreground hover:bg-muted transition-all"
-                                aria-label="Message Salon"
+                                className="h-14 w-14 rounded-2xl border border-border flex items-center justify-center text-foreground hover:bg-muted transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                                aria-label={`Message ${booking.salon.name}`}
                             >
-                                {messageLoadingId === booking.id ? <Loader2 className="w-5 h-5 animate-spin" /> : <MessageCircle className="w-5 h-5" />}
+                                {messageLoadingId === booking.id ? <Spinner className="w-5 h-5" /> : <MessageCircle className="w-5 h-5" />}
                             </button>
                         </TooltipTrigger>
                         <TooltipContent>Message Salon</TooltipContent>
@@ -319,8 +356,10 @@ export default function BookingsAndOrdersPage() {
 
                     {booking.status === 'completed' && (
                         <button
+                            type="button"
                             onClick={() => handleReview(booking.id, booking.salonId)}
-                            className="flex-1 h-14 rounded-2xl border border-border text-foreground font-bold text-sm hover:bg-muted transition-all flex items-center justify-center gap-2"
+                            className="flex-1 h-14 rounded-2xl border border-border text-foreground font-bold text-sm hover:bg-muted transition-all flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                            aria-label={`Leave a review for ${booking.salon.name}`}
                         >
                             <PenSquare className="w-4 h-4" />
                             Leave a Review
@@ -328,7 +367,11 @@ export default function BookingsAndOrdersPage() {
                     )}
 
                     {booking.status !== 'cancelled' && booking.status !== 'completed' && (
-                        <button className="flex-1 h-14 rounded-2xl border border-border text-foreground font-bold text-sm hover:bg-muted transition-all">
+                        <button
+                            type="button"
+                            className="flex-1 h-14 rounded-2xl border border-border text-foreground font-bold text-sm hover:bg-muted transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                            aria-label={`Reschedule appointment at ${booking.salon.name}`}
+                        >
                             Reschedule
                         </button>
                     )}
@@ -336,12 +379,13 @@ export default function BookingsAndOrdersPage() {
                         <Tooltip>
                             <TooltipTrigger asChild>
                                 <button
+                                    type="button"
                                     onClick={() => setBookingToCancel(booking)}
                                     disabled={processingId === booking.id}
-                                    className="h-14 w-14 rounded-2xl border border-border flex items-center justify-center text-muted-foreground hover:text-rose-600 hover:bg-rose-500/10 transition-all group/cancel"
-                                    aria-label="Cancel Booking"
+                                    className="h-14 w-14 rounded-2xl border border-border flex items-center justify-center text-muted-foreground hover:text-rose-600 hover:bg-rose-500/10 transition-all group/cancel focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                                    aria-label={`Cancel booking at ${booking.salon.name}`}
                                 >
-                                    {processingId === booking.id ? <Loader2 className="w-6 h-6 animate-spin" /> : <XCircle className="w-6 h-6" />}
+                                    {processingId === booking.id ? <Spinner className="w-6 h-6" /> : <XCircle className="w-6 h-6" />}
                                 </button>
                             </TooltipTrigger>
                             <TooltipContent>Cancel Booking</TooltipContent>
@@ -354,10 +398,25 @@ export default function BookingsAndOrdersPage() {
           )
         ) : (
           orders.length === 0 ? (
-            <div className="text-center py-20 text-muted-foreground">
-                <p>No orders found.</p>
-                <Link href="/app/marketplace" className="text-primary hover:underline mt-2 inline-block">Browse Marketplace</Link>
-            </div>
+            <Empty className="py-20 border-border bg-card/50 rounded-[32px]">
+              <EmptyHeader>
+                <EmptyMedia variant="icon">
+                  <ShoppingBag className="size-6 text-muted-foreground" />
+                </EmptyMedia>
+                <EmptyTitle className="text-xl font-bold">No orders found</EmptyTitle>
+                <EmptyDescription className="text-muted-foreground">
+                  You haven't placed any marketplace orders yet.
+                </EmptyDescription>
+              </EmptyHeader>
+              <EmptyContent>
+                <Link
+                  href="/app/marketplace"
+                  className="px-6 py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-bold hover:opacity-90 transition-all inline-flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                >
+                  Browse Marketplace
+                </Link>
+              </EmptyContent>
+            </Empty>
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {orders.map((order, i) => (
@@ -372,7 +431,7 @@ export default function BookingsAndOrdersPage() {
                             <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-[32px] overflow-hidden bg-muted flex-shrink-0">
                                 <img
                                     src={order.items[0]?.product.images?.[0] || "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=200&h=200&fit=crop"}
-                                    alt={order.items[0]?.product.name}
+                                    alt=""
                                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                                 />
                             </div>
@@ -457,9 +516,16 @@ export default function BookingsAndOrdersPage() {
           <AlertDialogFooter>
             <AlertDialogCancel>Keep Booking</AlertDialogCancel>
             <AlertDialogAction
-              onClick={() => bookingToCancel && handleCancelBooking(bookingToCancel.id)}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={(e) => {
+                if (bookingToCancel) {
+                  e.preventDefault();
+                  handleCancelBooking(bookingToCancel.id);
+                }
+              }}
+              disabled={!!processingId}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90 inline-flex items-center gap-2"
             >
+              {processingId ? <Spinner className="size-4" /> : null}
               Cancel Appointment
             </AlertDialogAction>
           </AlertDialogFooter>
