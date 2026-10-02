@@ -28,7 +28,7 @@ interface ProductCardProps {
   view?: 'grid' | 'list';
 }
 
-export function ProductCard({ product, view = 'grid' }: ProductCardProps) {
+export function ProductCard({ product, view = 'grid', onCompareSelect, isCompareSelected }: ProductCardProps & { onCompareSelect?: (product: Product) => void, isCompareSelected?: boolean }) {
   const isSale = product.price < product.originalPrice;
   const isNew = product.createdAt && new Date(product.createdAt) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
   const isLowStock = product.totalStock > 0 && product.totalStock <= 5;
@@ -106,21 +106,43 @@ export function ProductCard({ product, view = 'grid' }: ProductCardProps) {
             {!isOutOfStock && isNew && <Badge className="bg-blue-500 text-white">New</Badge>}
           </div>
 
-          {/* Wishlist Button (absolute top right) */}
-          <Button
-            size="icon"
-            variant="ghost"
-            className={cn(
-                "absolute right-2 top-2 h-8 w-8 rounded-full backdrop-blur-sm transition-colors",
-                isWishlisted
-                    ? "bg-red-500 text-white hover:bg-red-600"
-                    : "bg-black/20 text-white hover:bg-black/40"
+          {/* Compare & Wishlist Buttons (absolute top right) */}
+          <div className="absolute right-2 top-2 flex flex-col gap-2">
+            <Button
+              size="icon"
+              variant="ghost"
+              className={cn(
+                  "h-8 w-8 rounded-full backdrop-blur-sm transition-colors",
+                  isWishlisted
+                      ? "bg-red-500 text-white hover:bg-red-600"
+                      : "bg-black/20 text-white hover:bg-black/40"
+              )}
+              onClick={toggleWishlist}
+            >
+              <Heart className={cn("h-4 w-4", isWishlisted && "fill-current")} />
+              <span className="sr-only">Add to wishlist</span>
+            </Button>
+            {onCompareSelect && (
+              <Button
+                size="icon"
+                variant="ghost"
+                className={cn(
+                    "h-8 w-8 rounded-full backdrop-blur-sm transition-colors",
+                    isCompareSelected
+                        ? "bg-yellow-500 text-black hover:bg-yellow-600"
+                        : "bg-black/20 text-white hover:bg-black/40"
+                )}
+                onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    onCompareSelect(product);
+                }}
+              >
+                <span className="font-bold text-xs">VS</span>
+                <span className="sr-only">Compare</span>
+              </Button>
             )}
-            onClick={toggleWishlist}
-          >
-            <Heart className={cn("h-4 w-4", isWishlisted && "fill-current")} />
-            <span className="sr-only">Add to wishlist</span>
-          </Button>
+          </div>
         </div>
 
         {/* Content */}
