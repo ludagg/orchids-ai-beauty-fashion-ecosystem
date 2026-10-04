@@ -3,6 +3,7 @@
 import { Search, X } from "lucide-react";
 import { useRef, useEffect } from "react";
 import { Kbd } from "@/components/ui/kbd";
+import { ImageSearchButton } from "@/components/search/ImageSearchButton";
 
 interface SearchBarProps {
   value: string;
@@ -70,6 +71,9 @@ export default function SearchBar({ value, onChange, onSubmit, placeholder = "Se
           >
             <X className="w-3.5 h-3.5" />
           </button>
+        )}
+        {onSubmit && (
+          <ImageSearchButton onSearch={onSubmit} />
         )}
         <div className="hidden md:block pointer-events-none">
           <Kbd className="bg-background/50 border-none shadow-none text-[10px] h-5 min-w-5 opacity-60">
