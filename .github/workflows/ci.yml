@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Run lint
+        run: bun run lint
+
+      - name: Run tests
+        run: bun run test
+
+      - name: Build
+        run: bun run build
+        env:
+          DATABASE_URL: postgres://dummy:dummy@localhost:5432/dummy
+          BETTER_AUTH_SECRET: dummy_secret_key_for_build_only
+          BETTER_AUTH_URL: http://localhost:3000
+          NEXT_PUBLIC_APP_URL: http://localhost:3000
+          STRIPE_SECRET_KEY: dummy_stripe_secret
+          NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: dummy_stripe_publishable
+          RESEND_API_KEY: dummy_resend_key
+          CLOUDFLARE_R2_ACCESS_KEY_ID: dummy
+          CLOUDFLARE_R2_SECRET_ACCESS_KEY: dummy
+          CLOUDFLARE_R2_BUCKET_NAME: dummy
+          CLOUDFLARE_R2_ACCOUNT_ID: dummy
+          CLOUDFLARE_R2_PUBLIC_URL: http://dummy
+          NEXT_PUBLIC_SUPABASE_URL: http://dummy
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: dummy
