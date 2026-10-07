@@ -22,6 +22,18 @@ export const auth = betterAuth({
       loyaltyPoints: {
         type: "number",
       },
+      height: {
+        type: "string",
+        required: false,
+      },
+      weight: {
+        type: "string",
+        required: false,
+      },
+      bodyType: {
+        type: "string",
+        required: false,
+      },
     },
   },
   emailAndPassword: {
