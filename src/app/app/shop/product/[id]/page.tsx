@@ -19,6 +19,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import useEmblaCarousel from 'embla-carousel-react';
+import { AIFitCheckDialog } from '@/components/shop/ai/AIFitCheckDialog';
+import { ARTryOn } from '@/components/shop/ai/ARTryOn';
 
 export default function ProductDetailPage() {
   const { id } = useParams();
@@ -216,37 +218,7 @@ export default function ProductDetailPage() {
         </div>
 
         {/* AI Fit Check */}
-        <Dialog>
-            <DialogTrigger asChild>
-                <div className="flex items-center justify-between rounded-lg border border-yellow-500/30 bg-yellow-500/10 p-3 cursor-pointer">
-                    <div className="flex items-center gap-3">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-500 text-white">
-                            <Ruler className="h-4 w-4" />
-                        </div>
-                        <div>
-                            <div className="text-sm font-semibold text-yellow-700 dark:text-yellow-400">
-                                AI recommends size M for you
-                            </div>
-                            <div className="text-xs text-muted-foreground">Based on your profile</div>
-                        </div>
-                    </div>
-                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                </div>
-            </DialogTrigger>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>AI Fit Analysis</DialogTitle>
-                    <DialogDescription>
-                        We analyzed your previous purchases and profile measurements.
-                        This brand typically runs true to size.
-                    </DialogDescription>
-                </DialogHeader>
-                {/* Mock chart or details */}
-                <div className="h-40 bg-muted rounded-md flex items-center justify-center text-muted-foreground">
-                    Fit Graph Placeholder
-                </div>
-            </DialogContent>
-        </Dialog>
+        <AIFitCheckDialog product={product} />
 
         {/* Variants */}
         <div className="space-y-4">
@@ -378,7 +350,10 @@ export default function ProductDetailPage() {
       </div>
 
       {/* Sticky Bottom Bar */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60 space-y-3">
+        <div className="container mx-auto max-w-7xl">
+           <ARTryOn product={product} />
+        </div>
         <div className="container mx-auto flex gap-3 max-w-7xl">
             <Button variant="outline" className="flex-1" onClick={() => handleAddToCart(false)}>
                 Add to Cart
