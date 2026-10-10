@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ProductCard } from '@/components/shop/ProductCard';
+import { ARTryOn } from '@/components/shop/ai/ARTryOn';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import {
@@ -180,6 +181,10 @@ export default function ProductDetailPage() {
                     />
                 </div>
             ))}
+            {/* AR Try-On Slide */}
+            <div className="flex-[0_0_100%] min-w-0 relative h-full bg-background flex items-center justify-center p-4">
+               <ARTryOn productImageUrl={product.mainImageUrl} className="w-full h-full max-h-[80vh]" />
+            </div>
         </div>
         <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1">
              {[product.mainImageUrl, ...(product.galleryUrls || [])].map((_, index) => (
