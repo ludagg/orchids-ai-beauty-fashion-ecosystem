@@ -16,12 +16,22 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: 'Missing parameters' }, { status: 400 });
     }
 
-    // Fix Date Parsing
-    const [year, month, day] = dateStr.split('-').map(Number);
-    if (!year || !month || !day) {
+    // Fix Date Parsing (Robust Date Validation Pattern)
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
         return NextResponse.json({ error: 'Invalid date format (YYYY-MM-DD)' }, { status: 400 });
     }
+
+    const [yearStr, monthStr, dayStr] = dateStr.split('-');
+    const year = parseInt(yearStr, 10);
+    const month = parseInt(monthStr, 10);
+    const day = parseInt(dayStr, 10);
+
     const date = new Date(year, month - 1, day);
+
+    // Check Date components to prevent rollover dates (e.g. Feb 31st -> Mar 3rd)
+    if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) {
+        return NextResponse.json({ error: 'Invalid date value' }, { status: 400 });
+    }
 
     const dayStart = startOfDay(date);
     const dayEnd = endOfDay(date);
