@@ -16,7 +16,6 @@ import {
   Package,
   Truck,
   RotateCcw,
-  Loader2,
   ShoppingBag,
   PenSquare
 } from "lucide-react";
@@ -26,6 +25,15 @@ import { useRouter } from "next/navigation";
 import { format } from "date-fns";
 import { toast } from "sonner";
 import { ReviewForm } from "@/components/reviews/ReviewForm";
+import { Spinner } from "@/components/ui/spinner";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle
+} from "@/components/ui/empty";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import {
   AlertDialog,
@@ -224,16 +232,53 @@ export default function BookingsAndOrdersPage() {
 
         {loading ? (
              <div className="flex justify-center py-20">
-                <Loader2 className="w-10 h-10 animate-spin text-primary" />
+                <Spinner className="size-10 text-primary" />
              </div>
         ) : activeTab === "Bookings" ? (
           filteredBookings.length === 0 ? (
-            <div className="text-center py-20 text-muted-foreground">
-              <p>{statusFilter === "All" ? "No bookings found." : `No ${statusFilter.toLowerCase()} bookings.`}</p>
-              {statusFilter !== "All"
-                ? <button onClick={() => setStatusFilter("All")} className="text-primary hover:underline mt-2 inline-block">View all bookings</button>
-                : <Link href="/app/salons" className="text-primary hover:underline mt-2 inline-block">Book an appointment</Link>
-              }
+            <div className="min-h-[400px] flex items-center justify-center relative overflow-hidden rounded-[40px] border border-border bg-card/50">
+              {/* Decorative Background */}
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#e5e5e5_1px,transparent_1px)] dark:bg-[radial-gradient(circle_at_center,#262626_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]" />
+
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 0.05, scale: 1 }}
+                transition={{ duration: 2, repeat: Infinity, repeatType: "reverse" }}
+                className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary rounded-full blur-[100px]"
+              />
+
+              <Empty className="relative z-10 bg-transparent border-none shadow-none max-w-sm">
+                <EmptyHeader>
+                  <EmptyMedia variant="icon" className="bg-primary/10 text-primary">
+                    <Calendar className="w-6 h-6" />
+                  </EmptyMedia>
+                  <EmptyTitle>
+                    {statusFilter === "All" ? "No bookings yet" : `No ${statusFilter.toLowerCase()} bookings`}
+                  </EmptyTitle>
+                  <EmptyDescription>
+                    {statusFilter === "All"
+                      ? "You haven't scheduled any appointments. Ready for a transformation?"
+                      : `You don't have any bookings with the status "${statusFilter}".`}
+                  </EmptyDescription>
+                </EmptyHeader>
+                <EmptyContent>
+                  {statusFilter !== "All" ? (
+                    <button
+                      onClick={() => setStatusFilter("All")}
+                      className="w-full h-12 rounded-full bg-primary text-primary-foreground font-bold hover:opacity-90 transition-all shadow-lg shadow-primary/10"
+                    >
+                      View all bookings
+                    </button>
+                  ) : (
+                    <Link
+                      href="/app/salons"
+                      className="w-full h-12 rounded-full bg-primary text-primary-foreground font-bold hover:opacity-90 transition-all flex items-center justify-center shadow-lg shadow-primary/10"
+                    >
+                      Book an appointment
+                    </Link>
+                  )}
+                </EmptyContent>
+              </Empty>
             </div>
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -311,7 +356,7 @@ export default function BookingsAndOrdersPage() {
                                 className="h-14 w-14 rounded-2xl border border-border flex items-center justify-center text-foreground hover:bg-muted transition-all"
                                 aria-label="Message Salon"
                             >
-                                {messageLoadingId === booking.id ? <Loader2 className="w-5 h-5 animate-spin" /> : <MessageCircle className="w-5 h-5" />}
+                                {messageLoadingId === booking.id ? <Spinner className="size-5" /> : <MessageCircle className="w-5 h-5" />}
                             </button>
                         </TooltipTrigger>
                         <TooltipContent>Message Salon</TooltipContent>
@@ -341,7 +386,7 @@ export default function BookingsAndOrdersPage() {
                                     className="h-14 w-14 rounded-2xl border border-border flex items-center justify-center text-muted-foreground hover:text-rose-600 hover:bg-rose-500/10 transition-all group/cancel"
                                     aria-label="Cancel Booking"
                                 >
-                                    {processingId === booking.id ? <Loader2 className="w-6 h-6 animate-spin" /> : <XCircle className="w-6 h-6" />}
+                                    {processingId === booking.id ? <Spinner className="size-6" /> : <XCircle className="w-6 h-6" />}
                                 </button>
                             </TooltipTrigger>
                             <TooltipContent>Cancel Booking</TooltipContent>
@@ -354,9 +399,36 @@ export default function BookingsAndOrdersPage() {
           )
         ) : (
           orders.length === 0 ? (
-            <div className="text-center py-20 text-muted-foreground">
-                <p>No orders found.</p>
-                <Link href="/app/marketplace" className="text-primary hover:underline mt-2 inline-block">Browse Marketplace</Link>
+            <div className="min-h-[400px] flex items-center justify-center relative overflow-hidden rounded-[40px] border border-border bg-card/50">
+              {/* Decorative Background */}
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#e5e5e5_1px,transparent_1px)] dark:bg-[radial-gradient(circle_at_center,#262626_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]" />
+
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 0.05, scale: 1 }}
+                transition={{ duration: 2, repeat: Infinity, repeatType: "reverse" }}
+                className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-rose-500 rounded-full blur-[100px]"
+              />
+
+              <Empty className="relative z-10 bg-transparent border-none shadow-none max-w-sm">
+                <EmptyHeader>
+                  <EmptyMedia variant="icon" className="bg-rose-500/10 text-rose-500">
+                    <ShoppingBag className="w-6 h-6" />
+                  </EmptyMedia>
+                  <EmptyTitle>No orders found</EmptyTitle>
+                  <EmptyDescription>
+                    Your shopping bag is waiting to be filled with premium beauty and fashion products.
+                  </EmptyDescription>
+                </EmptyHeader>
+                <EmptyContent>
+                  <Link
+                    href="/app/marketplace"
+                    className="w-full h-12 rounded-full bg-rose-500 text-white font-bold hover:bg-rose-600 transition-all flex items-center justify-center shadow-lg shadow-rose-500/10"
+                  >
+                    Browse Marketplace
+                  </Link>
+                </EmptyContent>
+              </Empty>
             </div>
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -455,12 +527,24 @@ export default function BookingsAndOrdersPage() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Keep Booking</AlertDialogCancel>
+            <AlertDialogCancel disabled={processingId !== null}>Keep Booking</AlertDialogCancel>
             <AlertDialogAction
-              onClick={() => bookingToCancel && handleCancelBooking(bookingToCancel.id)}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={(e) => {
+                if (!bookingToCancel) return;
+                e.preventDefault();
+                handleCancelBooking(bookingToCancel.id);
+              }}
+              disabled={processingId !== null}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90 min-w-[140px]"
             >
-              Cancel Appointment
+              {processingId !== null ? (
+                <>
+                  <Spinner className="mr-2 size-4" />
+                  Cancelling...
+                </>
+              ) : (
+                "Cancel Appointment"
+              )}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

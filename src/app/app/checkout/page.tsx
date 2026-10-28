@@ -96,7 +96,7 @@ export default function CheckoutPage() {
                 Your order has been placed successfully. You can pick it up at the partner salon.
             </p>
             <div className="flex flex-col gap-3 w-full max-w-sm">
-                <Button className="w-full" onClick={() => router.push('/app/orders')}>View Booking</Button>
+                <Button className="w-full" onClick={() => router.push('/app/bookings')}>View Booking</Button>
                 <Button variant="outline" className="w-full" onClick={() => router.push('/app/shop')}>Continue Shopping</Button>
             </div>
         </div>
