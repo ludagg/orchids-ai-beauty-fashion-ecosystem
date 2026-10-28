@@ -128,17 +128,21 @@ export default function HeroSection() {
           transition={{ duration: 0.8, delay: 0.3 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10 w-full max-w-[600px] mx-auto"
         >
-          <Link href="/app" className="flex-1 w-full group">
-            <button
-              className="w-full h-14 rounded-full bg-primary text-primary-foreground font-medium text-[17px] hover:opacity-90 transition-all active:scale-[0.98] shadow-lg shadow-primary/10 flex items-center justify-center gap-2"
-            >
-              Get Started
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </button>
+          <Link
+            href="/app"
+            className="flex-1 w-full group h-14 rounded-full bg-primary text-primary-foreground font-medium text-[17px] hover:opacity-90 transition-all active:scale-[0.98] shadow-lg shadow-primary/10 flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            aria-label="Get started with Rare"
+          >
+            <span>Get Started</span>
+            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </Link>
-          <button className="w-full sm:w-auto px-8 py-4 h-14 rounded-full bg-card border border-border font-medium text-[17px] hover:bg-secondary transition-all hover:border-muted-foreground/30 active:scale-[0.98] flex items-center justify-center gap-2 group">
+          <button
+            type="button"
+            aria-label="Watch demo"
+            className="w-full sm:w-auto px-8 py-4 h-14 rounded-full bg-card border border-border font-medium text-[17px] hover:bg-secondary transition-all hover:border-muted-foreground/30 active:scale-[0.98] flex items-center justify-center gap-2 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          >
             <Play className="w-5 h-5 text-muted-foreground group-hover:text-foreground transition-colors" />
-            Watch Demo
+            <span>Watch Demo</span>
           </button>
         </motion.div>
 
@@ -167,15 +171,19 @@ export default function HeroSection() {
         <div className="relative aspect-[16/9] rounded-3xl overflow-hidden bg-gradient-to-br from-secondary to-card shadow-2xl shadow-foreground/10 border border-border">
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
-              <div className="w-20 h-20 mx-auto rounded-full bg-primary flex items-center justify-center cursor-pointer hover:scale-110 transition-transform shadow-xl">
+              <button
+                type="button"
+                aria-label="Play video: Watch how Rare works"
+                className="w-20 h-20 mx-auto rounded-full bg-primary flex items-center justify-center cursor-pointer hover:scale-110 transition-transform shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              >
                 <Play className="w-8 h-8 text-primary-foreground ml-1" />
-              </div>
+              </button>
               <p className="mt-4 text-muted-foreground text-sm">Watch how Rare works</p>
             </div>
           </div>
           <Image
             src="https://images.unsplash.com/photo-1441986300917-64674bd600d8"
-            alt="Video thumbnail"
+            alt=""
             fill
             className="object-cover opacity-30"
             priority
