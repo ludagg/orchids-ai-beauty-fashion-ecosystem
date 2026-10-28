@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { Star, Heart, Share2, MapPin, ChevronRight, Check, ShieldCheck, Ruler } from 'lucide-react';
+import { Star, Heart, Share2, MapPin, ChevronRight, Check, ShieldCheck, Ruler, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -18,11 +18,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { authClient } from "@/lib/auth-client";
 import useEmblaCarousel from 'embla-carousel-react';
 
 export default function ProductDetailPage() {
   const { id } = useParams();
   const router = useRouter();
+  const { data: session } = authClient.useSession();
   const [product, setProduct] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [selectedColor, setSelectedColor] = useState<any>(null);
@@ -30,6 +34,73 @@ export default function ProductDetailPage() {
   const [quantity, setQuantity] = useState(1);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+
+  // AI Fit State
+  const [fitAnalysis, setFitAnalysis] = useState<any>(null);
+  const [isFitLoading, setIsFitLoading] = useState(false);
+  const [showFitForm, setShowFitForm] = useState(false);
+  const [measurements, setMeasurements] = useState({ height: '', weight: '', bodyType: '' });
+  const [isSavingMeasurements, setIsSavingMeasurements] = useState(false);
+
+  useEffect(() => {
+    if (session?.user) {
+      const user = session.user as any;
+      setMeasurements({
+        height: user.height || '',
+        weight: user.weight || '',
+        bodyType: user.bodyType || ''
+      });
+      if (!user.height || !user.weight) {
+        setShowFitForm(true);
+      }
+    }
+  }, [session]);
+
+  const runFitAnalysis = async (currentMeasurements: any) => {
+    if (!product) return;
+    setIsFitLoading(true);
+    try {
+      const res = await fetch('/api/ai-fit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          productId: product.id,
+          ...currentMeasurements
+        })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setFitAnalysis(data);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsFitLoading(false);
+    }
+  };
+
+  const handleSaveMeasurements = async () => {
+    setIsSavingMeasurements(true);
+    try {
+      const res = await fetch('/api/users/profile/measurements', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(measurements)
+      });
+      if (res.ok) {
+        setShowFitForm(false);
+        runFitAnalysis(measurements);
+        toast.success("Measurements saved!");
+      } else {
+        toast.error("Failed to save measurements");
+      }
+    } catch (e) {
+      console.error(e);
+      toast.error("An error occurred");
+    } finally {
+      setIsSavingMeasurements(false);
+    }
+  };
 
   const toggleWishlist = async () => {
     const newState = !isWishlisted;
@@ -216,37 +287,113 @@ export default function ProductDetailPage() {
         </div>
 
         {/* AI Fit Check */}
-        <Dialog>
-            <DialogTrigger asChild>
-                <div className="flex items-center justify-between rounded-lg border border-yellow-500/30 bg-yellow-500/10 p-3 cursor-pointer">
-                    <div className="flex items-center gap-3">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-500 text-white">
-                            <Ruler className="h-4 w-4" />
-                        </div>
-                        <div>
-                            <div className="text-sm font-semibold text-yellow-700 dark:text-yellow-400">
-                                AI recommends size M for you
-                            </div>
-                            <div className="text-xs text-muted-foreground">Based on your profile</div>
-                        </div>
-                    </div>
-                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                </div>
-            </DialogTrigger>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>AI Fit Analysis</DialogTitle>
-                    <DialogDescription>
-                        We analyzed your previous purchases and profile measurements.
-                        This brand typically runs true to size.
-                    </DialogDescription>
-                </DialogHeader>
-                {/* Mock chart or details */}
-                <div className="h-40 bg-muted rounded-md flex items-center justify-center text-muted-foreground">
-                    Fit Graph Placeholder
-                </div>
-            </DialogContent>
-        </Dialog>
+        {session?.user && (
+          <Dialog onOpenChange={(open) => {
+              if (open && !showFitForm && !fitAnalysis && !isFitLoading) {
+                 runFitAnalysis(measurements);
+              }
+          }}>
+              <DialogTrigger asChild>
+                  <div className="flex items-center justify-between rounded-lg border border-yellow-500/30 bg-yellow-500/10 p-3 cursor-pointer">
+                      <div className="flex items-center gap-3">
+                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-500 text-white">
+                              <Ruler className="h-4 w-4" />
+                          </div>
+                          <div>
+                              <div className="text-sm font-semibold text-yellow-700 dark:text-yellow-400">
+                                  {fitAnalysis ? `AI recommends size ${fitAnalysis.recommendedSize}` : "Check your AI Fit"}
+                              </div>
+                              <div className="text-xs text-muted-foreground">
+                                  {fitAnalysis ? `${fitAnalysis.confidence}% confidence` : "Based on your profile"}
+                              </div>
+                          </div>
+                      </div>
+                      <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                  </div>
+              </DialogTrigger>
+              <DialogContent>
+                  <DialogHeader>
+                      <DialogTitle>AI Fit Analysis</DialogTitle>
+                      <DialogDescription>
+                          Get personalized sizing recommendations based on your measurements.
+                      </DialogDescription>
+                  </DialogHeader>
+
+                  {showFitForm ? (
+                      <div className="space-y-4 py-4">
+                          <div className="space-y-2">
+                              <Label htmlFor="height">Height (cm)</Label>
+                              <Input
+                                id="height"
+                                placeholder="e.g. 175"
+                                value={measurements.height}
+                                onChange={(e) => setMeasurements({...measurements, height: e.target.value})}
+                              />
+                          </div>
+                          <div className="space-y-2">
+                              <Label htmlFor="weight">Weight (kg)</Label>
+                              <Input
+                                id="weight"
+                                placeholder="e.g. 70"
+                                value={measurements.weight}
+                                onChange={(e) => setMeasurements({...measurements, weight: e.target.value})}
+                              />
+                          </div>
+                          <div className="space-y-2">
+                              <Label htmlFor="bodyType">Body Type</Label>
+                              <Input
+                                id="bodyType"
+                                placeholder="e.g. Athletic, Slim, Average"
+                                value={measurements.bodyType}
+                                onChange={(e) => setMeasurements({...measurements, bodyType: e.target.value})}
+                              />
+                          </div>
+                          <Button
+                              onClick={handleSaveMeasurements}
+                              className="w-full"
+                              disabled={isSavingMeasurements || !measurements.height || !measurements.weight}
+                          >
+                              {isSavingMeasurements && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                              Save & Analyze
+                          </Button>
+                      </div>
+                  ) : isFitLoading ? (
+                      <div className="h-40 flex flex-col items-center justify-center text-muted-foreground space-y-4">
+                          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                          <p>Analyzing fit...</p>
+                      </div>
+                  ) : fitAnalysis ? (
+                      <div className="py-4 space-y-6">
+                          <div className="flex flex-col items-center justify-center space-y-2">
+                              <div className="text-5xl font-bold text-primary">{fitAnalysis.recommendedSize}</div>
+                              <div className="text-sm text-muted-foreground">Recommended Size</div>
+                          </div>
+
+                          <div className="space-y-2">
+                              <div className="flex justify-between text-sm">
+                                  <span>Confidence Match</span>
+                                  <span className="font-medium">{fitAnalysis.confidence}%</span>
+                              </div>
+                              <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
+                                  <div
+                                      className="h-full bg-green-500"
+                                      style={{ width: `${fitAnalysis.confidence}%` }}
+                                  />
+                              </div>
+                          </div>
+
+                          <div className="bg-muted p-4 rounded-lg text-sm text-center">
+                              {fitAnalysis.explanation}
+                          </div>
+
+                          <Button variant="outline" className="w-full" onClick={() => setShowFitForm(true)}>
+                              Update Measurements
+                          </Button>
+                      </div>
+                  ) : null}
+              </DialogContent>
+          </Dialog>
+        )}
 
         {/* Variants */}
         <div className="space-y-4">
